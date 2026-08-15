@@ -392,7 +392,7 @@ Deterministic Tests
 Rules Audit
 ```
 
-**Issue 3 — V1 Rules Inventory and Dependency Map.** Produce and maintain a master inventory of every Rule Card (or coherent grouping) reachable from the initial vertical slice's dungeon-crawl loop (§14) — proposed Rule Card/grouping, rules domain, key historical source, known dependencies, whether it is required for v1, current research/approval status, ambiguity/research-risk flags, and a suggested research order. This does not require deep research of every item; its purpose is to establish the backlog and make dependency relationships visible before cluster selection (§15.1). Drafted — `docs/rules/INVENTORY.md` — pending human review before further Rule Card production or cluster selection proceeds.
+**Issue 3 — V1 Rules Inventory and Dependency Map.** Produce and maintain a master inventory of every Rule Card (or coherent grouping) reachable from the initial vertical slice's dungeon-crawl loop (§14) — proposed Rule Card/grouping, rules domain, key historical source, known dependencies, whether it is required for v1, current research/approval status, ambiguity/research-risk flags, and a suggested research order. This does not require deep research of every item; its purpose is to establish the backlog and make dependency relationships visible before cluster selection (§15.1). **Completed** — `docs/rules/INVENTORY.md` is `APPROVED` and merged, and is the basis for cluster selection going forward.
 
 ## 15.1 V1 Rules Inventory and Dependency-Complete Implementation Clusters
 
