@@ -7,6 +7,7 @@ Durable architectural and process decisions for the Retro D&D Simulator project.
 | [DEC-0001](DEC-0001-project-foundation-baseline.md) | Project Foundation Baseline | Approved | 2026-08-15 |
 | [DEC-0002](DEC-0002-rng-contract.md) | RNG Contract — Single-Stream, Rules-Facing Dice Abstraction | Approved | 2026-08-15 |
 | [DEC-0003](DEC-0003-python-toolchain-and-ci.md) | Python Toolchain and CI Enforcement Model | Approved | 2026-08-15 |
+| [DEC-0004](DEC-0004-full-v1-rules-corpus-before-implementation.md) | Full V1 Rules Corpus Required Before Historical-Rules Implementation | Approved | 2026-08-15 |
 
 ## Adding a Decision Record
 

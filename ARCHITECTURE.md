@@ -370,13 +370,9 @@ If this loop is historically defensible, reproducible, and enjoyable, the projec
 
 ## 15. Approved Implementation Sequence
 
-The first three implementation issues, in dependency order:
+**Issue 1 — RNG and Dice Infrastructure.** Define and implement the simulation-owned RNG abstraction (§5) and dice-expression support. This is infrastructure, not a historical game rule, and requires no Rule Card. The technical design for the RNG contract is approved (`docs/technical/RNG_CONTRACT.md`, `docs/decisions/DEC-0002-rng-contract.md`). **Completed** — `docs/completion-records/ISSUE-001-rng-dice-infrastructure.md` (and its defect-fix follow-up, `docs/completion-records/ISSUE-002-scripted-rng-die-range-validation-fix.md`).
 
-**Issue 1 — RNG and Dice Infrastructure.** Define and implement the simulation-owned RNG abstraction (§5) and dice-expression support. This is infrastructure, not a historical game rule, and requires no Rule Card. The technical design for the RNG contract is approved (`docs/technical/RNG_CONTRACT.md`, `docs/decisions/DEC-0002-rng-contract.md`). Writing the actual RNG code still requires a separate, explicit human authorization to begin — the Pre-Code Development Gate clearing (§16) is a precondition for that authorization, not the authorization itself.
-
-**Issue 2 — Rule Card Infrastructure and First Rule Card.** The Rule Card template (`docs/rules/_template.md`) already exists; this issue is to draft and carry exactly one Rule Card through the full research-and-approval workflow to `APPROVED` status (§12). No game-rule implementation begins before this has been demonstrated successfully end-to-end.
-
-**Issue 3 — Implement the First Approved Historical Procedure.** Implement exactly the mechanical specification of the Rule Card approved in Issue 2, with deterministic tests. A small, central procedure such as the dungeon wandering-monster check is a strong candidate, but the specific rule is selected separately. The purpose of this issue is to validate the complete workflow:
+**Issue 2 — Rule Card Infrastructure and First Rule Card.** The Rule Card template (`docs/rules/_template.md`) already exists; this issue is to draft and carry exactly one Rule Card through the full research-and-approval workflow to `APPROVED` status (§12). **Completed** — `docs/rules/exploration/dungeon_wandering_monster_check.md` (Rule ID `EXP-001`) was approved 2026-08-15, demonstrating the complete workflow end to end for the first time:
 
 ```text
 Historical Source
@@ -396,9 +392,15 @@ Deterministic Tests
 Rules Audit
 ```
 
-Implementation must not expand into larger systems such as character generation until this workflow has been proven on at least one rule.
+**Issue 3 — V1 Rules Inventory and Dependency Map.** Before any further historical-rules implementation is authorized, produce and maintain a master inventory of every Rule Card (or coherent grouping) reachable from the initial vertical slice's dungeon-crawl loop (§14) — proposed Rule Card/grouping, rules domain, key historical source, known dependencies, whether it is required for v1, current research/approval status, ambiguity/research-risk flags, and a suggested research order. This does not require deep research of every item; its purpose is to establish and scope the backlog for human review before Rule Card production continues. See `docs/rules/INVENTORY.md` and `docs/decisions/DEC-0004-full-v1-rules-corpus-before-implementation.md`.
 
-The project should also deliberately exercise the *historical completion* branch of this workflow relatively early — i.e., a Rule Card that requires researching beyond an incomplete 1974 source (SOURCE_HIERARCHY.md §5, §9) — rather than restricting early Rule Cards to only those already fully explicit in 1974. Early development is not restricted to 1974-explicit rules; the completion methodology itself needs to be exercised and validated early, not deferred.
+## 15.1 V1 Rules-Corpus Completion Gate
+
+This supersedes the sequencing plan originally written in this section (which allowed implementation to begin once a single rule had proven the research→approval→implementation workflow). See `docs/decisions/DEC-0004-full-v1-rules-corpus-before-implementation.md` for the full rationale.
+
+**Production implementation of any historical Rule Card does not begin until every Rule Card identified as required for the v1 dungeon-crawl loop is either `APPROVED` or explicitly marked out of v1 scope by human decision.** An individually approved Rule Card — including `EXP-001` — does not itself authorize implementation while this gate is open, the same way an approved Rule Card never overrides the Pre-Code Development Gate (§16).
+
+Once this gate clears, implementation proceeds issue by issue, following the same complete workflow demonstrated on `EXP-001` (research → Rule Card draft → human review → `APPROVED` → implementation → deterministic tests → rules audit). The project should deliberately exercise the *historical completion* branch of that workflow (a Rule Card requiring research beyond an incomplete 1974 source, `SOURCE_HIERARCHY.md` §5, §8) among the Rule Cards produced to close this gate, rather than restricting the v1 corpus to only rules already fully explicit in 1974.
 
 ## 16. Pre-Code Development Gate
 
