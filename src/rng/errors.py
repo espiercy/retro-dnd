@@ -34,3 +34,17 @@ class RollSequenceExhaustedError(DiceError):
     Per RNG_CONTRACT.md §9: the scripted RNG must fail explicitly rather
     than fall back to real randomness or silently repeat/wrap its queue.
     """
+
+
+class InvalidScriptedValueError(DiceError):
+    """A ScriptedRNG's next queued value is not a possible result for the requested die.
+
+    Distinct from ``RollSequenceExhaustedError``: the queue is not empty,
+    but its next value could not have come from rolling the die actually
+    requested — either it is outside ``[1, sides]``, or it is not an
+    integer die-result type at all (e.g. a ``bool``, ``float``, ``str``, or
+    ``None``). A scripted RNG may force any production-reachable result;
+    it must not be able to manufacture a production-impossible one.
+
+    No production randomness is consulted when this is raised.
+    """

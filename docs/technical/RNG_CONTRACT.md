@@ -146,6 +146,8 @@ This is **not** a promise that a seed alone reproduces a campaign indefinitely a
 
 **Scripted/deterministic test implementation ("fake RNG").** Constructed with a predetermined, ordered queue of raw die values to return (e.g., "next results: 6, 2, 4, 1") rather than a seed. Each raw draw the fake performs consumes the next queued value; the dice-expression operation still performs its own real aggregation logic (summing N draws + modifier) on top of those queued values — a scripted sequence `4, 2, 5` used for `3d6` must still exercise real dice aggregation and result construction, not simply return a prebuilt total of `11`. If the queue is exhausted, the fake raises an explicit error (§12) rather than falling back to real randomness or silently repeating/wrapping the queue.
 
+**A scripted value must be a possible result of the die it is drawn for.** The fake may force *which* valid result a die produces; it must not be able to manufacture a result the corresponding production die could never produce — a queued value of `9` for a d6 is invalid, not merely an unusual choice, since `SeededRNG` can never produce it either. Each value is validated against the specific die size at draw time (not at construction time, since the same fake instance may be asked for different die sizes across its lifetime) and must be an `int` (excluding `bool`, per §12's explicit-failure-over-silent-coercion principle) within `[1, sides]`; anything else raises explicitly (§12) rather than silently accepting an impossible result. This closes a gap in this contract's original text, which specified queue *exhaustion* behavior but did not explicitly require this invariant — identified in post-merge review and corrected without otherwise changing the approved architecture.
+
 Both implementations satisfy the identical rules-facing contract (§4) so that a rules procedure's tests can supply the fake with an exact scripted sequence to hit a specific historical branch (e.g., "force a natural 1"), without hunting for a seed that happens to produce it — this is the primary reason the fake exists alongside seeded reproduction rather than seeding being considered sufficient on its own.
 
 ## 10. Roll Diagnostics
@@ -186,6 +188,7 @@ Invalid requests fail explicitly; none of the following are silently coerced, cl
 - Non-positive die size.
 - Unsupported notation (mixed dice pools, modifiers beyond a single flat integer, anything outside §7's scope).
 - An exhausted controlled test sequence on the fake RNG (§9) — distinguished from other errors so a test author immediately recognizes "my scripted sequence was too short" rather than a generic failure.
+- A scripted value on the fake RNG that is not a possible result for the requested die — out of `[1, sides]`, or not an `int` (including `bool`) at all (§9) — distinguished from exhaustion (the queue isn't empty; its next value is simply invalid for this specific request).
 
 Error handling never invents a domain-specific game ruling (e.g., there is no "invalid roll, treat as a natural 1" fallback anywhere in this contract) — an error always propagates to the caller as an error, for rules code (or ultimately a human) to handle, never resolved into a plausible-seeming in-game result on the RNG's own authority.
 

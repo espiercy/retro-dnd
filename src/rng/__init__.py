@@ -10,6 +10,7 @@ from rng.errors import (
     DiceError,
     InvalidDiceExpressionError,
     InvalidDieSizeError,
+    InvalidScriptedValueError,
     RollSequenceExhaustedError,
 )
 from rng.expressions import parse_dice_expression
@@ -21,6 +22,7 @@ __all__ = [
     "DiceError",
     "InvalidDiceExpressionError",
     "InvalidDieSizeError",
+    "InvalidScriptedValueError",
     "RollSequenceExhaustedError",
     "RollResult",
     "ScriptedRNG",

@@ -13,7 +13,11 @@ from collections import deque
 from collections.abc import Sequence
 from typing import Protocol
 
-from rng.errors import InvalidDieSizeError, RollSequenceExhaustedError
+from rng.errors import (
+    InvalidDieSizeError,
+    InvalidScriptedValueError,
+    RollSequenceExhaustedError,
+)
 from rng.expressions import parse_dice_expression
 from rng.results import RollResult
 
@@ -120,6 +124,27 @@ class ScriptedRNG(_BaseRNG):
     Raises ``RollSequenceExhaustedError`` when the queue runs out, rather
     than falling back to real randomness or silently repeating/wrapping
     the queue.
+
+    Each queued value is validated against the specific die it is drawn
+    for — a value is only accepted if it is an ``int`` (excluding
+    ``bool``, which is a subtype of ``int`` but not a valid die result)
+    and lies within ``[1, sides]``. This can only be checked at draw time,
+    not at construction time, since the same instance may be asked for
+    different die sizes across its lifetime. A scripted RNG may force any
+    result the corresponding production die could produce; it must not be
+    able to manufacture one the production die never could
+    (``InvalidScriptedValueError``).
+
+    An invalid value is treated as a malformed test fixture, not a
+    completed roll: it is left in the queue rather than consumed (the
+    same "check before consume" shape already used for exhaustion above),
+    and the failure occurs before any sequence number is assigned, so a
+    rejected call never advances the rules-visible roll history any more
+    than a rejected ``roll_die``/``roll`` call does (see ``_BaseRNG``).
+    Raw values already drawn earlier in the *same* multi-die operation are
+    not rolled back — only the operation-level result fails to
+    materialize, consistent with the project's general rule that raw
+    stream consumption, once it has happened, is not undone.
     """
 
     def __init__(self, values: Sequence[int]) -> None:
@@ -132,4 +157,11 @@ class ScriptedRNG(_BaseRNG):
                 "scripted RNG's controlled sequence is exhausted; "
                 "supply more values or shorten the test scenario"
             )
-        return self._queue.popleft()
+        value = self._queue[0]
+        if not isinstance(value, int) or isinstance(value, bool) or not (1 <= value <= sides):
+            raise InvalidScriptedValueError(
+                f"scripted value {value!r} is not a possible result for a "
+                f"{sides}-sided die; scripted values must be an int in [1, {sides}]"
+            )
+        self._queue.popleft()
+        return value

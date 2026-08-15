@@ -5,3 +5,4 @@ Durable per-issue implementation records for the Retro D&D Simulator project (`D
 | Issue | Title | Status |
 |---|---|---|
 | [ISSUE-001](ISSUE-001-rng-dice-infrastructure.md) | RNG and Dice Infrastructure | Complete |
+| [ISSUE-002](ISSUE-002-scripted-rng-die-range-validation-fix.md) | ScriptedRNG Die-Value Validation (Post-Merge Defect Fix) | Complete |

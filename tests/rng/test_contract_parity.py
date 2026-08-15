@@ -17,7 +17,10 @@ from rng import (
 
 _IMPLEMENTATIONS: list[Callable[[], RNG]] = [
     lambda: SeededRNG(seed=1),
-    lambda: ScriptedRNG([1, 2, 3, 4, 5, 6, 7, 8]),
+    # Every value must be a valid d6 result -- these tests all draw
+    # against d6, and ScriptedRNG now validates that (post-merge defect
+    # fix: see ISSUE-002).
+    lambda: ScriptedRNG([1, 2, 3, 4, 5, 6, 1, 2]),
 ]
 
 

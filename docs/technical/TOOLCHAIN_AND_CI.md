@@ -136,6 +136,8 @@ CI runs on the single pinned Python version (§2) — no version matrix.
 
 The workflow exists at `.github/workflows/ci.yml`. Its only step of substance is `uv run python scripts/verify.py` — the identical command described in §8 — after installing `uv` and syncing dependencies with `uv sync --locked --group dev` (`--locked` fails the job if `uv.lock` is out of sync with `pyproject.toml`, rather than silently re-resolving).
 
+**Confirmed via a live run**, not merely local validation: commit `85c72abadd6d9e708f655b0c8465256cabf8204a` (ISSUE-001) ran successfully on GitHub Actions (run `31898738869` on the feature branch, re-confirmed as run `31899178267` after merge to `main`), executing this exact workflow end to end.
+
 ## 10. Coverage-Exception Handling
 
 Coverage thresholds are evaluated per path, not as one global percentage (§4):
@@ -183,7 +185,6 @@ Not decided by this document, and not needed for the first vertical slice:
 
 ## 12. Remaining Open Items
 
-The canonical verification command and the coverage-enforcement layer were built during Issue 1 (`docs/completion-records/ISSUE-001-rng-dice-infrastructure.md`): `scripts/verify.py` and `scripts/check_coverage.py`, respectively, with `.github/workflows/ci.yml` invoking the same `scripts/verify.py` command. None of the following block treating this document's toolchain direction as approved (`docs/decisions/DEC-0003-python-toolchain-and-ci.md`); they remain open, deferred until a concrete need arises:
+The canonical verification command and the coverage-enforcement layer were built during Issue 1 (`docs/completion-records/ISSUE-001-rng-dice-infrastructure.md`): `scripts/verify.py` and `scripts/check_coverage.py`, respectively, with `.github/workflows/ci.yml` invoking the same `scripts/verify.py` command, confirmed via a live run (§9). None of the following block treating this document's toolchain direction as approved (`docs/decisions/DEC-0003-python-toolchain-and-ci.md`); they remain open, deferred until a concrete need arises:
 
 1. Whether to adopt a code formatter (§5, §11).
-2. Whether a live GitHub Actions run has been confirmed by actually pushing to the remote — the workflow's YAML and its command have been validated locally (parses correctly; invokes the identical local verification command; a temporary intentional test failure was used to confirm the Tests/Coverage FAIL/UNAVAILABLE behavior in practice), but no push has been made to trigger a real Actions run.
