@@ -297,6 +297,16 @@ retro-dnd/
 ├── ARCHITECTURE.md
 ├── DEVELOPMENT_WORKFLOW.md
 ├── TESTING_STRATEGY.md
+├── pyproject.toml       # created — project metadata, dependencies, tool config
+├── uv.lock              # created — committed, per DEC-0003
+├── .gitignore           # created
+├── .github/
+│   └── workflows/
+│       └── ci.yml       # created — invokes scripts/verify.py (DEC-0003, gate item 8)
+├── scripts/
+│   ├── verify.py         # created — the canonical verification command (§8 of
+│   │                      #   docs/technical/TOOLCHAIN_AND_CI.md)
+│   └── check_coverage.py # created — differentiated coverage-threshold enforcement
 ├── docs/
 │   ├── rules/
 │   │   └── _template.md        # created — required Rule Card shape
@@ -306,9 +316,10 @@ retro-dnd/
 │   ├── technical/
 │   │   ├── TOOLCHAIN_AND_CI.md  # created — approved (DEC-0003; gate item 8)
 │   │   └── RNG_CONTRACT.md      # created — approved (DEC-0002; gate item 7)
-│   └── completion-records/     # not yet created; created with the first record (DEVELOPMENT_WORKFLOW.md §6)
+│   └── completion-records/     # created — see ISSUE-001
 ├── src/
-│   ├── rng/            # seedable/injectable RNG abstraction, dice expressions
+│   ├── rng/            # created (ISSUE-001) — seedable/injectable RNG abstraction,
+│   │                    #   dice expressions
 │   ├── rules/           # mechanical procedures: chargen, turns, encounter check,
 │   │                     #   monster/number-appearing generation, surprise, reaction,
 │   │                     #   morale, combat, treasure generation, XP — generation
@@ -318,10 +329,11 @@ retro-dnd/
 │   │                     #   through it (see §10); treasure/XP never do
 │   └── events/           # event type definitions and in-memory event log
 └── tests/
+    ├── rng/              # created (ISSUE-001)
     └── rules/           # one test module per rules procedure, deterministic-seed based
 ```
 
-The `docs/rules/_template.md` and `docs/decisions/` files above now exist, per the foundational governance decisions recorded in `docs/decisions/DEC-0001-project-foundation-baseline.md`. The `docs/technical/` documents are now approved as well (`DEC-0002`, `DEC-0003`), addressing Pre-Code Development Gate items 7–8 (§16). The `src/` tree and `docs/completion-records/` remain not yet created; they are created only once implementation is separately authorized to begin.
+The `docs/rules/_template.md` and `docs/decisions/` files above now exist, per the foundational governance decisions recorded in `docs/decisions/DEC-0001-project-foundation-baseline.md`. The `docs/technical/` documents are approved (`DEC-0002`, `DEC-0003`), addressing Pre-Code Development Gate items 7–8 (§16). Following Issue 1 (`docs/completion-records/ISSUE-001-rng-dice-infrastructure.md`), the project's toolchain (`pyproject.toml`, `uv.lock`, `.gitignore`), canonical verification scripts, CI workflow, `src/rng/`, `tests/rng/`, and `docs/completion-records/` all now exist. The remaining `src/` and `tests/` subdirectories (`rules`, `state`, `survivability`, `events`) are created as later issues implement them.
 
 This structure is intentionally smaller than earlier drafts of this document proposed. The following divisions are deferred, not rejected — they may be introduced later if the codebase demonstrates a real need for them:
 

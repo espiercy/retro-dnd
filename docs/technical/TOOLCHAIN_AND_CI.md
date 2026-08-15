@@ -30,7 +30,7 @@ No additional pytest plugins are recommended at this stage — specifically, not
 
 **[APPROVED]** `coverage.py`, invoked directly (`coverage run --branch -m pytest`), plus a **project-specific coverage enforcement layer** on top of it.
 
-`coverage.py` alone provides one global `--fail-under` percentage; it does not natively support the project's *differentiated* per-path thresholds (§10). The project-specific enforcement layer is a small piece of verification logic (exact mechanism is part of the canonical verification workflow, §8, and remains to be built at implementation time) that consumes `coverage.py`'s structured output (`coverage json`) and independently evaluates:
+`coverage.py` alone provides one global `--fail-under` percentage; it does not natively support the project's *differentiated* per-path thresholds (§10). The project-specific enforcement layer is `scripts/check_coverage.py`, invoked by the canonical verification workflow (§8), which consumes `coverage.py`'s structured output (`coverage json`) and independently evaluates:
 
 - 100% branch coverage per file under `src/rules/`;
 - 100% branch coverage per file under `src/survivability/`;
@@ -72,7 +72,7 @@ Neither `pyproject.toml` nor `uv.lock` is created by this document; both are imp
 
 ## 8. Canonical Local Verification Workflow
 
-There is exactly one command a developer runs locally that performs the same checks, in the same order, that CI enforces (§9). The exact implementation mechanism remains open (§11); the following behavior is specified regardless of that choice:
+There is exactly one command a developer runs locally that performs the same checks, in the same order, that CI enforces (§9): `uv run python scripts/verify.py`. It implements the following behavior:
 
 ```text
 Canonical Verification
@@ -134,7 +134,7 @@ A failed mandatory gate fails the CI job — including a `FAILED / UNAVAILABLE` 
 
 CI runs on the single pinned Python version (§2) — no version matrix.
 
-No GitHub Actions workflow file is created by this document; that is an implementation-assignment artifact.
+The workflow exists at `.github/workflows/ci.yml`. Its only step of substance is `uv run python scripts/verify.py` — the identical command described in §8 — after installing `uv` and syncing dependencies with `uv sync --locked --group dev` (`--locked` fails the job if `uv.lock` is out of sync with `pyproject.toml`, rather than silently re-resolving).
 
 ## 10. Coverage-Exception Handling
 
@@ -176,8 +176,6 @@ The verification operation does not currently attempt to automatically validate 
 Not decided by this document, and not needed for the first vertical slice:
 
 - A code formatter (`ruff format` or otherwise).
-- The exact mechanism for the canonical verification command (§8) — a small Python script vs. a task runner (`nox`, `invoke`) vs. a `Makefile`. A plain Python script remains the working assumption; revisit only if it proves insufficient.
-- The precise implementation shape of the project-specific coverage-enforcement layer (§4/§10) — e.g., a standalone script parsing `coverage json` output vs. a small local tool.
 - Test-order randomization (`pytest-randomly`) or parallelization (`pytest-xdist`).
 - Pre-commit hooks (e.g., the `pre-commit` framework) — the canonical verification command (§8) is the enforcement point; a pre-commit hook running the same command locally is a plausible convenience layer to add later, not a requirement now.
 - Release/packaging/distribution tooling — not relevant before there is a distributable artifact.
@@ -185,8 +183,7 @@ Not decided by this document, and not needed for the first vertical slice:
 
 ## 12. Remaining Open Items
 
-None of the following block treating this document's toolchain direction as approved (`docs/decisions/DEC-0003-python-toolchain-and-ci.md`); they are implementation-phase decisions deferred to Issue 1 or later, listed here for visibility:
+The canonical verification command and the coverage-enforcement layer were built during Issue 1 (`docs/completion-records/ISSUE-001-rng-dice-infrastructure.md`): `scripts/verify.py` and `scripts/check_coverage.py`, respectively, with `.github/workflows/ci.yml` invoking the same `scripts/verify.py` command. None of the following block treating this document's toolchain direction as approved (`docs/decisions/DEC-0003-python-toolchain-and-ci.md`); they remain open, deferred until a concrete need arises:
 
-1. The exact mechanism for the canonical verification command (§11).
-2. Whether to adopt a code formatter (§5, §11).
-3. The precise implementation shape of the project-specific coverage-enforcement layer (§4, §11).
+1. Whether to adopt a code formatter (§5, §11).
+2. Whether a live GitHub Actions run has been confirmed by actually pushing to the remote — the workflow's YAML and its command have been validated locally (parses correctly; invokes the identical local verification command; a temporary intentional test failure was used to confirm the Tests/Coverage FAIL/UNAVAILABLE behavior in practice), but no push has been made to trigger a real Actions run.

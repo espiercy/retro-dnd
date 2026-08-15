@@ -14,5 +14,6 @@ Critique the proposed architecture with emphasis on:
 - preserving canonical historical results before survivability modification;
 - avoiding premature complexity;
 - identifying the smallest useful first vertical slice.
+- when giving terminal commands for this project, provide PowerShell-compatible commands for Windows, not Bash/Git Bash syntax, unless explicitly asked otherwise
 
 Return findings and recommendations only. Do not create code until explicitly authorized.

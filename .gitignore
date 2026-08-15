@@ -1,0 +1,22 @@
+# Environment
+.venv/
+
+# Python bytecode / caches
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Coverage data and reports
+.coverage
+.coverage.*
+coverage.json
+htmlcov/
+
+# Packaging (not used — this project is an application, not a built
+# distribution; see pyproject.toml [tool.uv] package = false — but excluded
+# defensively in case that ever changes)
+dist/
+build/
+*.egg-info/
