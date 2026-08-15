@@ -12,7 +12,7 @@ Dungeon (Underworld) Wandering-Monster Check
 
 ## Status
 
-AWAITING_APPROVAL
+APPROVED
 
 ## Rules Domain
 
@@ -136,9 +136,9 @@ All cases use a controlled RNG (`ScriptedRNG` or equivalent) supplying a specifi
 
 ## Approval
 
-- Approved by: `<pending human review>`
-- Date: `<pending>`
-- Notes: `<pending>`
+- Approved by: Human project owner
+- Date: 2026-08-15
+- Notes: Approved after historical and specification review; turn-accounting integration remains a dependency of a future dungeon-turn Rule Card and does not block this procedure.
 
 ---
 
