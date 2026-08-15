@@ -1,6 +1,6 @@
 # V1 Rules Inventory and Dependency Map
 
-**Status: DRAFT — submitted for human review.** This is a scoping/backlog document, not a Rule Card. It identifies the Rule Cards (or coherent groupings) reachable from the v1 dungeon-crawl loop and makes their dependency relationships visible, per `ARCHITECTURE.md` §15.1 and `docs/decisions/DEC-0005-v1-rules-inventory-and-clustered-implementation.md` — it does not resolve any of them. Historical-rules work proceeds in dependency-complete clusters selected from this inventory once it is reviewed and accepted (§15.1); it does not require every item below to be `APPROVED` before any cluster may begin.
+**Status: APPROVED.** This is a scoping/backlog document, not a Rule Card. It identifies the Rule Cards (or coherent groupings) reachable from the v1 dungeon-crawl loop and makes their dependency relationships visible, per `ARCHITECTURE.md` §15.1 and `docs/decisions/DEC-0005-v1-rules-inventory-and-clustered-implementation.md` — it does not resolve any of them. Historical-rules work proceeds in dependency-complete clusters selected from this inventory once it is reviewed and accepted (§15.1); it does not require every item below to be `APPROVED` before any cluster may begin.
 
 This inventory was produced without deep-researching most items (per the assigning instructions). Two items — `EXP-001` and, incidentally, several of its neighbors in *The Underworld & Wilderness Adventures* — were already researched or partially sourced while drafting `EXP-001`; that head start is noted explicitly where it applies. Everything else is unresearched, and any domain-structure claims below not attributed to a specific extracted quote should be read as "expected, based on the three-volume set's known organization" rather than "verified."
 
@@ -116,9 +116,9 @@ These seven items are more consequential than the rest of the table and are call
 | `CHAR-008` | Alignment & Languages | Vol. 1 | Touches `ENC-003` (reaction), `CHAR-006` (retainers), `MON-*` (monster alignment/language), `MAGIC-*` (alignment-relevant spells) | Yes, where mechanically relevant | Unresearched | Medium — how much alignment is mechanically governed (vs. roleplaying guidance) in the 1974 core specifically needs verification; may be thinner than later editions. |
 | `CHAR-009` | Class Special Abilities & Racial Abilities/Limitations | Vol. 1 | `CHAR-002`; cross-references `ADV-002` (advancement), `COMBAT-002` (attack progression), `COMBAT-004` (saves), `MAGIC-001`/`002`/`003+` (spell progression), `MAGIC-004` (turn undead) | Yes — scoped to the three-book core roster only, no later-supplement classes (`DEC-0006`) | Unresearched | Medium-high — consolidates class restrictions (e.g., Magic-User weapon/armor limits, Cleric edged-weapon prohibition) and racial abilities/limits (infravision, resistance, level caps, dual-class rules) not otherwise captured by `CHAR-002`'s eligibility focus. |
 
-## Domain: `advancement` (ADV) — proposed new domain
+## Domain: `advancement` (ADV)
 
-`ARCHITECTURE.md` §12's suggested `docs/rules/` domain list does not currently include an XP/leveling domain; this inventory proposes adding `advancement` alongside the existing seven. Flagged for confirmation, not assumed.
+`advancement` is an established inventory domain alongside `exploration`, `encounters`, `monsters`, `combat`, `magic`, `treasure`, and `character_creation`, covering XP/leveling — approved in addition to `ARCHITECTURE.md` §12's original suggested `docs/rules/` domain list.
 
 | ID | Title / Grouping | Key Source | Dependencies | V1 Required | Status | Risk Flags |
 |---|---|---|---|---|---|---|
