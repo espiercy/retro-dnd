@@ -44,13 +44,14 @@ These seven items are more consequential than the rest of the table and are call
 |---|---|---|---|---|---|---|
 | `EXP-001` | Dungeon Wandering-Monster Check | Vol. 3, p. 10 | RNG abstraction | Yes | **APPROVED** | None — resolved. |
 | `EXP-002` | Dungeon Turn / Time Accounting | Vol. 3, p. 8 ("THE MOVE/TURN IN THE UNDERWORLD") | — | Yes | Partial source in hand | **High priority** — `EXP-001` already depends on this (its own Open Questions item). Partial text already extracted: a turn ≈ 10 minutes ≈ two moves; resting consumes one full turn per hour; searching a 10' wall section takes a full turn, shorter activities a referee-adjudged portion; combat is ten rounds per turn. The precise accounting *algorithm* for a computer simulation (how partial-turn activities accumulate, exact check-firing timing) is not yet specified. |
-| `EXP-003` | Dungeon Movement & Mapping | Vol. 3 p. 8; Vol. 1 (movement rates) — Vol. 1 not yet retrieved | `EXP-002`, `CHAR-005` | Yes | Partial source in hand | Medium. |
+| `EXP-003` | Dungeon Movement, Mapping & Special Terrain | Vol. 3 p. 8; Vol. 1 (movement rates) — Vol. 1 not yet retrieved | `CHAR-005`, `EXP-002` | Yes | Partial source in hand | Medium. Scope now explicitly includes special-terrain movement as a research concern, flagged but not resolved: underground water/aquatic movement (underground lakes, flooded areas, or similar terrain that authored dungeons or `SIM-001` may produce). Not assumed at inventory stage to need an independent Rule Card — may split out later only if research or `SIM-001`'s eventual design justifies it (see "A note on grouping"). No aquatic mechanics are specified here. |
 | `EXP-004` | Resting Procedure | Vol. 3, p. 8 | `EXP-002` | Yes | Partial source in hand ("one turn every hour must be spent motionless") | Low. |
 | `EXP-005` | Searching, Listening, Doors & Secret Features | Vol. 3, p. 10 | `EXP-002` | Yes | Substantial source in hand | Low-medium. Already sourced: secret doors 1–2 on d6 (elves 1–4; referee-optional passive sensing 1–2 for elves); forcing doors 1–2 on d6; listening 1 on d6 (elves/dwarves/hobbits 1–2); trap/pit trigger 1–2 on d6. Mostly needs formalizing into a card, not fresh research. |
 | `EXP-006` | Light & Exploration Resources | Vol. 3, p. 10 | `EXP-002` | Yes | Partial source in hand | Medium — illumination/detection behavior is sourced (torches let monsters see the party; wind can extinguish a torch; monsters have infravision), but resource *consumption rate* (how many turns a torch/lantern lasts) has not yet been located. |
 | `EXP-007` | Traps — trigger mechanic only | Vol. 3, p. 10 | `EXP-002` | Trigger mechanic: yes. Trap *effect* catalog: separate, large. | Partial source in hand (trigger: 1–2 on d6) | **High risk** — recommend splitting the trigger mechanic (small, in-scope, already sourced) from a trap-effect catalog (large, scattered, likely needs its own scoping decision similar to spells/monsters). |
 | `EXP-008` | Dungeon Stocking (monster/treasure room placement) | Vol. 3 (near p. 7, "Distribution of Monsters and Treasure" per the booklet's table of contents) | `MON-001`, `MON-002`, `TREAS-001` | Yes | Substantial source in hand | Low-medium. Already sourced: monster present in a room on a 1–2 (d6); of monster-occupied rooms, treasure present on 1–3 (d6); of unoccupied rooms, treasure present on 1 (d6). |
 | ~~`EXP-009`~~ → `SIM-001` | Dungeon Generation / Map Authoring | Vol. 3, p. 4 | Blocks meaningful end-to-end testing of `EXP-008` and dungeon entry generally | N/A — not a historical Rule Card | **Reclassified** as a Simulator Specification — see `SIM-001` under "Simulator Specifications" below, and Major Research-Risk Flags item 2. |
+| `EXP-010` | Party Formation & Marching Order | Not yet located; expected Vol. 3 (dungeon movement/encounter context) and/or Vol. 1 | `EXP-002`, `EXP-003`, `CHAR-005` | Yes | Unresearched | Medium — tracks mechanical relevance to dungeon movement, who is exposed first to hazards and traps where formation matters, `ENC-002` (surprise) and `ENC-003` (reaction) positioning/targeting, and possible `COMBAT-006` (sequence/timing) target-exposure implications. Dependencies and research surface only — specific mechanics not decided here; may split later per "A note on grouping" if research justifies it. |
 
 ## Domain: `encounters` (ENC)
 
@@ -109,7 +110,7 @@ These seven items are more consequential than the rest of the table and are call
 | `CHAR-002` | Race & Class Eligibility | Vol. 1 | `CHAR-001` | Yes — scoped to the 1974 three-book core roster only (Fighting-Man, Magic-User, Cleric; human/dwarf/elf/hobbit) | Unresearched | Medium — demi-human ability minimums/level caps need precise sourcing. Eligibility only; see `CHAR-009` for special/racial abilities and restrictions. Class-roster scope resolved this revision — see Major Research-Risk Flags item 5 and `DEC-0006`. |
 | `CHAR-003` | Starting Hit Points & Base Saving Throws | Vol. 1 | `CHAR-002` | Yes | Unresearched | Medium — interacts with `COMBAT-004`. |
 | `CHAR-004` | Starting Equipment & Expedition Preparation | Vol. 1 | `CHAR-001`–`CHAR-003` | Yes | Unresearched | Low-medium — mostly catalog transcription. |
-| `CHAR-005` | Encumbrance & Movement Rate | Vol. 1, cross-referenced with Vol. 3 | `CHAR-004`, `EXP-003` | Yes | Unresearched | Medium. |
+| `CHAR-005` | Encumbrance & Movement Rate | Vol. 1, cross-referenced with Vol. 3 | `CHAR-004` | Yes | Unresearched | Medium. Precedes `EXP-003` (dungeon movement consumes this item's movement-rate output) — see Proposed Research Order. |
 | `CHAR-006` | Retainers & Hirelings | Vol. 3 (table of contents: "Specialists," "Men-at-Arms" sections) | `CHAR-004` | Yes (per taxonomy) — see Major Research-Risk Flags item 6 for priority | Unresearched | Low-medium. |
 | `CHAR-007` | Ability Score Mechanical Effects & Cross-System Dependencies | Vol. 1 | `CHAR-001`; touches `CHAR-006` (retainers), `ENC-003` (reaction), `CHAR-008` (languages), `CHAR-002`/`CHAR-009` (class progression) | Yes | Unresearched | Medium — needs to enumerate Strength/Intelligence/Wisdom/Constitution/Charisma effects individually (not just ability generation) and their downstream dependencies; may split per-ability once researched (see "A note on grouping"). |
 | `CHAR-008` | Alignment & Languages | Vol. 1 | Touches `ENC-003` (reaction), `CHAR-006` (retainers), `MON-*` (monster alignment/language), `MAGIC-*` (alignment-relevant spells) | Yes, where mechanically relevant | Unresearched | Medium — how much alignment is mechanically governed (vs. roleplaying guidance) in the 1974 core specifically needs verification; may be thinner than later editions. |
@@ -166,18 +167,19 @@ This is a proposal for human review, not a final sequence.
 3. **Resolve `SIM-001`** (dungeon-generation approach — design, not historical research) — needed before the exploration loop can be exercised end-to-end, though `EXP-008`'s stocking *mechanic* can be researched independently of it.
 4. **`CHAR-001`, `CHAR-007`** (ability scores and their mechanical effects) — natural pair; needed to have a party at all.
 5. **`CHAR-002`, `CHAR-009`** (race/class eligibility, special/racial abilities) — `CHAR-009` may need revisiting once `COMBAT-001`/`ADV-002` resolve.
-6. **`CHAR-003`, `CHAR-004`** (starting HP/saves, equipment).
-7. **`EXP-003`–`EXP-008`** (remaining exploration procedures) — substantial source material already in hand for most of these.
-8. **`ENC-001`, `ENC-002`** (distance, surprise) — already sourced; quick to formalize.
-9. **`ENC-003`, `ENC-004`** (reaction, morale) — dedicated fresh research needed (Vol. 1/Vol. 2).
-10. **`MON-001`, `MON-002`** (monster determination, number appearing) — table already partially in hand.
-11. **`TREAS-001`** (treasure by level) — already substantially in hand.
-12. **`COMBAT-002`–`COMBAT-006`** (attack resolution, damage, saves, healing, sequence/timing) — after `COMBAT-001` resolves.
-13. **`ADV-001`, `ADV-002`** (experience, leveling).
-14. **`CHAR-008`** (alignment & languages).
-15. **`ENC-005`, `ENC-006`** (pursuit/evasion, non-combat resolution) — likely thinner sourcing; tackle after the core loop's more central pieces.
-16. **`CHAR-005`, `CHAR-006`** (encumbrance, retainers) — refine after the core loop is otherwise proven out.
-17. **`MAGIC-001`–`MAGIC-004`, `TREAS-002`–`TREAS-004`, `MON-003`, `MON-004`** — the largest-volume items, spanning the full three-book-core progression (Major Research-Risk Flags item 4); tackle last. `SIM-002` (survivability) is a design task, not a research task, and is not part of this research sequence at all.
+6. **`CHAR-003`, `CHAR-004`, `CHAR-005`** (starting HP/saves, equipment, encumbrance & movement rate) — `CHAR-005` moved up from its previous position so character/party movement capability is resolved *before* `EXP-003` and the other movement- and time-dependent exploration procedures, not after.
+7. **`EXP-003`–`EXP-008`** (remaining exploration procedures, including the special-terrain concerns now flagged in `EXP-003`) — substantial source material already in hand for most of these; now correctly sequenced after `CHAR-005`.
+8. **`EXP-010`** (party formation & marching order) — natural follow-on once movement and the core exploration procedures are in hand.
+9. **`CHAR-008`** (alignment & languages) — moved up from its previous position so it precedes, or is available as an explicit dependency for, communication-dependent encounter research rather than following it.
+10. **`ENC-001`, `ENC-002`** (distance, surprise) — already sourced; quick to formalize.
+11. **`ENC-003`, `ENC-004`** (reaction, morale) — dedicated fresh research needed (Vol. 1/Vol. 2); now correctly sequenced after `CHAR-008`.
+12. **`MON-001`, `MON-002`** (monster determination, number appearing) — table already partially in hand.
+13. **`TREAS-001`** (treasure by level) — already substantially in hand.
+14. **`COMBAT-002`–`COMBAT-006`** (attack resolution, damage, saves, healing, sequence/timing) — after `COMBAT-001` resolves.
+15. **`ADV-001`, `ADV-002`** (experience, leveling).
+16. **`ENC-005`, `ENC-006`** (pursuit/evasion, non-combat resolution/parley) — likely thinner sourcing; `ENC-006` (parley) also benefits from `CHAR-008` already being resolved by this point.
+17. **`CHAR-006`** (retainers) — refine after the core loop is otherwise proven out.
+18. **`MAGIC-001`–`MAGIC-004`, `TREAS-002`–`TREAS-004`, `MON-003`, `MON-004`** — the largest-volume items, spanning the full three-book-core progression (Major Research-Risk Flags item 4); tackle last. `SIM-002` (survivability) is a design task, not a research task, and is not part of this research sequence at all.
 
 ---
 
