@@ -202,12 +202,23 @@ procedure adjudicated or calculated that cost:
             EMIT "dungeon turn elapsed" signal                       (immediately — see below)
             RESOLVE boundary consumers (e.g. EXP-001) synchronously,
                     before any further remaining time is consumed
-            ledger := ledger - 1                                     (carry the fractional
-                                                                        remainder, if any,
-                                                                        forward; 0 if the
-                                                                        activity landed
-                                                                        exactly on the
-                                                                        boundary)
+            ledger := ledger - 1                                     (`step` never advances
+                                                                        the ledger past a
+                                                                        threshold in a single
+                                                                        iteration, so at this
+                                                                        exact point `ledger`
+                                                                        holds a whole integer;
+                                                                        subtracting 1 resets
+                                                                        its current fraction
+                                                                        to zero. Any further
+                                                                        unconsumed activity
+                                                                        time still lives in
+                                                                        `remaining` and is
+                                                                        processed by the next
+                                                                        loop iteration, which
+                                                                        may leave a fractional
+                                                                        `ledger` value once
+                                                                        `remaining` reaches 0)
             IF a boundary consumer signals that the activity is interrupted:
                 STOP  (remaining cost, if any, is not consumed;
                        the interruption/resumption protocol itself
