@@ -45,11 +45,11 @@ Gygax, Gary, and Dave Arneson. *Dungeons & Dragons, Volume 3: The Underworld & W
 4. **Scope boundary, stated by the source itself.** This is the *underworld* procedure. The same booklet contains a textually and mechanically separate "Wilderness Wandering Monsters" procedure (checked once per *day*, using a terrain-dependent matrix rather than a flat 1-in-6 roll) — the source explicitly flags this distinction ("For wilderness encounters an entirely different table will be used"). This card covers the underworld version only; the wilderness version is a distinct future Rule Card.
 5. **No stated depth/level modifier to the check itself.** The Wandering Monsters paragraph states a flat, unmodified 1-in-6 roll with no dependency on dungeon level. This is treated as 1974-explicit rather than an oversight: the same booklet's treasure-type table (p. 7) *does* explicitly vary by "Level Beneath Surface" when the authors intended depth-based variation — its absence here is a meaningful contrast, not silence to be filled in.
 6. **No stated referee discretion over whether to perform the check.** The clause is unqualified ("the referee will roll"). Elsewhere in the same booklet, discretionary procedures are explicitly marked as such (e.g., p. 10: "At the referee's option, Elves may be allowed the chance to sense any secret door they pass..."). The absence of equivalent qualifying language here is treated as 1974-explicit: the check is a standing procedure, not optional flavor.
-7. **A dungeon turn is approximately ten minutes of game time** (p. 8), referenced here only to establish that "turn" names a recurring, bounded unit of dungeon time — not to define its complete semantics (see "Dependencies").
+7. **A dungeon turn is approximately ten minutes of game time** (p. 8), and non-movement activity is already expressed in turn units, not left outside the turn system: resting requires "one turn every hour must be spent motionless" (p. 8); searching a ten-foot section of wall "will require a full turn," with other, shorter activities (e.g., ESP'ing) "adjudged by the referee" as consuming a lesser portion of a turn (p. 8); and combat is explicitly subdivided into turns — "There are ten rounds of combat per turn" (p. 8). These references establish that "turn" is a recurring, bounded unit of dungeon time that rest, search, and combat all consume or are denominated in — not that its complete accounting semantics are defined (see "Dependencies").
 
 ## 1974 Leaves Undefined
 
-Narrowly, within this card's scope: **what specifically constitutes "the end of a turn" for check-triggering purposes when the party is not moving** — e.g., during a turn spent resting, searching, or in combat (which the source separately describes as subdividing a turn into "ten rounds of combat," p. 8). The source establishes *that* a check happens at the end of every turn; it does not itself state what advances turn-count during non-movement activity. This card does not resolve that question — it is a dungeon-turn/exploration-turn system question, not a wandering-monster-check question (see "Dependencies" in the Mechanical Specification, and Open Questions).
+Narrowly, within this card's scope: the 1974 text already ties rest, search, and combat to turn units (see item 7 above) — it does not leave *that* undefined. What it does not specify is the precise accounting/integration semantics a computer simulation needs: how partial-turn activities (e.g., a quarter-turn ESP check) accumulate toward a whole elapsed turn, and exactly when, relative to that accounting, the check in this card fires. This card does not resolve that narrower question — it is a dungeon-turn/exploration-turn system integration question, not a wandering-monster-check question (see "Dependencies" in the Mechanical Specification, and Open Questions).
 
 Nothing else within this card's narrow scope (frequency, die, trigger value, procedure isolation) is left undefined by the 1974 text.
 
@@ -57,7 +57,7 @@ Nothing else within this card's narrow scope (frequency, die, trigger value, pro
 
 ## Completion Research
 
-Not applicable — 1974 is fully explicit for this card's narrow scope (frequency, die, and trigger value). The one genuine open item (precise turn-boundary semantics) is a dependency on a not-yet-authored dungeon-turn Rule Card, not an unresolved rules *question* this card needs a later source to complete. No non-AD&D D&D-lineage research was performed beyond the single corroborating cross-check noted under "1974 Source" (confirming, not completing, the 1974 finding). No AD&D material was consulted or considered.
+Not applicable — 1974 is fully explicit for this card's narrow scope (frequency, die, and trigger value). The one genuine open item (precise turn-accounting/integration semantics — see "1974 Leaves Undefined") is a dependency on a not-yet-authored dungeon-turn Rule Card, not an unresolved rules *question* this card needs a later source to complete. No non-AD&D D&D-lineage research was performed beyond the single corroborating cross-check noted under "1974 Source" (confirming, not completing, the 1974 finding). No AD&D material was consulted or considered.
 
 ## Compatibility Analysis
 
@@ -83,7 +83,7 @@ A qualifying dungeon-turn interval has elapsed
 Perform wandering-monster check
 ```
 
-This card does not define what constitutes a turn boundary (movement, resting, searching, or combat-round accounting) — that is the responsibility of the dungeon-turn Rule Card referenced in "Open Questions." This card applies only while the party is within the underworld; the separate wilderness procedure (out of scope) uses a day-based turn unit instead.
+Movement, resting, searching, and combat are all already expressed in turn units by the 1974 text (see "1974 Explicitly Establishes," item 7); what this card does not define is the precise turn-accounting algorithm — how partial-turn activities accumulate toward a whole elapsed turn, and exactly when the check fires relative to that accounting — which is the responsibility of the dungeon-turn Rule Card referenced in "Open Questions." This card applies only while the party is within the underworld; the separate wilderness procedure (out of scope) uses a day-based turn unit instead.
 
 **Procedure:**
 
@@ -105,7 +105,7 @@ WHEN a qualifying dungeon-turn interval has elapsed
 
 **Non-discretionary.** The check is performed unconditionally at the end of every qualifying turn. It is not skipped based on dungeon depth, party composition, prior results, or referee convenience — none of those exceptions are stated in the source (see "1974 Explicitly Establishes," items 5–6).
 
-**Survivability isolation.** This card specifies the canonical historical procedure only. It must not be modified by, or itself accept, a survivability policy (`ARCHITECTURE.md` §10). `GAME_CONSTITUTION.md` §8 permits a future survivability policy to adjust "encounter quantity," but any such adjustment is a downstream transformation of this procedure's canonical result (or of how often it is invoked by the turn system), never a parameter to, or a change of, this procedure's own 1-in-6 mechanic. This card takes no position on the shape of that future mechanism beyond stating it must not contaminate this specification.
+**Survivability out of scope.** This card specifies the canonical historical procedure only. Survivability is out of scope for it entirely: this procedure must not accept a survivability policy, and no survivability policy may alter this procedure's canonical 1-in-6 mechanic, without a separately approved Rule Card or policy decision specifically authorizing and defining that change (`ARCHITECTURE.md` §10). This card does not describe, authorize, or imply any mechanism by which survivability could do so.
 
 ---
 
@@ -130,8 +130,7 @@ All cases use a controlled RNG (`ScriptedRNG` or equivalent) supplying a specifi
 
 ## Open Questions
 
-1. **Turn-boundary semantics.** What specifically advances turn-count toward the next check — movement only, or also resting, searching, and combat rounds? Deferred to a future dungeon-turn/exploration-turn Rule Card. This card's mechanical specification depends on that system's "qualifying turn elapsed" signal but does not define when it fires. **This does not block approval of this card's own mechanical specification**, since the check procedure itself (roll, trigger, output) is fully specified independent of that answer.
-2. **Future survivability treatment of encounter frequency.** `GAME_CONSTITUTION.md` §8 permits a future survivability policy to touch "encounter quantity." This card takes no position on how that would be implemented, only that it must not alter this card's own canonical mechanic. A design decision for whenever a survivability Rule Card addressing encounter frequency is drafted — not required to approve this card.
+1. **Turn-accounting integration semantics.** Movement, rest, search, and combat are already turn-denominated per the 1974 text (see "1974 Explicitly Establishes," item 7); what a future dungeon-turn/exploration-turn Rule Card still needs to specify is the precise accounting algorithm — how partial-turn activities accumulate toward a whole elapsed turn, and exactly when, relative to that accounting, this card's "qualifying turn elapsed" signal fires. **This does not block approval of this card's own mechanical specification**, since the check procedure itself (roll, trigger, output) is fully specified independent of that answer.
 
 ---
 
