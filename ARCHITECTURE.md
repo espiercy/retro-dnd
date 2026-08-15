@@ -392,15 +392,48 @@ Deterministic Tests
 Rules Audit
 ```
 
-**Issue 3 — V1 Rules Inventory and Dependency Map.** Before any further historical-rules implementation is authorized, produce and maintain a master inventory of every Rule Card (or coherent grouping) reachable from the initial vertical slice's dungeon-crawl loop (§14) — proposed Rule Card/grouping, rules domain, key historical source, known dependencies, whether it is required for v1, current research/approval status, ambiguity/research-risk flags, and a suggested research order. This does not require deep research of every item; its purpose is to establish and scope the backlog for human review before Rule Card production continues. See `docs/rules/INVENTORY.md` and `docs/decisions/DEC-0004-full-v1-rules-corpus-before-implementation.md`.
+**Issue 3 — V1 Rules Inventory and Dependency Map.** Produce and maintain a master inventory of every Rule Card (or coherent grouping) reachable from the initial vertical slice's dungeon-crawl loop (§14) — proposed Rule Card/grouping, rules domain, key historical source, known dependencies, whether it is required for v1, current research/approval status, ambiguity/research-risk flags, and a suggested research order. This does not require deep research of every item; its purpose is to establish the backlog and make dependency relationships visible before cluster selection (§15.1). Drafted — `docs/rules/INVENTORY.md` — pending human review before further Rule Card production or cluster selection proceeds.
 
-## 15.1 V1 Rules-Corpus Completion Gate
+## 15.1 V1 Rules Inventory and Dependency-Complete Implementation Clusters
 
-This supersedes the sequencing plan originally written in this section (which allowed implementation to begin once a single rule had proven the research→approval→implementation workflow). See `docs/decisions/DEC-0004-full-v1-rules-corpus-before-implementation.md` for the full rationale.
+Supersedes the section previously written here, which required the entire v1 Rule Card corpus to be `APPROVED` before any historical-rules implementation could begin (`docs/decisions/DEC-0004-full-v1-rules-corpus-before-implementation.md`, itself now superseded — see `docs/decisions/DEC-0005-v1-rules-inventory-and-clustered-implementation.md` for the full rationale). Neither of two considered extremes is the approved policy:
 
-**Production implementation of any historical Rule Card does not begin until every Rule Card identified as required for the v1 dungeon-crawl loop is either `APPROVED` or explicitly marked out of v1 scope by human decision.** An individually approved Rule Card — including `EXP-001` — does not itself authorize implementation while this gate is open, the same way an approved Rule Card never overrides the Pre-Code Development Gate (§16).
+- **not** implementing each Rule Card immediately after its own individual approval — risks discovering, mid-implementation, that a later, dependent rule changes an earlier implementation's assumptions, forcing rework and encouraging premature interfaces;
+- **not** requiring the entire v1 corpus to be researched and approved before any implementation begins — defers all implementation/integration feedback until the whole corpus is frozen, and risks specifications that have never been exercised together.
 
-Once this gate clears, implementation proceeds issue by issue, following the same complete workflow demonstrated on `EXP-001` (research → Rule Card draft → human review → `APPROVED` → implementation → deterministic tests → rules audit). The project should deliberately exercise the *historical completion* branch of that workflow (a Rule Card requiring research beyond an incomplete 1974 source, `SOURCE_HIERARCHY.md` §5, §8) among the Rule Cards produced to close this gate, rather than restricting the v1 corpus to only rules already fully explicit in 1974.
+The approved policy is a hybrid, dependency-aware **cluster** workflow:
+
+```text
+Complete V1 Rules Inventory
+        ↓
+Select coherent rules cluster
+        ↓
+Research all Rule Cards required by that cluster
+        ↓
+Resolve ambiguities
+        ↓
+Human-approve the cluster's Rule Cards
+        ↓
+Implement and integrate the cluster
+        ↓
+Verify / test / learn from integration
+        ↓
+Select next cluster
+```
+
+**Prerequisite.** Before any cluster is selected, a complete V1 Rules Inventory and Dependency Map must exist and be human-reviewed (`docs/rules/INVENTORY.md`) — every historical rule, table, special case, and dependency reachable from the v1 dungeon-crawl loop (§14) identified and classified. This does not require every item to be researched or approved yet, only identified. Explicitly outside initial v1 scope unless a genuine in-scope dependency requires otherwise: wilderness campaign procedures, the Outdoor Survival map procedure, naval combat, aerial combat, stronghold/domain management, baronies/taxation, large-scale warfare, and other endgame campaign systems unrelated to the dungeon-expedition loop.
+
+**A cluster is ready for implementation only when:**
+
+1. its intended behavioral scope is clearly defined;
+2. all historical rules directly required to execute that scope have been identified;
+3. all Rule Cards required by that scope are `APPROVED`;
+4. any external dependency not implemented in the cluster has a stable approved contract sufficient for integration;
+5. no unresolved rules ambiguity remains that the implementation agent would need to adjudicate itself.
+
+Do not implement a historical subsystem while a Rule Card its own cluster requires remains unresolved. An individually approved Rule Card — including `EXP-001` — does not by itself authorize implementation; it waits for its cluster to become dependency-complete, the same way an approved Rule Card never overrides the Pre-Code Development Gate (§16). `EXP-001`'s likely first cluster is an exploration/time subsystem — dungeon-turn accounting, movement/time consumption, searching/time consumption, mandatory rest, combat-round-to-turn accounting, wandering-monster check timing, and light-duration interaction if the dependency analysis shows it belongs — but this list is illustrative, not final; the inventory and dependency analysis determine the actual cluster boundary.
+
+Implementation/integration feedback from a completed cluster is fed back into the inventory and later Rule Cards through the established governance process (Rule Card revision, or a new decision record, as appropriate) — never used to silently adjust a cluster already in progress.
 
 ## 16. Pre-Code Development Gate
 

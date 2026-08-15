@@ -7,7 +7,7 @@ DEC-0004
 Full V1 Rules Corpus Required Before Historical-Rules Implementation
 
 ## Status
-Approved
+Superseded
 
 ## Date
 2026-08-15
@@ -86,4 +86,4 @@ None as a decision record. This revises the more specific sequencing detail prev
 
 ## Superseded By
 
-None.
+`DEC-0005-v1-rules-inventory-and-clustered-implementation.md`. That decision retains this one's inventory-first requirement but replaces the full-corpus-before-any-implementation requirement with a dependency-complete cluster workflow — see `DEC-0005`'s Context and Rationale for why. This record's Context, Decision, and Rationale above are preserved unchanged as a historical account of what was decided and why on 2026-08-15, prior to that refinement.

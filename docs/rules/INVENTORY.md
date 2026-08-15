@@ -1,6 +1,6 @@
 # V1 Rules Inventory and Dependency Map
 
-**Status: DRAFT — submitted for human review.** This is a scoping/backlog document, not a Rule Card. It identifies the Rule Cards (or coherent groupings) needed to close the V1 Rules-Corpus Completion Gate (`ARCHITECTURE.md` §15.1, `docs/decisions/DEC-0004-full-v1-rules-corpus-before-implementation.md`) — it does not resolve any of them. Per that decision, no historical-rules implementation begins until every item below is either `APPROVED` or explicitly marked `OUT OF V1 SCOPE — HUMAN APPROVED`.
+**Status: DRAFT — submitted for human review.** This is a scoping/backlog document, not a Rule Card. It identifies the Rule Cards (or coherent groupings) reachable from the v1 dungeon-crawl loop and makes their dependency relationships visible, per `ARCHITECTURE.md` §15.1 and `docs/decisions/DEC-0005-v1-rules-inventory-and-clustered-implementation.md` — it does not resolve any of them. Historical-rules work proceeds in dependency-complete clusters selected from this inventory once it is reviewed and accepted (§15.1); it does not require every item below to be `APPROVED` before any cluster may begin.
 
 This inventory was produced without deep-researching most items (per the assigning instructions). Two items — `EXP-001` and, incidentally, several of its neighbors in *The Underworld & Wilderness Adventures* — were already researched or partially sourced while drafting `EXP-001`; that head start is noted explicitly where it applies. Everything else is unresearched, and any domain-structure claims below not attributed to a specific extracted quote should be read as "expected, based on the three-volume set's known organization" rather than "verified."
 
@@ -145,4 +145,4 @@ This is a proposal for human review, not a final sequence.
 
 ## Maintenance
 
-This document should be updated as items move from unresearched → partial source → Rule Card drafted → `APPROVED` (or → `OUT OF V1 SCOPE — HUMAN APPROVED`), and as grouping/numbering is refined during actual drafting. It is the durable tracking artifact `ARCHITECTURE.md` §15.1's gate refers to; the gate clears when every row above (and any rows added later) reaches one of those two terminal states.
+This document should be updated as items move from unresearched → partial source → Rule Card drafted → `APPROVED` (or → `OUT OF V1 SCOPE — HUMAN APPROVED`), as grouping/numbering is refined during actual drafting, and as cluster boundaries are chosen and completed (`ARCHITECTURE.md` §15.1). It is the durable tracking artifact clusters are selected from — a cluster becomes ready for implementation when its own scope is dependency-complete (§15.1's five readiness criteria), not when this entire inventory is resolved.
