@@ -208,6 +208,32 @@ docs/decisions/
 
 `docs/decisions/DEC-0001-project-foundation-baseline.md` summarizes the foundational decisions adopted before this document's own approval, without attempting to reproduce every prior conversation. Going forward, significant standalone architectural/process decisions receive their own new records rather than edits to `DEC-0001`.
 
+### 9.7 Revalidation After a Source-Authority Change
+
+A `APPROVED` Rule Card, cluster document, or rules inventory is authoritative only relative to the source hierarchy (`SOURCE_HIERARCHY.md`) in force when it was approved. When a decision record changes which source is primary — as `DEC-0007-rules-cyclopedia-primary-rules-authority.md` did on 2026-08-16 — every rules artifact approved under the superseded hierarchy stops being implementation-authoritative, regardless of what its own `Status` field still says, until it is reviewed against the current hierarchy.
+
+**`REVALIDATION_REQUIRED`** is the status such an artifact carries in the interim:
+
+```text
+previously APPROVED
+        ↓
+source authority superseded (new decision record)
+        ↓
+REVALIDATION_REQUIRED
+        ↓
+research against the current source hierarchy
+        ↓
+human review
+        ↓
+APPROVED again (or a materially revised specification, or retirement)
+```
+
+`REVALIDATION_REQUIRED` means: *this artifact was previously approved under an earlier source authority, but cannot currently authorize implementation until it is reviewed against the active hierarchy.* It does not mean the prior research was worthless, incorrect, or is being discarded — only that its mechanical authority is suspended pending review. The artifact's prior research content, and the record of its prior human approval (approver, date, and the policy then in force), must be preserved rather than deleted, exactly as a superseded decision record's Context/Decision/Rationale/Consequences are preserved rather than rewritten (§9.4). A narrow added note stating the supersession and pointing to the governing migration record (e.g., `docs/rules/RULESET_BASELINE_MIGRATION.md`) is sufficient; the artifact's substantive content is not rewritten as part of applying this status — that happens only during its actual revalidation, a separate, explicitly authorized task.
+
+This status applies to Rule Cards (`docs/rules/_template.md`), cluster documents (`docs/rules/clusters/`), and the V1 Rules Inventory (`docs/rules/INVENTORY.md`) alike. A cluster or inventory in this state blocks the corresponding step of `ARCHITECTURE.md` §15.1's cluster workflow (or whichever migration gate is currently active, e.g., `ARCHITECTURE.md` §15.2) exactly as an unapproved Rule Card would.
+
+Revalidation itself is not defined as a single fixed procedure here — it is, in substance, the same research→draft→human-review→`APPROVED` workflow already used for a new Rule Card (`AGENTS.md` §9), applied against the current source hierarchy instead of a blank page, and may conclude either that the prior specification survives essentially unchanged (with updated provenance labeling) or that it requires material rewriting and new deterministic tests. No artifact may be silently grandfathered back to `APPROVED` merely because its previously-researched mechanics happen to resemble the current authority's rule — revalidation must be performed and recorded, not assumed.
+
 ## 10. Relationship to Automated Verification
 
 Completion records (§3–§8) and decision records (§9) are durable, human-readable reports. They are not the enforcement mechanism for testing or coverage requirements. Once the implementation toolchain is selected, automated CI/build gates are the objective enforcement mechanism for those requirements; a completion record documents what those gates showed, after the fact. See `TESTING_STRATEGY.md` §9–§10 for the full model, including the requirement that a failed mandatory gate must fail the build and must not be described as a completed issue.

@@ -1,5 +1,7 @@
 # Cluster 1: Dungeon Exploration Time
 
+> **Migration note (2026-08-16).** This cluster was approved based on three Rule Cards (`EXP-001`, `EXP-002`, `EXP-004`) researched under the superseded 1974-primary source policy. Its implementation authority is suspended: status changed to `REVALIDATION_REQUIRED` below. Requires Rules Cyclopedia revalidation of its boundary and included rules before implementation authority is restored (`DEC-0007-rules-cyclopedia-primary-rules-authority.md`, `DEVELOPMENT_WORKFLOW.md` §9.7, `ARCHITECTURE.md` §15.2). Do not assume the existing three-item boundary below will remain unchanged once revalidated — it is preserved here as the historical record of what was previously approved, not as a pre-committed outcome of revalidation. See `docs/rules/RULESET_BASELINE_MIGRATION.md`.
+
 ## 1. Cluster ID
 
 `CLUSTER-001`
@@ -12,9 +14,9 @@ Dungeon Exploration Time
 
 ## 3. Status
 
-`APPROVED` — human-approved 2026-08-15, subject to the consistency corrections recorded in §14.
+`REVALIDATION_REQUIRED` — previously `APPROVED` (human-approved 2026-08-15, subject to the consistency corrections recorded in §14); that approval was granted under the since-superseded 1974-primary source policy and no longer authorizes implementation as-is (see migration note above). The historical approval record, boundary analysis, rationale, and research ordering below (§4–§14) are preserved unchanged; none of it is rewritten by this migration.
 
-This approves the cluster *boundary* itself (§5–§13). It does not, by itself, begin Rule Card research for `EXP-002` or `EXP-004`, and it does not authorize implementation of anything in the cluster — both remain separate, explicitly authorized tasks under the established workflow (`ARCHITECTURE.md` §15.1, `DEVELOPMENT_WORKFLOW.md`).
+This document previously approved the cluster *boundary* itself (§5–§13) and did not, by itself, begin Rule Card research or authorize implementation — both remained separate, explicitly authorized tasks under the established workflow (`ARCHITECTURE.md` §15.1, `DEVELOPMENT_WORKFLOW.md`). That remains true; implementation of this cluster additionally now requires the revalidation described above before the established workflow can resume.
 
 ## 4. Purpose
 

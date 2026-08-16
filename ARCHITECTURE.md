@@ -435,6 +435,36 @@ Do not implement a historical subsystem while a Rule Card its own cluster requir
 
 Implementation/integration feedback from a completed cluster is fed back into the inventory and later Rule Cards through the established governance process (Rule Card revision, or a new decision record, as appropriate) — never used to silently adjust a cluster already in progress.
 
+## 15.2 Rules Baseline Migration Gate (added 2026-08-16)
+
+`DEC-0007-rules-cyclopedia-primary-rules-authority.md` replaced the 1974 three-book OD&D core with the Rules Cyclopedia as the project's primary rules authority. See `docs/rules/RULESET_BASELINE_MIGRATION.md` for the full migration record.
+
+This does not erase the fact that a V1 Rules Inventory (`docs/rules/INVENTORY.md`) and a first cluster, `CLUSTER-001` (dungeon exploration time — `EXP-001`, `EXP-002`, `EXP-004`), were previously researched, human-approved, and merged under the superseded 1974-primary policy. Both remain in the repository as a historical record of completed work and are not deleted or rewritten. Neither currently carries implementation authority: both are marked `REVALIDATION_REQUIRED` (`DEVELOPMENT_WORKFLOW.md` §9.7), pending review against the current source hierarchy.
+
+The progression toward Cluster 1 implementation described in §15.1 is **suspended**, replaced by:
+
+```text
+Rules Baseline Migration (this gate)
+        ↓
+Rules Cyclopedia governance established
+        ↓
+V1 Rules Inventory revalidated/rebuilt against the Rules Cyclopedia
+        ↓
+human approval of the revised inventory
+        ↓
+existing Rule Cards / clusters revalidated, or new ones selected, per §15.1's cluster workflow
+        ↓
+human approval
+        ↓
+implementation readiness (re-)approved
+        ↓
+historical-rules implementation
+```
+
+`§15.1`'s cluster-workflow *mechanics* (inventory-first, dependency-complete clusters, the five readiness criteria) remain the approved process and are not superseded by this gate — only the specific inventory and cluster content produced under the prior source authority require revalidation before that process's outputs can authorize implementation again.
+
+**Historical-rules implementation authorization: FROZEN** until: (1) a Rules Cyclopedia V1 Rules Inventory is approved; (2) affected cluster boundaries are approved/revalidated under that inventory; (3) all Rule Cards required by the first revised cluster are approved under the current hierarchy; (4) implementation readiness is (re-)approved for that cluster. No `APPROVED` (or `IMPLEMENTATION_READY`) metadata dated under the superseded policy bypasses this freeze — see `DEC-0007`'s Consequences.
+
 ## 16. Pre-Code Development Gate
 
 Production code must not begin — including Issue 1 (§15) — until a human has reviewed and approved each of the following foundational items:

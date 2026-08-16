@@ -1,5 +1,9 @@
 # Rule Card: Dungeon Wandering-Monster Check
 
+> **Migration note (2026-08-16).** Previously approved under the superseded 1974-primary source policy (`docs/decisions/DEC-0006-v1-playable-content-scope.md` and prior). Requires Rules Cyclopedia revalidation before implementation authority is restored (`DEC-0007-rules-cyclopedia-primary-rules-authority.md`, `DEVELOPMENT_WORKFLOW.md` §9.7). This does not indicate the research below was incorrect — only that it has not yet been reviewed against the current source hierarchy. All content below is preserved unchanged as the historical research and approval record; it is not rewritten by this migration. See `docs/rules/RULESET_BASELINE_MIGRATION.md`.
+>
+> Prior approval record: Approved by Human project owner, 2026-08-15, under the then-governing 1974-primary source policy — see this card's own "Approval" section below, preserved unchanged.
+
 ---
 
 ## Rule ID
@@ -12,7 +16,7 @@ Dungeon (Underworld) Wandering-Monster Check
 
 ## Status
 
-APPROVED
+REVALIDATION_REQUIRED
 
 ## Rules Domain
 

@@ -1,10 +1,14 @@
 # Retro D&D Simulator — Agent Instructions
 
+> **Migration note (2026-08-16).** This document was revised under `DEC-0007-rules-cyclopedia-primary-rules-authority.md`, which replaced the 1974 three-book OD&D core with the *Dungeons & Dragons Rules Cyclopedia* as the simulator's primary rules authority. See `docs/rules/RULESET_BASELINE_MIGRATION.md` for the full migration record and `SOURCE_HIERARCHY.md` for the current hierarchy.
+
 ## 1. Mission
 
-You are contributing to a historically grounded simulator of the original 1974 Dungeons & Dragons game.
+You are contributing to a retro Dungeons & Dragons dungeon-crawler simulator grounded primarily in the *Dungeons & Dragons Rules Cyclopedia*, using historically compatible alternate D&D sources where necessary to complete or clarify the executable rules.
 
-Your job is to implement and support the project's approved design. You are not authorized to modernize, rebalance, reinterpret, or complete game rules without documented approval.
+Your job is to implement and support the project's approved design. You are not authorized to modernize, rebalance, reinterpret, or complete game rules without documented approval. This includes not silently preferring an earlier-edition rule (including the project's own prior 1974-primary research) over an explicit Rules Cyclopedia mechanic merely because it is more historically primary, more familiar, or was the project's original baseline — that is itself a form of the silent rules decision prohibited in §3.
+
+A Rule Card, cluster, or inventory previously `APPROVED` under a since-superseded source authority does not retain implementation authority merely because it still says `APPROVED`. See `REVALIDATION_REQUIRED` (`DEVELOPMENT_WORKFLOW.md` §9.7, `docs/rules/_template.md`) for the status such artifacts carry until reviewed against the current hierarchy.
 
 Before performing rules-related work, read:
 
@@ -57,9 +61,9 @@ Instead provide:
 
 Do not use AD&D as rules authority unless a specific approved project decision explicitly authorizes it.
 
-Prefer the source hierarchy in `SOURCE_HIERARCHY.md`.
+Prefer the source hierarchy in `SOURCE_HIERARCHY.md`, which begins with the Rules Cyclopedia (§3) and treats BECMI, B/X, Holmes, and original OD&D as alternate-source completion material, not as authority earlier sources are checked against ahead of the Rules Cyclopedia.
 
-If no compatible D&D-lineage answer exists, escalate for a Simulator Ruling.
+If no compatible D&D-lineage answer exists, escalate for a Simulator Ruling. If a compatible-but-conflicting alternate-source rule is nonetheless desired, escalate it as a candidate Human-Approved Variant (`SOURCE_HIERARCHY.md` §7) rather than importing it as ordinary completion.
 
 ## 5. Preserve Historical Procedures
 
@@ -143,12 +147,12 @@ An issue must not be represented as complete when required tests are failing, re
 
 When asked to research a rule:
 
-1. Separate explicit 1974 behavior from omissions.
-2. Search sources in the approved hierarchy.
-3. Address the exact unresolved question rather than importing an entire later rule.
-4. Distinguish clarification from revision.
-5. Report compatibility concerns.
-6. Do not convert research conclusions into approved rules unless authorized.
+1. Separate explicit Rules Cyclopedia behavior from omissions or ambiguity.
+2. Search alternate-source sources in the order given in `SOURCE_HIERARCHY.md` §3.
+3. Address the exact unresolved question rather than importing an entire alternate-source rule.
+4. Classify each alternate-source comparison using the compatibility vocabulary (`SOURCE_HIERARCHY.md` §6) — Preserved, Compatible Completion, Evolved/Different, or Conflicting — rather than a bare clarification/revision binary.
+5. Report compatibility concerns, and flag any Evolved/Different or Conflicting finding as a candidate Human-Approved Variant rather than importing it.
+6. Do not convert research conclusions into approved rules, and do not create a Human-Approved Variant, unless authorized.
 
 ## 11. Testing Expectations
 

@@ -7,7 +7,7 @@ DEC-0006
 V1 Playable-Content Scope: Full 1974-Core Progression, Three-Book Boundary
 
 ## Status
-Approved
+Superseded by `DEC-0007`
 
 ## Date
 2026-08-15
@@ -62,4 +62,4 @@ None. This decision is complementary to `DEC-0004` and `DEC-0005` — it clarifi
 
 ## Superseded By
 
-None.
+`DEC-0007-rules-cyclopedia-primary-rules-authority.md` (2026-08-16). That decision replaces the 1974 three-book core as the project's primary rules authority with the Rules Cyclopedia, which necessarily supersedes this record's three-book playable-content boundary (Decision items 1–2 above). This record's Context, Decision, and Rationale are preserved unchanged as a historical account of what was decided and why on 2026-08-15, prior to that migration — they remain an accurate record of the reasoning applied under the policy in force at the time, not a currently active content boundary.

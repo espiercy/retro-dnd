@@ -1,36 +1,38 @@
 # Retro D&D Simulator — Game Constitution
 
+> **Migration note (2026-08-16).** Sections 1, 2, 3, 4, and 5 below were revised under `DEC-0007-rules-cyclopedia-primary-rules-authority.md`, which replaced the 1974 three-book OD&D core with the *Dungeons & Dragons Rules Cyclopedia* as the simulator's primary rules authority. See `docs/rules/RULESET_BASELINE_MIGRATION.md` for the full migration record. Every other section of this document is unaffected and retained as originally adopted.
+
 ## 1. Purpose
 
-Retro D&D Simulator is a computer game intended to simulate the procedures, uncertainty, danger, and emergent play of the original 1974 Dungeons & Dragons game as faithfully as practical.
+Retro D&D Simulator is a computer game intended to simulate the procedures, uncertainty, danger, and emergent play of a retro Dungeons & Dragons dungeon crawler, grounded primarily in the *Dungeons & Dragons Rules Cyclopedia*, using historically compatible alternate D&D sources where necessary to complete or clarify the executable rules, as faithfully as practical.
 
 The primary game experience is dungeon crawling. The game does not require an epic or overarching narrative. Campaign history should emerge from expeditions, exploration, encounters, treasure recovery, character advancement, death, survival, and the persistent consequences of player decisions.
 
-## 2. Historical Fidelity
+## 2. Rules-Cyclopedia Fidelity
 
-The 1974 Dungeons & Dragons rules are the canonical foundation of the simulator.
+The *Dungeons & Dragons Rules Cyclopedia* is the canonical mechanical foundation of the simulator.
 
-When a rule is explicitly and sufficiently defined in the 1974 rules, that rule must be preserved. It may not be replaced merely because a later rule is clearer, more balanced, more familiar, or easier to implement.
+When a rule is explicitly and sufficiently defined in the Rules Cyclopedia, that rule must be preserved. It may not be replaced merely because an earlier or later source is more familiar, more historically primary, or easier to implement — including the project's own prior 1974-primary research, which remains valuable as historical and alternate-source material but no longer defines game behavior on its own authority (`SOURCE_HIERARCHY.md` §3, §10).
 
-The simulator must not silently modernize Dungeons & Dragons.
+The simulator must not silently deviate from the Rules Cyclopedia's explicit mechanics without an explicit, documented Human-Approved Variant (`SOURCE_HIERARCHY.md` §7).
 
 ## 3. Ambiguity Is a First-Class Design Concern
 
-The 1974 rules are not complete in all areas. Ambiguity must be identified rather than hidden.
+The Rules Cyclopedia is not complete in all areas. Ambiguity must be identified rather than hidden.
 
-When implementation requires behavior that the 1974 rules do not fully define:
+When implementation requires behavior that the Rules Cyclopedia does not fully define:
 
-1. Determine precisely what the 1974 text establishes.
-2. Determine precisely what remains undefined.
-3. Consult the project's source hierarchy for the earliest compatible completion.
-4. Import only behavior that is compatible with the 1974 rule already established.
-5. If no compatible historical completion exists, create a documented Simulator Ruling.
+1. Determine precisely what the Rules Cyclopedia establishes.
+2. Determine precisely what remains undefined or ambiguous.
+3. Consult the project's source hierarchy (`SOURCE_HIERARCHY.md` §3) for the most relevant compatible alternate-source completion.
+4. Import only behavior that is compatible with the Rules Cyclopedia rule already established, classified per `SOURCE_HIERARCHY.md` §6.
+5. If no compatible completion exists, create a documented Simulator Ruling.
 
-No coding agent may silently resolve rules ambiguity.
+No coding agent may silently resolve rules ambiguity, and no coding agent may silently substitute an earlier-edition preference for an explicit Rules Cyclopedia rule.
 
 ## 4. D&D Lineage, Not AD&D
 
-The project belongs to the Dungeons & Dragons lineage descending through Basic D&D and culminating in the Rules Cyclopedia.
+The project belongs to the Dungeons & Dragons lineage that the Rules Cyclopedia consolidates — BECMI, B/X, Holmes, and original OD&D and its supplements are its alternate-source completion lineage (`SOURCE_HIERARCHY.md` §3).
 
 AD&D rules are excluded by default. They may not be used as implementation authority unless a specific exception is explicitly approved by the human project owner.
 
@@ -38,13 +40,13 @@ If the non-AD&D D&D lineage does not provide a compatible answer, a documented S
 
 ## 5. Rules Provenance
 
-Every implemented rule should be traceable to one of the following provenance categories:
+Every implemented rule should be traceable to one of the following provenance categories (`SOURCE_HIERARCHY.md` §10):
 
-- **1974 Explicit** — directly and sufficiently specified by the 1974 rules.
-- **1974 Interpreted** — derived from the 1974 rules but requiring documented interpretation.
-- **D&D Completion** — completed from an approved source in the non-AD&D D&D lineage.
-- **Rules Cyclopedia Completion** — completed using the Rules Cyclopedia where earlier compatible coverage is unavailable or insufficient.
-- **Simulator Ruling** — behavior required by the simulation but not satisfactorily resolved by approved historical sources.
+- **Rules Cyclopedia Explicit** — directly and sufficiently specified by the Rules Cyclopedia.
+- **Necessary Mathematical/Mechanical Consequence** — an unavoidable executable consequence of a Rules Cyclopedia Explicit rule.
+- **Alternate-Source Compatible Completion** — completed from an approved source in the non-AD&D D&D lineage where the Rules Cyclopedia leaves a gap.
+- **Simulator Ruling** — behavior required by the simulation but not satisfactorily resolved by the Rules Cyclopedia or any compatible alternate source.
+- **Human-Approved Variant** — a deliberate, documented deviation from an explicit Rules Cyclopedia rule, approved by the human project owner (`SOURCE_HIERARCHY.md` §7).
 
 Rules provenance is part of the product, not merely developer documentation.
 
@@ -157,6 +159,7 @@ The human project owner retains final authority over:
 - historical interpretation;
 - source compatibility judgments;
 - Simulator Rulings;
+- Human-Approved Variants (`SOURCE_HIERARCHY.md` §7);
 - approving Rule Cards for implementation (see `SOURCE_HIERARCHY.md` and `AGENTS.md`);
 - approving foundational process documents (`DEVELOPMENT_WORKFLOW.md`, `TESTING_STRATEGY.md`) and clearing the pre-code development gate (see `ARCHITECTURE.md`);
 - approving and superseding durable architecture/process decision records (see `docs/decisions/`);

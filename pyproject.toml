@@ -1,7 +1,7 @@
 [project]
 name = "retro-dnd-simulator"
 version = "0.1.0"
-description = "A historically faithful simulator of the original 1974 Dungeons & Dragons game."
+description = "A retro Dungeons & Dragons dungeon-crawler simulator grounded primarily in the Rules Cyclopedia."
 requires-python = ">=3.14,<3.15"
 dependencies = []
 
