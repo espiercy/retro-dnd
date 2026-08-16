@@ -1,190 +1,233 @@
-# V1 Rules Inventory and Dependency Map
+# V1 Rules Inventory and Dependency Map (Rules Cyclopedia)
 
-> **Migration note (2026-08-16).** This inventory was constructed around the 1974 three-book OD&D core, under the source policy superseded by `DEC-0007-rules-cyclopedia-primary-rules-authority.md`. It can no longer remain the active Rules Cyclopedia V1 inventory as-is: status changed to `REVALIDATION_REQUIRED` below. The active target is now Rules Cyclopedia-reachable V1 dungeon-crawler content, not the three-book boundary described in the "Playable-content boundary" paragraph below (which is preserved unchanged as a historical record of the prior policy, not the current one). Many content families, dependencies, and even row boundaries may change under systematic Rules Cyclopedia revalidation — changing source names alone does not make the existing content below correct. The recommended next task is a full Rules Cyclopedia V1 Rules Inventory revalidation/rebuild, not a card-by-card patch of this document. See `docs/rules/RULESET_BASELINE_MIGRATION.md` and `ARCHITECTURE.md` §15.2. This migration does not attempt that rebuild.
+**Status: DRAFT.** This is a scoping/backlog document, not a Rule Card — it does not resolve any individual mechanic, and nothing below may authorize implementation (`ARCHITECTURE.md` §15.2's migration gate remains in force regardless of this document's own status). It supersedes the prior inventory's active framing; the prior, 1974-primary inventory remains available through Git history and is not duplicated here — see `docs/rules/RULESET_BASELINE_MIGRATION.md` for that history and `docs/rules/INVENTORY_MIGRATION_MAP.md` for the row-by-row disposition of every entry the prior inventory contained.
 
-**Status: REVALIDATION_REQUIRED** (previously `APPROVED`, 2026-08-15, under the since-superseded 1974-primary policy — see migration note above; `DEVELOPMENT_WORKFLOW.md` §9.7). This is a scoping/backlog document, not a Rule Card. It identifies the Rule Cards (or coherent groupings) reachable from the v1 dungeon-crawl loop and makes their dependency relationships visible, per `ARCHITECTURE.md` §15.1 and `docs/decisions/DEC-0005-v1-rules-inventory-and-clustered-implementation.md` — it does not resolve any of them. Historical-rules work proceeds in dependency-complete clusters selected from this inventory once it is reviewed and accepted (§15.1); it does not require every item below to be `APPROVED` before any cluster may begin. The content below is preserved unchanged as a historical record of the prior, 1974-primary inventory; it is not rewritten by this migration.
+This document requires human review before it may be set to `APPROVED`. Until then, no cluster may be selected or defined against it (`ARCHITECTURE.md` §15.1/§15.2).
 
-This inventory was produced without deep-researching most items (per the assigning instructions). Two items — `EXP-001` and, incidentally, several of its neighbors in *The Underworld & Wilderness Adventures* — were already researched or partially sourced while drafting `EXP-001`; that head start is noted explicitly where it applies. Everything else is unresearched, and any domain-structure claims below not attributed to a specific extracted quote should be read as "expected, based on the three-volume set's known organization" rather than "verified."
+## Source and Method
 
-**V1 progression scope (historical, under the superseded policy).** This inventory covers the full playable progression reachable through normal v1 play under the 1974 three-book core — not an arbitrary low-level or low-dungeon-level cap. If normal play can advance a character to a higher supported level, the rules and content reachable at that level (higher-level class progression, higher-level spells, deeper dungeon encounter content, treasure and magic items reachable through the canonical procedures, and the monsters/special abilities reachable through those procedures) remain part of this inventory. Cluster-based *implementation* (`ARCHITECTURE.md` §15.1) may still proceed incrementally — an early cluster reasonably starting with low-level content is a sequencing choice, not a catalog boundary — but this document itself must not silently truncate what's catalogued. See `docs/decisions/DEC-0006-v1-playable-content-scope.md` (superseded).
+Driven by the *Dungeons & Dragons Rules Cyclopedia* (TSR 1071, 1991) as primary authority (`DEC-0007`, `SOURCE_HIERARCHY.md`), not by the retired 1974-primary inventory as a checklist. See `docs/rules/RC_V1_SCOPE_AUDIT.md` for the chapter/section coverage this document was built from, and its stated verification-method limits — citations below are chapter/section-level, not page-verified, and every entry remains subject to primary-text confirmation during its own future Rule Card research. This is a deliberately broad, shallow pass (identify and classify, not resolve) — see the assigning task for the full scope boundary.
 
-**Playable-content boundary (historical, under the superseded policy).** For initial v1 playable content, the 1974 three-book core (*Men & Magic*, *Monsters & Treasure*, *The Underworld & Wilderness Adventures*) is the content boundary — the classes, spells, monsters, and magic items catalogued here are drawn only from those three books. Later non-AD&D D&D sources remain available through `SOURCE_HIERARCHY.md` for *compatible completion* of an incomplete or ambiguous 1974 mechanic; they do not automatically enlarge this catalog. A class, spell, monster, or item that exists only in a later supplement (e.g., the Thief, from Supplement I: *Greyhawk*) is tracked as future supplement-expansion scope (see "Future Scope: Supplement Expansion" below), not included here. See `docs/decisions/DEC-0006-v1-playable-content-scope.md` (superseded). **This boundary is no longer active policy** — see the migration note above; the active boundary is Rules Cyclopedia-reachable V1 content, pending the recommended revalidation/rebuild task.
+**V1 gameplay loop** (unchanged from prior policy — reachability root, not itself RC-specific):
+
+```text
+Create / maintain party
+        ↓
+Prepare and equip expedition
+        ↓
+Enter dungeon
+        ↓
+Explore under dungeon procedures
+        ↓
+Encounter monsters / traps / features
+        ↓
+Negotiate / evade / fight / otherwise resolve
+        ↓
+Find and recover treasure
+        ↓
+Exit dungeon
+        ↓
+Award XP / advance / recover / resupply
+        ↓
+Begin another expedition
+```
+
+**V1 progression scope.** No 1974-era progression cap is carried forward. The Rules Cyclopedia supports character levels 1–36; V1 covers the full progression reachable through normal play under that range — higher-level classes/spells/monsters/treasure are in scope, not truncated to starting characters (see "Progression-Scope Findings" below for what this changes versus the old boundary).
+
+**Playable-content boundary.** Rules Cyclopedia content reachable through the V1 loop above, completed by alternate non-AD&D D&D sources only where RC itself is silent or ambiguous (`SOURCE_HIERARCHY.md` §3) — not automatically the old three-book catalog, and not automatically every RC-adjacent supplement either.
 
 ## How to Read This Table
 
 | Column | Meaning |
 |---|---|
-| ID | Proposed, reserved Rule ID (domain prefix + number). Not yet drafted unless marked otherwise. Grouping and numbering may shift once actual drafting starts. |
-| Title / Grouping | Working title. |
-| Key Source | Where 1974 material is expected or known to live. "Not yet retrieved" means the source volume hasn't been fetched during this project yet — only *The Underworld & Wilderness Adventures* (Vol. 3) has been consulted so far. |
-| Dependencies | Other inventory items this one needs resolved first (mechanically, not just for drafting convenience). |
-| V1 Required | Whether the taxonomy this inventory was built from marks this as reachable from the v1 dungeon-crawl loop. |
-| Status | `APPROVED` / partial-source-in-hand / unresearched / blocked. |
-| Risk Flags | Known or suspected difficulty, ambiguity, or scope-decision needs. |
+| ID | Domain-prefixed Rule ID/grouping. Existing 1974-primary IDs are reused where the underlying rules responsibility survives conceptually (`INVENTORY_MIGRATION_MAP.md`); new IDs continue each domain's existing numbering, preserving gaps left by retired IDs rather than renumbering. |
+| Title | Working title under the current (RC) understanding of the responsibility — may differ from the old title where RC reframes scope. |
+| RC Source | Chapter/section believed to contain this material, per `RC_V1_SCOPE_AUDIT.md`. Not page-verified unless stated. |
+| Core/Optional/Conditional | `CORE` (part of RC's default rules), `OPTIONAL` (RC itself presents it as DM-choice — human decision needed before it's in or out of V1), `CONDITIONAL` (in scope only if a specific upstream decision, usually an `OPTIONAL` entry, is enabled). |
+| Dependencies | Other inventory items this one needs resolved first. |
+| Downstream Consumers | Other inventory items that depend on this one (kept visible in both directions per the assigning instructions' reachability-closure requirement). |
+| V1 Reachable | Whether this is reachable through the loop above. |
+| Status | Lifecycle status of the *inventory entry itself* — none of these are researched Rule Cards yet. |
+| Risk / Notes | Ambiguity/research risk, catalog-closure requirement where applicable, and legacy-mapping pointer. |
 
-**A note on grouping.** An inventory ID is a proposed, reserved identifier for tracking purposes — not a permanent one-to-one Rule Card boundary. A grouping such as `EXP-005` ("Searching, Listening, Doors & Secret Features") may split into multiple Rule Cards once research reveals distinct historical procedures, separate dependencies, racial modifiers, independent ambiguity, or independently testable behavior. This inventory defines the complete rules surface; detailed research determines the final Rule Card boundaries.
-
----
-
-## ⚠ Major Research-Risk Flags (read first)
-
-These seven items are more consequential than the rest of the table and are called out separately because each blocks or shapes a large downstream portion of the inventory. None of them is resolved by this document.
-
-1. **Combat system selection (`COMBAT-001`).** OD&D 1974 does not mandate one combat system — Volume 1 (*Men & Magic*) presents the default Chainmail-based man-to-man system and an "Alternative Combat System." `SOURCE_HIERARCHY.md` §3 lists *Chainmail* as an explicit dependency "where the 1974 rules explicitly depend upon it," but choosing between the two systems is a foundational fork with major downstream consequences (armor class meaning, to-hit resolution, everything in the `COMBAT-*` and much of `MON-*` domains). This is a human decision, not an implementation-agent inference.
-2. **Dungeon generation / map authoring — reclassified as a Simulator Specification, not an unresolved historical rule.** The 1974 text is explicit that dungeon layout is hand-authored by the referee: "Before it is possible to conduct a campaign of adventures in the mazey dungeons, it is necessary for the referee to sit down with pencil in hand and draw these labyrinths on graph paper" (Vol. 3, p. 4). No 1974 procedural/random dungeon-layout generation algorithm has been located, and none is expected to exist historically. This is distinct from *dungeon stocking* (`EXP-008`, populating an already-drawn dungeon with monsters/treasure), which *is* explicitly procedural and already substantially sourced. Rather than track this indefinitely as an undefined historical rule, it is now `SIM-001` — a simulator-authored design requirement, constrained by historical guidance but not itself a historical rule (see "Simulator Specifications" below).
-3. **Reaction (`ENC-003`) and Monster Morale (`ENC-004`) have not yet been located** in the material consulted so far (Volume 3 only). These are expected to live in Volume 1 or Volume 2, neither of which has been retrieved yet. Flagged as unresearched, not merely unresolved.
-4. **Spell, monster, and magic-item breadth is large, not indefinite — full 1974-core progression, not level-capped.** `MAGIC-003+` (individual spell effects), `MON-003`/`MON-004` (general monster stats and special abilities), and `TREAS-003`/`TREAS-004` (magic-item catalog and use) each span the full playable progression the 1974 core supports — not truncated to starting characters or low dungeon levels (see "V1 progression scope" above; `DEC-0006`). This is a genuine research-*volume* concern, not a scoping-decision one: cluster-based implementation (`ARCHITECTURE.md` §15.1) may still reasonably tackle lower-level content in an earlier cluster, but the inventory itself must catalog the full three-book-core breadth.
-5. **Core class roster — resolved this revision.** OD&D's original three booklets define exactly three classes — Fighting-Man, Magic-User, Cleric — and four playable races (human, dwarf, elf, hobbit) with class restrictions. `CHAR-002`, `CHAR-009`, and related items are scoped to this three-book roster only. A Thief class does not exist in the 1974 core; it first appears in Supplement I: *Greyhawk* (still non-AD&D lineage, per `SOURCE_HIERARCHY.md` §3 item 3, but not part of the core three booklets) and is tracked under "Future Scope: Supplement Expansion" below, not included in v1 core (`DEC-0006`).
-6. **Retainers/hirelings (`CHAR-006`) priority.** Included per the assigned taxonomy, but the core dungeon-crawl loop (§14) can plausibly function with PC-only parties. Flagged for a priority/sequencing decision, not proposed for removal from scope.
-7. **Combat sequence, initiative, and timing — newly flagged, historically high-risk.** Melee timing, missile timing, spellcasting timing, and movement during combat are given their own inventory visibility (`COMBAT-006`) rather than being absorbed into attack resolution (`COMBAT-002`). This is likely one of the more historically ambiguous areas in the whole inventory: OD&D's relationship to *Chainmail*'s turn/initiative structure, and any differences in sequencing between the default and "Alternative" combat systems, are not yet researched. Depends directly on `COMBAT-001`.
+**A note on grouping**, carried forward unchanged in principle: an inventory ID is a reserved identifier for tracking, not a permanent one-to-one Rule Card boundary. Groupings may split or merge once actual research begins (`INVENTORY_MIGRATION_MAP.md` records several likely candidates already).
 
 ---
 
-## Domain: `exploration` (EXP)
+## ⚠ Major Research-Risk Flags and Human Decisions (read first)
 
-| ID | Title / Grouping | Key Source | Dependencies | V1 Required | Status | Risk Flags |
-|---|---|---|---|---|---|---|
-| `EXP-001` | Dungeon Wandering-Monster Check | Vol. 3, p. 10 | RNG abstraction | Yes | **REVALIDATION_REQUIRED** (previously APPROVED 2026-08-15, superseded source policy — see migration note above) | None — resolved under the prior policy; revalidation against the Rules Cyclopedia pending. |
-| `EXP-002` | Dungeon Turn / Time Accounting | Vol. 3, p. 8 ("THE MOVE/TURN IN THE UNDERWORLD") | — | Yes | **REVALIDATION_REQUIRED** (previously APPROVED 2026-08-16, superseded source policy — see migration note above) | **High priority** — `EXP-001` already depends on this (its own Open Questions item). Partial text already extracted: a turn ≈ 10 minutes ≈ two moves; resting consumes one full turn per hour; searching a 10' wall section takes a full turn, shorter activities a referee-adjudged portion; combat is ten rounds per turn. The accounting algorithm is now specified in the approved Rule Card (`docs/rules/exploration/dungeon_turn_time_accounting.md`). |
-| `EXP-003` | Dungeon Movement, Mapping & Special Terrain | Vol. 3 p. 8; Vol. 1 (movement rates) — Vol. 1 not yet retrieved | `CHAR-005`, `EXP-002` | Yes | Partial source in hand | Medium. Scope now explicitly includes special-terrain movement as a research concern, flagged but not resolved: underground water/aquatic movement (underground lakes, flooded areas, or similar terrain that authored dungeons or `SIM-001` may produce). Not assumed at inventory stage to need an independent Rule Card — may split out later only if research or `SIM-001`'s eventual design justifies it (see "A note on grouping"). No aquatic mechanics are specified here. |
-| `EXP-004` | Resting Procedure | Vol. 3, p. 8 | `EXP-002` | Yes | **REVALIDATION_REQUIRED** (previously APPROVED 2026-08-16, superseded source policy — see migration note above) | Low. Approved Rule Card exposes a `rest_overdue` historical fact (Moldvay B/X completion: −1 to hit, −1 to damage while overdue) that `COMBAT-002`/`COMBAT-006` will need to consume once researched — a downstream touchpoint, not a blocking dependency of `EXP-004` itself. |
-| `EXP-005` | Searching, Listening, Doors & Secret Features | Vol. 3, p. 10 | `EXP-002` | Yes | Substantial source in hand | Low-medium. Already sourced: secret doors 1–2 on d6 (elves 1–4; referee-optional passive sensing 1–2 for elves); forcing doors 1–2 on d6; listening 1 on d6 (elves/dwarves/hobbits 1–2); trap/pit trigger 1–2 on d6. Mostly needs formalizing into a card, not fresh research. |
-| `EXP-006` | Light & Exploration Resources | Vol. 3, p. 10 | `EXP-002` | Yes | Partial source in hand | Medium — illumination/detection behavior is sourced (torches let monsters see the party; wind can extinguish a torch; monsters have infravision), but resource *consumption rate* (how many turns a torch/lantern lasts) has not yet been located. |
-| `EXP-007` | Traps — trigger mechanic only | Vol. 3, p. 10 | `EXP-002` | Trigger mechanic: yes. Trap *effect* catalog: separate, large. | Partial source in hand (trigger: 1–2 on d6) | **High risk** — recommend splitting the trigger mechanic (small, in-scope, already sourced) from a trap-effect catalog (large, scattered, likely needs its own scoping decision similar to spells/monsters). |
-| `EXP-008` | Dungeon Stocking (monster/treasure room placement) | Vol. 3 (near p. 7, "Distribution of Monsters and Treasure" per the booklet's table of contents) | `MON-001`, `MON-002`, `TREAS-001` | Yes | Substantial source in hand | Low-medium. Already sourced: monster present in a room on a 1–2 (d6); of monster-occupied rooms, treasure present on 1–3 (d6); of unoccupied rooms, treasure present on 1 (d6). |
-| ~~`EXP-009`~~ → `SIM-001` | Dungeon Generation / Map Authoring | Vol. 3, p. 4 | Blocks meaningful end-to-end testing of `EXP-008` and dungeon entry generally | N/A — not a historical Rule Card | **Reclassified** as a Simulator Specification — see `SIM-001` under "Simulator Specifications" below, and Major Research-Risk Flags item 2. |
-| `EXP-010` | Party Formation & Marching Order | Not yet located; expected Vol. 3 (dungeon movement/encounter context) and/or Vol. 1 | `EXP-002`, `EXP-003`, `CHAR-005` | Yes | Unresearched | Medium — tracks mechanical relevance to dungeon movement, who is exposed first to hazards and traps where formation matters, `ENC-002` (surprise) and `ENC-003` (reaction) positioning/targeting, and possible `COMBAT-006` (sequence/timing) target-exposure implications. Dependencies and research surface only — specific mechanics not decided here; may split later per "A note on grouping" if research justifies it. |
+1. **Wandering-monster check cadence is genuinely uncertain for RC specifically.** The already-approved-but-`REVALIDATION_REQUIRED` `EXP-001` established "at the end of every turn" from the 1974 text. Secondary-source research performed both during this task and during `EXP-004`'s own earlier drafting found conflicting claims that B/X/BECMI (RC's direct lineage) use "every 2 turns" instead. This could not be confidently resolved without primary-text access (`RC_V1_SCOPE_AUDIT.md`). This is the single highest-priority item for `EXP-001`'s eventual revalidation — see "Treatment of Existing Rule Cards" below.
+2. **Optional systems require explicit human decisions before V1 scope is final.** Weapon Mastery, General Skills, and the optional classes (Druid, Mystic, and apparently Paladin/Avenger as high-level Fighter branches) are all RC-presented DM-choice content, not automatically in scope merely because RC is primary authority (assigning instructions §9). See "Major Human Decisions Required" below — none of these is decided by this document.
+3. **`COMBAT-003` (Damage & Death) is a confirmed, foundational, material change from the prior baseline.** RC uses per-weapon damage dice, not 1974's universal 1d6 regardless of weapon — this is one of `DEC-0007`'s own two motivating examples for the whole migration. High confidence, still not primary-verified.
+4. **Spell, monster, and magic-item catalog breadth is large and now demonstrably larger than the old three-book boundary** — Magic-User spells run 9 levels, Cleric spells 7 levels, across a 1–36 character-level range (versus the old boundary's narrower three-book progression). See "Progression-Scope Findings."
+5. **`SIM-001` (procedural dungeon generation) could not be confirmed resolved or unresolved by RC during this pass.** Retained as a likely-still-necessary Simulator Specification pending verification, not silently dropped or silently kept unchanged.
+6. **Mandatory training-for-level-up does not appear to be part of B/X/BECMI/RC's default rules** (unlike AD&D 1e), per multiple corroborating sources. `ADV-002` is scoped accordingly — flagged so a future researcher does not import an AD&D-derived assumption.
+7. **Combat-system risk is likely reduced, not increased, versus the old inventory.** RC has one unified attack-roll system (no OD&D-style "which combat system" fork), and Reaction/Morale — "unresearched, not located" under the old policy — are expected to be fully present in this single consolidated volume. See "Major Dependency Changes" in `INVENTORY_MIGRATION_MAP.md`.
 
-## Domain: `encounters` (ENC)
-
-| ID | Title / Grouping | Key Source | Dependencies | V1 Required | Status | Risk Flags |
-|---|---|---|---|---|---|---|
-| `ENC-001` | Encounter Distance | Vol. 3, p. 10 | — | Yes | Source in hand (2d4 → 20–80 feet) | Low. |
-| `ENC-002` | Surprise | Vol. 3, p. 10 | — | Yes | Source in hand (1–2 on d6 per side; 10–30 ft distance if surprised) | Low. |
-| `ENC-003` | Reaction | Not yet located (expected Vol. 1 or Vol. 2) | Follows a triggered encounter (`EXP-001`, `MON-001`) | Yes | **Unresearched, not located** | **High — see Major Research-Risk Flags item 3.** |
-| `ENC-004` | Monster Morale | Not yet located (expected Vol. 2) | `ENC-003`, combat domain | Yes | **Unresearched, not located** | **High — see Major Research-Risk Flags item 3.** |
-| `ENC-005` | Retreat, Pursuit & Evasion (underworld) | Vol. 3 has a *wilderness* pursuit/evasion procedure (found); an underworld-specific equivalent has not yet been confirmed | `EXP-002`, `EXP-003` | Yes | Unresearched (wilderness analog only) | Medium-high — may reuse a similar mechanic, may be silent (candidate for Simulator Ruling). |
-| `ENC-006` | Non-Combat Resolution / Parley | Not yet located; may be thin in 1974 beyond the reaction result itself | `ENC-003` | Uncertain — may resolve to "governed almost entirely by the reaction result, no separate mechanical card needed" | Unresearched | Medium — possible Simulator Ruling candidate if 1974 doesn't mechanize this further. |
-
-## Domain: `monsters` (MON)
-
-| ID | Title / Grouping | Key Source | Dependencies | V1 Required | Status | Risk Flags |
-|---|---|---|---|---|---|---|
-| `MON-001` | Monster Determination & Level Matrix | Vol. 3, pp. 10–11 (table located, not transcribed) | `EXP-001`, `EXP-008` | Yes | Table located, untranscribed | Medium — needs a careful, complete, verified transcription. |
-| `MON-002` | Number Appearing | Vol. 3, p. 11 (found: "based on a single creature, modified by type ... and the number of adventurers in the party") | `MON-001` | Yes | Partial source in hand | Medium. |
-| `MON-003` | General Monster Statistics (core roster) | *Monsters & Treasure* (Vol. 2) — not yet retrieved | `MON-001`, and likely `COMBAT-001` for how stats are expressed | Yes — full 1974-core monster roster reachable through canonical procedures, not level-capped (see "V1 progression scope") | **Unresearched, Vol. 2 not yet retrieved** | High effort — large catalog; cluster-based implementation may still reasonably tackle lower-level monsters in an earlier cluster (see Major Research-Risk Flags item 4). |
-| `MON-004` | Monster Special Abilities (v1-reachable) | Vol. 2 | `MON-003` | Yes, scoped to `MON-003`'s full roster | **Unresearched** | High effort, size follows from `MON-003`'s scope. |
-
-## Domain: `combat` (COMBAT)
-
-| ID | Title / Grouping | Key Source | Dependencies | V1 Required | Status | Risk Flags |
-|---|---|---|---|---|---|---|
-| `COMBAT-001` | Combat System Selection | Vol. 1 (*Men & Magic*, both systems referenced); *Chainmail* (1971, explicit external dependency per `SOURCE_HIERARCHY.md` §3) | None, but gates everything below | Yes | **Unresearched — foundational decision, not made** | **Critical — see Major Research-Risk Flags item 1.** |
-| `COMBAT-002` | Attack Resolution, Armor Class & To-Hit | Depends entirely on `COMBAT-001`'s outcome | `COMBAT-001` | Yes | Blocked | Shape and size unknown until `COMBAT-001` resolves. |
-| `COMBAT-003` | Damage & Death | Vol. 1 / Vol. 2 | `COMBAT-001`, `COMBAT-002` | Yes | Unresearched | Medium. |
-| `COMBAT-004` | Saving Throws | Vol. 1 | `CHAR-003` | Yes | Unresearched | Medium — class/level matrix, needs full sourcing. |
-| `COMBAT-005` | Healing & Natural Recovery | Vol. 3 (table of contents lists "Healing Wounds," p. 34; not yet extracted) | — | Yes | Located in table of contents, not yet extracted | Low. |
-| `COMBAT-006` | Combat Sequence, Initiative & Timing (melee/missile/spell/movement ordering) | Vol. 1 (*Men & Magic*); relationship to *Chainmail*'s turn structure not yet researched | `COMBAT-001` | Yes | Unresearched | **High — see Major Research-Risk Flags item 7.** Historically ambiguous; kept explicitly visible rather than folded into `COMBAT-002`. |
-
-## Domain: `magic` (MAGIC)
-
-| ID | Title / Grouping | Key Source | Dependencies | V1 Required | Status | Risk Flags |
-|---|---|---|---|---|---|---|
-| `MAGIC-001` | Spell Preparation & Memorization | Vol. 1 | `CHAR-002` | Yes | Unresearched | Medium. |
-| `MAGIC-002` | Spellcasting Procedure (casting time, interruption) | Vol. 1 | `MAGIC-001` | Yes | Unresearched | Medium. |
-| `MAGIC-003+` | Individual Spell Effects (grouped by class + level) | Vol. 1 spell lists | `MAGIC-001`, `MAGIC-002` | Yes — full spell-level progression reachable under the 1974 core, not capped to starting-character spell levels (see "V1 progression scope") | **Unresearched — large** | **High — see Major Research-Risk Flags item 4.** |
-| `MAGIC-004` | Cleric Turn Undead | Vol. 1 | `CHAR-002` | Yes, if clerics are in v1 (expected) | Unresearched | Low-medium. |
-
-## Domain: `treasure` (TREAS)
-
-| ID | Title / Grouping | Key Source | Dependencies | V1 Required | Status | Risk Flags |
-|---|---|---|---|---|---|---|
-| `TREAS-001` | Treasure Type Generation by Dungeon Level | Vol. 3, p. 7 (full table already extracted) | `EXP-008` | Yes | **Substantial source in hand** — complete silver/gold/gems/magic-percentage table by level band already captured verbatim while researching `EXP-001` | Low — best-positioned item in this domain. |
-| `TREAS-002` | Gem/Jewelry/Coin Value Determination | Vol. 2 — not yet retrieved | `TREAS-001` | Yes | Unresearched | Medium. |
-| `TREAS-003` | Magic Item Generation, Catalog & Effects | Vol. 2 | `TREAS-001`, `MAGIC-003+` (spell-based items depend on spell definitions) | Yes — full magic-item catalog reachable under the 1974 core, not level-capped (see "V1 progression scope") | **Unresearched — large** | **High — see Major Research-Risk Flags item 4.** |
-| `TREAS-004` | Magic-Item Use: Activation, Restrictions, Identification & Curses | Vol. 1 / Vol. 2 (expected) | `TREAS-003`, `CHAR-002`/`CHAR-009` (class/race restrictions) | Yes | Unresearched | Medium-high — likely uneven across items (some may just require wearing/wielding, others need explicit activation or charge-tracking); identification-of-function and curse behavior need dedicated research once `TREAS-003`'s catalog exists. |
+---
 
 ## Domain: `character_creation` (CHAR)
 
-| ID | Title / Grouping | Key Source | Dependencies | V1 Required | Status | Risk Flags |
-|---|---|---|---|---|---|---|
-| `CHAR-001` | Ability Score Generation | Vol. 1 | — | Yes | Unresearched | Low — likely straightforward, needs primary verification (not assumed here). |
-| `CHAR-002` | Race & Class Eligibility | Vol. 1 | `CHAR-001` | Yes — scoped to the 1974 three-book core roster only (Fighting-Man, Magic-User, Cleric; human/dwarf/elf/hobbit) | Unresearched | Medium — demi-human ability minimums/level caps need precise sourcing. Eligibility only; see `CHAR-009` for special/racial abilities and restrictions. Class-roster scope resolved this revision — see Major Research-Risk Flags item 5 and `DEC-0006`. |
-| `CHAR-003` | Starting Hit Points & Base Saving Throws | Vol. 1 | `CHAR-002` | Yes | Unresearched | Medium — interacts with `COMBAT-004`. |
-| `CHAR-004` | Starting Equipment & Expedition Preparation | Vol. 1 | `CHAR-001`–`CHAR-003` | Yes | Unresearched | Low-medium — mostly catalog transcription. |
-| `CHAR-005` | Encumbrance & Movement Rate | Vol. 1, cross-referenced with Vol. 3 | `CHAR-004` | Yes | Unresearched | Medium. Precedes `EXP-003` (dungeon movement consumes this item's movement-rate output) — see Proposed Research Order. |
-| `CHAR-006` | Retainers & Hirelings | Vol. 3 (table of contents: "Specialists," "Men-at-Arms" sections) | `CHAR-004` | Yes (per taxonomy) — see Major Research-Risk Flags item 6 for priority | Unresearched | Low-medium. |
-| `CHAR-007` | Ability Score Mechanical Effects & Cross-System Dependencies | Vol. 1 | `CHAR-001`; touches `CHAR-006` (retainers), `ENC-003` (reaction), `CHAR-008` (languages), `CHAR-002`/`CHAR-009` (class progression) | Yes | Unresearched | Medium — needs to enumerate Strength/Intelligence/Wisdom/Constitution/Charisma effects individually (not just ability generation) and their downstream dependencies; may split per-ability once researched (see "A note on grouping"). |
-| `CHAR-008` | Alignment & Languages | Vol. 1 | Touches `ENC-003` (reaction), `CHAR-006` (retainers), `MON-*` (monster alignment/language), `MAGIC-*` (alignment-relevant spells) | Yes, where mechanically relevant | Unresearched | Medium — how much alignment is mechanically governed (vs. roleplaying guidance) in the 1974 core specifically needs verification; may be thinner than later editions. |
-| `CHAR-009` | Class Special Abilities & Racial Abilities/Limitations | Vol. 1 | `CHAR-002`; cross-references `ADV-002` (advancement), `COMBAT-002` (attack progression), `COMBAT-004` (saves), `MAGIC-001`/`002`/`003+` (spell progression), `MAGIC-004` (turn undead) | Yes — scoped to the three-book core roster only, no later-supplement classes (`DEC-0006`) | Unresearched | Medium-high — consolidates class restrictions (e.g., Magic-User weapon/armor limits, Cleric edged-weapon prohibition) and racial abilities/limits (infravision, resistance, level caps, dual-class rules) not otherwise captured by `CHAR-002`'s eligibility focus. |
+| ID | Title | RC Source | Core/Opt/Cond | Dependencies | Downstream Consumers | V1 Reachable | Status | Risk / Notes |
+|---|---|---|---|---|---|---|---|---|
+| `CHAR-001` | Ability Score Generation | Character Creation, Ch. 1 | CORE | — | `CHAR-002`, `CHAR-007` | Yes | Unresearched | Low. Legacy: `CHAR-001`, RETAIN/REVALIDATE. |
+| `CHAR-002` | Race & Class Eligibility | Character Creation, Ch. 2 | CORE (core roster); the optional-class question is tracked separately at `CHAR-013` | `CHAR-001` | `CHAR-009`, `CHAR-010`, `MAGIC-*`, `COMBAT-*` | Yes — 4 human classes (Cleric, Fighter, Magic-User, Thief) + 3 demi-human race-classes (Dwarf, Elf, Halfling) | Unresearched | Medium. Legacy: `CHAR-002`, REFRAME — the 1974 three-class/four-race roster is superseded; RC's roster includes the Thief (previously excluded as a later-supplement class under `DEC-0006`, now core-scoped under `DEC-0007`) and a distinct race-as-class structure for demi-humans that already matches how the old inventory modeled races, easing this transition. |
+| `CHAR-003` | Hit Points & Hit Dice (starting and per-level) | Character Creation / Combat | CORE | `CHAR-002` | `COMBAT-003`, `COMBAT-005` | Yes | Unresearched | Medium. Legacy: `CHAR-003` ("Starting Hit Points & Base Saving Throws"), REFRAME/SPLIT CANDIDATE — the saving-throw half of the old grouping is better owned by `COMBAT-004`'s full class/level table; this entry narrows to HP/HD specifically. |
+| `CHAR-004` | Starting Equipment & Expedition Preparation | Character Creation / Equipment | CORE | `CHAR-001`–`CHAR-003` | `EXP-005` (spikes, rope, etc.), `EXP-006` (light sources), `COMBAT-002`/`COMBAT-003` (weapon/armor selection) | Yes | Unresearched | Low-medium — mostly catalog transcription (weapon list, armor list, adventuring gear, price list). Legacy: `CHAR-004`, RETAIN/REVALIDATE. |
+| `CHAR-005` | Encumbrance & Movement Rate | Character Creation / Combat Movement | CORE | `CHAR-004` | `EXP-003` | Yes | Unresearched | Medium. Legacy: `CHAR-005`, RETAIN/REVALIDATE — `CLUSTER-001`'s prior exclusion of this item as a "stable external contract" needing only `EXP-002`'s fixed turn-conversion fact is expected to still hold conceptually, subject to `EXP-002`'s own revalidation. |
+| `CHAR-006` | Retainers & Hirelings | Nonplayer Characters / Specialists | CORE | `CHAR-004` | — | Yes (per loop; priority question carried forward — see legacy note) | Unresearched | Low-medium. Legacy: `CHAR-006`, RETAIN/REVALIDATE. The old inventory's own flag that the core loop can plausibly function PC-only is preserved as a priority (not scope) question. |
+| `CHAR-007` | Ability Score Mechanical Effects & Cross-System Dependencies | Character Creation, Ch. 1 | CORE | `CHAR-001` | `CHAR-006`, `ENC-003`, `CHAR-008`, `CHAR-002`/`CHAR-009` | Yes | Unresearched | Medium. Legacy: `CHAR-007`, RETAIN/REVALIDATE. RC's ability-modifier table is expected to differ numerically from 1974's (non-linear at the tails, per corroborated secondary description) — a concrete, bounded revalidation task, not a large one. |
+| `CHAR-008` | Alignment & Languages | Character Creation | CORE | — | `ENC-003`, `CHAR-006`, `MON-*`, `MAGIC-*` | Yes, where mechanically relevant | Unresearched | Medium. Legacy: `CHAR-008`, REFRAME — RC uses the classic three-axis Law/Neutrality/Chaos alignment (not AD&D's nine-alignment grid), corroborated but not primary-verified; likely more mechanically integrated with Cleric/Druid spellcasting than the 1974 core was. |
+| `CHAR-009` | Class Special Abilities & Racial Abilities/Limitations | Character Creation, Ch. 2 | CORE (core-roster abilities); touches `OPTIONAL` content via `CHAR-010`/`CHAR-013` | `CHAR-002` | `ADV-002`, `COMBAT-002`, `COMBAT-004`, `MAGIC-*` | Yes — scoped to the core roster (`CHAR-002`); no longer artificially excludes the Thief | Unresearched | Medium-high. Legacy: `CHAR-009`, REFRAME (major scope change) — RC's class-ability catalog is materially larger than the 1974 core's minimal Fighting-Man/Magic-User/Cleric feature set; the Thief's core abilities are now split out to `CHAR-010` given their distinct, sizable percentage-table mechanic. |
+| `CHAR-010` | Thief Skills (Open Locks, Find/Remove Traps, Climb Sheer Surfaces, Move Silently, Hide in Shadows, Pick Pockets, Hear Noise) | Character Creation, Ch. 2 (Thief) | CORE (Thief is a core class per `CHAR-002`) | `CHAR-002`, `CHAR-009` | `EXP-005`, `EXP-007`, `ENC-002` | Yes | Unresearched | Medium — percentage-by-level table for each skill; interacts directly with `EXP-005`'s door/secret-door procedures and `EXP-007`'s trap triggers, which may need Thief-specific branching once researched. **NEW** — absent from the old inventory (the Thief was excluded from the 1974-primary roster under the now-superseded `DEC-0006`). |
+| `CHAR-011` | Weapon Mastery | "Other Character Abilities" section (corroborated, not page-verified) | **OPTIONAL** — human decision needed | `CHAR-002`, `CHAR-004` (weapon selection) | `COMBAT-007` | Conditional on human decision | Unresearched | High — five mastery tiers (Basic/Skilled/Expert/Master/Grand Master), level-gated acquisition, attack/damage/AC bonuses and special maneuvers. Large optional system; do not enable without explicit approval. **NEW.** |
+| `CHAR-012` | General Skills | "Other Character Abilities" section, same location as `CHAR-011` (corroborated) | **OPTIONAL** — human decision needed | `CHAR-001` (ability-score roll-under resolution) | — | Conditional on human decision | Unresearched | Medium — d20 roll-under-ability-score resolution, 4 skills at creation, more with high Intelligence. **NEW.** |
+| `CHAR-013` | Optional/High-Level Class Branches (Druid from Cleric; Mystic; Paladin and Avenger as Fighter branches; any other RC-specific branch not yet confirmed) | Character Creation, Ch. 2 (optional classes) | **OPTIONAL** — human decision needed per branch | `CHAR-002`, `CHAR-009` | `MAGIC-005` (Druid spells only) | Conditional on human decision, per branch | Unresearched | Medium-high — each branch has its own prerequisites (e.g., Druid requires a Neutral Cleric) and progression; the full list of RC high-level branches is not yet confirmed complete (`RC_V1_SCOPE_AUDIT.md` flags this). **NEW**, and explicitly not a closed list yet. |
+
+## Domain: `exploration` (EXP)
+
+| ID | Title | RC Source | Core/Opt/Cond | Dependencies | Downstream Consumers | V1 Reachable | Status | Risk / Notes |
+|---|---|---|---|---|---|---|---|---|
+| `EXP-001` | Dungeon Wandering-Monster Check | Dungeon Adventures chapter | CORE | RNG abstraction, `EXP-002` | — | Yes | **`REVALIDATION_REQUIRED`** (existing Rule Card, not revalidated this task) | **High** — see Major Research-Risk Flags item 1: cadence ("every turn" vs. "every 2 turns") is the central open question for revalidation. Legacy: `EXP-001`. |
+| `EXP-002` | Dungeon Turn / Time Accounting | Dungeon Adventures chapter | CORE | — | `EXP-001`, `EXP-003`–`EXP-010`, `EXP-004` | Yes | **`REVALIDATION_REQUIRED`** (existing Rule Card, not revalidated this task) | Low-medium — the 10-minute-turn/2-moves-per-turn convention is expected to be stable across the whole Basic-lineage including RC (already corroborated during this card's own original research); likely largely preserved. Legacy: `EXP-002`. |
+| `EXP-003` | Dungeon Movement, Mapping & Special Terrain | Dungeon Adventures / Combat Movement | CORE | `CHAR-005`, `EXP-002` | — | Yes | Unresearched | Medium. Legacy: `EXP-003`, RETAIN/REVALIDATE. |
+| `EXP-004` | Resting Procedure | Dungeon Adventures chapter | CORE, **if retained by RC at all** — flagged | `EXP-002` | `COMBAT-*` (via `rest_overdue`, if retained) | Yes, pending verification | **`REVALIDATION_REQUIRED`** (existing Rule Card, not revalidated this task) | **High** — secondary-source research located during this card's own prior drafting suggested BECMI dropped the mandatory-rest rule entirely ("no specific rules for this kind of resting"). If confirmed for RC specifically, this entry may become MATERIALLY CHANGED or OBSOLETE rather than a simple revalidation — flagged prominently, not silently assumed either way. Legacy: `EXP-004`. |
+| `EXP-005` | Searching, Listening, Doors & Secret Features | Dungeon Adventures chapter | CORE | `EXP-002`, `CHAR-010` (Thief interaction) | — | Yes | Unresearched | Low-medium; still a plausible split candidate. Legacy: `EXP-005`, RETAIN/REVALIDATE. |
+| `EXP-006` | Light & Exploration Resources | Dungeon Adventures chapter | CORE | `EXP-002` | — | Yes | Unresearched | Medium. Legacy: `EXP-006`, RETAIN/REVALIDATE. |
+| `EXP-007` | Traps — trigger mechanic | Dungeon Adventures chapter | CORE (trigger); catalog-closure for effects | `EXP-002`, `CHAR-010` (Thief interaction) | — | Trigger: yes. Effect catalog: separate, large. | Unresearched | High risk, same split concern as before (trigger vs. effect catalog); also carries forward the unresolved `EXP-005`/`EXP-007` overlap question, explicitly not resolved here either. Legacy: `EXP-007`, RETAIN/REVALIDATE. |
+| `EXP-008` | Dungeon Stocking (monster/treasure room placement) | Dungeon Adventures chapter | CORE | `MON-001`, `MON-002`, `TREAS-001` | — | Yes | Unresearched | Low-medium. Legacy: `EXP-008`, RETAIN/REVALIDATE. |
+| `EXP-009` | *(retired — see `SIM-001`)* | — | — | — | — | — | — | ID retired, not reused (legacy: `EXP-009`→`SIM-001`, already retired before this migration). |
+| `EXP-010` | Party Formation & Marching Order | Dungeon Adventures / Combat | CORE | `EXP-002`, `EXP-003`, `CHAR-005` | `ENC-002`, `ENC-003`, `COMBAT-006` | Yes | Unresearched | Medium. Legacy: `EXP-010`, RETAIN/REVALIDATE. |
+
+## Domain: `encounters` (ENC)
+
+| ID | Title | RC Source | Core/Opt/Cond | Dependencies | Downstream Consumers | V1 Reachable | Status | Risk / Notes |
+|---|---|---|---|---|---|---|---|---|
+| `ENC-001` | Encounter Distance | Encounters chapter | CORE | — | — | Yes | Unresearched | Low-medium — exact roll/formula not yet corroborated for RC specifically (the old 2d4×10ft figure is 1974-specific and not assumed to carry over). Legacy: `ENC-001`, RETAIN/REVALIDATE. |
+| `ENC-002` | Surprise | Encounters chapter (corroborated as its own chapter) | CORE | `CHAR-010` (Thief interaction, e.g. Hide/Move Silently) | `COMBAT-006` | Yes | Unresearched | Low-medium. Legacy: `ENC-002`, RETAIN/REVALIDATE. |
+| `ENC-003` | Reaction | Encounters chapter | CORE | `EXP-001`/`MON-001` (follows a triggered encounter), `CHAR-008` (alignment/language) | `ENC-006` | Yes | Unresearched | **Risk reduced versus old inventory** — expected fully present in this single consolidated volume, resolving the old "not located" flag. Legacy: `ENC-003`, RETAIN/REVALIDATE. |
+| `ENC-004` | Monster Morale | Encounters / Monsters chapter | CORE | `ENC-003`, combat domain | — | Yes | Unresearched | **Risk reduced versus old inventory**, same reasoning as `ENC-003`. Legacy: `ENC-004`, RETAIN/REVALIDATE. |
+| `ENC-005` | Retreat, Pursuit & Evasion (underworld) | Dungeon Adventures / Encounters | CORE | `EXP-002`, `EXP-003` | — | Yes | Unresearched | Medium — same underworld-vs-wilderness distinction the old inventory flagged is expected to persist; not yet confirmed whether RC unifies or keeps them separate. Legacy: `ENC-005`, RETAIN/REVALIDATE. |
+| `ENC-006` | Non-Combat Resolution / Parley | Encounters chapter | CORE, possibly thin | `ENC-003` | — | Uncertain — may resolve to "governed by the reaction result" | Unresearched | Medium — same uncertainty carried forward; not assumed resolved by RC's greater completeness elsewhere. Legacy: `ENC-006`, RETAIN/REVALIDATE. |
+
+## Domain: `monsters` (MON)
+
+| ID | Title | RC Source | Core/Opt/Cond | Dependencies | Downstream Consumers | V1 Reachable | Status | Risk / Notes |
+|---|---|---|---|---|---|---|---|---|
+| `MON-001` | Monster Determination & Level/Encounter Matrix | Dungeon Adventures / Monsters chapter | CORE | `EXP-001`, `EXP-008` | — | Yes | Unresearched | Medium — RC's own dungeon-level encounter tables expected, not yet transcribed. Legacy: `MON-001`, RETAIN/REVALIDATE. |
+| `MON-002` | Number Appearing | Monsters chapter (per-monster stat block field, expected) | CORE | `MON-001` | — | Yes | Unresearched | Low-medium — likely folded directly into each monster's stat block rather than a separate table; a plausible MERGE CANDIDATE into `MON-003`'s catalog-closure entry once researched. Legacy: `MON-002`, RETAIN/REVALIDATE (merge candidate flagged). |
+| `MON-003` | General Monster Statistics (catalog closure) | Monsters chapter | CORE | `MON-001`, `COMBAT-002` (attack-roll expression) | `MON-004`, `TREAS-001` | Yes — full V1-reachable monster roster, not level-capped | Unresearched | **Catalog-closure entry** — later specification work must achieve complete reachability closure over every monster the canonical dungeon-stocking/encounter procedures can produce; this entry does not itself enumerate them. High effort. Legacy: `MON-003`, RETAIN/REVALIDATE. |
+| `MON-004` | Monster Special Abilities & Immunities (catalog closure) | Monsters chapter | CORE | `MON-003` | — | Yes, scoped to `MON-003`'s roster | Unresearched | **Catalog-closure entry**, same closure obligation as `MON-003`. High effort, size follows from `MON-003`'s scope. Legacy: `MON-004`, RETAIN/REVALIDATE. |
+
+## Domain: `combat` (COMBAT)
+
+| ID | Title | RC Source | Core/Opt/Cond | Dependencies | Downstream Consumers | V1 Reachable | Status | Risk / Notes |
+|---|---|---|---|---|---|---|---|---|
+| `COMBAT-001` | Combat System (unified Attack Roll vs. Armor Class) | Combat chapter | CORE | None, but gates everything below | `COMBAT-002`–`COMBAT-007`, `MON-003` | Yes | Unresearched | **Risk resolved, not merely reduced** — RC has one system, no OD&D-style selection fork; the old "combat system selection" decision no longer exists as a question. Legacy: `COMBAT-001`, REFRAME (from a *decision* item to a *description* item). |
+| `COMBAT-002` | Attack Resolution, Armor Class & To-Hit | Combat chapter | CORE | `COMBAT-001` | `MON-003`, `CHAR-011` (Weapon Mastery bonuses, if enabled) | Yes | Unresearched | Medium — **now immediately researchable**, unlike the old inventory's "blocked pending `COMBAT-001`" state; class/level attack-roll tables expected. Legacy: `COMBAT-002`, RETAIN/REVALIDATE (unblocked). |
+| `COMBAT-003` | Damage & Death | Combat chapter | CORE | `COMBAT-001`, `COMBAT-002` | `ADV-001` | Yes | Unresearched | **High, confirmed material change** — per-weapon damage dice (not 1974's universal 1d6); explicit `DEC-0007` motivating example. Legacy: `COMBAT-003`, REFRAME. |
+| `COMBAT-004` | Saving Throws | Combat / Character Creation | CORE | `CHAR-003` | — | Yes | Unresearched | Low-medium — five-category structure (Death Ray/Poison, Magic Wands, Paralysis/Stone, Breath Attack, Rod/Staff/Spell) corroborated across independent sources; class/level table itself not yet transcribed. Legacy: `COMBAT-004`, RETAIN/REVALIDATE. |
+| `COMBAT-005` | Healing & Natural Recovery | Combat / Recovery section | CORE | — | `ADV-*` (between-expedition recovery) | Yes | Unresearched | Low. Legacy: `COMBAT-005`, RETAIN/REVALIDATE. |
+| `COMBAT-006` | Combat Sequence, Initiative & Timing | Combat chapter | CORE (side-based 1d6 initiative, Movement→Missile→Magic→Melee sequence); **OPTIONAL** individual-initiative variant | `COMBAT-001` | — | Yes | Unresearched | **Risk reduced versus old inventory** — a single, corroborated default sequence exists, plus a clearly-labeled optional alternative (not an unresolved *Chainmail*-relationship question as under 1974). Legacy: `COMBAT-006`, RETAIN/REVALIDATE, risk downgraded. |
+| `COMBAT-007` | Weapon Mastery Combat Effects (attack/damage/AC bonuses, multiple attacks, special maneuvers) | "Other Character Abilities" section, combat-effects portion | **CONDITIONAL** on `CHAR-011` | `CHAR-011`, `COMBAT-002`, `COMBAT-003` | — | Conditional | Unresearched | High if `CHAR-011` is enabled; not in scope at all otherwise. **NEW.** |
+
+## Domain: `magic` (MAGIC)
+
+| ID | Title | RC Source | Core/Opt/Cond | Dependencies | Downstream Consumers | V1 Reachable | Status | Risk / Notes |
+|---|---|---|---|---|---|---|---|---|
+| `MAGIC-001` | Spell Preparation & Memorization | Spells and Spellcasting chapter | CORE | `CHAR-002` | `MAGIC-002` | Yes | Unresearched | Medium. Legacy: `MAGIC-001`, RETAIN/REVALIDATE. |
+| `MAGIC-002` | Spellcasting Procedure (casting time, interruption) | Spells and Spellcasting chapter | CORE | `MAGIC-001` | `COMBAT-006` | Yes | Unresearched | Medium — interruption-by-damage-during-casting is a plausible combat-timing interaction not yet confirmed for RC. Legacy: `MAGIC-002`, RETAIN/REVALIDATE. |
+| `MAGIC-003+` | Individual Spell Effects (Magic-User, catalog closure) | Spell lists, Spells and Spellcasting chapter | CORE | `MAGIC-001`, `MAGIC-002` | — | Yes — 9 spell levels across levels 1–36, not capped to starting-character range | Unresearched | **Catalog-closure entry, confirmed larger than the old three-book boundary** — see "Progression-Scope Findings." High effort. Legacy: `MAGIC-003+`, RETAIN/REVALIDATE (larger scope). |
+| `MAGIC-004` | Cleric Turn Undead | Character Creation (Cleric) / Combat | CORE | `CHAR-002` | — | Yes | Unresearched | Low-medium. Legacy: `MAGIC-004`, RETAIN/REVALIDATE. |
+| `MAGIC-005` | Individual Spell Effects (Cleric, catalog closure) | Spell lists, Spells and Spellcasting chapter | CORE | `MAGIC-001`, `MAGIC-002` | — | Yes — 7 spell levels across levels 1–36 | Unresearched | **Catalog-closure entry.** **NEW** — the old inventory did not separate Cleric spells from `MAGIC-003+`'s grouping; split out here because Magic-User and Cleric spell lists are historically and mechanically distinct catalogs of comparable individual size. High effort. |
+| `MAGIC-006` | Druid Spells (catalog closure) | Spell lists, Spells and Spellcasting chapter | **CONDITIONAL** on `CHAR-013`'s Druid branch | `CHAR-013`, `MAGIC-001`, `MAGIC-002` | — | Conditional | Unresearched | Only in scope if Druid is enabled. **NEW.** |
+
+## Domain: `treasure` (TREAS)
+
+| ID | Title | RC Source | Core/Opt/Cond | Dependencies | Downstream Consumers | V1 Reachable | Status | Risk / Notes |
+|---|---|---|---|---|---|---|---|---|
+| `TREAS-001` | Treasure Type Generation by Dungeon Level | Treasure chapter | CORE | `EXP-008` | — | Yes | Unresearched | Medium — the old inventory's already-transcribed 1974 table does not carry over; RC's own lettered treasure-type tables (expected, not yet confirmed identical in structure) need fresh sourcing. Legacy: `TREAS-001`, RETAIN/REVALIDATE (loses its prior sourcing head start). |
+| `TREAS-002` | Gem/Jewelry/Coin Value Determination | Treasure chapter | CORE | `TREAS-001` | — | Yes | Unresearched | Medium. Legacy: `TREAS-002`, RETAIN/REVALIDATE. |
+| `TREAS-003` | Magic Item Generation, Catalog & Effects (catalog closure) | Treasure chapter | CORE | `TREAS-001`, `MAGIC-003+`/`MAGIC-005` (spell-based items) | `TREAS-004` | Yes — full magic-item catalog, not level-capped | Unresearched | **Catalog-closure entry.** High effort. Legacy: `TREAS-003`, RETAIN/REVALIDATE. |
+| `TREAS-004` | Magic-Item Use: Activation, Restrictions, Identification & Curses | Treasure chapter | CORE | `TREAS-003`, `CHAR-002`/`CHAR-009` | — | Yes | Unresearched | Medium-high, same unevenness concern as before. Legacy: `TREAS-004`, RETAIN/REVALIDATE. |
 
 ## Domain: `advancement` (ADV)
 
-`advancement` is an established inventory domain alongside `exploration`, `encounters`, `monsters`, `combat`, `magic`, `treasure`, and `character_creation`, covering XP/leveling — approved in addition to `ARCHITECTURE.md` §12's original suggested `docs/rules/` domain list.
-
-| ID | Title / Grouping | Key Source | Dependencies | V1 Required | Status | Risk Flags |
-|---|---|---|---|---|---|---|
-| `ADV-001` | Experience Point Awards (gold + monsters defeated) | Vol. 1 (expected) | `TREAS-001`, `COMBAT-003`, `MON-001` | Yes | Unresearched | Medium. |
-| `ADV-002` | Level Advancement & Titles | Vol. 1 (per-class XP tables, expected) | `ADV-001`, `CHAR-002` | Yes | Unresearched | Medium. |
+| ID | Title | RC Source | Core/Opt/Cond | Dependencies | Downstream Consumers | V1 Reachable | Status | Risk / Notes |
+|---|---|---|---|---|---|---|---|---|
+| `ADV-001` | Experience Point Awards (treasure + monsters defeated) | Experience chapter | CORE | `TREAS-001`, `COMBAT-003`, `MON-001` | `ADV-002` | Yes | Unresearched | Medium — treasure-based XP tradition expected to continue (Basic-lineage hallmark); exact ratio/formula not yet confirmed for RC. Legacy: `ADV-001`, RETAIN/REVALIDATE. |
+| `ADV-002` | Level Advancement & Titles | Experience chapter | CORE | `ADV-001`, `CHAR-002` | `MAGIC-003+`/`MAGIC-005` (spell-level access), `CHAR-011` (Weapon Mastery gates), `CHAR-013` (high-level branches) | Yes — full 1–36 progression | Unresearched | **Confirmed scope expansion** (level 36 vs. the old boundary); **confirmed simplification** — no mandatory gold/time training procedure appears to exist in this lineage (Major Research-Risk Flags item 6), so this entry does not need a training sub-procedure. Legacy: `ADV-002`, RETAIN/REVALIDATE. |
+| `ADV-003` | Between-Expedition Resupply & Town Services | Equipment / Nonplayer Characters (expected, not yet confirmed as a single consolidated section) | CORE | `CHAR-004`, `TREAS-004` (identification services) | — | Yes — closes the loop's "recover / resupply" stage | Unresearched | Low-medium — may be thin (largely a restatement of `CHAR-004`'s shopping loop plus `TREAS-004`'s identification services) rather than a distinct new procedure; possible MERGE CANDIDATE once researched. **NEW** — the old inventory did not give this loop stage its own entry. |
 
 ## Simulator Specifications (Non-Historical Design Requirements)
 
-These two items are not historical Rule Cards — no amount of further 1974-source research resolves them, because they are not questions the historical text answers or leaves ambiguous. They are simulator-authored design requirements, constrained by historical guidance where it exists, tracked here so they are not forgotten rather than left to be improvised during implementation.
-
 | ID | Title | Constraint Source | Dependencies | Status | Notes |
 |---|---|---|---|---|---|
-| `SIM-001` | Procedural Dungeon Generation / Map Authoring | Historical guidance only: Vol. 3, p. 4 (referee hand-authors the map; no procedural algorithm given) | `EXP-008` (stocking consumes an already generated/authored map) | Unresearched / undesigned | The game requires generated dungeon environments even though the 1974 books do not provide a complete random map-generation algorithm. Historical guidance constrains the eventual design (room/passage character, level-depth conventions) without prescribing an algorithm. Kept explicitly distinct from the historically defined procedures around it: dungeon stocking (`EXP-008`), monster generation (`MON-001`/`MON-002`), treasure generation (`TREAS-001`–`TREAS-004`), traps (`EXP-007`), and other exploration procedures — none of those are reclassified, only map layout itself. |
-| `SIM-002` | V1 Survivability Policy Specification | `ARCHITECTURE.md` §10, `GAME_CONSTITUTION.md` §8 (structural constraint, already documented) | Cuts across whichever clusters implement encounters, traps, and rewards | Not researched or designed — intentionally deferred | Must eventually define: which accommodations are exposed to players; which canonical results they may modify; which they may not modify (treasure/XP procedures never accept a survivability parameter — architecturally enforced, `ARCHITECTURE.md` §10); interaction with trap lethality/telegraphing and encounter severity. This inventory revision does not research or design these controls — it only ensures the requirement is tracked and not silently dropped. |
+| `SIM-001` | Procedural Dungeon Generation / Map Authoring | Uncertain — could not confirm during this pass whether RC provides complete executable generation guidance beyond authorial advice (`RC_V1_SCOPE_AUDIT.md`) | `EXP-008` | Reassessed, not resolved — retained pending verification | Legacy: `SIM-001`, RETAIN pending the specific verification flagged above; not silently kept unchanged nor silently dropped. |
+| `SIM-002` | V1 Survivability Policy Specification | `ARCHITECTURE.md` §10, `GAME_CONSTITUTION.md` §8 — source-baseline-independent | Cuts across whichever clusters implement encounters, traps, and rewards | Not researched or designed — intentionally deferred, unchanged in nature | Legacy: `SIM-002`, RETAIN unchanged — this project's survivability-isolation principle does not depend on which rules edition is primary. `COMBAT-007`'s Weapon Mastery bonuses and `CHAR-011`/`CHAR-012`'s optional systems, if enabled, are new *canonical* mechanics, not survivability mechanics — flagged here only to note they must not be conflated with `SIM-002`, not because they change its design. |
 
-`ARCHITECTURE.md` §10's structural isolation of treasure/XP from survivability remains in force regardless of `SIM-002`'s eventual content — `SIM-002` specifies *what survivability may touch*, never treasure or XP generation.
+## Major Human Decisions Required
 
-## Explicitly Outside V1 Scope (unless a v1 procedure depends on them)
+None of the following is decided by this document. Each materially affects V1 scope and must be resolved before this inventory can be `APPROVED`, or explicitly deferred to a later, dedicated decision if the human project owner prefers to approve the inventory's identification of the question without yet answering it.
 
-Per the assigned taxonomy: wilderness campaign procedures, the Outdoor Survival map procedure, naval combat, aerial combat, stronghold/domain construction and management, taxation/barony rules, large-scale domain warfare, and other endgame campaign systems unrelated to the dungeon expedition loop. If any of these turns out to be a genuine dependency of an in-scope item, that dependency should be surfaced for human review rather than silently pulled into scope.
+1. **Weapon Mastery (`CHAR-011`, `COMBAT-007`).** RC-canonical optional content. Affects: combat resolution shape, equipment/weapon choice significance, character-sheet complexity. No recommendation offered — this is a genuine game-feel choice, not a rules-clarity question.
+2. **General Skills (`CHAR-012`).** RC-canonical optional content. Affects: character-creation complexity, non-combat resolution outside `EXP-005`/`ENC-006`'s existing procedures. No recommendation offered.
+3. **Druid, Mystic, Paladin/Avenger, and any other high-level class branch (`CHAR-013`, `MAGIC-006`).** RC-canonical optional/high-level content. Affects: class roster breadth, spell-catalog size (Druid), and whether `CHAR-013`'s "list not yet confirmed complete" gap needs closing before approval. Recommendation: given this project's existing preference for the full canonical roster where reachable (the Thief's inclusion under `DEC-0007` is exactly this), including the optional classes is consistent with that stance — but this is offered as a recommendation, not a decision, since the assigning task explicitly withholds this choice from the agent.
+4. **Wilderness Adventures reachability boundary.** Whether any Wilderness Adventures content beyond the narrow movement/pursuit facts already folded into `EXP-003`/`ENC-005` is a genuine V1 dependency, or can remain excluded per "Proposed V1 Exclusions" below. No specific candidate was found requiring import during this pass, but the chapter was not exhaustively verified (`RC_V1_SCOPE_AUDIT.md`).
+5. **Whether to approve this inventory with `EXP-004` (Resting Procedure) still flagged as possibly-obsolete**, or to prioritize a targeted verification of RC's rest rule before broader approval, given its downstream effect on `EXP-002`'s cluster and `COMBAT-*`'s `rest_overdue` touchpoint.
 
-This exclusion list is about *game subsystems* and is independent of the three-book playable-content boundary above: a subsystem can be in scope (the dungeon-crawl loop) while still being limited to three-book-core content, and a subsystem can be out of scope regardless of which book its source material would come from.
+## Progression-Scope Findings
 
-## Future Scope: Supplement Expansion
+Two confirmed expansions versus the old three-book boundary, both directly following from `DEC-0007`: (1) Magic-User spells run 9 levels and Cleric spells 7 levels, both reachable across the full 1–36 character-level range, materially larger than the 1974 core's narrower spell-level range; (2) the character-level cap itself is 36, versus the old inventory's already-uncapped-but-narrower three-book progression. No systems outside the intended V1 loop were found to become *mechanically unavoidable* purely as a consequence of this expanded range — high-level Fighter/Cleric/Magic-User/Thief play remains dungeon-crawl-loop content; only the optional high-level *class branches* (`CHAR-013`) and Weapon Mastery's late-tier acquisitions raise genuinely optional-content questions, already surfaced above, not scope-forcing ones.
 
-The 1974 three-book core is the v1 playable-content boundary (see "Playable-content boundary" above; `DEC-0006`). This is not a permanent rejection of later OD&D-era supplement material. The intended long-term model is:
+## Proposed V1 Exclusions
 
-```text
-1974 three-book core
-        ↓
-faithful v1 dungeon-crawler baseline
-        ↓
-later explicitly authorized D&D supplement expansions
-```
+Re-derived from RC directly, not assumed carried over from the old exclusion list, per the assigning instructions:
 
-Future, separately authorized expansion phases may introduce additional classes (e.g., the Thief, Supplement I: *Greyhawk*), spells, monsters, magic items, or rules options drawn from later non-AD&D D&D-era supplements, subject to the same source-hierarchy and Rule Card approval process as everything else. This is a placeholder note, not a detailed supplement inventory — a supplement-content inventory is a future task, not part of this revision.
+- Dominion Rules — domain/stronghold management, taxation, "War Machine" mass combat.
+- Naval and aerial campaign-scale combat, if distinct from ordinary dungeon/wilderness encounters (not yet confirmed as a separate RC subsystem; flagged for verification, not assumed).
+- Stronghold construction and economics (Wilderness Adventures).
+- Known World/Mystara and Hollow World campaign-setting material (lore, not a rules system).
+- AD&D 2nd Edition conversion notes/appendix.
 
----
+For each, no in-scope V1 mechanic was found during this pass to depend on it (`RC_V1_SCOPE_AUDIT.md`). If a genuine dependency later surfaces, it is to be surfaced for human review, not silently imported or silently kept excluded.
 
 ## Proposed Research Order
 
-This is a proposal for human review, not a final sequence.
+A proposal for human review, not a final sequence — dependency-aware, not merely chapter-ordered:
 
-1. **`EXP-002`** (dungeon turn/time accounting) — `EXP-001` already depends on it; it also gates `EXP-003`–`EXP-008`.
-2. **`COMBAT-001`** (combat system selection) — foundational fork; also needed before `MON-003`/`MON-004`/`COMBAT-006`/`CHAR-009` can be expressed meaningfully.
-3. **Resolve `SIM-001`** (dungeon-generation approach — design, not historical research) — needed before the exploration loop can be exercised end-to-end, though `EXP-008`'s stocking *mechanic* can be researched independently of it.
-4. **`CHAR-001`, `CHAR-007`** (ability scores and their mechanical effects) — natural pair; needed to have a party at all.
-5. **`CHAR-002`, `CHAR-009`** (race/class eligibility, special/racial abilities) — `CHAR-009` may need revisiting once `COMBAT-001`/`ADV-002` resolve.
-6. **`CHAR-003`, `CHAR-004`, `CHAR-005`** (starting HP/saves, equipment, encumbrance & movement rate) — `CHAR-005` moved up from its previous position so character/party movement capability is resolved *before* `EXP-003` and the other movement- and time-dependent exploration procedures, not after.
-7. **`EXP-003`–`EXP-008`** (remaining exploration procedures, including the special-terrain concerns now flagged in `EXP-003`) — substantial source material already in hand for most of these; now correctly sequenced after `CHAR-005`.
-8. **`EXP-010`** (party formation & marching order) — natural follow-on once movement and the core exploration procedures are in hand.
-9. **`CHAR-008`** (alignment & languages) — moved up from its previous position so it precedes, or is available as an explicit dependency for, communication-dependent encounter research rather than following it.
-10. **`ENC-001`, `ENC-002`** (distance, surprise) — already sourced; quick to formalize.
-11. **`ENC-003`, `ENC-004`** (reaction, morale) — dedicated fresh research needed (Vol. 1/Vol. 2); now correctly sequenced after `CHAR-008`.
-12. **`MON-001`, `MON-002`** (monster determination, number appearing) — table already partially in hand.
-13. **`TREAS-001`** (treasure by level) — already substantially in hand.
-14. **`COMBAT-002`–`COMBAT-006`** (attack resolution, damage, saves, healing, sequence/timing) — after `COMBAT-001` resolves.
-15. **`ADV-001`, `ADV-002`** (experience, leveling).
-16. **`ENC-005`, `ENC-006`** (pursuit/evasion, non-combat resolution/parley) — likely thinner sourcing; `ENC-006` (parley) also benefits from `CHAR-008` already being resolved by this point.
-17. **`CHAR-006`** (retainers) — refine after the core loop is otherwise proven out.
-18. **`MAGIC-001`–`MAGIC-004`, `TREAS-002`–`TREAS-004`, `MON-003`, `MON-004`** — the largest-volume items, spanning the full three-book-core progression (Major Research-Risk Flags item 4); tackle last. `SIM-002` (survivability) is a design task, not a research task, and is not part of this research sequence at all.
+1. **Resolve the two foundational uncertainties first**, since they affect the shape of everything downstream: `EXP-001`'s wandering-check cadence and `EXP-004`'s current-RC status (Major Research-Risk Flags items 1 and 6... err 1 and the `EXP-004` note). These are revalidation tasks for existing cards, not new research, but are proposed first because `CLUSTER-001`'s own future revalidation depends on them.
+2. **`CHAR-001`, `CHAR-002`, `CHAR-007`** — ability scores and race/class eligibility; needed to have a party at all, and `CHAR-002` resolves the human-decision-adjacent question of exactly which core classes exist.
+3. **`CHAR-003`–`CHAR-006`** — HP/HD, equipment, encumbrance/movement, retainers.
+4. **`EXP-002`–`EXP-010` revalidation/research** — now that `CHAR-005` is available; largely mirrors the old proposed order's reasoning.
+5. **`COMBAT-001`–`COMBAT-006`** — no longer gated behind a foundational combat-system decision; can proceed as soon as `CHAR-003`/`CHAR-004` are available.
+6. **`ENC-001`–`ENC-006`** — expected to be the fastest-moving domain given RC's completeness relative to the old inventory's biggest research-risk gap.
+7. **`MON-001`, `MON-002`** — determination/number-appearing procedures, ahead of the large catalog-closure items.
+8. **`TREAS-001`, `TREAS-002`** — treasure-type and value procedures, ahead of the magic-item catalog.
+9. **`ADV-001`–`ADV-003`** — experience, leveling, resupply loop-closure.
+10. **`CHAR-009`, `CHAR-010`** — class/racial abilities and Thief skills, once the foundational systems they cross-reference (combat, exploration) are in hand.
+11. **Optional-system decisions (`CHAR-011`/`COMBAT-007`, `CHAR-012`, `CHAR-013`/`MAGIC-006`)** — resolved by human decision before or during this phase; research proceeds only for enabled systems.
+12. **`MAGIC-001`–`MAGIC-006`, `TREAS-003`–`TREAS-004`, `MON-003`–`MON-004`** — the largest-volume catalog-closure items, tackled last, exactly as the old inventory proposed.
+
+`SIM-002` remains a design task, not a research task, and is not part of this sequence. `SIM-001` depends on the verification flagged above before its own sequencing can be meaningfully proposed.
+
+## Candidate Cluster Signals (observations only — not proposals)
+
+Per the assigning instructions, these are dependency-graph observations, not cluster definitions, boundaries, or authorizations:
+
+- A possible **exploration/time cluster** resembling the old `CLUSTER-001` (`EXP-001`, `EXP-002`, `EXP-004`) remains visible in the dependency graph, though its exact membership is now uncertain pending the `EXP-004` obsolescence question above — see "Preliminary Assessment of `CLUSTER-001`" in `INVENTORY_MIGRATION_MAP.md`.
+- A possible **character-foundation cluster** (`CHAR-001`–`CHAR-007`) is visible as a tight, low-risk dependency group with no external blockers.
+- A possible **encounter-resolution cluster** (`ENC-001`–`ENC-006`) is visible, now unusually low-risk relative to the old inventory given RC's completeness.
+- A possible **combat-foundation cluster** (`COMBAT-001`–`COMBAT-006`, excluding the optional `COMBAT-007`) is visible, also unblocked (no combat-system-selection fork).
+
+None of these is defined, bounded, or approved here.
+
+## Explicitly Outside V1 Scope
+
+See "Proposed V1 Exclusions" above — re-derived from RC, not carried forward from the old list unexamined.
 
 ---
 
 ## Maintenance
 
-This document should be updated as items move from unresearched → partial source → Rule Card drafted → `APPROVED` (or → `OUT OF V1 SCOPE — HUMAN APPROVED`), as grouping/numbering is refined during actual drafting, and as cluster boundaries are chosen and completed (`ARCHITECTURE.md` §15.1). It is the durable tracking artifact clusters are selected from — a cluster becomes ready for implementation when its own scope is dependency-complete (§15.1's five readiness criteria), not when this entire inventory is resolved.
+This document requires human review before `APPROVED`. Once approved, it is updated as entries move from unresearched → partial source → Rule Card drafted → `APPROVED` (or `OUT OF V1 SCOPE — HUMAN APPROVED`), as the optional-system human decisions above are resolved, and as cluster boundaries are (re-)selected (`ARCHITECTURE.md` §15.1/§15.2). It does not itself authorize any cluster or implementation.

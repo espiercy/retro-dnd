@@ -100,3 +100,7 @@ implementation
 Do **not** revalidate `EXP-001` individually as the immediate next step — the inventory should give global visibility again first, so revised research clusters are chosen deliberately rather than by re-litigating whichever card happens to be nearest at hand.
 
 Historical-rules implementation authorization remains **FROZEN** (`ARCHITECTURE.md` §15.2) until that sequence reaches implementation readiness again.
+
+## 11. Status Update (2026-08-16) — Inventory Rebuild Drafted
+
+The first step of §10's sequence has been drafted: `docs/rules/INVENTORY.md` has been rebuilt against the Rules Cyclopedia (Status: `DRAFT`), accompanied by `docs/rules/RC_V1_SCOPE_AUDIT.md` (coverage traceability) and `docs/rules/INVENTORY_MIGRATION_MAP.md` (row-by-row disposition of every entry the retired inventory contained). This is a draft awaiting human review — it is **not** `APPROVED`, and its existence does **not** clear the migration gate in `ARCHITECTURE.md` §15.2 or reauthorize any historical-rules implementation. `EXP-001`, `EXP-002`, `EXP-004`, and `CLUSTER-001` remain `REVALIDATION_REQUIRED`, untouched by this drafting pass. The most significant finding surfaced is that `EXP-004` (Resting Procedure) may be materially changed or obsolete under RC — see the migration map's "Treatment of Existing Rule Cards."
