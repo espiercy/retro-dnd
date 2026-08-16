@@ -56,3 +56,11 @@ A rules baseline that the project owner does not actually want to ship is not a 
 ## Superseded By
 
 None.
+
+---
+
+## Historical Clarification / Addendum — 2026-08-16
+
+*The following is an addendum, not a revision. It does not alter this record's Context, Decision, Rationale, Consequences, Supersedes, or Superseded By fields above, all of which remain exactly as originally adopted.*
+
+Later review of the original project conversation established that the Rules Cyclopedia interpretation of D&D was the project's original intended rules target. The 1974-primary policy described in this decision's original Context above accurately reflects the repository's actual governing policy immediately before this decision — that period genuinely happened and is not erased by this addendum — but it did not reflect the project's original product intent. The OD&D-primary period is therefore understood as intervening governance drift, not as an earlier, equally-valid product direction that this decision replaced with a new one. This decision restored the originally intended Rules Cyclopedia baseline while preserving the historical record of the temporary 1974-primary policy, exactly as that record already stands above and in `docs/rules/RULESET_BASELINE_MIGRATION.md` §3.1.

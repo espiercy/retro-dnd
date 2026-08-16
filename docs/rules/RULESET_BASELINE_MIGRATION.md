@@ -16,6 +16,12 @@ A conflicting alternate-source rule that is nonetheless desired requires an expl
 
 Rule Card research and drafting for `EXP-001`, `EXP-002`, and `EXP-004` required close, page-verified engagement with the actual 1974 text. That engagement surfaced material differences between explicit 1974 mechanics and the rules the human project owner actually wants for this simulator — e.g., universal 1d6 weapon damage regardless of weapon type, and the absence of the Thief class from the original three-book roster. The project owner had not originally chosen the 1974 rules from prior familiarity with that specific text; having now reviewed what those rules actually require, the owner determined the 1974 core is not an adequate primary baseline for the intended game, while the project's underlying dungeon-crawler product vision remains exactly as originally intended. See `DEC-0007`'s Context for the full statement.
 
+## 3.1 Historical Clarification — Original Product Intent (added 2026-08-16)
+
+The repository's previous governing rules baseline treated the 1974 three-book OD&D core as primary authority — this was genuinely the active governing policy, in force and applied to real research and drafting work (`EXP-001`, `EXP-002`, `EXP-004`, `CLUSTER-001`, the original V1 inventory), for the period recorded in §1 and elsewhere in this document. That fact is not erased or rewritten by this clarification.
+
+Subsequent review of the project's original intent established that this policy represented **governance drift**, not the project's original product vision: the intended rules target had been the Rules Cyclopedia interpretation of classic D&D from the outset. `DEC-0007` should therefore be understood as **restoring** the project's originally intended source of mechanical truth, not as the project owner abandoning an originally intended OD&D simulator in favor of a newly selected edition. The 1974-primary period is accordingly understood as an intervening governance/process drift that the project has now corrected, while the underlying dungeon-crawler product vision (`GAME_CONSTITUTION.md` §1, §7) never changed at all — see §3 above, which already noted the product vision remained "exactly as originally intended" through the migration; this section clarifies that the *rules baseline itself*, not only the product vision around it, is best understood as returning to its original target rather than departing to a new one.
+
 ## 4. Decisions Superseded
 
 | Decision | Disposition |
