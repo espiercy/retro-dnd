@@ -49,7 +49,9 @@ A rules baseline that the project owner does not actually want to ship is not a 
 
 ## Supersedes
 
-None directly. `DEC-0006-v1-playable-content-scope.md` is separately marked `Superseded By` this record (see that record's own `Status`/`Superseded By` fields and `docs/decisions/INDEX.md`), rather than being listed here as if this record's *primary* purpose were superseding it — this record's primary purpose is establishing the new rules authority; `DEC-0006`'s supersession is a consequence of that.
+`DEC-0006-v1-playable-content-scope.md`. This record's primary purpose is establishing the Rules Cyclopedia as the new primary rules authority; `DEC-0006`'s three-book playable-content boundary is directly invalidated by that change, since it depended entirely on the 1974 three-book core being primary. See that record's own `Status`/`Superseded By` fields and `docs/decisions/INDEX.md`, both already updated accordingly.
+
+`DEC-0001-project-foundation-baseline.md` remains active overall — this record does not supersede it. Only `DEC-0001`'s "Historical Source Policy" summary subsection is superseded in substance by this record (see Consequences above); `DEC-0001`'s own `Status` is unchanged, per its own provision that its governing documents control where they and its summary differ.
 
 ## Superseded By
 

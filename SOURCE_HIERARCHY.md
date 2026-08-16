@@ -12,7 +12,7 @@ The goal is to construct the most defensible, historically grounded executable i
 
 Use the Rules Cyclopedia's rule whenever one exists.
 
-Where the Rules Cyclopedia does not completely specify behavior, search the alternate non-AD&D D&D lineage for the earliest and most directly relevant complete treatment of the exact unresolved question.
+Where the Rules Cyclopedia does not completely specify behavior, search the alternate non-AD&D D&D lineage for the highest-priority, most directly relevant compatible treatment under §3.
 
 Import only the portions that are compatible with what the Rules Cyclopedia already establishes.
 
