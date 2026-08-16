@@ -1,8 +1,8 @@
 # V1 Rules Inventory and Dependency Map (Rules Cyclopedia)
 
-**Status: DRAFT.** This is a scoping/backlog document, not a Rule Card — it does not resolve any individual mechanic, and nothing below may authorize implementation (`ARCHITECTURE.md` §15.2's migration gate remains in force regardless of this document's own status). It supersedes the prior inventory's active framing; the prior, 1974-primary inventory remains available through Git history and is not duplicated here — see `docs/rules/RULESET_BASELINE_MIGRATION.md` for that history and `docs/rules/INVENTORY_MIGRATION_MAP.md` for the row-by-row disposition of every entry the prior inventory contained.
+**Status: APPROVED** — human-approved 2026-08-16 (commit `c6e843f`). This is a scoping/backlog document, not a Rule Card — it does not resolve any individual mechanic, and nothing below may authorize implementation (`ARCHITECTURE.md` §15.2's migration gate remains in force regardless of this document's own status). It supersedes the prior inventory's active framing; the prior, 1974-primary inventory remains available through Git history and is not duplicated here — see `docs/rules/RULESET_BASELINE_MIGRATION.md` for that history and `docs/rules/INVENTORY_MIGRATION_MAP.md` for the row-by-row disposition of every entry the prior inventory contained.
 
-This document requires human review before it may be set to `APPROVED`. Until then, no cluster may be selected or defined against it (`ARCHITECTURE.md` §15.1/§15.2). This revision incorporates primary-text corrections and explicit V1 rules-profile decisions from human review of the first draft (commit `dde84ee`) — see `docs/decisions/DEC-0008-rules-cyclopedia-v1-rules-profile.md` for the durable record of the selections applied throughout this document.
+Approval of this inventory authorizes cluster (re-)selection to proceed against it, per `ARCHITECTURE.md` §15.1/§15.2 — it does not itself select or define a cluster, revalidate any Rule Card, or reauthorize historical-rules implementation, each of which remains a separate, explicitly authorized future task. This revision incorporates primary-text corrections and explicit V1 rules-profile decisions from human review of the first draft (commit `dde84ee`) — see `docs/decisions/DEC-0008-rules-cyclopedia-v1-rules-profile.md` for the durable record of the selections applied throughout this document.
 
 ## Source and Method
 
@@ -264,4 +264,4 @@ Unchanged in shape from the prior draft, with the caveat below now stated more s
 
 ## Maintenance
 
-This document requires human review before `APPROVED`. Once approved, it is updated as entries move from unresearched → partial source → Rule Card drafted → `APPROVED` (or `OUT OF V1 SCOPE — HUMAN APPROVED`), and as cluster boundaries are (re-)selected (`ARCHITECTURE.md` §15.1/§15.2). It does not itself authorize any cluster or implementation.
+Now `APPROVED` (2026-08-16). It is updated as entries move from unresearched → partial source → Rule Card drafted → `APPROVED` (or `OUT OF V1 SCOPE — HUMAN APPROVED`), and as cluster boundaries are (re-)selected (`ARCHITECTURE.md` §15.1/§15.2). It does not itself authorize any cluster or implementation.

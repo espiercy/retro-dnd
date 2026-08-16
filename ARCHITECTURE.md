@@ -465,7 +465,7 @@ historical-rules implementation
 
 **Historical-rules implementation authorization: FROZEN** until: (1) a Rules Cyclopedia V1 Rules Inventory is approved; (2) affected cluster boundaries are approved/revalidated under that inventory; (3) all Rule Cards required by the first revised cluster are approved under the current hierarchy; (4) implementation readiness is (re-)approved for that cluster. No `APPROVED` (or `IMPLEMENTATION_READY`) metadata dated under the superseded policy bypasses this freeze — see `DEC-0007`'s Consequences.
 
-**Status update (2026-08-16).** Step (1) has a draft in progress: `docs/rules/INVENTORY.md` has been rebuilt against the Rules Cyclopedia (Status: `DRAFT`, not yet `APPROVED`), with a companion coverage audit (`docs/rules/RC_V1_SCOPE_AUDIT.md`) and migration map (`docs/rules/INVENTORY_MIGRATION_MAP.md`). This draft does **not** clear this gate and does **not** reauthorize implementation on its own — it awaits human review. Steps (2)–(4) remain entirely unaddressed.
+**Status update (2026-08-16).** Step (1) is complete: `docs/rules/INVENTORY.md` (rebuilt against the Rules Cyclopedia, with a companion coverage audit `docs/rules/RC_V1_SCOPE_AUDIT.md` and migration map `docs/rules/INVENTORY_MIGRATION_MAP.md`) is now `APPROVED`. This approval satisfies step (1) only — it does **not** clear this gate as a whole and does **not** reauthorize historical-rules implementation on its own. Steps (2)–(4) remain entirely unaddressed: no cluster boundary has been (re-)approved, no Rule Card has been revalidated under the current hierarchy, and implementation readiness has not been (re-)approved for any cluster. The freeze continues in force.
 
 ## 16. Pre-Code Development Gate
 
