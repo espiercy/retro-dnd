@@ -11,6 +11,7 @@ Durable architectural and process decisions for the Retro D&D Simulator project.
 | [DEC-0005](DEC-0005-v1-rules-inventory-and-clustered-implementation.md) | V1 Rules Inventory and Dependency-Complete Implementation Clusters | Approved | 2026-08-15 |
 | [DEC-0006](DEC-0006-v1-playable-content-scope.md) | V1 Playable-Content Scope: Full 1974-Core Progression, Three-Book Boundary | Superseded by DEC-0007 | 2026-08-15 |
 | [DEC-0007](DEC-0007-rules-cyclopedia-primary-rules-authority.md) | Rules Cyclopedia as Primary Rules Authority | Approved | 2026-08-16 |
+| [DEC-0008](DEC-0008-rules-cyclopedia-v1-rules-profile.md) | Rules Cyclopedia V1 Rules Profile — Selected Core/Optional Systems | Approved | 2026-08-16 |
 
 ## Adding a Decision Record
 
