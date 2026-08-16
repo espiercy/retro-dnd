@@ -12,7 +12,7 @@ Resting Procedure
 
 ## Status
 
-AWAITING_APPROVAL
+APPROVED
 
 ## Rules Domain
 
@@ -36,29 +36,29 @@ Gygax, Gary, and Dave Arneson. *Dungeons & Dragons, Volume 3: The Underworld & W
 
 1. **Wilderness movement rest** (p. 17): "Rest: All creatures must rest after six days of movement. Rest must be at least one full day. Exception: Dragons who travel for three weeks must sleep one full week if their mode of travel was walking, and they must sleep for three full weeks if their mode of travel was flight." This is explicitly a *wilderness*-scale rule — the same section states "Each move will constitute one day. Each day is considered a turn" (p. 17), a completely different time granularity (a wilderness "turn" = one day) from the underworld turn (≈ 10 minutes) this card concerns. Not the same procedure; not used here.
 2. **Wilderness pursuit rest** (p. 20): "For each hex moved in pursuit, a party must spend one-half day resting (remember, a day equals one turn). During a day at rest two dice are thrown for determining if wandering monsters are encountered, rather than but one." Also wilderness-day-scale, and a distinct mechanism (doubling the *number of dice thrown* per rest period, not the *number of rest turns*) from the underworld doubled-rest-period clause this card addresses. Not adopted, but noted below as a thematically relevant, non-binding data point (see "Compatibility Analysis").
-3. **Healing Wounds** (p. 35): "As noted previously, energy levels can only be regained by fresh experience, but common wounds can be healed with the passage of time (or the use of magics already explained). On the first day of complete rest no hit points will be regained, but every other day thereafter one hit point will be regained until the character is completely healed." This is an explicit, *separate*, day-granularity hit-point-recovery system, textually and mechanically distinct from the turn-granularity "motionless" requirement at p. 8. It directly informs "1974 Leaves Undefined" item 5 and "Central Question F" below: 1974 itself does not connect the underworld mandatory rest turn to hit-point recovery. This system belongs to a future healing/downtime Rule Card, not `EXP-004`.
+3. **Healing Wounds** (p. 35): "As noted previously, energy levels can only be regained by fresh experience, but common wounds can be healed with the passage of time (or the use of magics already explained). On the first day of complete rest no hit points will be regained, but every other day thereafter one hit point will be regained until the character is completely healed." This is an explicit, *separate*, day-granularity hit-point-recovery system, textually and mechanically distinct from the turn-granularity "motionless" requirement at p. 8. It directly informs "1974 Leaves Undefined" item 5 below: 1974 itself does not connect the underworld mandatory rest turn to hit-point recovery. This system belongs to a future healing/downtime Rule Card, not `EXP-004`.
 
 ## 1974 Explicitly Establishes
 
-1. **A recurring mandatory rest requirement exists.** "One turn every hour must be spent motionless" (p. 8) is stated as an obligation ("must be"), not as an optional or referee-discretionary activity.
+1. **A recurring mandatory rest requirement exists, and it is expressed in time, not distance.** "One turn every hour must be spent motionless" (p. 8) is stated as an obligation ("must be"), not as an optional or referee-discretionary activity — and critically, the unit it is measured against is an **hour** (elapsed dungeon time), not a distance moved or a count of moves taken. The requirement's own textual anchor is therefore time-based from the 1974 text itself, before any later source is consulted (see "Completion Research" for how Holmes makes this explicit and how it bears on what counts toward the cadence).
 2. **The baseline rest period is one turn**, consuming dungeon time exactly as any other turn-costed activity (already fixed by `EXP-002`'s per-activity-type table — not reopened here).
 3. **A flight/pursuit episode doubles the required rest period.** "Double the rest period must be taken after a flight/pursuit takes place" (p. 8) — i.e., two turns rather than one (already fixed by `EXP-002`'s per-activity-type table as "Rest, while in a flight/pursuit state = 2 turns" — not reopened here).
-4. **The approximate ratio between the mandatory-rest cadence and elapsed time is fixed by arithmetic, though not by an explicit discrete counting rule.** A turn is "approximately ten minutes" (`EXP-002`, p. 8); an hour is therefore approximately six turns; "one turn every hour" therefore implies, as a matter of arithmetic, roughly one rest turn per six-turn cycle. The text does not itself say "after five turns" or "on the sixth turn" — see "1974 Leaves Undefined," item 1.
+4. **The approximate ratio between the mandatory-rest cadence and elapsed time is fixed by arithmetic, though not by an explicit discrete counting rule.** A turn is "approximately ten minutes" (`EXP-002`, p. 8); an hour is therefore approximately six turns; "one turn every hour" therefore implies, as a matter of arithmetic, roughly one rest turn per six-turn cycle. The 1974 text does not itself say "after five turns" or "on the sixth turn" — see "1974 Leaves Undefined," item 1, and "Completion Research" for how the lineage supplies the exact discrete count.
 5. **What triggers or ends a flight/pursuit state is not specified by this passage** — that remains `ENC-005`'s concern, exactly as `EXP-002` already established for the movement-doubling half of the same sentence. This card, like `EXP-002`, treats "a flight/pursuit episode has occurred" as an external event it consumes, not one it resolves.
 6. **Hit-point recovery is governed by a separate, day-granularity system** (p. 35, "Healing Wounds") that the p. 8 passage does not reference and does not depend on. 1974 does not connect the underworld motionless-rest turn to wound healing.
 
 ## 1974 Leaves Undefined
 
-Consistent with `EXP-002`'s own treatment of adjacent gaps, each item below is stated as narrowly as possible.
+Consistent with `EXP-002`'s own treatment of adjacent gaps, each item below is stated as narrowly as possible; several are since resolved by completion research, cross-referenced below.
 
-1. **The exact discrete cadence.** 1974 gives a ratio ("one turn every hour"), not an executable counting rule. An implementation agent cannot determine from this text alone *which* turn must be the rest turn, or how a running count of elapsed turns is meant to trigger it.
-2. **What kinds of elapsed dungeon time count toward the requirement.** The text says "every hour," without stating whether that hour is measured only in movement time, or in all dungeon-turn time regardless of activity type.
-3. **Whether rest time itself counts toward triggering the next mandatory rest.** Not addressed at all — a bookkeeping question 1974's authors had no occasion to consider, but one an executable specification cannot avoid.
-4. **The exact moment mandatory rest takes effect, and what enforcement (if any) applies once it is due.** The text states an obligation, not an enforcement mechanism. It does not say what happens if the party does not comply.
-5. **What "motionless" permits or excludes.** The text gives no boundary between "motionless" and other simultaneous referee-adjudicated activity (listening, standing watch, handling equipment, etc.).
-6. **Whether resting before the mandatory threshold is arrived at satisfies or resets the requirement**, or is mechanically inert.
-7. **How a flight/pursuit episode's doubled-rest requirement interacts with any ordinary rest debt already outstanding or accumulating**, and whether successive flight/pursuit episodes before the doubled rest is taken compound the requirement.
-8. **What happens to the rest requirement if a mandatory or voluntary rest turn is interrupted** (e.g., by a wandering-monster encounter triggered during that turn) before it completes.
+1. **The exact discrete cadence.** 1974 gives a ratio ("one turn every hour"), not an executable counting rule. Resolved via later compatible completion — see "Completion Research" and "Compatibility Analysis."
+2. **Whether the "hour" is measured only in movement time, or in all dungeon-turn time regardless of activity type.** Resolved via later compatible completion (Holmes) — see "Completion Research."
+3. **Whether rest time itself counts toward triggering the next mandatory rest.** Not addressed by any historical source — a bookkeeping question 1974's authors had no occasion to consider. Resolved as a necessary mechanical consequence of the adopted six-turn cycle — see "Approved Mechanical Specification."
+4. **What enforcement, if any, applies once mandatory rest is due and not taken.** The 1974 text states an obligation, not an enforcement mechanism. Resolved via later compatible completion (B/X) — see "Completion Research" and "Compatibility Analysis."
+5. **What "motionless" permits or excludes** beyond the absence of spatial movement. Narrowly resolved for this card's purposes — see "Simulator Ruling."
+6. **Whether resting before the mandatory threshold is arrived at satisfies or resets the requirement.** Resolved by Simulator Ruling — see below.
+7. **How a flight/pursuit episode's doubled-rest requirement interacts with any ordinary rest debt already outstanding, and whether successive episodes compound it.** Resolved by Simulator Ruling — see below.
+8. **What happens to the rest requirement's bookkeeping at the moment a rest turn's completed-turn boundary coincides with an `EXP-001`-triggered encounter**, and what happens if some future mechanic interrupts a rest turn before it has fully elapsed. Resolved — see "Approved Mechanical Specification" and Simulator Ruling on true pre-boundary interruption.
 
 ---
 
@@ -66,65 +66,62 @@ Consistent with `EXP-002`'s own treatment of adjacent gaps, each item below is s
 
 Per `SOURCE_HIERARCHY.md` §8, this is treated as a consequential ambiguity (it gates enforcement behavior across the entire exploration loop) and researched with the full lineage walk rather than stopping at the first available later text, while staying bounded to underworld mandatory rest specifically — no broader fatigue, wilderness-travel, or healing-system research was performed, per the assigning instructions.
 
-**Holmes Basic D&D (1977) and B/X D&D — Moldvay Basic (1981) / Cook Expert.** Verified via `WebSearch`, cross-checked against multiple independent secondary sources (Dragonsfoot forum threads discussing the rule directly, Zenopus Archives' Holmes-specific scholarship already used for `EXP-002`, and an EN World "Let's Read" thread quoting Moldvay's text):
+**Human review has independently verified the following citations**, resolving the verification caveat that previously accompanied them in this card's draft form. They are treated as settled for approval purposes.
 
-- **Cadence.** Multiple independent sources converge on the same figure: OD&D, Holmes, and B/X are all described as using a "rest 1 turn in 6" cadence — equivalently stated by one source specifically for B/X as "after moving for 5 turns, the party must rest for 1 turn." This is arithmetically identical to the ratio 1974's own numbers already imply (turn ≈ 10 min → hour ≈ 6 turns → 1 of those 6 is rest, leaving 5) — the same corroboration pattern `EXP-002` already used for the same underlying arithmetic. It supplies the one thing 1974 itself does not state directly: an explicit discrete count ("5" non-rest turns, not merely "≈ 1 in 6").
-- **Consequence of not resting.** B/X is specifically and consistently described as imposing "a −1 penalty to all hit and damage rolls until rest is taken" for skipping the mandatory rest turn — not a hard block on further activity. This directly addresses 1974's silence on enforcement (item 4 above).
-- **Hit-point recovery.** Holmes is independently corroborated as using its own day-granularity healing rule ("1–3 points... every 24 hours of full rest"), structurally the same *kind* of separate system as 1974's own p. 35 "Healing Wounds" passage — reinforcing, not contradicting, the conclusion that turn-scale motionless rest and day-scale wound healing are different systems throughout this lineage.
-- **BECMI / Rules Cyclopedia.** Multiple sources agree this specific mandatory-rest rule was **dropped** in BECMI and is not restated in the Rules Cyclopedia ("no specific rules for this kind of resting"; the party is instead assumed to take breathers implicitly during ordinary dungeon movement). No useful completion material was found here, and none was expected to be, once B/X was found to fully address the two open questions (cadence, consequence) `SOURCE_HIERARCHY.md` §3 sends research forward to resolve.
-- **Interrupted rest.** No reliable, clearly-attributed non-AD&D lineage source was found addressing whether an interrupted mandatory rest turn must restart. Search results touching "interrupted rest" were dominated by unrelated modern-edition material (5th-edition long-rest interruption rules) and by a different classic-era mechanic entirely — the multi-hour rest required for spell-memorization, which is not the same "motionless" dungeon-turn rest this card concerns and is out of this card's scope. This question remains unresolved by the lineage; see "Simulator Ruling."
-- **Voluntary/early rest and doubled-rest stacking.** No source found — lineage or 1974 — addresses either question directly. Both remain unresolved by history; see "Simulator Ruling."
+**Holmes Basic D&D (1977).**
+- Holmes explicitly clarifies the recurring rest cadence as **"one turn every hour / one turn out of every six."** This is the pivotal piece of completion evidence for this card: it confirms, in the D&D lineage's own words, that the 1974 hour-based formulation (item 1 under "1974 Explicitly Establishes") is correctly read as a **dungeon-time cadence** — a ratio of elapsed turns — rather than a distance- or movement-specific rule. Holmes restates the ratio without narrowing its scope to any one activity type.
+- Holmes also preserves the concept of a doubled, two-turn rest after running (flight/pursuit), consistent with — not a revision of — the 1974 text.
 
-**Verification caveat**, consistent with the standard already applied in `EXP-002`'s research: these findings rest on `WebSearch` results drawing on named, identifiable secondary sources (Dragonsfoot forum discussion, Zenopus Archives, EN World) rather than this agent's own page-by-page reading of the Holmes or Moldvay booklets. The specific "−1 to hit and damage" figure and the "5 turns" figure should be treated as well-corroborated (multiple independent sources agree) but not independently page-verified by this agent, and are flagged here for a human reviewer's attention before final approval, exactly as `EXP-002`'s B2 citation was flagged before its own verification.
+**Moldvay B/X D&D (1981).**
+- Moldvay explicitly states: **"after moving for five turns, the party must rest for one turn"**; and, consistent with Holmes, that **"one turn in six is spent resting."** Moldvay's own wording is specifically phrased in terms of *moving* — this card does not overstate it as a general "any five turns" statement in Moldvay's own words. However, Moldvay's narrower movement-specific phrasing does not displace the earlier, broader OD&D/Holmes hour-based (dungeon-time) formulation; Moldvay supplies the exact discrete count ("five"), which this card adopts, while the *scope* of what counts toward that count (all dungeon-turn activity, not movement alone) is grounded in the earlier and broader OD&D/Holmes framing, not in Moldvay's own narrower wording. This distinction is preserved transparently rather than silently harmonized (see "Compatibility Analysis").
+- Moldvay explicitly states that characters who fail to rest **suffer a −1 penalty to hit and damage until they do rest.** This directly and completely addresses 1974's silence on enforcement.
+
+**Hit-point recovery.** Holmes is independently corroborated as using its own day-granularity healing rule ("1–3 points... every 24 hours of full rest"), structurally the same *kind* of separate system as 1974's own p. 35 "Healing Wounds" passage — reinforcing, not contradicting, the conclusion that turn-scale motionless rest and day-scale wound healing are different systems throughout this lineage.
+
+**BECMI / Rules Cyclopedia.** This specific mandatory-rest rule was **dropped** in BECMI and is not restated in the Rules Cyclopedia (the party is instead assumed to take breathers implicitly during ordinary dungeon movement). No completion material was found here, and none was needed, since Holmes and B/X together fully address both open questions (cadence and enforcement) `SOURCE_HIERARCHY.md` §3 sends research forward to resolve.
+
+**Interrupted rest / rest-boundary ordering.** No non-AD&D lineage source addresses this bookkeeping question at the level of detail an executable specification needs. It is resolved instead as a necessary mechanical consequence of `EXP-002`'s own already-approved signal semantics (see "Approved Mechanical Specification") — not a Simulator Ruling in the sense of an invented answer, but a correction of an internal inconsistency in this card's own earlier draft.
+
+**Voluntary/early rest and doubled-rest stacking.** No source — 1974 or lineage — addresses either question directly. Both are resolved by Simulator Ruling below, as the smallest sufficient proposals.
 
 ## Compatibility Analysis
 
 | Source | Addresses | Judgment |
 |---|---|---|
-| Holmes/B-X — "rest 1 turn in 6" / "after 5 turns, rest 1 turn" | Exact cadence (1974 Leaves Undefined, item 1) | **Adopted as a compatible completion.** Reproduces the same ratio 1974's own numbers already imply and supplies only the missing discrete counting rule; does not change the underlying 1:6 relationship 1974 establishes. |
-| B/X — "−1 to hit and damage until rest is taken" | Consequence of not resting (item 4) | **Presented as an alternative completion, not adopted as the primary proposal.** Does not contradict any explicit 1974 statement (1974 states no consequence at all), but it introduces a specific combat-mechanical penalty 1974 never mentions, and applying it would reach into combat-domain territory (`COMBAT-002`/`COMBAT-006`) that this card does not otherwise touch. See "Simulator Ruling" for the full treatment and the preferred alternative. |
+| Holmes — "one turn every hour / one turn out of every six" | Whether the cadence is time-based (all activity) or movement-specific | **Adopted as the governing clarification.** Confirms the 1974 hour-based formulation is a dungeon-time cadence, not a movement-specific one. This is the primary historical basis for treating all `EXP-002`-recognized activity types as qualifying — not software convenience, but Holmes's own explicit restatement of what 1974 already implies by measuring the requirement in hours. |
+| Moldvay — "after moving for 5 turns, the party must rest for 1 turn" | Exact discrete count | **Adopted for the number only.** Supplies "five" as the precise count 1974's ratio implies but never states. Moldvay's own wording is movement-specific; this card does **not** adopt that narrowing — the broader time-based scope comes from the OD&D/Holmes formulation above, and Moldvay's phrasing is treated as compatible with, not a correction of, that broader scope, since nothing in Moldvay contradicts non-movement activity also consuming dungeon time that counts toward the same hour. |
+| Moldvay — "−1 to hit and −1 to damage until rest is taken" | Consequence of not resting | **Adopted as a Later Compatible D&D Completion**, not a Simulator Ruling. Does not contradict any explicit 1974 statement (1974 states no consequence at all) and directly, completely answers the historical silence. Its actual application is a combat-domain mechanic (`COMBAT-002`/`COMBAT-006`); `EXP-004` exposes the historical fact (`rest_overdue`) the combat domain needs, without implementing attack mechanics itself. See "Approved Mechanical Specification." |
 | BECMI / Rules Cyclopedia — rule dropped entirely | Cadence, consequence | **Not adopted.** Removing an explicit-enough historical procedure is a revision by omission, not a compatible completion, per `SOURCE_HIERARCHY.md` §6. Its absence there is noted, not imported. |
-| Wilderness pursuit-rest (p. 20) — doubled monster-check exposure (two dice, not one) during pursuit-related rest | Whether resting parties get an exception from `EXP-001` checks (see "Rest and Wandering-Monster Checks" below) | **Not adopted directly** — different scale (wilderness day-turns) and different mechanism (extra dice, not extra dungeon turns). **Used only as corroborating context**: it shows this source's own design instinct, elsewhere in the same booklet, is to increase a resting party's exposure to wandering monsters after pursuit, never to suppress it. This supports (without independently proving) the conclusion that ordinary `EXP-001` cadence should continue unmodified during underworld rest turns. |
+| Wilderness pursuit-rest (p. 20) — doubled monster-check exposure (two dice, not one) during pursuit-related rest | Whether resting parties get an exception from `EXP-001` checks | **Not adopted directly** — different scale (wilderness day-turns) and different mechanism (extra dice, not extra dungeon turns). **Used only as corroborating context**: it shows this source's own design instinct, elsewhere in the same booklet, is to increase a resting party's exposure to wandering monsters after pursuit, never to suppress it — supporting the conclusion that ordinary `EXP-001` cadence continues unmodified during underworld rest turns. |
 
 ---
 
 ## Simulator Ruling
 
-No combination of 1974 and compatible later sources resolves every executable question this card must answer. Each ruling below is presented as a **proposed** Simulator Ruling for human decision — this card does not self-approve any of them. Per `SOURCE_HIERARCHY.md` §3 item 8, a Simulator Ruling is used only where no compatible historical source supplies a complete answer; where one does (cadence), it is adopted above as a completion instead.
+Historical research (above) fully resolves the cadence, its scope, and the consequence of not resting — none of those are Simulator Rulings in this card's final form. What remains is a small set of genuinely unsourced executable bookkeeping questions, each resolved below as the smallest sufficient proposal, now approved.
 
-**Ruling 1 (required) — What counts toward the cadence.**
-*Proposed:* every qualifying non-rest dungeon turn, regardless of activity type (movement, search, listening, ESP, hiding, treasure-loading, combat, or any other turn-costed activity `EXP-002` recognizes), counts toward the recurring rest requirement. *Rationale:* `EXP-002`'s already-approved shared dungeon-time ledger treats all activity types uniformly for turn-elapsing purposes, and `EXP-001` already consumes that same uniform signal without regard to activity type. A movement-only counting rule for `EXP-004` would require inventing a second, parallel time-tracking mechanism inconsistent with the already-approved single-ledger architecture, which this card does not reopen. This is classified as a **necessary mechanical consequence** of not reopening `EXP-002`, not an independent Simulator Ruling requiring alternatives.
+**Ruling A — Meaning of "motionless" (narrow).**
+**Approved:** a qualifying rest turn must contain no spatial movement by the resting party. This card does not decide whether other non-movement activity (listening, searching, spellcasting, equipment handling, standing watch, or any future action) may be performed concurrently with a qualifying rest turn — those procedures may establish their own compatibility with rest when they are researched. `EXP-004` supplies only: qualifying rest → full required rest duration elapsed → no spatial movement during that credited interval. This is deliberately narrow so as not to prejudge procedures this card does not own. 1974 does not connect this rest turn to hit-point recovery (see "1974 Explicitly Establishes," item 6) — a directly sourced fact, not itself a ruling, and unchanged here.
 
-**Ruling 2 (required) — Does rest time generate its own rest debt.**
-*Proposed:* `EXP-004` maintains a counter of "qualifying turns since rest was last satisfied," separate from `EXP-002`'s own elapsed-time ledger. Rest turns (ordinary or doubled) do **not** increment this counter — completing them instead resets it to zero. *Rationale:* without this distinction, a rest turn's own dungeon-time cost would itself count toward triggering the next rest, producing a nonsensical unbounded recursion inconsistent with the plain intent of a rest requirement (to be satisfiable). No historical source addresses this bookkeeping question, because it only arises when the rule is made executable. *Alternative considered and rejected:* a single unified counter where every elapsed turn, including rest turns, counts toward the next threshold — rejected because it either never allows the requirement to be satisfied (if rest turns also increment it) or requires an arbitrary exception rule at that point anyway, which is exactly the distinction this ruling proposes directly instead.
+**Ruling B — Voluntary/early rest.**
+**Approved:** a voluntarily-taken rest turn that meets the same definition as a mandatory one (one full turn, motionless) satisfies and resets the cadence identically to a mandatory rest turn — 1974 gives no textual basis for treating "the same activity, taken slightly early" as mechanically different from the mandatory case. No separate "voluntary rest" activity type is introduced beyond what is needed to track whether an obligation existed beforehand; the completed rest's effect on state is identical either way.
 
-**Ruling 3 (required) — Enforcement when rest is due.**
-*Proposed default:* a **hard gate** — once the qualifying-turn counter reaches the threshold (5, per the adopted B/X-corroborated cadence), no further qualifying non-rest turn may be consumed until a satisfying rest is completed. This is the most literal reading of 1974's obligatory language ("must be spent") without inventing new mechanical content (a numeric combat penalty) that 1974 never states, and it requires no reach into combat-domain mechanics. *Alternative (well-sourced, not the default proposal):* adopt B/X's **−1 to hit and damage rolls until rest is taken**, allowing activity to continue. This is a genuine, on-point, compatible later completion — arguably the historically "richer" answer — but its actual application is a combat-domain mechanic; if adopted, this card would only expose a `rest_overdue` state fact, and a separate combat-domain Rule Card (`COMBAT-002`/`COMBAT-006`) would need to consume it to apply the penalty. Both alternatives are presented for human decision; this card does not pick one on its own authority.
+**Ruling C — Doubled post-flight/pursuit rest: non-stacking, replacement semantics.**
+**Approved:** the doubled (two-turn) requirement is triggered immediately when the flight/pursuit episode ends, and **replaces/satisfies** whatever ordinary rest debt is outstanding at that moment rather than stacking as an additional obligation:
+- No ordinary debt, flight ends → exactly **2 turns** required.
+- Ordinary 1-turn rest already due, flight ends → **2 turns** total, not 3.
+- A second flight/pursuit episode occurs before the outstanding doubled rest is completed → the requirement remains **2 turns**, not 4.
 
-**Ruling 4 (required) — What "motionless" permits.**
-*Proposed:* the smallest faithful reading — "motionless" restricts spatial movement, not all referee-adjudicated activity. A turn otherwise spent on quiet, non-movement activity (standing watch, listening, brief equipment handling) is not automatically disqualified from counting as the required rest turn, absent a more specific historical statement. *Alternative:* a maximal reading — a qualifying rest turn permits no other adjudicated activity of any kind. Neither reading is resolved by 1974 or the lineage; this ruling does not need to be finalized to complete this card's core accounting behavior (which needs only to know whether a given turn is *designated* as the rest turn, not to exhaustively police what else occurs during it), and is flagged as non-blocking in "Open Questions." **1974 does not connect this rest turn to hit-point recovery** (see "1974 Explicitly Establishes," item 6) — that is not itself a Simulator Ruling but a directly sourced negative finding, and this card does not propose changing it.
+1974 states a doubling relationship, not a compounding one, and no lineage source suggests otherwise; an additive/stacking model would be this card's own invention with no textual anchor.
 
-**Ruling 5 (required) — Voluntary/early rest.**
-*Proposed:* a voluntarily-taken rest turn that meets the same definition as a mandatory one (one full turn, motionless) satisfies and resets the qualifying-turn counter identically to a mandatory rest turn — 1974 gives no textual basis for treating "the same activity, taken slightly early" as mechanically different from the mandatory case. *Alternative considered and rejected as less parsimonious:* a model in which voluntary rest consumes time without affecting the requirement at all, meaning the party could rest indefinitely without ever "banking" toward the eventual mandatory turn — rejected because it requires inventing a second, functionally distinct category of "resting" nowhere suggested by the source.
-
-**Ruling 6 (required) — Doubled post-flight/pursuit rest and its interaction with ordinary rest debt.**
-*Proposed:* the doubled (two-turn) post-flight/pursuit rest requirement is triggered immediately when the flight/pursuit episode ends (the most direct reading of "after a flight/pursuit takes place"), and **satisfies/resets** whatever ordinary rest debt is outstanding at that moment, rather than stacking as an additional, separately-tracked obligation. Concretely, applying this to the three scenarios raised in the assigning task:
-- No ordinary rest debt outstanding when flight begins, flight ends → exactly **2 turns** required (the doubled rest alone).
-- Ordinary rest threshold reached *during* the flight/pursuit episode itself, flight then ends → still exactly **2 turns**, not 3 — the doubled rest is proposed to be the ceiling 1974 establishes for this situation; nothing in the text supports adding the ordinary 1-turn requirement on top of the doubled one.
-- Two separate flight/pursuit episodes occur before the special rest is taken → the outstanding requirement remains **2 turns**, not 4 — proposed as **not stacking**, because 1974 states a doubling relationship, not a compounding one, and no lineage source suggests otherwise.
-
-*Alternative considered and rejected:* additive/stacking models for any of the three cases above — rejected for lack of any historical or lineage support; a compounding rule would be this card's own invention with no textual anchor at all, unlike the doubling itself which is explicitly 1974 text.
-
-**Ruling 7 (required) — Rest interrupted by an encounter.**
-*Proposed:* if the `EXP-001` check performed during a rest turn (ordinary or doubled) triggers a wandering-monster encounter that interrupts the party, the interrupted turn does **not** satisfy the rest requirement — the requirement remains outstanding, to be attempted again once it is safe to do so. Any subsequent combat consumes dungeon time normally through `EXP-002` and, per Ruling 1, counts as qualifying non-rest time toward the *next* rest requirement, not toward satisfying the interrupted one. *Rationale:* "motionless... rest" was not actually completed if interrupted, so treating the turn as satisfying would contradict the plain sense of the requirement; no partial-credit mechanism is proposed, consistent with `AGENTS.md` §5's guidance against inventing convenient complexity the source does not support. *Alternative considered and rejected:* a proportional/partial-credit model (an interrupted rest turn counts fractionally toward satisfying the requirement) — rejected as unsupported invention with no historical basis and unnecessary complexity for a rule 1974 states as a whole-turn requirement.
+**Ruling D — True pre-boundary interruption receives no fractional rest credit.**
+**Approved, smallest sufficient proposal:** if some future mechanic (not designed by this card, and not reachable by the currently approved `EXP-001`/`EXP-002` architecture — see "Approved Mechanical Specification" for why an `EXP-001` check itself cannot cause this) interrupts a rest turn before it has fully elapsed, that incomplete interval earns no whole-rest-turn credit. No fractional/partial-credit mechanism is proposed. Time already consumed before such an interruption remains consumed according to `EXP-002`'s own accounting — it is not refunded or discounted. No historical source addresses this bookkeeping question, because it only arises when the rule is made executable; this is the smallest rule that avoids inventing a partial-credit system `AGENTS.md` §5 would flag as unnecessary complexity. The exact sources of such an interruption, beyond current Cluster 1 behavior, are outside this card's scope.
 
 ---
 
 ## Approved Mechanical Specification
 
-*(Presented in pre-approval draft form, consistent with `EXP-002`'s original submission — not authoritative until a human sets this card's Status to `APPROVED`, per `AGENTS.md` §2.)*
-
-**Scope.** This procedure determines: (a) when the recurring mandatory rest requirement becomes due, (b) what satisfies it, (c) how a flight/pursuit episode's doubled requirement interacts with it, and (d) what happens if a rest turn is interrupted. It does not decide *whether* the party chooses to rest at any given non-mandatory moment (a player/referee decision), does not define hit-point recovery, and does not implement any enforcement penalty itself if Ruling 3's combat-penalty alternative is later selected — that would be implemented by the combat domain consuming this card's exposed state.
+**Scope.** This procedure determines: (a) when the recurring mandatory rest requirement becomes due and how it is satisfied, (b) how a flight/pursuit episode's doubled requirement interacts with it, (c) the historical fact (`rest_overdue`) the combat domain needs to apply the B/X penalty, and (d) how a rest turn's completion relates to `EXP-001`'s boundary check. It does not decide *whether* the party chooses to rest at any given non-mandatory moment (a player/referee decision), does not define hit-point recovery, and does not implement the −1 to-hit/damage penalty itself — that is the combat domain's responsibility, consuming the fact this card exposes.
 
 **Dependencies:**
 
@@ -132,75 +129,100 @@ No combination of 1974 and compatible later sources resolves every executable qu
 EXP-002 (shared dungeon-time ledger, turn-elapsed signal)  ─┐
 EXP-001 (wandering-monster check, consumes the same signal) ─┼─→  EXP-004 rest state
 ENC-005 (flight/pursuit episode occurrence)                 ─┘
+
+EXP-004 rest state  ─→  rest_overdue fact  ─→  combat domain (COMBAT-002/COMBAT-006,
+                                                 applies −1 to hit, −1 to damage —
+                                                 not implemented by this card)
 ```
 
-`EXP-004` consumes `EXP-002`'s "dungeon turn elapsed" signal as one of its boundary consumers, exactly as `EXP-001` does — it does not depend on `EXP-001`'s own content, only on the same shared signal. It consumes "a flight/pursuit episode has just ended" as an external event from `ENC-005`, exactly as `EXP-002` already consumes "the party is in a flight/pursuit state" without resolving it.
+`EXP-004` consumes `EXP-002`'s "dungeon turn elapsed" signal as one of its boundary consumers, exactly as `EXP-001` does — it does not depend on `EXP-001`'s own content, only on the same shared signal. It consumes "a flight/pursuit episode has just ended" as an external event from `ENC-005`, exactly as `EXP-002` already consumes "the party is in a flight/pursuit state" without resolving it. It produces, but does not consume, a `rest_overdue` fact for the future combat domain — this is a documented downstream dependency, and does not require the combat domain to exist before `EXP-004` itself can be implemented and tested.
 
-**Minimum authoritative state** (per Ruling 2 and the general principle of tracking no more than necessary):
+**Minimum authoritative state:**
 
 | State | Meaning |
 |---|---|
-| `qualifying_turns_since_rest` | Count of completed non-rest qualifying turns (Ruling 1) since the rest requirement was last satisfied. Incremented by each "dungeon turn elapsed" signal attributable to non-rest activity; not incremented by rest turns themselves (Ruling 2); reset to 0 whenever the rest requirement is satisfied. |
-| `rest_turns_required` | 0 if no rest is currently outstanding; 1 if an ordinary rest is due; 2 if a doubled post-flight/pursuit rest is due (Ruling 6). Set to 1 when `qualifying_turns_since_rest` reaches the threshold (5, per the adopted cadence). Set to 2 (not added to any existing value) when a flight/pursuit episode ends (Ruling 6). Decremented by one for each rest turn successfully completed without interruption; unchanged by an interrupted rest turn (Ruling 7). |
+| `qualifying_turns_since_rest` | Count of completed non-rest qualifying turns — every dungeon turn `EXP-002` attributes to any activity type (movement, search, listening, ESP, hiding, treasure-loading, combat, or any other turn-costed activity), per "1974 Explicitly Establishes," item 1 and Holmes's clarification — since the rest requirement was last satisfied. Incremented by each qualifying non-rest "dungeon turn elapsed" signal, but only while `rest_turns_required = 0` (see procedure below — this is what prevents ordinary debt from escalating past one required turn). Reset to 0 whenever the rest requirement is satisfied. |
+| `rest_turns_required` | 0 if no rest is currently outstanding; 1 if an ordinary rest is due; 2 if a doubled post-flight/pursuit rest is due (Ruling C). Set to 1 when `qualifying_turns_since_rest` reaches 5. Set to 2 (not added to any existing value) when a flight/pursuit episode ends (Ruling C). Decremented by one for each rest turn whose completed-turn boundary is reached (see ordering below); unaffected by a true pre-boundary interruption (Ruling D). |
 
-No further state is proposed. In particular, no separate state is proposed for "which specific activities occurred during a rest turn" (Ruling 4 does not require tracking this for `EXP-004`'s own accounting) or for stacking multiple flight/pursuit episodes (Ruling 6 proposes exactly one outstanding doubled requirement, not a count of episodes).
+**Derived fact** (not separately stored): `rest_overdue := (rest_turns_required > 0)`.
 
-**Procedure — cadence and threshold (Rulings 1–2):**
+No further state is proposed. In particular, no separate state is proposed for "which specific activities occurred during a rest turn" (Ruling A does not require tracking this for `EXP-004`'s own accounting) or for counting stacked flight/pursuit episodes (Ruling C proposes exactly one outstanding doubled requirement, not a count of episodes).
+
+**Procedure — cadence and threshold, ordinary debt does not escalate:**
 
 ```text
 WHEN EXP-002 emits a "dungeon turn elapsed" signal for a turn attributable to
 qualifying non-rest activity (i.e., the elapsed turn was not itself a rest turn):
 
-    qualifying_turns_since_rest := qualifying_turns_since_rest + 1
-
-    IF qualifying_turns_since_rest >= 5:
-        rest_turns_required := MAX(rest_turns_required, 1)
+    IF rest_turns_required = 0:
+        qualifying_turns_since_rest := qualifying_turns_since_rest + 1
+        IF qualifying_turns_since_rest >= 5:
+            rest_turns_required := 1
+    ELSE:
+        (rest is already due or overdue — further qualifying turns do not
+         increase rest_turns_required beyond its current value; the ordinary
+         requirement never grows past 1, per the human decision that overdue
+         rest is a fixed condition, not an accumulating count of owed turns)
 ```
 
-**Procedure — enforcement (Ruling 3, primary proposal — hard gate):**
+**Overdue-rest enforcement (Later Compatible D&D Completion — Moldvay B/X, adopted; supersedes the earlier hard-gate proposal, which is rejected):**
 
 ```text
-BEFORE a further qualifying non-rest turn is consumed:
-
-    IF rest_turns_required > 0:
-        the requesting activity is not permitted to proceed
-        (this is the same structural "boundary consumer signals interruption"
-         mechanism EXP-002 already establishes as possible at each threshold —
-         see EXP-002 "Approved Mechanical Specification," Accumulation algorithm)
+WHILE rest_overdue (i.e., rest_turns_required > 0):
+    the party MAY continue undertaking dungeon activity — no activity is blocked
+    the historical fact rest_overdue = true is exposed to the combat domain
+    the combat domain (not this card) applies −1 to hit and −1 to damage while
+        rest_overdue remains true
 ```
 
-*(If Ruling 3's alternative is instead approved, this block is replaced by: no blocking occurs; instead, `rest_turns_required > 0` is exposed as a `rest_overdue` fact for the combat domain to consume as a to-hit/damage penalty. This card does not specify that penalty's mechanics.)*
-
-**Procedure — satisfying rest (Rulings 5, 7):**
+**Rest-boundary ordering and its relationship to `EXP-001` (corrects the earlier draft's inconsistency).** `EXP-002` only emits a "dungeon turn elapsed" signal once a full turn has actually elapsed on the shared ledger — the signal is a *consequence* of the turn having completed, not a gate that could still prevent it from having completed. `EXP-004` and `EXP-001` are both consumers of that same signal. Therefore, when a rest turn reaches its completed-turn boundary:
 
 ```text
-WHEN a rest turn (voluntary or mandatory) is consumed through EXP-002's
-ordinary activity accounting (cost: 1 turn, or 2 turns if flagged as the
-doubled post-flight/pursuit rest — both already fixed by EXP-002):
-
-    IF the turn completes without an EXP-001-triggered interruption:
-        rest_turns_required        := MAX(rest_turns_required - 1, 0)
-        qualifying_turns_since_rest := 0
-    ELSE  (interrupted — Ruling 7):
-        rest_turns_required and qualifying_turns_since_rest are unchanged
-        (the interrupted turn satisfies nothing; it must be attempted again)
+rest interval completes
+        ↓
+rest credit is applied (EXP-004 state updates — see below)
+        ↓
+the normal completed-turn signal is available to boundary consumers
+        ↓
+EXP-001 performs its check
+        ↓
+a triggered encounter, if any, follows
 ```
 
-**Procedure — flight/pursuit doubled rest (Ruling 6):**
+not the reverse — a check performed at that same boundary cannot retroactively un-complete a rest turn that has already elapsed, because the check's own opportunity to fire is itself downstream of that same turn having elapsed. Concretely:
+
+```text
+WHEN a rest turn (voluntary or mandatory, ordinary or doubled) reaches a
+completed-turn boundary through EXP-002's ordinary accounting:
+
+    rest_turns_required := rest_turns_required - 1
+    IF rest_turns_required = 0:
+        qualifying_turns_since_rest := 0        (fully satisfied — cadence resets)
+
+    -- only then does EXP-001 perform its normal check on this same signal --
+    -- a resulting encounter does not undo the decrement above --
+```
+
+- **One-turn ordinary rest, encounter at the boundary:** the single required turn completes, `rest_turns_required` reaches 0, `rest_overdue` becomes false, the cadence resets — *then* `EXP-001` checks; if it triggers, the encounter follows, but the rest requirement remains satisfied.
+- **Two-turn doubled rest, encounter after the first turn:** the first turn completes, `rest_turns_required` goes from 2 to 1 (that turn's credit is not lost), *then* `EXP-001` checks; if it triggers, the resulting encounter is a **true pre-boundary interruption of the second, not-yet-started rest turn** — the second turn is not consumed (Ruling D: no fractional credit for time not yet spent), and `rest_turns_required` remains 1, to be completed once it is safe to do so.
+- **Combat following such an encounter is not exempt from the ordinary cadence.** Any dungeon time the resulting combat consumes is qualifying non-rest activity like any other (per the cadence procedure above) and counts toward the *next* time `qualifying_turns_since_rest` is tracked, once the currently outstanding `rest_turns_required` is eventually satisfied. It does not erase or discount the rest credit already earned.
+- **True pre-boundary interruption** (Ruling D) — a full rest turn interrupted *before* it reaches a completed-turn boundary at all, by some mechanic outside the currently approved `EXP-001`/`EXP-002` architecture — earns no credit, and whatever partial dungeon time was consumed before the interruption remains consumed under `EXP-002`'s own accounting (no refund, no fractional credit).
+
+**Procedure — flight/pursuit doubled rest:**
 
 ```text
 WHEN ENC-005 reports that a flight/pursuit episode has just ended:
 
     rest_turns_required := 2   (not added to any existing value — replaces/
                                  satisfies whatever ordinary debt was
-                                 outstanding, per Ruling 6)
+                                 outstanding, per Ruling C)
 ```
 
-**Integration with `EXP-001` and `EXP-002` (unmodified).** A rest turn — mandatory, voluntary, or doubled — is consumed through `EXP-002`'s ordinary accounting exactly like any other activity, and each whole turn it completes emits `EXP-002`'s normal "dungeon turn elapsed" signal, which `EXP-001` consumes exactly as it always does (1d6, trigger on 6). Neither `EXP-001`'s cadence nor `EXP-002`'s accumulation algorithm is modified by this card. A two-turn doubled rest therefore produces two ordinary check opportunities, consistent with "Rest and Wandering-Monster Checks" and this card's Compatibility Analysis — no exception is created.
+**Integration with `EXP-001` and `EXP-002` (unmodified).** A rest turn — mandatory, voluntary, or doubled — is consumed through `EXP-002`'s ordinary accounting exactly like any other activity, and each whole turn it completes emits `EXP-002`'s normal "dungeon turn elapsed" signal, which `EXP-001` consumes exactly as it always does (1d6, trigger on 6). Neither `EXP-001`'s cadence nor `EXP-002`'s accumulation algorithm is modified by this card, no second dungeon-time ledger is introduced, and rest-boundary processing is not batched — it is resolved at each individual completed-turn boundary, consistent with `EXP-002`'s progressive model. A one-turn ordinary rest produces one `EXP-001` check opportunity; a two-turn doubled rest produces up to two sequential opportunities, the second contingent on the first not being interrupted. No exception to `EXP-001`'s cadence is created; wandering checks are never suppressed while resting.
 
-**Multi-turn activity crossing the threshold.** Because `EXP-002` already resolves turn boundaries progressively and synchronously during an in-progress multi-turn activity, `EXP-004`'s threshold check (above) is evaluated at each such boundary alongside `EXP-001`'s. If a multi-turn activity's *n*-th internal boundary is the one that pushes `qualifying_turns_since_rest` to 5, `rest_turns_required` becomes 1 at that same boundary, and (under Ruling 3's primary proposal) the activity is not permitted to continue past that point — exercising the same structural interruption possibility `EXP-002` already established without designing a new one.
+**Multi-turn qualifying activity crossing the threshold.** Because `EXP-002` already resolves turn boundaries progressively and synchronously during an in-progress multi-turn activity, `EXP-004`'s cadence procedure is evaluated at each such boundary alongside `EXP-001`'s. Reaching the fifth qualifying turn mid-activity sets `rest_turns_required` to 1 at that boundary; consistent with the adopted overdue-rest completion, this does **not** interrupt the in-progress activity — the party may continue, with `rest_overdue` now true and the combat-domain penalty (if applicable) in effect.
 
-**Survivability out of scope.** Consistent with `EXP-001`/`EXP-002`, this card specifies canonical historical rest accounting only. It must not accept a survivability policy, and no survivability policy may alter the cadence, enforcement, or doubled-rest rules, without a separately approved Rule Card or policy decision (`ARCHITECTURE.md` §10).
+**Survivability out of scope.** Consistent with `EXP-001`/`EXP-002`, this card specifies canonical historical rest accounting only. It must not accept a survivability policy, and no survivability policy may alter the cadence, the overdue-rest fact, or the doubled-rest rules, without a separately approved Rule Card or policy decision (`ARCHITECTURE.md` §10).
 
 **No RNG owned by this card.** Like `EXP-002`, this procedure is purely state-tracking arithmetic; the only randomness in its vicinity belongs to `EXP-001`'s own check.
 
@@ -212,88 +234,99 @@ All cases are pure state-machine transitions; cases involving `EXP-001`'s own di
 
 **Normal cadence:**
 
-1. **Five qualifying turns trigger the requirement.** Five successive non-rest qualifying turns (of any mix of activity types, per Ruling 1) → `qualifying_turns_since_rest` reaches 5, `rest_turns_required` becomes 1.
-2. **One rest turn satisfies it.** Following case 1, one uninterrupted rest turn → `rest_turns_required` returns to 0, `qualifying_turns_since_rest` resets to 0.
+1. **Four qualifying turns → no rest due.** Four successive non-rest qualifying turns (any mix of activity types) → `qualifying_turns_since_rest = 4`, `rest_turns_required = 0`.
+2. **Fifth qualifying turn → ordinary rest becomes due.** A fifth qualifying turn → `qualifying_turns_since_rest = 5`, `rest_turns_required = 1`, `rest_overdue = true`.
+3. **Qualifying normal rest clears it.** From case 2, one uninterrupted rest turn reaching its completed-turn boundary → `rest_turns_required = 0`, `qualifying_turns_since_rest = 0`, `rest_overdue = false`.
 
-**Before threshold:**
+**Overdue behavior (Moldvay B/X completion):**
 
-3. **No premature requirement.** Four qualifying turns → `rest_turns_required` remains 0; no gating or penalty condition is active.
+4. **Activity is permitted while overdue.** From case 2, the party undertakes further qualifying activity without resting → the activity is not blocked.
+5. **`rest_overdue` remains true and the combat-domain contract is exposed.** While in the state from case 4, `rest_overdue` reads `true`, and the historical fact is available for a combat-domain consumer to apply −1 to hit and −1 to damage (not implemented by this card).
+6. **Ordinary debt does not escalate.** From case 2, additional qualifying non-rest turns elapse before rest is taken → `rest_turns_required` remains `1` throughout (never 2, 3, ...), and `qualifying_turns_since_rest` does not continue incrementing while `rest_turns_required > 0`.
 
-**Rest boundary / `EXP-002` integration:**
+**Rest does not create debt:**
 
-4. **Rest turn advances the shared ledger normally.** A rest turn's consumption produces exactly one `EXP-002` "dungeon turn elapsed" signal, identically to any other 1-turn activity.
+7. **A completed qualifying rest is not counted as turn one of the next cadence.** Immediately after case 3, `qualifying_turns_since_rest = 0` — the completed rest turn itself is not counted toward the next five-turn cadence.
 
-**`EXP-001` integration:**
+**Mixed activities:**
 
-5. **Mandatory rest still produces a check opportunity.** A mandatory rest turn's elapsed-turn signal results in exactly one `EXP-001` check, using the same RNG contract as any other turn.
+8. **Different activity types contribute to the same cadence.** A sequence of, e.g., two movement turns, one search turn, one combat turn, and one treasure-loading turn (five qualifying turns of mixed type) → `rest_turns_required` becomes 1, identically to five turns of a single activity type.
 
-**No recursive debt (Ruling 2):**
+**Voluntary rest:**
 
-6. **Rest does not generate new rest debt.** Starting from `rest_turns_required = 1`, `qualifying_turns_since_rest = 5`, completing the required rest turn resets both to `0`/`0` — not to `0`/`1` (which a naive "rest also counts as elapsed time" model would incorrectly produce).
+9. **Voluntary rest after three qualifying turns resets the cadence.** From `qualifying_turns_since_rest = 3` (below threshold, no rest due), a voluntarily-taken rest turn completes → `qualifying_turns_since_rest = 0`.
+10. **A fresh five turns are required afterward.** Following case 9, five new qualifying turns are required before `rest_turns_required` becomes 1 again — not two (i.e., the three pre-voluntary-rest turns do not carry over).
 
-**Multi-turn activity crossing the threshold:**
+**Doubled rest:**
 
-7. **Threshold reached mid-activity gates further progress (Ruling 3, primary proposal).** Starting from `qualifying_turns_since_rest = 4`, a multi-turn activity whose first internal boundary would be qualifying turn 5 → `rest_turns_required` becomes 1 at that boundary, and the activity's further progress is not permitted past that point, per `EXP-002`'s existing interruption structure.
+11. **No prior debt.** `rest_turns_required = 0` when a flight/pursuit episode ends → becomes `2`.
+12. **Prior ordinary debt already due.** `rest_turns_required = 1` when a flight/pursuit episode ends → becomes `2`, not `3`.
+13. **Repeated episode before satisfaction.** A second flight/pursuit episode ends while `rest_turns_required` is already `2` (unsatisfied) → remains `2`, not `4`.
 
-**Voluntary early rest (Ruling 5):**
+**Boundary encounter during ordinary rest:**
 
-8. **Voluntary rest resets the counter.** Starting from `qualifying_turns_since_rest = 3`, a voluntarily-taken rest turn (not mandatory) → resets to `0`, identically to case 2's mandatory case.
+14. **Credited rest survives a boundary encounter.** A one-turn ordinary rest reaches its completed-turn boundary (`rest_turns_required` goes from 1 to 0, `qualifying_turns_since_rest` resets to 0) — *then* `EXP-001`'s check, using a scripted roll of 6, triggers an encounter → the ordinary rest requirement remains satisfied (`rest_turns_required = 0`) despite the encounter.
 
-**Flight/pursuit doubled rest (Ruling 6):**
+**Boundary encounter during doubled rest:**
 
-9. **No prior debt.** `rest_turns_required = 0` when a flight/pursuit episode ends → becomes `2`.
-10. **Prior ordinary debt already due.** `rest_turns_required = 1` when a flight/pursuit episode ends → becomes `2`, not `3`.
-11. **Two episodes before rest is taken.** A second flight/pursuit episode ends while `rest_turns_required` is already `2` (from a first episode, unsatisfied) → remains `2`, not `4`.
-12. **Doubled rest produces two check opportunities.** Satisfying a `rest_turns_required = 2` obligation consumes two turns through `EXP-002`, producing two ordinary `EXP-001` check opportunities — no exception.
+15. **First turn credited, second remains required, encounter does not erase the first.** A two-turn doubled rest's first turn reaches its completed-turn boundary (`rest_turns_required` goes from 2 to 1) — *then* `EXP-001`'s check, using a scripted roll of 6, triggers an encounter → `rest_turns_required` remains `1` afterward (not reset to 2), i.e., the first turn's credit is preserved and only the second, not-yet-started turn is affected.
 
-**Interrupted rest (Ruling 7):**
+**True pre-boundary interruption:**
 
-13. **Interrupted mandatory rest does not satisfy the requirement.** Starting from `rest_turns_required = 1`, a rest turn whose `EXP-001` check triggers an encounter that interrupts it → `rest_turns_required` remains `1`, `qualifying_turns_since_rest` is unchanged (not reset).
-14. **Combat following an interrupted rest counts toward the next requirement.** Continuing case 13, if the resulting combat consumes further dungeon turns, those turns increment `qualifying_turns_since_rest` normally (per Ruling 1), independent of the still-outstanding rest requirement from case 13.
+16. **No whole-turn credit, no fractional credit, consumed time remains consumed.** A rest turn interrupted by a mechanism outside the currently approved `EXP-001`/`EXP-002` architecture, before reaching a completed-turn boundary → `rest_turns_required` is unchanged (no decrement), and whatever partial dungeon time `EXP-002` had already accounted for that turn remains consumed under `EXP-002`'s own ledger (not refunded).
+
+**`EXP-002` integration (no second ledger, no batching):**
+
+17. **Rest turns advance the single shared ledger like any other activity.** A rest turn's consumption produces exactly one `EXP-002` "dungeon turn elapsed" signal per whole turn completed, using the same accumulator `EXP-002` already defines — no separate rest-specific ledger, and no batching of a doubled rest's two boundaries into a single deferred update.
 
 ## Provenance Classification
 
 **1974 Explicit**
-- A recurring mandatory rest requirement exists ("one turn every hour must be spent motionless").
+- A recurring mandatory rest requirement exists, expressed in time ("one turn every hour"), not distance.
 - A flight/pursuit episode doubles the required rest period.
 - Hit-point recovery is governed by a separate day-granularity system, not this p. 8 passage.
 
+**Later Compatible D&D Completion / Clarification**
+- Holmes's explicit restatement, "one turn every hour / one turn out of every six" — the primary historical basis for reading the requirement as a general dungeon-time cadence rather than a movement-specific one.
+- The exact discrete executable cadence, "five qualifying turns → one mandatory rest turn," from Moldvay's "after moving for 5 turns" — adopted for its numeric count; Moldvay's own movement-specific wording is not adopted for the *scope* of what counts (see Compatibility Analysis).
+- Moldvay's −1 to hit / −1 to damage consequence for failing to rest, exposed by `EXP-004` as `rest_overdue` for the combat domain to apply.
+
 **Necessary Mathematical / Mechanical Consequence**
-- The approximate 1-rest-turn-per-6-turn ratio (from turn ≈ 10 minutes, hour ≈ 6 turns).
-- All qualifying-turn accounting uses `EXP-002`'s single shared ledger, uniformly across activity types (Ruling 1) — forced by not reopening `EXP-002`'s approved architecture, not an independent choice.
+- The approximate 1-rest-turn-per-6-turn ratio (from turn ≈ 10 minutes, hour ≈ 6 turns) — the arithmetic underlying the adopted cadence.
+- A completed rest turn does not itself count as a qualifying non-rest turn of the next cadence — the direct consequence of the adopted six-turn cycle (5 qualifying + 1 rest = 6), not an independently invented rule.
 - The doubled rest period equals two turns (already fixed by `EXP-002`).
+- Ordinary rest debt does not escalate past one required turn — the fixed-condition (not accumulating-count) reading of "overdue," a direct consequence of treating the requirement as satisfiable by exactly one rest turn.
+- A rest turn's completed-turn boundary is reached, and its credit applied, before `EXP-001`'s check on that same signal resolves — a direct consequence of `EXP-002`'s already-approved signal semantics (the signal is emitted only once the turn has elapsed), not an independent judgment call.
 
-**Later Compatible D&D Completion**
-- The exact discrete cadence, "5 qualifying turns → 1 mandatory rest turn," from the Holmes/B-X-corroborated "rest 1 turn in 6" convention.
-
-**Simulator Ruling (proposed, unresolved pending human decision)**
-- Ruling 2: rest turns do not generate their own rest debt.
-- Ruling 3: enforcement mechanism when rest is due (hard gate, proposed default, vs. B/X's −1 to-hit/damage penalty, alternative).
-- Ruling 4: the activity boundary of "motionless" (non-blocking).
-- Ruling 5: voluntary/early rest resets the cadence.
-- Ruling 6: doubled post-flight/pursuit rest satisfies/replaces rather than stacks with ordinary debt, and does not compound across repeated episodes.
-- Ruling 7: an interrupted rest turn does not satisfy the requirement, and does not receive partial credit.
+**Simulator Ruling (approved)**
+- Ruling A: "motionless" requires no spatial movement; this card does not decide compatibility with other concurrent non-movement activity.
+- Ruling B: voluntary/early rest resets the cadence identically to mandatory rest.
+- Ruling C: doubled post-flight/pursuit rest replaces/satisfies ordinary debt and does not stack across repeated episodes.
+- Ruling D: a true pre-boundary interruption (outside current Cluster 1 architecture) earns no whole or fractional rest credit; consumed time remains consumed.
 
 **Out of scope for this card**
-- The B/X-attested −1 to-hit/damage penalty's actual mechanical application (`COMBAT-002`/`COMBAT-006`, only if Ruling 3's alternative is adopted).
+- The −1 to-hit/−1 to-damage penalty's actual mechanical application (`COMBAT-002`/`COMBAT-006`) — `EXP-004` exposes `rest_overdue`; it does not implement the penalty.
 - Flight/pursuit state entry/exit triggers (`ENC-005`).
 - Hit-point recovery / healing (a future downtime/healing Rule Card).
-- Wilderness-scale rest and pursuit-rest procedures (out of scope entirely; noted only for transparency).
+- Wilderness-scale rest and pursuit-rest procedures.
+- What future mechanic, if any, could cause a true pre-boundary interruption (Ruling D fixes only its *consequence*, not its cause).
 
 ---
 
 ## Open Questions
 
-1. **Rulings 2–7 all require human decision before this card can be `APPROVED`.** See "Simulator Ruling" for the full proposals and alternatives.
-2. **The B/X "−1 to hit/damage" citation (cadence and penalty figures) is well-corroborated by multiple independent secondary sources but not independently page-verified by this agent against the primary Holmes/Moldvay booklets.** Flagged for human attention before final approval, per the same standard applied to `EXP-002`'s B2 citation.
-3. **Ruling 4 (what "motionless" permits) does not block this card's core accounting behavior** and may be left genuinely open even after approval, revisited only if a future card (e.g., a detailed activity-execution loop) needs a firmer answer.
-4. **If Ruling 3's combat-penalty alternative is ever selected instead of the hard-gate default, this card would gain a soft forward dependency on the combat domain** (to expose `rest_overdue` in a form `COMBAT-002`/`COMBAT-006` can consume) not currently reflected in `docs/rules/INVENTORY.md`'s `EXP-004` row. This is not proposed as an inventory correction — the primary proposal (hard gate) requires no such dependency — but is noted here for the human reviewer's awareness in case the alternative is preferred.
+None that block approval or implementation within this card's defined scope.
+
+The following are informational, non-blocking notes for awareness:
+
+1. **A new cross-domain relationship now exists between `EXP-004` and the combat domain** (`rest_overdue` → −1 to hit / −1 to damage), not previously reflected anywhere in `docs/rules/INVENTORY.md`. This does not require the combat domain to exist before `EXP-004` can itself be implemented and tested (the combat-domain consumption is a separate, later integration step) — see "Inventory Maintenance" for the narrow inventory note this creates.
+2. **What future mechanic could cause a true pre-boundary interruption** (Ruling D) is not designed here and is not currently reachable by the approved `EXP-001`/`EXP-002` architecture; only the consequence, if one ever occurs, is fixed.
 
 ## Approval
 
-- Approved by: `<name>`
-- Date: `<date>`
-- Notes: `<optional>`
+- Approved by: Human project owner
+- Date: 2026-08-16
+- Notes: Approval incorporates the following human decisions made during review: (1) the recurring cadence is five qualifying non-rest dungeon turns → one mandatory rest turn → repeat, grounded in 1974's own hour-based (time, not distance) formulation and Holmes's explicit "one turn out of every six" clarification, with Moldvay supplying only the discrete count; (2) all `EXP-002`-recognized activity types count toward the cadence, for the historical reason above, not merely as a software-architecture necessity; (3) a completed rest turn does not itself create rest debt, and ordinary overdue rest is a fixed one-turn condition that does not escalate; (4) the proposed hard-gate enforcement is rejected in favor of the Moldvay B/X completion — rest becomes overdue but does not block further activity, and `EXP-004` exposes `rest_overdue` for the combat domain to apply a −1 to-hit/−1 to-damage penalty; (5) "motionless" is narrowly defined as no spatial movement, without deciding compatibility with other concurrent activity; (6) voluntary early rest resets the cadence; (7) doubled post-flight/pursuit rest replaces rather than stacks with ordinary debt, and does not compound across repeated episodes; (8) a rest turn's completed-turn boundary is credited before `EXP-001`'s check on that same signal resolves, so a resulting encounter cannot retroactively invalidate an already-completed rest turn, though it may interrupt a not-yet-started subsequent turn of a doubled rest; (9) a true pre-boundary interruption (outside current Cluster 1 architecture) earns no fractional rest credit.
 
 ---
 
