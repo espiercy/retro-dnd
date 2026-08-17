@@ -27,7 +27,7 @@ CHAR-001 → CHAR-007 → COMBAT-004 (ability-based save mapping), CHAR-012, CHA
 CHAR-002 + CHAR-008 + CHAR-009 → CHAR-013 → MAGIC-006
 
 EXP-002 (no dependencies) → EXP-001 (+ RNG), EXP-003, EXP-004, EXP-005, EXP-006, EXP-007, EXP-010
-EXP-008 → MON-001, MON-002, TREAS-001   (see SS7 — a circularity was found here)
+EXP-008 → MON-001, MON-002, TREAS-001   (see §4 — a circularity was found here)
 
 ENC-001 (no dependencies)
 ENC-002 → CHAR-010
@@ -37,7 +37,7 @@ ENC-005 → EXP-002, EXP-003
 ENC-006 → ENC-003
 ENC-007 → MON-001, EXP-001
 
-MON-001 → EXP-001, EXP-008 (circular — see SS7)
+MON-001 → EXP-001, EXP-008 (circular — see §4)
 MON-002 → MON-001
 MON-003 → MON-001, COMBAT-002
 MON-004 → MON-003
@@ -65,7 +65,11 @@ SIM-002 (survivability) — cuts across everything, deliberately deferred
 
 ## 4. A Discovered Dependency Problem (reported, not fixed)
 
-**`MON-001` lists `EXP-008` as one of its own dependencies, while `EXP-008` also lists `MON-001` as one of its dependencies — a circular reference.** This is not new to this analysis; it was carried forward unexamined from the retired 1974-primary inventory's identical `MON-001` dependency listing (`EXP-001`, `EXP-008`), through both RC-driven inventory drafts, without being re-derived. The directionally sensible relationship, consistent with every other row's framing (stocking *consumes* determination, not the reverse) and with `EXP-001`'s own dependency list (which does *not* list `MON-001`), is that `MON-001` should depend only on `EXP-001` (the trigger that invokes determination) — `EXP-008` should be `MON-001`'s downstream *consumer*, not its dependency. This is flagged here per instruction rather than corrected in `INVENTORY.md`. It does not affect the recommendation below, since the recommended cluster touches neither `MON-001` nor `EXP-008`, but it should be corrected before any cluster reaching those two entries is selected.
+**`MON-001` lists `EXP-008` as one of its own dependencies, while `EXP-008` also lists `MON-001` as one of its dependencies — a circular reference.** This is not new to this analysis; it was carried forward unexamined from the retired 1974-primary inventory's identical `MON-001` dependency listing (`EXP-001`, `EXP-008`), through both RC-driven inventory drafts, without being re-derived.
+
+This task has not researched the correct dependency direction sufficiently to assert a specific fix. An earlier draft of this document did assert one (that `MON-001` should depend only on `EXP-001`, with `EXP-008` as a downstream consumer); that assertion is withdrawn here as unsupported by this task's actual scope. What can be said with confidence is only that the relationship among `EXP-001` (the wandering-encounter trigger), `EXP-008` (dungeon stocking), and `MON-001` (monster determination) is not currently coherent as approved, and must be re-derived — not assumed in either direction — before a future cluster containing `MON-001` or `EXP-008` is selected.
+
+This is flagged here per instruction rather than corrected in `INVENTORY.md`. It does not affect the recommendation below, since the recommended cluster touches neither `MON-001` nor `EXP-008`.
 
 ## 5. Candidates Evaluated
 
@@ -77,7 +81,7 @@ Four candidates from `INVENTORY.md`'s own "Candidate Cluster Signals," each inde
 
 The old `CLUSTER-001` (`EXP-001`+`EXP-002`+`EXP-004`) is not the starting point — this membership is re-derived from the current graph. `EXP-002` has no dependencies at all. `EXP-001` depends only on `EXP-002` and the RNG abstraction (already implemented, approved, and edition-neutral — confirmed directly during this project's own prior `CLUSTER-001` implementation-readiness pass, `roll_die`/`roll` in `src/rng/rng.py`). Nothing else in the inventory is a hard dependency of either card. This two-item core is fully dependency-complete on its own.
 
-`EXP-004` is deliberately excluded, for reasons distinct from (and stronger than) the old cluster's original rationale for including it. `EXP-004` is currently the single least stable entry touching this area: its old mandatory-rest mechanic does not survive as RC canon, its replacement (running exhaustion vs. a distinct wilderness-travel-rest procedure) is an open `SPLIT CANDIDATE`, and the wilderness-travel half may not even belong at the same *scale* as underworld turn accounting at all. `EXP-002`'s shared-ledger accounting model does not require a real `EXP-004` to be exercised meaningfully — it is activity-type-agnostic by design (already established in `EXP-002`'s own approved mechanical specification), so a synthetic "an activity of cost *N* turns occurred" input suffices for testing, exactly as the old `CLUSTER-001`'s own external-contract analysis already established (§8 of that document) for movement. Excluding `EXP-004` removes the cluster's only source of real boundary instability.
+`EXP-004` is deliberately excluded, for reasons distinct from (and stronger than) the old cluster's original rationale for including it. `EXP-004` is currently the single least stable entry touching this area: its old mandatory-rest mechanic does not survive as RC canon, its replacement (running exhaustion vs. a distinct wilderness-travel-rest procedure) is an open `SPLIT CANDIDATE`, and the wilderness-travel half may not even belong at the same *scale* as underworld turn accounting at all. The pre-migration `EXP-002` design was activity-type-agnostic, and the old `CLUSTER-001`'s own implementation-readiness analysis (§8 of that document) found a synthetic "an activity of cost *N* turns occurred" test fixture sufficient to exercise it without a real movement/search/rest procedure. That is useful historical/design evidence that a synthetic-input testing approach is *feasible* for this shape of problem — it is not current approved mechanical authority: `EXP-002` remains `REVALIDATION_REQUIRED`, and its revalidation must independently establish its own authoritative executable time-accounting/input contract, including whether a synthetic-fixture testing approach still applies, before implementation readiness. Excluding `EXP-004` removes the cluster's only source of real boundary instability; it does not depend on that revalidation outcome either way.
 
 `EXP-003` (movement) was considered and excluded for the same reason the old `CLUSTER-001` excluded it: it requires `CHAR-005` (encumbrance/movement rate), which pulls in a `CHAR-001→002→004→005` chain unrelated to turn accounting itself. That reasoning is source-baseline-independent and applies unchanged under RC.
 
@@ -184,11 +188,11 @@ A merged "character core + exploration/time" cluster (producing a character that
 
 **Internal dependency graph:** `EXP-002` (no dependencies) → `EXP-001` (depends on `EXP-002`'s turn-elapsed signal and the RNG abstraction).
 
-**Stable external dependencies:** the RNG abstraction (`src/rng/`, `RNG_CONTRACT.md`) — already implemented, approved, edition-neutral, directly confirmed sufficient during this project's prior `CLUSTER-001` readiness pass; a synthetic/scripted "an activity of cost *N* turns occurred" input, exactly as the old `CLUSTER-001`'s own external-contract analysis already established for movement (no real character, map, or monster content required).
+**Stable external dependency:** the RNG abstraction (`src/rng/`, `RNG_CONTRACT.md`) — already implemented, approved, edition-neutral, directly confirmed sufficient during this project's prior `CLUSTER-001` readiness pass. (A synthetic/scripted "an activity of cost *N* turns occurred" test fixture is expected to be usable for exercising this cluster without real character, map, or monster content — see §5.1 and §11 — but that is a controlled testing convention, not itself a stable external contract; `EXP-002`'s own revalidation must still establish its authoritative time-accounting/input contract.)
 
 **Unresolved issues requiring research before implementation** (not performed here): `EXP-001`'s exact revalidated cadence/timing specification (every-other-turn, encounter appearing at the start of the next turn — the *finding* is known, the *executable specification* is not yet rewritten); `EXP-002`'s reassessed integration contract with `EXP-001` given that changed cadence; confirmation of whether `EXP-002`'s existing shared-ledger/progressive-boundary accounting model (a Simulator Ruling, not source-dependent) still applies unchanged.
 
-**Why the boundary is coherent:** both cards share one purpose (authoritative dungeon time), have no dependency on any other domain, and — critically — excluding `EXP-004` removes the graph's only real source of instability in this area without weakening the cluster's own internal completeness, since `EXP-002`'s accounting model does not require a real rest/exhaustion procedure to be exercised meaningfully.
+**Why the boundary is coherent:** both cards share one purpose (authoritative dungeon time), have no dependency on any other domain, and — critically — excluding `EXP-004` removes the graph's only real source of instability in this area without weakening the cluster's own internal completeness: the pre-migration `EXP-002` design did not require a real rest/exhaustion procedure to be exercised meaningfully, and `EXP-004`'s exclusion does not depend on that design surviving revalidation unchanged.
 
 **What it unlocks:** the rest of the exploration domain (`EXP-003`, `005`–`007`, `010`, all of which depend on `EXP-002`'s signal), `ENC-003`/`ENC-005`/`ENC-007` (which depend on `EXP-001`'s trigger or `EXP-002`'s time), and re-validates the entire cluster-workflow pipeline (research → Rule Card → human approval → implementation → verification) under the new source authority for the first time.
 
@@ -215,22 +219,34 @@ Cluster 4: Combat-Foundation — COMBAT-001–006, 008, 009, plus CHAR-011/COMBA
            analysis flagged as split-risk, now resolvable since COMBAT-004
            exists; also depends on Cluster 2's CHAR-003/007 being settled
         ↓
-Cluster 5: Monster & Encounter Integration — MON-001, MON-002, ENC-001–006,
-           EXP-008 (dungeon stocking), TREAS-001 — this is the first point
-           SIM-001 (layout generation) becomes genuinely necessary alongside
-           a cluster, for meaningful end-to-end stocking/testing
+Cluster 5 (tentative — boundary NOT dependency-complete as sketched,
+           requires later re-derivation): Monster & Encounter Integration —
+           provisionally MON-001, MON-002, ENC-001–006, EXP-008 (dungeon
+           stocking), TREAS-001. This placeholder grouping is known-incomplete:
+           ENC-002 depends on CHAR-010 (Thief skills), which this sequence
+           does not introduce until Cluster 6+, so ENC-002 cannot actually be
+           built at Cluster 5 as listed. MON-003/MON-004 (monster combat
+           stats/special abilities) are also omitted here without a stated
+           reason. The real membership of this cluster — including whether
+           CHAR-010 must move earlier, whether MON-003/MON-004 belong inside
+           it or after it, and how the MON-001/EXP-008 circularity (§4)
+           resolves — must be re-derived by dedicated future cluster
+           analysis, not assumed from this placeholder list
         ↓
-first meaningful "create party → enter room → advance time →
-trigger/resolve encounter" vertical slice becomes possible
+a first meaningful "create party → enter room → advance time →
+trigger/resolve encounter" vertical slice is anticipated somewhere around
+this boundary, but neither its exact cluster number nor its exact
+membership is settled here
         ↓
-Cluster 6+: catalog closures (MAGIC-001–006, MON-003/004, TREAS-002–004),
-            CHAR-009/010/012/013 (class/racial abilities, Thief skills,
-            General Skills, high-level branches), ADV-001–003 — large-volume
-            content, correctly sequenced last per the inventory's own
-            proposed research order
+Cluster 6+: catalog closures (MAGIC-001–006, MON-003/004 if not moved
+            earlier, TREAS-002–004), CHAR-009/010/012/013 (class/racial
+            abilities, Thief skills, General Skills, high-level branches),
+            ADV-001–003 — large-volume content, correctly sequenced late per
+            the inventory's own proposed research order, though CHAR-010's
+            exact position is itself unsettled per the Cluster 5 note above
 ```
 
-**Estimated point at which a meaningful dungeon-expedition vertical slice becomes possible: not before Cluster 5** — the first point at which character, time, combat, monster determination, and encounter resolution all coexist in at least minimal form. This is a planning signal only; building that slice is not proposed as a near-term task.
+**Tentative estimate of when a meaningful dungeon-expedition vertical slice becomes possible: not before the Monster & Encounter Integration boundary sketched above (provisionally "Cluster 5")** — the point at which character, time, combat, monster determination, and encounter resolution would all need to coexist in at least minimal form. This is a soft planning signal only, not a settled milestone: the boundary itself is not yet dependency-complete (see the Cluster 5 note above), so its exact position and cluster number may shift once later monster/encounter cluster analysis re-derives it. Building that slice is not proposed as a near-term task.
 
 ## 9. Treatment of Existing `EXP` Rule Cards
 
@@ -251,13 +267,13 @@ For the recommended cluster only, classified per the assigning task's categories
 | `EXP-001` | REVALIDATE EXISTING RULE CARD |
 | `EXP-002` | REVALIDATE EXISTING RULE CARD |
 | RNG abstraction | EXTERNAL STABLE CONTRACT (already implemented/approved) |
-| Synthetic "activity occurred" test input | EXTERNAL STABLE CONTRACT (design-time convention, not a Rule Card) |
+| Synthetic "activity occurred / costs *N* turns" test input | Not classified as an EXTERNAL STABLE CONTRACT and not a Rule Card — it is a controlled test fixture/testing convention for exercising time accounting without implementing movement/search/etc. Its continued suitability is not settled; `EXP-002`'s revalidation must establish the cluster's actual authoritative executable time-accounting/input contract. |
 
 No new Rule Card and no split decision is implied by the recommended cluster itself. (Split decisions — `CHAR-007`, `CHAR-013`, `EXP-004` — belong to later clusters per §8 and are not triggered by selecting this one.)
 
 ## 12. `SIM-001` Relative to the Recommendation
 
-**Not needed alongside the recommended cluster.** `EXP-001`/`EXP-002` do not touch dungeon stocking, layout, or any spatial content at all; a synthetic activity-cost input is sufficient for their own meaningful testing, as already established during this project's prior `CLUSTER-001` implementation-readiness analysis. `SIM-001` becomes relevant no earlier than Cluster 5 (§8), once `EXP-008` (stocking) enters scope.
+**Not needed alongside the recommended cluster.** `EXP-001`/`EXP-002` do not touch dungeon stocking, layout, or any spatial content at all; a synthetic activity-cost test fixture is expected to be sufficient for their own meaningful testing, consistent with this project's prior `CLUSTER-001` implementation-readiness analysis — though, as with the rest of `EXP-002`'s testing approach (§5.1, §11), this remains subject to confirmation during `EXP-002`'s own revalidation rather than settled fact. `SIM-001` becomes relevant no earlier than the tentative Monster & Encounter Integration boundary (§8), once `EXP-008` (stocking) enters scope — and that boundary's exact composition is itself unsettled, per §8.
 
 ## 13. Human Decisions Required Before Cluster 1 Can Be Selected
 
@@ -280,4 +296,4 @@ Nothing else was identified as blocking. The `CHAR-007` split question (§5.2), 
 
 **`READY FOR HUMAN CLUSTER SELECTION`.**
 
-The dependency graph is well-enough understood from already-approved documentation to support a confident first-cluster recommendation without further analysis. The one open item worth human awareness before final sign-off is the circular `MON-001`/`EXP-008` dependency (§4) — it does not affect the recommended cluster and is not itself a blocker to selecting Exploration/Time as Cluster 1, but should be corrected in `INVENTORY.md` before any cluster reaching `MON-001` or `EXP-008` is later selected.
+The dependency graph is well-enough understood from already-approved documentation to support a confident first-cluster recommendation without further analysis. The one open item worth human awareness before final sign-off is the circular `MON-001`/`EXP-008` dependency (§4) — it does not affect the recommended cluster and is not itself a blocker to selecting Exploration/Time as Cluster 1, but the actual relationship among `EXP-001`, `EXP-008`, and `MON-001` should be re-derived (this analysis does not know the correct direction) and `INVENTORY.md` corrected accordingly before any cluster reaching `MON-001` or `EXP-008` is later selected. Relatedly, §8's tentative Cluster 5 (Monster & Encounter Integration) sketch is known-incomplete — see §8's own note — and should not be read as a settled boundary either.
