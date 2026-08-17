@@ -68,7 +68,7 @@ Making "stop, evidence is inadequate" an explicitly successful, expected outcome
 ## Consequences
 
 - Rule Card research and revalidation normally becomes two separate agent tasks (Stage A — Evidence, and Stage B — Synthesis/Draft) rather than one, with a human review point between them. A trivial Rule Card may collapse the two stages only when a human explicitly authorizes doing so for that specific card.
-- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` is created as the canonical, detailed protocol document.
+- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` is created as the canonical, detailed protocol document. Stage-A evidence reports are committed as durable repository artifacts under `docs/rules/evidence/<RULE-ID>-evidence.md` (protocol §12) — not itself a Rule Card, not mechanically authoritative, and never assigned `APPROVED` Rule Card status, but preserved after human evidence review so Stage-B drafting and future audits can see exactly what evidence supported synthesis.
 - `AGENTS.md` §9's implementation-workflow diagram and §10's Rules Research Workflow are updated to reference the new protocol rather than describing the single-pass pipeline.
 - `DEVELOPMENT_WORKFLOW.md` §9.7's description of revalidation is updated to reflect the same two-stage lifecycle, replacing its prior "same research→draft→human-review workflow already used for a new Rule Card" framing.
 - Individual research tasks should see fewer downstream correction cycles and higher source confidence, at the cost of more research tasks stopping short of a finished artifact and awaiting further human direction — this is treated as the protocol working as intended, not as a shortfall.

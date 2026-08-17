@@ -28,7 +28,7 @@ WHOLE-SOURCE CROSS-REFERENCE SEARCH
         ↓
 FALSIFICATION / CHALLENGE PASS
         ↓
-HUMAN EVIDENCE REVIEW                      ◄── hard gate (§9)
+HUMAN EVIDENCE REVIEW                      ◄── hard gate (§11)
         ↓
 MECHANICAL SYNTHESIS
         ↓
@@ -43,7 +43,7 @@ RULE CARD DRAFT / REVALIDATION
 HUMAN RULE CARD APPROVAL
 ```
 
-**Core principle: evidence must close before mechanical synthesis begins.** Everything above the "Human Evidence Review" gate is **Stage A — Evidence**. Everything from "Mechanical Synthesis" downward is **Stage B — Synthesis / Rule Card Draft**. A research agent must not produce a polished executable specification from incomplete primary evidence, and must not cross from Stage A into Stage B without explicit human authorization (§9).
+**Core principle: evidence must close before mechanical synthesis begins.** Everything above the "Human Evidence Review" gate is **Stage A — Evidence**. Everything from "Mechanical Synthesis" downward is **Stage B — Synthesis / Rule Card Draft**. A research agent must not produce a polished executable specification from incomplete primary evidence, and must not cross from Stage A into Stage B without explicit human authorization (§11).
 
 In practice, Stage A and Stage B are normally two separate agent tasks. A trivial Rule Card may collapse the two stages into one task only when a human explicitly authorizes doing so for that specific card — an agent may not decide unilaterally that a card is "trivial enough" to skip the gate.
 
@@ -55,7 +55,7 @@ For Rules Cyclopedia research, the relevant Rules Cyclopedia primary text must a
 - identify terminology worth searching for in the primary text;
 - suggest pages worth checking.
 
-**They may not substitute for primary RC evidence when establishing the RC mechanic itself.** A search-engine snippet, an AI-generated summary of a search result, or a secondary source's paraphrase is not primary evidence, no matter how confident or specific it sounds — it is, at best, a locator (see the confidence vocabulary in §7).
+**They may not substitute for primary RC evidence when establishing the RC mechanic itself.** A search-engine snippet, an AI-generated summary of a search result, or a secondary source's paraphrase is not primary evidence, no matter how confident or specific it sounds — it is, at best, a locator (see the confidence vocabulary in §6).
 
 If usable primary text cannot be accessed after a genuine attempt:
 
@@ -69,14 +69,20 @@ Report:
 - the exact access failure for each (connection refused, size limit, 403, truncation, etc.);
 - the exact research question(s) that remain unanswered as a result.
 
-Do **not** proceed to mechanical synthesis, Rule Card rewriting, alternate-source substitution, or a Simulator Ruling merely because primary access failed. Wait for human direction — which may be to try a different access method, accept a lower-confidence secondary-source-only pass explicitly (as this project has done before, always disclosed), or hold the task open.
+**This is a hard gate, not a standing bypass.** Do not proceed to mechanical synthesis, Rule Card rewriting, alternate-source substitution, or a Simulator Ruling merely because primary access failed — and do not treat "accept a lower-confidence secondary-source-only pass" as an ordinary, available continuation of this protocol. If usable primary Rules Cyclopedia text cannot be accessed, the Stage A task stops there. Human direction, given after that stop, may:
+
+- provide another primary-source access method to try;
+- defer the research until access is available;
+- explicitly authorize a separate exceptional governance decision covering that specific case.
+
+**Secondary-source-only evidence does not satisfy this gate and cannot, under this protocol, establish or authorize an RC mechanic on its own — regardless of how a human subsequently chooses to proceed.** A future human directive that changes how a specific case is handled is a governance decision made outside and after this protocol's normal operation, not a discretionary option this protocol itself offers a research agent as a routine escape route. Secondary sources remain locators only (see above), never a substitute for the gate itself.
 
 ## 5. Stage A Is Separate From Rule Card Drafting
 
 Every substantial new Rule Card or revalidation begins with a distinct Stage A task. During Stage A:
 
 - **Do not rewrite the active Rule Card specification.** A Rule Card being revalidated keeps its current content and `REVALIDATION_REQUIRED` status untouched throughout Stage A.
-- Produce a standalone **evidence report** (see §11 for the required contents and §12 for where it lives) containing, at minimum, an evidence map in this shape:
+- Produce a standalone **evidence report**, committed as a durable evidence artifact (see §11 for the required contents and §12 for the artifact's location and lifecycle), containing, at minimum, an evidence map in this shape:
 
 | Research Question | Primary Source Location | What RC Establishes | Provenance | Confidence |
 |---|---|---|---|---|
@@ -87,7 +93,7 @@ Provenance classifications used in the evidence map (a subset of `GAME_CONSTITUT
 - **Necessary Mechanical Consequence**
 - **Unresolved by RC**
 
-(Alternate-Source Compatible Completion and Simulator Ruling are not evidence-stage classifications — they are Stage B outcomes, reached only after the process in §13/§14 below, and only for gaps the evidence stage has already precisely documented as unresolved.)
+(Alternate-Source Compatible Completion and Simulator Ruling are not evidence-stage classifications — they are Stage B outcomes, reached only after the process in §15/§16 below, and only for gaps the evidence stage has already precisely documented as unresolved.)
 
 ## 6. Confidence Vocabulary
 
@@ -99,7 +105,7 @@ Every evidence-map row's Confidence column uses exactly one of:
 - **SECONDARY SOURCE LOCATOR ONLY** — found only via a secondary source; primary text has not (yet) been directly inspected for this specific fact. **May guide further research. Cannot authorize mechanics** — a row at this confidence level blocks Stage A from closing on that question.
 - **NOT YET VERIFIED** — a plausible reading not yet checked against primary text at all; a placeholder, not a finding.
 
-A Stage A evidence report is not ready for human review while any consequential row still carries `SECONDARY SOURCE LOCATOR ONLY` or `NOT YET VERIFIED` — either the primary text must be located and inspected, or the row must be reported as an unresolved research question (§4, §14) rather than smoothed over.
+A Stage A evidence report is not ready for human review while any consequential row still carries `SECONDARY SOURCE LOCATOR ONLY` or `NOT YET VERIFIED` — either the primary text must be located and inspected, or the row must be reported as an unresolved research question (§4, §11) rather than smoothed over.
 
 ## 7. Facts and Consequences Must Be Separate
 
@@ -208,9 +214,9 @@ Every Stage A task must stop and produce a report containing, at minimum:
 11. Conclusions rejected, and what further research they need.
 12. Unresolved RC questions.
 13. Questions determined to belong to a different Rule Card's own scope, not this one.
-14. Whether alternate-source research is actually required for any unresolved question (§13) — and if so, the precise gap statement, not a general "let's also check B/X" plan.
-15. Possible Simulator Ruling areas, named but not drafted (§14).
-16. Explicit confirmation that, for a `REVALIDATION_REQUIRED` card, the legacy Rule Card was withheld from detailed comparison until RC-first research was independently complete (§12).
+14. Whether alternate-source research is actually required for any unresolved question (§15) — and if so, the precise gap statement, not a general "let's also check B/X" plan.
+15. Possible Simulator Ruling areas, named but not drafted (§16).
+16. Explicit confirmation that, for a `REVALIDATION_REQUIRED` card, the legacy Rule Card was withheld from detailed comparison until RC-first research was independently complete (§13).
 17. Access limitations encountered (size limits, blocked hosts, truncation, etc.), even where a workaround succeeded.
 18. An overall confidence assessment.
 19. A recommendation, exactly one of:
@@ -222,9 +228,42 @@ Every Stage A task must stop and produce a report containing, at minimum:
     MORE PRIMARY RESEARCH REQUIRED
     ```
 
-Then stop. Do not continue into Stage B on the same task.
+**This report is committed to the repository as the durable evidence artifact defined in §12 — it does not stop at a chat response.** Then stop. Do not continue into Stage B on the same task.
 
-## 12. RC First, Legacy Rule Card Later
+## 12. Evidence Artifacts — Location and Lifecycle
+
+**Location.** Stage-A evidence artifacts live under:
+
+```text
+docs/rules/evidence/
+```
+
+**Naming convention:**
+
+```text
+docs/rules/evidence/<RULE-ID>-evidence.md
+```
+
+Examples:
+
+```text
+docs/rules/evidence/EXP-001-evidence.md
+docs/rules/evidence/COMBAT-004-evidence.md
+```
+
+**Definition and treatment:**
+
+- The evidence artifact is the **durable repository record of Stage A** — the committed form of the report required by §11, not merely something described in an agent's chat response.
+- It is **committed on the Stage-A research branch**, alongside (or ahead of) any other Stage-A work, exactly as any other documentation change in this project is committed and pushed for review.
+- It contains, at minimum, the evidence map, whole-source cross-reference results, falsification passes, unresolved questions, confidence assessment, and recommendation already required by §11 — this section does not add new required contents, only where they live and how they persist.
+- **It is not itself a Rule Card.** It does not use `docs/rules/_template.md`'s shape, does not carry a Rule Card `Status` field, and is never assigned `APPROVED` Rule Card status under `SOURCE_HIERARCHY.md` §9.
+- **It is not mechanically authoritative.** Nothing in an evidence artifact authorizes implementation, and nothing in it may be treated as an approved mechanical specification — that remains the Rule Card's role, reached only via Stage B and human Rule Card approval.
+- It is **preserved after human evidence review**, whether the recommendation was accepted, sent back for more research, or partially revised — so that later Stage-B work, and any future audit, can see exactly what evidence supported (or failed to support) synthesis, without reconstructing it from a chat transcript.
+- **Stage B references the accepted evidence artifact** when drafting or revalidating the corresponding Rule Card (e.g., the Rule Card's source/citation sections may cite `docs/rules/evidence/<RULE-ID>-evidence.md` directly), rather than re-deriving or re-quoting the same primary-text research from scratch.
+
+The `docs/rules/evidence/` directory itself does not need to exist in advance — it is created (with its first file) when the first Stage-A task under this protocol produces an evidence artifact.
+
+## 13. RC First, Legacy Rule Card Later
 
 For `REVALIDATION_REQUIRED` Rule Cards, do not begin detailed research from the superseded Rule Card's own content, framing, or terminology. Stage A order is fixed:
 
@@ -251,7 +290,7 @@ Only *after* the RC procedure is independently understood and has cleared human 
 
 Legacy Rule Cards are provenance, a regression/completeness check, and historical evidence. **They are not templates that survive unless disproven.** This rule exists specifically to prevent anchoring on the superseded 1974-primary specifications — a legacy mechanic earns its place in the revalidated card by being independently supported by RC evidence, not by having already been written down before.
 
-## 13. Do Not Preserve Simulator Machinery by Inertia
+## 14. Do Not Preserve Simulator Machinery by Inertia
 
 Existing implementation-shaped concepts carried in a prior draft or a legacy card — ledgers, accumulators, event/boundary models, state variables, rounding schemes, interruption systems, activity-cost abstractions — must each be re-justified against the actual RC procedure during Stage B, not carried forward because they already exist in prose. For each such concept, ask: **does the historical game mechanic require this concept, or is this merely one possible software representation of it?**
 
@@ -263,7 +302,7 @@ over statements like:
 
 > Publish `TurnBoundaryEvent` to subscribers.
 
-## 14. Alternate Sources Are Gap-Directed Only
+## 15. Alternate Sources Are Gap-Directed Only
 
 Do not broadly browse earlier editions merely to see what they did, and do not begin alternate-source research until a precise RC gap has been documented in this shape:
 
@@ -292,9 +331,9 @@ Before accepting a completion, document:
 
 Only then may it be classified **Alternate-Source Compatible Completion**.
 
-## 15. Simulator Rulings Are Last
+## 16. Simulator Rulings Are Last
 
-A Simulator Ruling may be proposed only after RC primary research, the whole-source cross-reference pass, the falsification pass, and gap-directed compatible-source research (§14) together fail to establish the executable behavior required. Every proposed Simulator Ruling must independently state:
+A Simulator Ruling may be proposed only after RC primary research, the whole-source cross-reference pass, the falsification pass, and gap-directed compatible-source research (§15) together fail to establish the executable behavior required. Every proposed Simulator Ruling must independently state:
 
 1. The exact missing behavior.
 2. Why executable simulation requires an answer at all.
@@ -304,7 +343,7 @@ A Simulator Ruling may be proposed only after RC primary research, the whole-sou
 
 Do not bundle unrelated rulings into one proposal (each ruling stands or falls on its own). Do not self-approve a Simulator Ruling — it is proposed, in `AWAITING_APPROVAL`, pending explicit human sign-off, exactly as `EXP-002`'s long-encounter ruling was.
 
-## 16. Hard Stop Conditions
+## 17. Hard Stop Conditions
 
 An agent performing rules research under this protocol must stop under each of the following conditions, with the corresponding exact message:
 
@@ -315,11 +354,11 @@ An agent performing rules research under this protocol must stop under each of t
 | Two or more RC passages conflict and have not been reconciled | `STOP — INTERNAL SOURCE CONFLICT REQUIRES REVIEW` |
 | The falsification pass (§10) rejects a tentative interpretation | `STOP — MORE PRIMARY RESEARCH REQUIRED` |
 | An alternate-source completion candidate's compatibility with RC cannot be established with confidence | `STOP — COMPLETION COMPATIBILITY NOT ESTABLISHED` |
-| Substantial simulator-level behavior remains undefined after §13–§15 | `STOP — HUMAN RULING REQUIRED` |
+| Substantial simulator-level behavior remains undefined after §14–§16 | `STOP — HUMAN RULING REQUIRED` |
 
 **Stopping is a successful research outcome when the evidence does not support synthesis.** Completing a polished artifact is never more important than preserving provenance integrity. An agent that stops correctly under this section has done its job; an agent that pushes through to a plausible-looking Rule Card without clearing the relevant gate has not, regardless of how well-written the result reads.
 
-## 17. Relationship to Other Governing Documents
+## 18. Relationship to Other Governing Documents
 
 - `GAME_CONSTITUTION.md` and `SOURCE_HIERARCHY.md` remain the authority on *what* the rules hierarchy is and how compatibility/provenance are classified. This protocol governs the *research process* used to apply them faithfully.
 - `docs/rules/_template.md` remains the required shape of a finished Rule Card (Stage B's output). This protocol governs what must be true before that template is filled in with confidence.
@@ -327,6 +366,6 @@ An agent performing rules research under this protocol must stop under each of t
 - `AGENTS.md` §10 binds agents to this document's hard gates rather than restating them.
 - This document does not change `ARCHITECTURE.md`, the Pre-Code Development Gate, the Rules Baseline Migration Gate, `DEC-0007`, or `DEC-0008` in any way.
 
-## 18. Status
+## 19. Status
 
-Adopted `docs/decisions/DEC-0009-evidence-first-rule-research-protocol.md`, `APPROVED`, 2026-08-16. This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full.
+Adopted `docs/decisions/DEC-0009-evidence-first-rule-research-protocol.md`, `APPROVED`, 2026-08-16. This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full — expected to produce a committed `docs/rules/evidence/EXP-001-evidence.md` Stage-A artifact, not a rewritten Rule Card, as its first deliverable.

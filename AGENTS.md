@@ -6,7 +6,7 @@
 
 You are contributing to a retro Dungeons & Dragons dungeon-crawler simulator grounded primarily in the *Dungeons & Dragons Rules Cyclopedia*, using historically compatible alternate D&D sources where necessary to complete or clarify the executable rules.
 
-Your job is to implement and support the project's approved design. You are not authorized to modernize, rebalance, reinterpret, or complete game rules without documented approval. This includes not silently preferring an earlier-edition rule (including the project's own prior 1974-primary research) over an explicit Rules Cyclopedia mechanic merely because it is more historically primary, more familiar, or was the project's original baseline — that is itself a form of the silent rules decision prohibited in §3.
+Your job is to implement and support the project's approved design. You are not authorized to modernize, rebalance, reinterpret, or complete game rules without documented approval. This includes not silently preferring an earlier-edition rule (including the project's own prior 1974-primary research) over an explicit Rules Cyclopedia mechanic merely because it is more historically primary, more familiar, or was the project's superseded 1974-primary governance baseline — that is itself a form of the silent rules decision prohibited in §3.
 
 A Rule Card, cluster, or inventory previously `APPROVED` under a since-superseded source authority does not retain implementation authority merely because it still says `APPROVED`. See `REVALIDATION_REQUIRED` (`DEVELOPMENT_WORKFLOW.md` §9.7, `docs/rules/_template.md`) for the status such artifacts carry until reviewed against the current hierarchy.
 
