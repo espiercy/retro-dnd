@@ -164,3 +164,19 @@ High confidence for the core cadence/roll/timing/trigger-vs-appearance findings 
 ```text
 EVIDENCE READY FOR HUMAN REVIEW
 ```
+
+## 12. Human Evidence Review
+
+```text
+Human Evidence Review: ACCEPTED
+Date: 2026-08-16
+```
+
+The Stage-A Rules Cyclopedia evidence basis above is accepted for progression to Stage B. Acceptance authorizes mechanical synthesis, legacy-card comparison, and gap-directed completion research under `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md`. **It does not approve `EXP-001` mechanics and does not change the Rule Card's lifecycle status** — `EXP-001` remains `REVALIDATION_REQUIRED` until a Stage-B draft is produced and separately, explicitly human-approved.
+
+**Material Stage-B questions preserved, unresolved, from this evidence** (not resolved by this acceptance; Stage B must treat these as precise, gap-directed questions, not an invitation to browse earlier editions generally — `RULE_CARD_RESEARCH_PROTOCOL.md` §15):
+
+1. Whether encounter-credited turn(s) — per `EXP-002`'s approved contract — participate in the every-two-turn wandering-monster cadence (§9 item 1).
+2. What, if anything, supplies executable meaning to RC's "possibly with higher chances" language for noise, battles, cursed items, or special areas (§9 item 2).
+3. Related timing/duration semantics for those heightened checks — when they begin and how long they persist relative to the triggering condition (§9 item 3).
+4. Whether any completion is necessary for multi-turn non-encounter activities' check-opportunity count (§9 item 4).
