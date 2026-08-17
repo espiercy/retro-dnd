@@ -2,9 +2,11 @@
 
 ## Status
 
-`ANALYSIS — AWAITING HUMAN CLUSTER SELECTION`
+`ANALYSIS COMPLETE — CLUSTER-001 SELECTED`
 
-This is not a Rule Card, not an approved cluster definition, and not a decision record. It is an analytical comparison of candidate first implementation clusters against the approved Rules Cyclopedia V1 Rules Inventory (`docs/rules/INVENTORY.md`, `APPROVED` 2026-08-16), produced to support — not make — the human cluster-selection decision required by `ARCHITECTURE.md` §15.1/§15.2 and `DEC-0005`. No cluster is created, activated, or approved by this document. The old `docs/rules/clusters/CLUSTER-001-dungeon-exploration-time.md` is treated strictly as historical/revalidation material; its three-item boundary is not assumed to survive and is independently re-derived below.
+**Outcome (2026-08-16):** Following human review, the recommendation in §7 was accepted in substance. **Human selection: Exploration/Time — `EXP-001` + `EXP-002`.** The selected boundary has been formalized as the revalidated `CLUSTER-001` — see `docs/rules/clusters/CLUSTER-001-dungeon-exploration-time.md`'s "Current Rules Cyclopedia-Revalidated Boundary" section, which is now `APPROVED` (boundary only; `EXP-001`/`EXP-002` remain `REVALIDATION_REQUIRED`). No decision record was created for this selection — `DEC-0005` already governs cluster selection and sequencing. This analysis document is retained as-is below (comparative analysis, matrix, and tentative future-cluster discussion unchanged) as the supporting record for that outcome; it is no longer an open question awaiting selection.
+
+This was not a Rule Card, not an approved cluster definition, and not a decision record. It is an analytical comparison of candidate first implementation clusters against the approved Rules Cyclopedia V1 Rules Inventory (`docs/rules/INVENTORY.md`, `APPROVED` 2026-08-16), produced to support — not make — the human cluster-selection decision required by `ARCHITECTURE.md` §15.1/§15.2 and `DEC-0005`. This document does not itself create, activate, or approve a cluster — see the Outcome note above for where that formalization now lives. The old `docs/rules/clusters/CLUSTER-001-dungeon-exploration-time.md` was treated strictly as historical/revalidation material at the time this analysis was written; its three-item boundary was not assumed to survive and was independently re-derived below.
 
 ## 1. Method and Scope
 
