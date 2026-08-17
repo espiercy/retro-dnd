@@ -1,6 +1,6 @@
 # Rule Card: Dungeon Turn / Time Accounting
 
-> **Revalidation note (2026-08-16, corrected).** This card has been revalidated against the Rules Cyclopedia per `DEC-0007-rules-cyclopedia-primary-rules-authority.md` / `DEVELOPMENT_WORKFLOW.md` §9.7, as the first Rule Card researched for the revalidated `CLUSTER-001` (`docs/rules/clusters/CLUSTER-001-dungeon-exploration-time.md`). **This revision corrects the prior draft of this card** (produced when direct primary-text access to the Rules Cyclopedia and BECMI Basic Rules was unavailable and repeatedly failed) using the same primary sources now directly retrieved and searched in full. The prior draft's central open question — how RC treats combat/encounter duration relative to dungeon-turn accounting — is now resolved directly from RC's own explicit text, not left as a self-generated Simulator Ruling guess. The current, active specification is everything from "Rules Cyclopedia Source" below down to "Approval." It replaces the prior draft's proposal entirely, subject to human approval (see "Status" — still submitted `AWAITING_APPROVAL`, not self-approved). The complete 1974-primary research, specification, and approval record remains preserved unchanged, for provenance, under "Historical 1974-Primary Research and Specification" near the end of this document — it does not describe this card's current content.
+> **Revalidation note (2026-08-16, approved).** This card has been revalidated against the Rules Cyclopedia per `DEC-0007-rules-cyclopedia-primary-rules-authority.md` / `DEVELOPMENT_WORKFLOW.md` §9.7, as the first Rule Card researched for the revalidated `CLUSTER-001` (`docs/rules/clusters/CLUSTER-001-dungeon-exploration-time.md`), and is now **human-approved**, including the narrow Simulator Ruling covering the one RC-unspecified edge case (encounters exceeding 60 rounds). The current, active specification is everything from "Rules Cyclopedia Source" below down to "Approval." The complete 1974-primary research, specification, and approval record remains preserved unchanged, for provenance, under "Historical 1974-Primary Research and Specification" near the end of this document — it does not describe this card's current content. Approval of this Rule Card is not, by itself, authorization to implement it: `CLUSTER-001`'s boundary is `APPROVED` but not implementation-ready (`EXP-001` remains `REVALIDATION_REQUIRED`), and implementation of any historical rule remains additionally subject to the Pre-Code Development Gate (`ARCHITECTURE.md` §16) and the Rules Baseline Migration Gate (`ARCHITECTURE.md` §15.2).
 
 ---
 
@@ -14,7 +14,7 @@ Dungeon Turn / Time Accounting
 
 ## Status
 
-AWAITING_APPROVAL
+APPROVED
 
 ## Rules Domain
 
@@ -31,7 +31,7 @@ exploration
 - **Chapter 8: Combat, p. 102** — the Combat Sequence Checklist (consulted only to confirm it contains no additional round↔turn conversion guidance beyond Chapter 7's Encounter Checklist).
 - **Chapter 13: Dungeon Master Procedures, p. 148** — "Record Keeping" / "Timekeeping" and the Timetrack Table.
 
-**Verification method — corrects and replaces the prior draft's secondary-source-only citations.** Both primary sources were retrieved and searched directly in this pass: the Rules Cyclopedia's full OCR transcription (`archive.org/stream/TSR1071TheDDRulesCyclopedia/…djvu.txt`) and the BECMI Basic Rules Boxed Set's full OCR transcription (`archive.org/stream/tsr01011bcorerulesddbasicrulesboxedset/…djvu.txt`) were loaded directly in-browser and searched via the loaded page's own full text (in-page string search over the complete ~1.9M-character RC transcription and ~583K-character BECMI transcription), avoiding the content-length truncation that defeated the prior pass's `WebFetch`-based attempts. Every quotation below was extracted directly from that full text, not recalled or paraphrased from a secondary summary, and the Encounter Checklist's location was independently cross-checked against the source's own internal page reference ("switch to the Encounter Checklist (on page 93)"). This is now page-verified primary-source quotation, consistent with this project's `EXP-001`/`EXP-002` 1974-primary research standard — the prior draft's "chapter/section-level confidence, not page-verified confidence" caveat no longer applies to the material below.
+**Verification method.** Both primary sources — the Rules Cyclopedia's full OCR transcription and the BECMI Basic Rules Boxed Set's full OCR transcription (both via archive.org) — were retrieved and searched directly in-browser (in-page full-text search over the complete transcriptions), avoiding the content-length truncation that defeated earlier `WebFetch`-based attempts. Every quotation below was extracted directly from that full text, and the Encounter Checklist's location was independently cross-checked against the source's own internal page reference ("switch to the Encounter Checklist (on page 93)"). This is page-verified primary-source quotation, consistent with this project's `EXP-001`/`EXP-002` 1974-primary research standard.
 
 ## Rules Cyclopedia Explicitly Establishes
 
@@ -52,7 +52,7 @@ exploration
    > 3. Results: The DM describes the results of the party's actions as follows: ... c. If an encounter occurs, skip to the Encounter Checklist.
    > 4. Wandering Monsters Check: The DM checks for wandering monsters and random encounters. The DM rolls 1d6 every other turn to check for this. If this is a dungeon and a '1' comes up on the die, the PCs will encounter wandering monsters at the beginning of the next turn..."
 
-   This is a **discrete, whole-turn iteration procedure**, not a continuous fractional-time system: each pass through the checklist corresponds to exactly one 10-minute turn elapsing, regardless of what specific activities filled step 2's "Actions." It also **directly and independently corroborates the already-established `EXP-001` finding** recorded in `docs/rules/INVENTORY.md` (every-other-turn cadence; a triggered check results in arrival "at the beginning of the next turn," not immediately) — not re-derived here, but now confirmed from the same primary source `EXP-001`'s own future revalidation will need, not merely asserted secondhand.
+   This is a **discrete, whole-turn iteration procedure**, not a continuous fractional-time system: each pass through the checklist corresponds to exactly one 10-minute turn elapsing, regardless of what specific activities filled step 2's "Actions." It also **directly and independently corroborates the already-established `EXP-001` finding** recorded in `docs/rules/INVENTORY.md` (every-other-turn cadence; a triggered check results in arrival "at the beginning of the next turn," not immediately) — not re-derived here, but now confirmed from the same primary source `EXP-001`'s own future revalidation will need.
 
 4. **Encounters switch play to a separate, round-based Encounter Checklist, and always resolve to a fixed minimum turn cost — the single most important finding of this revalidation** (Ch. 7 p. 93, exact text):
 
@@ -60,28 +60,28 @@ exploration
    > 2. Surprise... 3. Initiative... 4. Reactions... 5. Results: ... d. If one or both sides attack, play proceeds with the Combat Sequence Checklist (see Chapter 8, page 102...).
    > 6. Encounter Ends: After the encounter ends, begin play with a new turn. **Always assume that an encounter takes at least one full turn to resolve.**"
 
-   This is **RC Explicit and unconditional**: regardless of how few actual combat rounds an encounter took, exactly one dungeon turn (at minimum) is credited when it ends, and normal turn-mode play resumes fresh. This directly, completely resolves the question the prior draft of this card could not settle from secondary sources and had proposed a self-generated Simulator Ruling to cover — no such ruling is needed for the common case; see "Rules Cyclopedia Leaves Undefined," item 1, for the one narrow remaining gap (encounters whose actual round count exceeds 60).
+   This is **RC Explicit and unconditional**: regardless of how few actual combat rounds an encounter took, exactly one dungeon turn (at minimum) is credited when it ends, and normal turn-mode play resumes fresh. See "Rules Cyclopedia Leaves Undefined," item 1, for the one narrow remaining gap RC itself does not resolve (encounters whose actual round count exceeds 60), and "Simulator Ruling" for its human-approved resolution.
 
 5. **Movement is three distinct figures, not one continuous rate re-expressed in different units.** The Character Movement Rates and Encumbrance Table (Ch. 6 p. 87) gives Normal Speed (feet per **turn**), Encounter Speed (feet per **round**), and Running Speed (feet per **round**) separately — e.g., for the lightest encumbrance bracket: 120 (turn) / 40 (round) / 120 (round). RC's own text explains why these are not proportional expressions of the same velocity (exact text):
 
    > "Though the normal speed of 120' per turn seems very slow, this rate includes many assumed actions — mapping, peeking around corners, resting, and so forth... Characters move at 1/3 their normal speed in feet per round [during encounters]... when characters are running at full speed..., their rate is equal to their normal speed in feet per round (rather than turn) or three times their encounter speed."
 
-   Normal Speed is deliberately slow *because it bundles non-movement caution, mapping, and rest time into the turn* — not because characters physically move that slowly. Encounter Speed and Running Speed describe actual movement capability once that bundled caution is set aside. **The old 1974 "two moves constitute a turn" quantum does not govern RC — not because RC substitutes a different continuous-rate arithmetic (as the prior draft of this card characterized it), but because RC's exploration-turn movement figure is a bundled-activity abstraction, structurally unlike either model.**
+   Normal Speed is deliberately slow *because it bundles non-movement caution, mapping, and rest time into the turn* — not because characters physically move that slowly. **The old 1974 "two moves constitute a turn" quantum does not govern RC — not because RC substitutes a different continuous-rate arithmetic, but because RC's exploration-turn movement figure is a bundled-activity abstraction, structurally unlike either model.**
 
 ## Rules Cyclopedia Leaves Undefined / Ambiguous
 
-1. **Encounters whose actual round count exceeds 60 (more than one turn's worth of real time).** Item 4 above establishes an unconditional *minimum* of one turn, but a full-text search of the entire Rules Cyclopedia transcription for "more than one turn," "several turns," "many turns," "over one turn," and "exceed[s]" (in this context) located no formula, table, or further guidance for the case where an encounter's actual round count clearly exceeds 60. This is now the narrowest possible remaining gap — not "what happens to combat-duration accounting" generally (RC resolves that, item 4), only "exactly how many turns for an unusually long encounter." See "Simulator Ruling."
-2. **Whether a turn (or turns) credited to an encounter's resolution counts toward `EXP-001`'s own every-other-turn check cadence the same way an ordinary Game-Turn-Checklist turn does.** The Game Turn Checklist's own step 1 (item 3 above) shows a wandering-monster arrival itself entering the Encounter Checklist, whose resolution then credits at least one turn before a fresh Game Turn Checklist begins — but nothing located in this pass states whether that credited turn participates in the underlying every-other-turn count. This is `EXP-001`'s own concern; flagged as a narrow interface question, not resolved here (see "Open Questions").
+1. **Encounters whose actual round count exceeds 60 (more than one turn's worth of real time).** Item 4 above establishes an unconditional *minimum* of one turn, but a full-text search of the entire Rules Cyclopedia transcription for "more than one turn," "several turns," "many turns," "over one turn," and "exceed[s]" (in this context) located no formula, table, or further guidance for the case where an encounter's actual round count clearly exceeds 60. **Resolved by human-approved Simulator Ruling — see "Simulator Ruling" below.**
+2. **Whether a turn (or turns) credited to an encounter's resolution counts toward `EXP-001`'s own every-other-turn check cadence the same way an ordinary Game-Turn-Checklist turn does.** The Game Turn Checklist's own step 1 (item 3 above) shows a wandering-monster arrival itself entering the Encounter Checklist, whose resolution then credits at least one turn before a fresh Game Turn Checklist begins — but nothing located in this pass states whether that credited turn participates in the underlying every-other-turn count. **This is `EXP-001`'s own concern and is explicitly recorded as `DEFERRED TO EXP-001`** — this card does not decide it in either direction (see "Open Questions").
 3. **Individual activity time-costs for search, listening, ESP, hiding, treasure-loading, etc.**, beyond the Game Turn Checklist's own general "Actions"/"Results" framing — not investigated in this task's scope; remains `EXP-005`'s.
-4. **Whether the Game Turn Checklist's "Actions" step permits multiple distinct activities within a single turn** (e.g., moving, then listening) versus one activity occupying the whole turn — RC's own phrasing lists activity types together ("movement, listening, searching, etc.") without clarifying whether they combine within one turn or are each turn-length individually. Does not affect `EXP-002`'s own contract either way (see "Approved Mechanical Specification" — whatever occurs in a turn's Actions/Results, the whole turn elapses once).
+4. **Whether the Game Turn Checklist's "Actions" step permits multiple distinct activities within a single turn** (e.g., moving, then listening) versus one activity occupying the whole turn — RC's own phrasing lists activity types together ("movement, listening, searching, etc.") without clarifying whether they combine within one turn or are each turn-length individually. Does not affect `EXP-002`'s own contract either way — whatever occurs in a turn's Actions/Results, the whole turn elapses once.
 
 ---
 
 ## Alternate-Source Completion Research
 
-Per `SOURCE_HIERARCHY.md` §3/§8 — researched for **corroboration only** in this pass, since item 4 above already resolves the encounter-duration question RC-natively; this is not alternate-source research filling a genuine RC gap.
+Per `SOURCE_HIERARCHY.md` §3/§8 — researched for **corroboration only**, since item 4 above already resolves the encounter-duration question RC-natively; this is not alternate-source research filling a genuine RC gap.
 
-**BECMI Basic Rules Boxed Set — Basic Player's Manual** (directly retrieved and searched, archive.org OCR, ~p. 56 per the assigning task; located and confirmed). Exact text:
+**BECMI Basic Rules Boxed Set — Basic Player's Manual** (directly retrieved and searched, archive.org OCR, ~p. 56). Exact text:
 
 > "During encounters and combat, the DM uses rounds of 10 seconds of 'game time,' instead of turns, and each character can perform only one action during a round — a swing of a sword, a spell, some movement, or other action. A battle normally lasts only a minute or two, but is counted as a full turn because your characters rest afterwards, clean up their equipment, and do other assumed normal actions."
 
@@ -91,31 +91,37 @@ This states the same design principle RC's own Encounter Checklist later formali
 
 | Source | Addresses | Judgment |
 |---|---|---|
-| BECMI Basic Player's Manual — "battle... counted as a full turn" | Encounter-duration/turn-crediting | **Preserved / corroborating, not Compatible Completion.** RC's own Chapter 7 Encounter Checklist already states the same rule explicitly and more precisely ("at least one full turn"); BECMI is not needed to complete a gap and is not adopted as this card's authority — RC is. Cited only to show continuity of the design principle across the BECMI→RC lineage, per this task's explicit instruction not to adopt BECMI merely because it is clearer when RC already answers the same question. |
-| Prior draft's secondary-source comparison (Holmes' "shifting turn"; an unconfirmed B/X rounding convention) | Combat/turn relationship | **Superseded by direct RC primary-text confirmation.** No longer relevant to this card's specification — RC's own Chapter 7 material resolves the question directly. The prior draft's reliance on Holmes/B-X comparison to guess at RC's likely treatment is withdrawn, not restated as active research. |
+| BECMI Basic Player's Manual — "battle... counted as a full turn" | Encounter-duration/turn-crediting | **Preserved / corroborating, not Compatible Completion.** RC's own Chapter 7 Encounter Checklist already states the same rule explicitly and more precisely ("at least one full turn"); BECMI is not needed to complete a gap and is not adopted as this card's authority — RC is. Cited only to show continuity of the design principle across the BECMI→RC lineage. |
 
 ---
 
 ## Simulator Ruling
 
-Reassessed individually, not bundled, per this task's explicit instruction — the prior draft's four-item bundle does not survive as a single unit:
+**Human-approved, 2026-08-16.** Reassessed individually against the corrected specification; only one ruling survives — every other item previously proposed (a shared fractional ledger, a generic arbitrary-fractional activity-cost model, and an unconditional no-minimum combat-round arithmetic) is not required by the corrected, RC-native specification and does not appear here (see "Final Simulator-Ruling Inventory" context below and `docs/rules/INVENTORY_MIGRATION_MAP.md`-style disposition in this card's own prior-draft history, preserved in the revision history of this branch).
 
-1. **Shared cross-activity fractional time ledger.** **REMOVE — no longer required.** RC resolves ordinary exploration turn accounting natively via the discrete, whole-turn Game Turn Checklist; no fractional per-activity costs are combined within a turn under RC's own procedure, so no Simulator Ruling is needed to synthesize a ledger.
-2. **Generic externally-supplied arbitrary-fractional activity-cost model.** **REMOVE as previously formulated; narrowly retained only for the encounter case.** `EXP-002` no longer accepts arbitrary fractional-turn inputs for ordinary activities at all. It accepts exactly one externally-supplied quantity, for encounters only: an actual elapsed round count (a non-negative integer, not a fraction), from whichever procedure resolved the encounter.
-3. **Progressive/immediate boundary emission.** **Retained, reformulated — narrower justification than before.** No longer justified by "an activity's fractional cost is consumed progressively mid-activity" (that scenario no longer exists in the RC-native model). Reformulated as: each discrete completed turn — ordinary, or one of the (usually one, occasionally more) turns credited to a resolved encounter — fires its own signal, in strict order, resolved before the next is considered. Still needed because the unresolved long-encounter case (Ruling 4) may credit more than one turn at once, and those should remain individually observable rather than silently batched.
-4. **Precise combat-round arithmetic with no minimum/full-turn treatment.** **REMOVED — directly contradicted by RC Explicit text** (Ch. 7 p. 93, item 4 above: "Always assume that an encounter takes at least one full turn to resolve"). Cannot survive unchanged, exactly as anticipated by this task's own framing. **Replaced by a much narrower proposed ruling, applying only where RC's own "at least" phrasing leaves the exact multiple unspecified:**
+**The long-encounter ruling.**
 
-   ```text
-   IF actual encounter round count R <= 60:
-       turns credited = 1                          (RC Explicit minimum — not a ruling)
-   ELSE:
-       turns credited = MAX(1, ceiling(R / 60))     (proposed Simulator Ruling, narrow,
-                                                       not RC Explicit — extends RC's own
-                                                       explicit round/turn ratio to the one
-                                                       case RC's "at least" wording leaves open)
-   ```
+> **`encounter_turn_cost = max(1, ceiling(encounter_rounds / 60))`**
 
-   This is proposed, not self-approved (see "Open Questions," `BLOCKS APPROVAL`). It does not reintroduce the previously-rejected unconditional-arithmetic-with-no-minimum model — the RC-explicit one-turn minimum governs whenever it applies (i.e., always, for R ≤ 60), and this ruling only extends the same explicit 60-rounds-per-turn ratio to the narrow case where the minimum by itself is not obviously sufficient.
+Applied as:
+
+```text
+1–60 rounds     → 1 dungeon turn
+61–120 rounds   → 2 dungeon turns
+121–180 rounds  → 3 dungeon turns
+...
+```
+
+This fills the single genuine RC edge-case gap identified above (item 1 under "Rules Cyclopedia Leaves Undefined") without contradicting RC's own explicit one-turn minimum — for `encounter_rounds ≤ 60`, this formula always evaluates to exactly 1, identical to RC's explicit rule; it only produces a value greater than 1 for the RC-unspecified case of an encounter exceeding 60 rounds.
+
+**Provenance: Simulator Ruling — not Rules Cyclopedia Explicit, not a Necessary Mathematical/Mechanical Consequence, not an Alternate-Source Compatible Completion, and not a Human-Approved Variant.** RC does not state this formula, and it is not a logically-forced consequence of RC's explicit facts either (RC's explicit facts establish the 60:1 ratio and the one-turn minimum; they do not by themselves dictate that a long encounter's *cost* must scale by the same ratio rather than, say, remaining a flat 1, or being left entirely to DM discretion with no formula at all — extending the ratio to this case is this project's own executable choice, not RC's). It does not import a conflicting rule from an alternate source, so it is not a Human-Approved Variant either.
+
+**Rationale.** RC deliberately treats encounter time as a procedural abstraction, not literal stopwatch time carried over from round-mode into turn-mode arithmetic:
+
+- Even a one-round encounter consumes a full dungeon turn (item 4 above) — RC's minimum is not a rounding convenience for "close to a turn," it is a flat abstraction applied regardless of how little actual time the rounds represent.
+- The minimum turn is understood to encompass more than the literal seconds of fighting — RC's own text does not say why, but the BECMI Basic Player's Manual, describing the same underlying design principle, states the reason directly: characters "rest afterwards, clean up their equipment, and do other assumed normal actions." This corroborates (does not establish) that the whole-turn cost represents a bundled post-encounter activity abstraction, structurally the same kind of bundling RC's Normal Speed already uses for ordinary movement (see "Rules Cyclopedia Explicitly Establishes," item 5).
+- Therefore, for an encounter extending into a second (or further) 60-round block, this ruling preserves the *same whole-turn abstraction*, rather than switching to exact-second/exact-round accounting partway through. An encounter of 61 rounds does **not** mean "10 minutes 10 seconds of dungeon-turn accounting" — there is no such thing as a fractional dungeon turn under this model. It means the encounter's procedure ran long enough to occupy part of a *second* encounter-turn block, and — consistent with RC's own "at least one full turn" treatment of the first block — that second block is also credited as a whole turn. Total encounter cost: 2 dungeon turns.
+- This is a deliberate, faithful reproduction of RC's own procedural, non-continuous model of encounter time, not a modernization into continuous-time simulation. The extra minute-scale precision a literal round count might suggest (e.g., "61 rounds is only 10 seconds into a second block, so it should barely cost anything extra") is intentionally **not** how this ruling treats it — the whole-turn abstraction applies to each block reached, exactly as RC's own explicit minimum applies to the first.
 
 ---
 
@@ -127,14 +133,14 @@ Not applicable.
 
 ## Approved Mechanical Specification
 
-**Scope.** Defines the two RC time units and their fixed relationship (RC Explicit); maintains an authoritative, discrete (whole-number) dungeon-turn counter; advances it by exactly one turn per completed Game-Turn-Checklist iteration, or by the turn count an encounter resolves to (RC-explicit minimum of one, or more only per the narrow proposed ruling above); and emits one "dungeon turn *N* elapsed" signal per whole turn credited. It does not run the Game Turn Checklist's Actions/Results steps, does not resolve encounters, and does not decide *why* a given turn elapsed — only *that* one did.
+**Scope.** Defines the two RC time units and their fixed relationship (RC Explicit); maintains an authoritative, discrete (whole-number) dungeon-turn counter; advances it by exactly one turn per completed Game-Turn-Checklist iteration, or by the turn count an encounter resolves to (RC Explicit minimum of one, or more per the human-approved long-encounter ruling above); and tracks the resulting whole-turn credit(s). It does not run the Game Turn Checklist's Actions/Results steps, does not resolve encounters, and does not decide *why* a given turn elapsed — only *that* one did. **This card does not prescribe a software event/API architecture or a particular signaling mechanism** — "credit," "produces," and similar words below describe mechanical bookkeeping facts a future implementation must honor, not a specific software design.
 
-**Preserve responsibility boundaries.** A significant simplification relative to the prior draft: `EXP-002` no longer needs or accepts per-activity turn-cost values for movement, search, rest, or any other ordinary exploration activity, because RC's own Game Turn Checklist treats an ordinary turn as a single atomic unit regardless of what filled it. The only external input `EXP-002` needs, beyond "an ordinary turn completed," is an encounter's actual round count when one is resolved.
+**Preserve responsibility boundaries.** `EXP-002` does not need or accept per-activity turn-cost values for movement, search, rest, or any other ordinary exploration activity, because RC's own Game Turn Checklist treats an ordinary turn as a single atomic unit regardless of what filled it. The only external input `EXP-002` needs, beyond "an ordinary turn completed," is an encounter's actual round count when one is resolved.
 
 | Input `EXP-002` accepts | Source | What `EXP-002` does NOT need to know |
 |---|---|---|
 | "An ordinary Game-Turn-Checklist iteration completed" (no data) | Whatever procedure runs exploration turns (future integration, not yet designed) | What activities occurred during it (`EXP-003`, `EXP-005`, `EXP-004`, etc. remain those procedures' own concern) |
-| "An encounter resolved, having taken *R* actual rounds" | Combat domain / `COMBAT-006`, or a future encounter-resolution card | What happened during the encounter, its participants, or its outcome |
+| "An encounter resolved, having taken `encounter_rounds` actual rounds" | Combat domain / `COMBAT-006`, or a future encounter-resolution card | What happened during the encounter, its participants, or its outcome |
 
 **Dependencies:** none. `EXP-002` remains the exploration domain's time-accounting foundation.
 
@@ -157,41 +163,26 @@ TURN MODE  (Game Turn Checklist governs)
 ROUND MODE  (Encounter Checklist governs: Surprise → Initiative → Reactions →
              Results → [Combat Sequence Checklist, if applicable] → Encounter Ends)
      │
-     │  the encounter is resolved — credit at least 1 turn (RC Explicit minimum)
+     │  the encounter is resolved in rounds first; once resolution finishes,
+     │  its whole-turn cost becomes authoritative — encounter_turn_cost =
+     │  max(1, ceiling(encounter_rounds / 60))  (RC Explicit minimum of 1;
+     │  human-approved Simulator Ruling for encounter_rounds > 60)
      ▼
-TURN MODE resumes, with a fresh turn
+TURN MODE resumes, with fresh turn(s) credited
 ```
 
-**Turn counter and signal emission:**
+**Turn-credit accounting — a mechanical requirement, not a software architecture:**
 
-```text
-STATE: turn_number  (a non-negative integer; starts at 0)
+- Each ordinary completed Game-Turn-Checklist iteration produces exactly **one whole-turn credit**.
+- Each resolved encounter produces exactly **`encounter_turn_cost` whole-turn credit(s)**, computed only once the encounter's round-mode resolution has finished (`EXP-002` is not consulted, and produces no credit, while round mode is in progress).
+- **No dungeon-turn credit is produced during round-mode encounter resolution.** This is the direct, RC-text-supported answer to whether an `EXP-001` consumer should act mid-encounter merely because round-based time is elapsing: it should not, because RC itself switches out of turn-based accounting entirely for the duration of an encounter (Ch. 7 p. 93: "Game time switches from 10-minute turns to 10-second rounds"), and only resumes turn-based accounting once the encounter concludes and its cost is credited as a discrete event.
+- **When an encounter's resolution produces more than one whole-turn credit, those credits remain individually distinguishable and correctly ordered — they are not collapsed into a single opaque multi-turn duration.** This is the one mechanical requirement this card imposes on however a future implementation represents turn-credits: whatever the representation, the *number* and *order* of credits an encounter produces must be recoverable, so that later turn-dependent procedures (including, potentially, `EXP-001`) can resolve their own cadence correctly against each individual credited turn rather than a single merged event. This is not itself classified as a Simulator Ruling — it does not encode a substantive design choice among historically-plausible alternatives, only the baseline correctness requirement that no information about turn count is lost.
+- Turn-credits are strictly ordered and cumulative across a session: whatever numbering or bookkeeping a future implementation uses, credits accumulate monotonically, whether produced by ordinary turns or by an encounter's resolution, with no reset and no gap when turn mode resumes after an encounter.
+- Whether a given credit arose from an ordinary Game-Turn-Checklist iteration or from an encounter's resolution remains distinguishable information — `EXP-002` does not discard this distinction, in case `EXP-001`'s own future revalidation needs it (see "Rules Cyclopedia Leaves Undefined," item 2, and "Open Questions," `DEFERRED TO EXP-001`) — though this card does not mandate how that distinction is represented.
 
-WHEN an ordinary Game-Turn-Checklist iteration completes (turn mode; no
-     encounter arose this turn):
+**No fractional/rational ledger is maintained.** Turn-credits are whole numbers only. `EXP-002` performs no accumulation of fractional-turn quantities from movement, search, rest, or any other ordinary activity — RC's own procedure does not describe exploration in those terms (see "Rules Cyclopedia Explicitly Establishes," item 3, and "Rules Cyclopedia Leaves Undefined," item 4).
 
-    turn_number := turn_number + 1
-    EMIT "dungeon turn <turn_number> elapsed"
-
-WHEN an encounter is resolved (round mode ends; supplied: actual round
-     count R, from whichever procedure resolved the encounter):
-
-    IF R <= 60:
-        credited := 1                              (RC Explicit minimum)
-    ELSE:
-        credited := MAX(1, ceiling(R / 60))         (proposed narrow Simulator
-                                                       Ruling — see above)
-
-    FOR each of the `credited` turns, in order:
-        turn_number := turn_number + 1
-        EMIT "dungeon turn <turn_number> elapsed"
-```
-
-**No signal fires during round mode itself.** This is the direct, RC-text-supported answer to the prior draft's open question ("should an `EXP-001` consumer execute in the middle of an encounter merely because 600 seconds of round-based time elapsed?"): **no** — RC itself switches out of turn-based accounting entirely for the duration of an encounter (Ch. 7 p. 93, item 1 under "Rules Cyclopedia Explicitly Establishes": "Game time switches from 10-minute turns to 10-second rounds"), and only resumes turn-mode signaling once the encounter concludes and its turn(s) are credited as a discrete event.
-
-**No fractional/rational ledger is maintained.** `turn_number` is a plain non-negative integer. `EXP-002` performs no accumulation of fractional-turn quantities from movement, search, rest, or any other ordinary activity — RC's own procedure does not describe exploration in those terms (see "Rules Cyclopedia Explicitly Establishes," item 3, and "Rules Cyclopedia Leaves Undefined," item 4). This is a deliberate, evidence-driven simplification relative to both the prior draft of this card and the historical 1974-primary specification, not an arbitrary implementation preference.
-
-**Output and integration with `EXP-001` — the minimum stable contract, unchanged in shape from the prior draft.** `EXP-002` emits an unconditional signal at every whole-turn credit — ordinary or encounter-credited alike — carrying the absolute turn number. This lets `EXP-001`'s own currently-recorded every-other-turn cadence (now directly corroborated by primary text, item 3 above) filter downstream without `EXP-002` needing to know that cadence exists. **One new, narrow, unresolved interface question** (not resolved here; belongs to `EXP-001`'s own future revalidation — see "Rules Cyclopedia Leaves Undefined," item 2, and "Open Questions"): whether a turn credited for an encounter's resolution participates in `EXP-001`'s every-other-turn count the same way an ordinary turn does. `EXP-002` supplies the same uniform signal shape regardless of which kind of turn produced it; how `EXP-001` interprets a given signal is entirely its own concern.
+**Integration with `EXP-001` — the minimum stable contract.** `EXP-002` produces a whole-turn credit — ordinary or encounter-credited alike — for every whole turn that elapses, each distinguishably ordered (see above). This lets `EXP-001`'s own currently-recorded every-other-turn cadence (corroborated by primary text, item 3 above) apply its own filtering downstream without `EXP-002` needing to know that cadence exists. **Whether an encounter-credited turn participates in that cadence the same way an ordinary turn does is `DEFERRED TO EXP-001`** — this card does not assert either answer (see "Open Questions"). `EXP-002` supplies the same uniform whole-turn credit shape regardless of which kind of turn produced it; how `EXP-001` interprets a given credit is entirely its own concern.
 
 **No RNG owned by this card.** This procedure is purely arithmetic and counting. It performs no die rolls and must not be given its own RNG stream (`ARCHITECTURE.md` §5, `AGENTS.md` §7).
 
@@ -201,40 +192,46 @@ WHEN an encounter is resolved (round mode ends; supplied: actual round
 
 ## Deterministic Test Cases
 
-All cases are pure counting/arithmetic and require no RNG double. Completely rewritten from the prior draft — the prior arbitrary-fraction cases (0.3, 0.4, 0.6 turn, etc.) are removed, since the corrected research establishes RC does not require arbitrary fractional-turn activity inputs.
+All cases are pure counting/arithmetic and require no RNG double. No arbitrary-fraction cases (0.3, 0.4, 0.6 turn, etc.) appear anywhere below — the corrected, human-approved research establishes RC does not require arbitrary fractional-turn activity inputs.
 
 **Ordinary exploration turns:**
 
-1. **A single ordinary completed turn.** One Game-Turn-Checklist iteration completes with no encounter → `turn_number` increments by 1, exactly one signal.
-2. **A sequence of ordinary turns.** Five consecutive ordinary iterations, no encounters → signals for turns 1–5, in strict order, no gaps.
+1. **A single ordinary completed turn.** One Game-Turn-Checklist iteration completes with no encounter → exactly one whole-turn credit produced.
+2. **A sequence of ordinary turns.** Five consecutive ordinary iterations, no encounters → five whole-turn credits, in strict order, no gaps.
 
 **Encounters at or under the RC-explicit minimum:**
 
-3. **A short encounter, well under 60 rounds.** A 4-round combat resolves → exactly 1 turn credited, one signal — the RC Explicit minimum applies regardless of the small actual round count.
-4. **An encounter lasting exactly 60 rounds.** → exactly 1 turn credited, one signal.
+3. **1-round encounter.** → `encounter_turn_cost = max(1, ceiling(1/60)) = 1` — one whole-turn credit, the RC Explicit minimum, despite the encounter's negligible actual duration.
+4. **4-round encounter.** → `max(1, ceiling(4/60)) = 1` — one whole-turn credit.
+5. **59-round encounter.** → `max(1, ceiling(59/60)) = 1` — one whole-turn credit, confirming the minimum applies right up to the boundary.
+6. **60-round encounter (exactly one full block).** → `max(1, ceiling(60/60)) = 1` — one whole-turn credit.
 
-**Encounters exceeding 60 rounds (the narrow, proposed, not-yet-approved ruling):**
+**Encounters exceeding 60 rounds (the human-approved long-encounter ruling):**
 
-5. **61 rounds.** → 2 turns credited (`MAX(1, ceiling(61/60)) = 2`), two signals in order.
-6. **120 rounds.** → 2 turns credited (`ceiling(120/60) = 2`).
-7. **121 rounds.** → 3 turns credited (`ceiling(121/60) = 3`).
+7. **61-round encounter.** → `max(1, ceiling(61/60)) = 2` — two whole-turn credits. Not "10 minutes 10 seconds" of anything — two full, discrete turn credits, per the approved ruling's rationale.
+8. **120-round encounter.** → `max(1, ceiling(120/60)) = 2` — two whole-turn credits.
+9. **121-round encounter.** → `max(1, ceiling(121/60)) = 3` — three whole-turn credits.
 
 **Mode-switch correctness:**
 
-8. **No signal fires during round mode itself.** A scripted sequence representing an in-progress encounter (Surprise, Initiative, Reactions, and Combat Sequence steps occurring) produces zero `EXP-002` signals until the encounter is reported resolved — regardless of how many actual rounds elapse within it.
-9. **Turn mode resumes cleanly after an encounter.** After an encounter's credited turn(s) are signaled, the next ordinary Game-Turn-Checklist iteration continues the *same* `turn_number` sequence — no reset, no gap, no duplicate.
+10. **No dungeon-turn credit is produced during round-mode encounter resolution.** A scripted sequence representing an in-progress encounter (Surprise, Initiative, Reactions, and Combat Sequence steps occurring) produces zero `EXP-002` turn-credits until the encounter is reported resolved — regardless of how many actual rounds elapse within it, and regardless of whether that count will ultimately exceed 60.
+11. **Turn-mode → round-mode → turn-mode transition.** An ordinary turn completes (credit 1), an encounter is detected and resolves after some number of rounds (credit(s) *N*+1 ... per `encounter_turn_cost`), and ordinary turn-mode resumes immediately afterward, continuing the same cumulative credit count with no reset, no gap, and no duplicate.
 
-**Absolute numbering across mixed sequences:**
+**Multiple encounter-turn credits remain distinguishable:**
 
-10. **Strictly increasing, gapless turn numbers across a mixed sequence.** An arbitrary interleaving of ordinary turns and encounters (of varying round counts, including some exceeding 60) produces turn numbers `1, 2, 3, ..., N` in order, with no gaps and no repeats, regardless of how many of each kind occurred.
+12. **A >60-round encounter's multiple credits are individually distinguishable and correctly ordered, not collapsed into one opaque multi-turn duration.** For a 121-round encounter (case 9), the three resulting whole-turn credits are separately recoverable and ordered, not merely a single "3 turns happened" opaque total with no internal structure.
+
+**Absolute accounting across mixed sequences:**
+
+13. **Cumulative, gapless turn-credit accounting across a mixed sequence.** An arbitrary interleaving of ordinary turns and encounters (of varying round counts, including some exceeding 60) produces a strictly increasing, gapless cumulative credit count, regardless of how many of each kind occurred or in what order.
 
 **No RNG dependency:**
 
-11. **`EXP-002`'s own procedure requires no RNG.** The turn-counter/signal procedure is exercisable with no RNG double supplied at all (or one that raises on any call) and still produces correct results.
+14. **`EXP-002`'s own procedure requires no RNG.** The turn-credit accounting procedure is exercisable with no RNG double supplied at all (or one that raises on any call) and still produces correct results.
 
-**Interface-only pairing with `EXP-001` (not exercising `EXP-001`'s own logic):**
+**`EXP-001` cadence explicitly remains outside this Rule Card:**
 
-12. **One signal per credited turn, each independently addressable by turn number.** Given a scripted sequence known to credit exactly *N* total turns (ordinary and encounter-credited combined), exactly *N* signals are emitted, each carrying a distinct, strictly increasing absolute turn number — sufficient for a future `EXP-001` revalidation to apply its own every-other-turn filter, including across encounter-credited turns, per the open interface question this card flags but does not resolve.
+15. **This card's own tests do not assert, exercise, or depend on any particular every-other-turn filtering behavior.** A scripted sequence known to produce exactly *N* total whole-turn credits (ordinary and encounter-credited combined) is verified only for correct count, order, and distinguishability (per cases 1–13) — never for whether a hypothetical `EXP-001` consumer would act on any particular one of them. That determination is `DEFERRED TO EXP-001`'s own future revalidation and is not encoded here even as a test assumption.
 
 ## Provenance Classification
 
@@ -247,14 +244,13 @@ All cases are pure counting/arithmetic and require no RNG double. Completely rew
 - The wandering-monster check's every-other-turn cadence and "arrival at the beginning of the next turn" timing (Ch. 7 p. 91, Game Turn Checklist steps 1 and 4) — corroborates, does not re-derive, `EXP-001`'s existing finding.
 
 **Necessary Mathematical / Mechanical Consequence**
-- None load-bearing in this card's core specification. The prior draft's `ceiling(rounds/10)` and `1 round = 1/60 turn` continuous-arithmetic model is superseded for the common case by RC's own explicit one-turn minimum; it survives only inside the narrow proposed Simulator Ruling for the >60-round edge case.
+- None load-bearing in this card's core specification. The 60:1 ratio and the one-turn minimum are each independently RC Explicit; nothing in this card's specification is derived as a forced arithmetic consequence of combining them beyond what RC already states directly.
 
 **Alternate-Source Compatible Completion**
 - Not applicable — RC resolves the question directly. BECMI is Preserved/corroborating (see Compatibility Analysis), not adopted as completion.
 
-**Simulator Ruling — proposed, narrow, awaiting human approval**
-- `turns credited = MAX(1, ceiling(R / 60))` for the single unresolved case: an encounter whose actual round count exceeds 60. Does not apply to, or alter, RC's own explicit one-turn minimum for R ≤ 60.
-- Progressive/immediate signal emission, reformulated for discrete whole-turn credits rather than fractional-activity progress.
+**Simulator Ruling — human-approved, 2026-08-16**
+- `encounter_turn_cost = max(1, ceiling(encounter_rounds / 60))` for the single unresolved case: an encounter whose actual round count exceeds 60. Does not apply to, or alter, RC's own explicit one-turn minimum for `encounter_rounds ≤ 60`. See "Simulator Ruling" above for full rationale.
 
 **Out of scope for this card**
 - Individual activity time-costs for search, listening, ESP, hiding, treasure-loading (`EXP-005`).
@@ -268,19 +264,22 @@ All cases are pure counting/arithmetic and require no RNG double. Completely rew
 
 ## Open Questions
 
-**`BLOCKS APPROVAL`**
+**Resolved by this human approval (2026-08-16)**
 
-1. **Whether to approve the narrow proposed Simulator Ruling** (`turns credited = MAX(1, ceiling(R / 60))` for R > 60) and the reformulated progressive/immediate-emission ruling — required before this card can move past `AWAITING_APPROVAL`.
-2. **Whether, for an encounter exceeding 60 rounds, each credited turn should fire its own individual signal (as currently specified) or be batched as a single multi-turn credit event.** RC gives no guidance either way; this is a genuine design choice for human confirmation. It does not affect the common (≤ 60 rounds) case, which is unambiguous.
+1. ~~Whether to approve the narrow long-encounter Simulator Ruling.~~ **Resolved — approved**, as `encounter_turn_cost = max(1, ceiling(encounter_rounds / 60))` (see "Simulator Ruling").
+2. ~~Whether, for an encounter exceeding 60 rounds, credited turns should be individually distinguishable or batched as one event.~~ **Resolved — individually distinguishable and correctly ordered, not collapsed** (see "Approved Mechanical Specification").
 
 **`DOES NOT BLOCK EXP-002 APPROVAL`**
 
-3. Whether the Game Turn Checklist's "Actions" step permits multiple distinct activities within a single turn — does not affect `EXP-002`'s discrete-turn-counter contract either way.
-4. **Interruption/resumption mid-turn is no longer a live concern for `EXP-002`'s own scope**, unlike the prior draft (and the historical 1974-primary card). Because turns are now atomic, discrete units rather than a fractionally-accumulated ledger, there is nothing mid-turn for `EXP-002` itself to interrupt. This is recorded as effectively resolved/moot for this card, not carried forward as an open architectural question — it may still matter for whatever future integration executes a turn's activities, but that is outside this card's now-narrower scope.
+3. Whether the Game Turn Checklist's "Actions" step permits multiple distinct activities within a single turn — does not affect `EXP-002`'s discrete-turn-credit contract either way.
+4. **Interruption/resumption mid-turn is not a live concern for `EXP-002`'s own scope.** Because turns are atomic, discrete units rather than a fractionally-accumulated ledger, there is nothing mid-turn for `EXP-002` itself to interrupt. Effectively moot for this card; may still matter for whatever future integration executes a turn's activities, but that is outside this card's scope.
+
+**`DEFERRED TO EXP-001`**
+
+5. **Whether an encounter-credited turn counts toward `EXP-001`'s every-other-turn cadence the same as an ordinary turn.** This card does not decide this in either direction — it neither asserts that every encounter-credited turn automatically advances the wandering-monster check cadence, nor that it does not. `EXP-002` exposes sufficient mechanical information (distinguishable, correctly-ordered whole-turn credits, individually traceable to their ordinary-turn or encounter-resolution origin) for `EXP-001`'s own future revalidation to resolve this if RC requires a distinction. Does not block `EXP-002`'s approval.
 
 **`BELONGS TO ANOTHER RULE CARD`**
 
-5. Whether an encounter-credited turn counts toward `EXP-001`'s every-other-turn cadence the same as an ordinary turn — `EXP-001`'s own future revalidation.
 6. Individual activity time-costs for search, listening, ESP, hiding, treasure-loading — `EXP-005`.
 7. Movement rate values and spatial/mapping procedure — `CHAR-005` / `EXP-003`.
 8. Rest cadence, mandatory-rest triggers, running exhaustion — `EXP-004` (not touched by this task).
@@ -290,15 +289,15 @@ All cases are pure counting/arithmetic and require no RNG double. Completely rew
 
 ## Approval
 
-- Approved by: *(pending — this card is `AWAITING_APPROVAL`, not approved by this task)*
-- Date: *(pending)*
-- Notes: Research is now primary-source-verified and substantially simpler than the prior draft. Only human approval of the one remaining narrow Simulator Ruling (the >60-round encounter edge case) and the reformulated progressive-emission ruling (Open Questions, `BLOCKS APPROVAL` items 1–2) remains before this card can reach `APPROVED`.
+- Approved by: Human project owner
+- Date: 2026-08-16
+- Notes: Approves the corrected, primary-source-verified Rules Cyclopedia specification above in full, including the single narrow Simulator Ruling required to close RC's one genuine remaining gap (`encounter_turn_cost = max(1, ceiling(encounter_rounds / 60))` for encounters exceeding 60 rounds). This approval authorizes `EXP-002`'s specification as a Rule Card; it does not by itself authorize implementation — `CLUSTER-001`'s boundary is `APPROVED` but not implementation-ready, since `EXP-001` remains `REVALIDATION_REQUIRED`, and any historical-rules implementation remains additionally subject to `ARCHITECTURE.md` §16 and §15.2. This card is not marked `IMPLEMENTED` or `VERIFIED` — no production implementation has occurred.
 
 ---
 
 ## Historical 1974-Primary Research and Specification (preserved for provenance)
 
-> **This section is historical and does not describe this card's current content.** Everything from here to "Status Lifecycle" is the complete 1974-primary-sourced research, specification, and human approval this card carried before the Rules Cyclopedia migration (`DEC-0007`), preserved verbatim (headers demoted one level to nest under this banner; content otherwise unchanged) for provenance — to show the reasoning that led to today's revalidated specification above, not as a statement of this card's current mechanics, dependencies, or status. In particular: **do not read anything below as saying "two moves constitute a turn," "ten rounds of combat per turn," or any specific numeric activity cost (movement = 1/2 turn, ESP = 1/4 turn, etc.) is current Rules Cyclopedia mechanics** — none of them survived this revalidation unchanged; see "Rules Cyclopedia Explicitly Establishes" and "Provenance Classification" above for what actually carries forward. Note also that an intermediate, now-superseded revalidation draft of this card (produced before direct primary-text access succeeded) proposed a continuous-fractional-ledger model and an unconditional round↔turn arithmetic ruling; that intermediate draft is not separately preserved as its own section — its proposals are withdrawn in favor of the corrected specification above, and its reasoning is summarized in the current "Simulator Ruling" section's item-by-item reassessment.
+> **This section is historical and does not describe this card's current content.** Everything from here to "Status Lifecycle" is the complete 1974-primary-sourced research, specification, and human approval this card carried before the Rules Cyclopedia migration (`DEC-0007`), preserved verbatim (headers demoted one level to nest under this banner; content otherwise unchanged) for provenance — to show the reasoning that led to today's revalidated specification above, not as a statement of this card's current mechanics, dependencies, or status. In particular: **do not read anything below as saying "two moves constitute a turn," "ten rounds of combat per turn," or any specific numeric activity cost (movement = 1/2 turn, ESP = 1/4 turn, etc.) is current Rules Cyclopedia mechanics** — none of them survived this revalidation unchanged; see "Rules Cyclopedia Explicitly Establishes" and "Provenance Classification" above for what actually carries forward. Note also that two intermediate, now-superseded revalidation drafts of this card preceded the current, approved specification: an initial secondary-source-only draft (proposing a continuous-fractional-ledger model and an unconditional round↔turn arithmetic ruling with no minimum), and a corrected primary-text draft (which first established the material above but left the long-encounter edge case as a proposed, not-yet-approved ruling). Neither intermediate draft is separately preserved as its own section here; their proposals are superseded by the approved specification above, and their reasoning is summarized in this card's git history and in the "Simulator Ruling" section's rationale.
 
 ### Historical — 1974 Source
 
