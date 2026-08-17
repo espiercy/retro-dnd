@@ -112,11 +112,11 @@ The full path from source to shipped behavior is:
 ```text
 Historical Source
       ↓
-Research
+Evidence-First Research (Stage A → Stage B — docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md)
       ↓
-Rule Card Draft
+Rule Card Draft / Revalidation
       ↓
-Human Review
+Human Rule Card Approval
       ↓
 APPROVED Rule Card
       ↓
@@ -145,14 +145,20 @@ An issue must not be represented as complete when required tests are failing, re
 
 ## 10. Rules Research Workflow
 
-When asked to research a rule:
+Rule research follows the **Evidence-First** two-stage protocol in `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` (adopted by `docs/decisions/DEC-0009-evidence-first-rule-research-protocol.md`), not a single research→draft pass. This section states what binds every rules-research agent; the linked protocol is the full, authoritative procedure — do not treat this summary as a substitute for reading it before starting substantial rules research.
 
-1. Separate explicit Rules Cyclopedia behavior from omissions or ambiguity.
-2. Search alternate-source sources in the order given in `SOURCE_HIERARCHY.md` §3.
-3. Address the exact unresolved question rather than importing an entire alternate-source rule.
-4. Classify each alternate-source comparison using the compatibility vocabulary (`SOURCE_HIERARCHY.md` §6) — Preserved, Compatible Completion, Evolved/Different, or Conflicting — rather than a bare clarification/revision binary.
-5. Report compatibility concerns, and flag any Evolved/Different or Conflicting finding as a candidate Human-Approved Variant rather than importing it.
-6. Do not convert research conclusions into approved rules, and do not create a Human-Approved Variant, unless authorized.
+1. **Stage A (Evidence) and Stage B (Synthesis/Draft) are separate tasks.** Do not rewrite an active Rule Card's specification during Stage A. Evidence must close before mechanical synthesis begins.
+2. **Primary Rules Cyclopedia text is a hard gate.** Secondary sources may only locate material or suggest terminology/pages worth checking — they cannot themselves establish RC mechanics. If usable primary text cannot be accessed, stop: `PRIMARY SOURCE ACCESS REQUIRED`.
+3. **Search the whole primary source, not just the chapter that answers part of the question**, before treating evidence as complete.
+4. **Actively attempt to falsify every consequential tentative conclusion** before proposing it; a rejected interpretation stops the task rather than being silently replaced with another guess.
+5. **For `REVALIDATION_REQUIRED` cards, research the current Rules Cyclopedia procedure from scratch before consulting the superseded Rule Card in detail** — legacy cards are provenance and a completeness check, not a template that survives unless disproven.
+6. **Human evidence review is a hard gate.** Stage A ends with either `EVIDENCE READY FOR HUMAN REVIEW` or `MORE PRIMARY RESEARCH REQUIRED`; Stage B may not begin without explicit human authorization.
+7. **Alternate-source research is gap-directed only** — performed after a precise RC gap is documented, never a broad browse of earlier editions. **Simulator Rulings are proposed only after that research fails**, are never bundled, and are never self-approved.
+8. Classify each alternate-source comparison using the compatibility vocabulary (`SOURCE_HIERARCHY.md` §6) — Preserved, Compatible Completion, Evolved/Different, or Conflicting — and, when revalidating, classify each inherited legacy mechanic using the protocol's disposition vocabulary (PRESERVED / CHANGED / REMOVED / MOVED TO ANOTHER RESPONSIBILITY / RC DOES NOT SPECIFY / POTENTIAL COMPLETION QUESTION).
+9. Report compatibility concerns, and flag any Evolved/Different or Conflicting finding as a candidate Human-Approved Variant rather than importing it.
+10. Do not convert research conclusions into approved rules, and do not create a Human-Approved Variant, unless authorized.
+
+`docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` additionally defines the confidence vocabulary, the required Stage-A evidence-report contents, and the complete set of hard-stop conditions (including `PRIMARY PROCEDURE NOT YET ESTABLISHED`, `INTERNAL SOURCE CONFLICT REQUIRES REVIEW`, and `COMPLETION COMPATIBILITY NOT ESTABLISHED`) — not restated here.
 
 ## 11. Testing Expectations
 

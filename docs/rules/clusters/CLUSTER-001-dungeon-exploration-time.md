@@ -19,7 +19,7 @@
 - **`EXP-001` depends on `EXP-002`** for that elapsed-turn signal, and on the **already-approved RNG abstraction** (`docs/technical/RNG_CONTRACT.md`) for its own die roll.
 - **No other historical-rule dependency is required for this boundary.** `EXP-001` and `EXP-002` are dependency-complete on their own — no character, monster, combat, or map content is needed to exercise them.
 - **`EXP-004` (Resting Procedure) is deliberately removed from this boundary.** Its old mandatory-hourly-rest mechanic does not survive as Rules Cyclopedia canon, and its replacement responsibility is currently classified `REFRAME` with an open `SPLIT CANDIDATE` flag (possible short-term running/exhaustion content, a distinct wilderness-travel-rest responsibility, or both) in `docs/rules/INVENTORY_MIGRATION_MAP.md`. Its scope is not settled enough to belong in a stable cluster boundary. See "`EXP-004` — excluded from the current boundary" below.
-- **The cluster therefore has a stable boundary even though both included Rule Cards still require their own Rules Cyclopedia revalidation.** Boundary stability and Rule Card readiness are different questions — the boundary does not depend on the outcome of either card's revalidation, since neither `EXP-001` nor `EXP-002` is expected to gain or lose the other as a dependency once revalidated.
+- **The cluster's boundary was stable independent of either Rule Card's own revalidation outcome, and that has now been borne out: `EXP-002` is `APPROVED`, while `EXP-001` remains `REVALIDATION_REQUIRED`.** Boundary stability and Rule Card readiness were always different questions — the boundary never depended on the outcome of either card's revalidation, since neither `EXP-001` nor `EXP-002` gained or lost the other as a dependency once revalidated.
 
 ### Status of the boundary vs. status of its Rule Cards — do not conflate these
 
@@ -27,10 +27,10 @@
 |---|---|
 | `CLUSTER-001` boundary (this document's current scope) | **`APPROVED`** |
 | `EXP-001` (Dungeon Wandering-Monster Check) | `REVALIDATION_REQUIRED` |
-| `EXP-002` (Dungeon Turn / Time Accounting) | `REVALIDATION_REQUIRED` |
+| `EXP-002` (Dungeon Turn / Time Accounting) | **`APPROVED`** (human-approved 2026-08-16, including its long-encounter Simulator Ruling) |
 | `EXP-004` (Resting Procedure) | `REVALIDATION_REQUIRED` — excluded from this cluster; see below |
 
-**The cluster is therefore selected, but it is not implementation-ready.** Per `DEC-0005-v1-rules-inventory-and-clustered-implementation.md`'s workflow, the next required step is Rule Card research/revalidation for `EXP-001` and `EXP-002` — not implementation, and not begun by this document.
+**The cluster is therefore selected, but it is not implementation-ready.** `EXP-002`'s revalidation is complete and `APPROVED`. Per `DEC-0005-v1-rules-inventory-and-clustered-implementation.md`'s workflow, the next required step is Rule Card research/revalidation for `EXP-001` — under the Evidence-First protocol (`docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md`, `DEC-0009-evidence-first-rule-research-protocol.md`) — not implementation, and not begun by this document.
 
 ### `EXP-004` — excluded from the current boundary
 
@@ -38,7 +38,7 @@
 
 ### Stable external dependency
 
-The cluster's one currently established external stable dependency is the **already-approved RNG abstraction** (`src/rng/`, `docs/technical/RNG_CONTRACT.md`) — `EXP-001`'s own dependency for its die roll. A synthetic "activity occurred / costs *N* turns" input may remain a possible testing convention for exercising `EXP-002`'s accounting without a real movement/search procedure, but it is **not** classified as an external stable contract here. `EXP-002`'s own revalidation must establish the boundary's authoritative executable time-accounting/input contract before implementation readiness is reached.
+The cluster's one currently established external stable dependency is the **already-approved RNG abstraction** (`src/rng/`, `docs/technical/RNG_CONTRACT.md`) — `EXP-001`'s own dependency for its die roll. `EXP-002`'s revalidation is complete and `APPROVED`: it establishes the boundary's authoritative executable time-accounting contract directly — a discrete whole-turn credit model (one credit per completed Game-Turn-Checklist iteration, plus `max(1, ceiling(encounter_rounds / 60))` whole-turn credit(s) for a resolved encounter, produced only once round-mode resolution finishes), not a fractional ledger or a synthetic activity-cost input. See `docs/rules/exploration/dungeon_turn_time_accounting.md` for the full specification. Implementation readiness for this cluster still awaits `EXP-001`'s own revalidation.
 
 ### Provenance
 
