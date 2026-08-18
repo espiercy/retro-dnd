@@ -8,7 +8,7 @@
 
 **Mechanics cited below are extracted, not reinterpreted.** Every mechanical statement in §4–§9 is sourced to a specific clause of `docs/rules/exploration/dungeon_wandering_monster_check.md` (`EXP-001`) or `docs/rules/exploration/dungeon_turn_time_accounting.md` (`EXP-002`), both `Status: APPROVED`. Where this plan proposes a *representation* (a class, a field, a module path) rather than a *mechanic*, that is called out explicitly as an implementation-shape choice, distinguishable from rules content. Historical (1974-primary) sections of either card are provenance only and are not used as a source of current mechanics anywhere below.
 
-**Ending recommendation:** `READY FOR HUMAN IMPLEMENTATION-PLAN REVIEW` — see §19.
+**Ending recommendation:** `READY FOR HUMAN IMPLEMENTATION-PLAN APPROVAL` — see §19. (This document has already been through one human review round; production orchestration was deferred per that review — see §11 — and this revision applies the resulting corrections.)
 
 ---
 
@@ -84,7 +84,7 @@ This cluster does **not** implement, and this plan does not design:
 | Beginning-of-next-Game-Turn arrival | Arrival is resolved at the **beginning** of the immediately following Game Turn, before that turn's own Actions/Results/step-4 check — a distinct procedural moment from "a credit was completed." | "Rules Cyclopedia Explicit" item 3; Procedure B |
 | Pending-arrival sequencing | `pending_arrival` is a sufficient single boolean under valid execution sequences (Procedure B before that same turn's own Procedure A) — proven, not assumed, in the card's own invariant proof; the proof is explicitly scoped to that valid ordering and does not claim to defend against malformed sequencing. | "Invariant" subsection, "Approved Mechanical Specification" |
 | Arrival preempts the remainder of that Game Turn Checklist | On arrival, that turn's own Actions/Results/step-4 check do not occur at all. | "Rules Cyclopedia Explicit" item 4 |
-| Shared normal/heightened cadence tally | One shared counter (`turns_since_last_check`) for both; it resets only when a check actually executes, never merely because heightened checking activates or deactivates. | **Simulator Ruling C**, human-approved 2026-08-18 |
+| Shared normal/heightened cadence tally | One shared counter (`turns_since_last_check`) for both; it resets when an ordinary due period is resolved — either a performed wandering-monster check, or the approved pre-decided-period skip — but never merely because heightened checking activates or deactivates. | **Simulator Ruling C**, human-approved 2026-08-18 (transition behavior); "Rules Cyclopedia Explicit" item 6 (skip-resolution reset) |
 
 **Simulator Rulings A, B, and C are preserved as mechanics by this plan, exactly as approved. They are not reopened, reinterpreted, or reconsidered here.**
 
@@ -99,7 +99,7 @@ State concepts, identified mechanically before any class design:
 | Turn-credit origin | `EXP-002` (produces the distinction); consumed by `EXP-001` | `EXP-001`'s execution-eligibility rule (§4.2) requires distinguishing ordinary from encounter-derived credits. | N/A (value) | Value type, no lifetime | Exactly two values: ordinary, encounter-derived | Closed set of two | Encoding round count, cadence state, or check outcome |
 | Turn credit | `EXP-002` | `EXP-001`'s own "Dependencies" section requires "an absolute turn number per credit... strictly ordered." | No (immutable value) | Ephemeral — produced per elapsed turn, consumed by the next stage | `turn_number` a positive int, strictly increasing and gapless across a session; origin one of the two values above | Never produced during round-mode (an orchestration-level guarantee this type cannot self-enforce — see §11) | Which activity produced it; encounter details; cadence/check state |
 | Dungeon-turn counter | `EXP-002` | "Maintains an authoritative, discrete... dungeon-turn counter" (Scope) | Yes | Per campaign/exploration session | Non-negative int, monotonically increasing | Advances by exactly 1 per ordinary credit, or by `encounter_turn_cost` per resolved encounter; never decreases, never skips | Wandering-check cadence, RNG, arrival |
-| Wandering cadence tally (`turns_since_last_check`) | `EXP-001` | Baseline/heightened due-ness both depend on it (§4.2) | Yes | Per campaign/exploration session | Non-negative int, unbounded | Advances by exactly 1 per credit received (any origin); resets to 0 only when a check actually executes (Simulator Ruling B); unaffected by heightened checking's own activation/deactivation (Simulator Ruling C) | Die results, RNG, arrival |
+| Wandering cadence tally (`turns_since_last_check`) | `EXP-001` | Baseline/heightened due-ness both depend on it (§4.2) | Yes | Per campaign/exploration session | Non-negative int, unbounded | Advances by exactly 1 per credit received (any origin — Simulator Ruling A). Resets to 0 when an ordinary due period is resolved: either a performed wandering-monster check, or the approved pre-decided-period skip ("Rules Cyclopedia Explicit" item 6 / "DM-discretion skip input") — both consume the due period identically. Unaffected by heightened checking's own activation or deactivation alone (Simulator Ruling C). | Die results, RNG, arrival |
 | Pending arrival (`pending_arrival`) | `EXP-001` | Trigger-vs-arrival is a distinct procedural moment (§4.2) | Yes | Per campaign/exploration session | `{True, False}` | Proven sufficient as a single boolean under valid execution sequencing (§4.2) | Monster identity, distance, arrival details beyond the fact |
 | Heightened-checking frequency flag | Externally supplied; `EXP-001` only consumes it | `EXP-001` explicitly does not decide which upstream condition sets it | See §6 | Per call (recommended) or per session (if a future policy layer needs push semantics) | `{True, False}` | None owned by `EXP-001` | Deciding when it is true |
 | Heightened chance level | Externally supplied; `EXP-001` only consumes it | Same as above — magnitude of the heightened trigger range | See §6 | Same as above | One of `{1, 2, 3, 4}` (representing 1-in-6 … 4-in-6); meaningful only when the frequency flag is true; ignored/defaulted otherwise | Defaults to baseline (`1`) when heightened checking is inactive | Deciding which level a given condition warrants |
@@ -195,7 +195,8 @@ FOR each credit IN credits, IN ORDER:
 | `src/rules/exploration/turn_credit.py` | Shared value types for the `EXP-002` → `EXP-001` interface (§6) | `EXP-001`, `EXP-002` (contract between them; owned by neither's mechanics alone) | `TurnCreditOrigin`, `TurnCredit` | None (stdlib `enum`, `dataclasses` only) | Neither Rule Card module; no RNG | None (pure value types) | Everything mechanical |
 | `src/rules/exploration/dungeon_turn_time_accounting.py` | `EXP-002`'s full contract: the dungeon-turn counter, ordinary-turn credit production, encounter-turn-cost calculation, encounter-derived credit production | `EXP-002` | `DungeonTimeAccounting` class; `encounter_turn_cost(encounter_rounds: int) -> int` helper, tested independently of the class per §4.1's formula | `turn_credit` | `dungeon_wandering_monster_check`; `src/rng` (this card owns no RNG); `src/survivability` | The dungeon-turn counter | Wandering-check cadence, RNG, arrival |
 | `src/rules/exploration/dungeon_wandering_monster_check.py` | `EXP-001`'s full contract: cadence tally, due-ness, execution eligibility, the 1d6 roll, pending-arrival state and resolution | `EXP-001` | `WanderingMonsterCadence` class (`advance()` = Procedure A, `resolve_arrival()` = Procedure B); `WanderingCheckResult`, `CheckOutcome`, `ArrivalResult` | `turn_credit`; `src/rng` (`RNG` Protocol only — never a concrete implementation) | `dungeon_turn_time_accounting` (per `EXP-001`'s own "Dependencies": depends on the credit sequence only, not `EXP-002`'s internal mechanics); `src/survivability` | The cadence tally, `pending_arrival` | Turn-counting, encounter-cost calculation |
-| `src/rules/exploration/dungeon_turn_cycle.py` | Thin orchestration seam sequencing the three moments in §7 for this cluster's own integration; owns no rules content of its own | Neither card individually — a pure sequencing composition of both | A small driver exposing the three moments as explicit calls (see §11 — requires human confirmation before this specific file is implemented) | `turn_credit`, `dungeon_turn_time_accounting`, `dungeon_wandering_monster_check`, `src/rng` | `src/state`, `src/events`, presentation/narrative code (none exist yet) | None of its own — delegates all state to the two modules above | Any mechanical decision either card makes |
+
+**No production orchestration module is proposed for `CLUSTER-001`.** Per human architecture decision (§11), `src/rules/exploration/dungeon_turn_cycle.py` — a proposed thin orchestration seam sequencing the three moments in §7 — is **not** implemented in this cluster. Neither Rule Card's own mechanics require it: cross-card sequencing (§7) is instead demonstrated directly by tests composing `DungeonTimeAccounting`, `WanderingMonsterCadence`, and `TurnCredit` according to the approved sequencing contract (§12/§13), with no intervening production wrapper. A production driver that determines *when* the three moments actually occur is a distinct, larger responsibility deferred to a future exploration-turn driver (§11).
 
 ```text
 src/
@@ -206,17 +207,18 @@ src/
             turn_credit.py
             dungeon_turn_time_accounting.py
             dungeon_wandering_monster_check.py
-            dungeon_turn_cycle.py
 tests/
     rules/
         exploration/
             test_turn_credit.py
             test_dungeon_turn_time_accounting.py
             test_dungeon_wandering_monster_check.py
-            test_dungeon_turn_cycle.py    # cross-card integration scenarios, §12
+            test_cluster_001_integration.py    # cross-card integration scenarios, §13 —
+                                                #  composes the two production modules above
+                                                #  directly; no production orchestration module
 ```
 
-This mirrors the existing `docs/rules/exploration/` naming (one module per Rule Card slug) and `ARCHITECTURE.md` §13's `src/rules/` bucket. No `engine`, `generation`, `world`, or presentation layer is created — consistent with §13's explicit deferral of those boundaries "until the codebase demonstrates a real need for them." No `src/events/` module is created; `advance()`/`resolve_arrival()`/`complete_ordinary_turn()`/`resolve_encounter()` return values are the authoritative outcome for now, consumed directly by callers and tests. Structured-event emission (`ARCHITECTURE.md` §8's illustrative `DungeonTurnElapsed`/`WanderingEncounterTriggered`) is deferred until a real consumer (presentation, logging, persistence) exists to need it — introducing it now would be exactly the "generic event system... unless the current architecture already requires one" this task instructs against.
+This mirrors the existing `docs/rules/exploration/` naming (one module per Rule Card slug) and `ARCHITECTURE.md` §13's `src/rules/` bucket. No `engine`, `generation`, `world`, `application/`, or `presentation/` layer is created — consistent with §13's explicit deferral of those boundaries "until the codebase demonstrates a real need for them," and with the human decision in §11 that this cluster does not yet supply that need. No `src/events/` module is created; `advance()`/`resolve_arrival()`/`complete_ordinary_turn()`/`resolve_encounter()` return values are the authoritative outcome for now, consumed directly by callers and tests. Structured-event emission (`ARCHITECTURE.md` §8's illustrative `DungeonTurnElapsed`/`WanderingEncounterTriggered`) is deferred until a real consumer (presentation, logging, persistence) exists to need it — introducing it now would be exactly the "generic event system... unless the current architecture already requires one" this task instructs against.
 
 ---
 
@@ -231,13 +233,15 @@ accounting.py          monster_check.py  ──→  src/rng (RNG Protocol only)
       ↑                  ↑
       └──────┬───────────┘
              │
-   dungeon_turn_cycle.py  (the only module aware of both Rule Cards at once)
+  tests/rules/exploration/test_cluster_001_integration.py
+  (the only place both Rule Card modules are composed together —
+   a test module, not a production module; see §11)
 ```
 
 - `EXP-002`'s module has **no** dependency on `EXP-001`'s module, matching `CLUSTER-001-dungeon-exploration-time.md`'s explicit one-way integration relationship ("`EXP-002` → elapsed-turn signal → `EXP-001`... not the reverse").
 - `EXP-001`'s module has **no** dependency on `EXP-002`'s module — only on the shared `turn_credit` type, matching `EXP-001`'s own "Dependencies" section ("does not depend on `EXP-002`'s internal accounting mechanics — only on the credit sequence itself").
 - Neither Rule Card module depends on `src/state`, `src/survivability`, `src/events`, or any presentation/narrative code — all either do not exist yet or are structurally forbidden (`ARCHITECTURE.md` §10/§11; both cards' own "Survivability out of scope" clauses).
-- Only the orchestration seam (`dungeon_turn_cycle.py`) is permitted to import both Rule Card modules — this preserves each Rule Card's independent callability/testability requirement (`ARCHITECTURE.md` §4, `TESTING_STRATEGY.md` §4).
+- **No production module imports both Rule Card modules** — per the human decision in §11, that composition exists only in the integration test module for this cluster; a future production orchestrator, when one is actually needed, is a distinct, later responsibility (§11, §16).
 - `src/rng` remains a leaf dependency, consistent with its existing role — no rules module is imported by it.
 
 ---
@@ -255,7 +259,7 @@ Uses the already-approved abstraction (`src/rng`) exactly as it exists today; no
 
 ---
 
-## 11. Orchestration — Where Moments A/B/C Are Sequenced (Human Decision Point)
+## 11. Orchestration — Where Moments A/B/C Are Sequenced (Resolved Human Decision)
 
 Neither Rule Card designs, and `ARCHITECTURE.md` does not yet define, the code that:
 
@@ -264,18 +268,21 @@ Neither Rule Card designs, and `ARCHITECTURE.md` does not yet define, the code t
 3. decides when an encounter has "resolved" with a known round count (Moment C trigger);
 4. enforces that Moment A's `resolve_arrival()` call happens before that same turn's own Moment B `advance()` call.
 
-`EXP-001`'s own card names this explicitly as "a future implementation-time design question, not a rules-content question" (Open Questions item 7) and states the required *ordering contract* without designing the mechanism. `ARCHITECTURE.md` §13 explicitly defers an `engine`/orchestration layer "until the codebase demonstrates a real need for them" — this cluster is the first candidate for that need.
+`EXP-001`'s own card names this explicitly as "a future implementation-time design question, not a rules-content question" (Open Questions item 7) and states the required *ordering contract* without designing the mechanism.
 
-**`ARCHITECTURE DECISION REQUIRED`.** This plan recommends the smallest viable answer, requiring explicit human confirmation before `src/rules/exploration/dungeon_turn_cycle.py` specifically is implemented (nothing else in this plan depends on that confirmation — see §14):
+**`RESOLVED` — production Game-Turn orchestration deferred until a real exploration-turn driver exists; `CLUSTER-001` integration is verified directly through the approved rule-module contracts.**
 
-- `dungeon_turn_cycle.py` is **not** a generic engine, event bus, or orchestration framework. It exposes a small number of explicit calls that a caller (for now: a deterministic test harness; later: whichever module eventually drives real exploration turns) invokes directly, in the order the caller itself already knows applies (this module does not infer timing — it only sequences what happens once told a moment has occurred):
-  - `begin_game_turn() -> ArrivalResult` — calls `resolve_arrival()` (Moment A). If arrival occurred, the caller must not proceed to `complete_ordinary_turn()` for this same turn.
-  - `complete_ordinary_turn() -> WanderingCheckResult` — calls `EXP-002.complete_ordinary_turn()` then `EXP-001.advance()` on the result (Moment B).
-  - `resolve_encounter(encounter_rounds: int) -> tuple[WanderingCheckResult, ...]` — calls `EXP-002.resolve_encounter()` then `EXP-001.advance()` once per resulting credit, in order (Moment C).
-- This module does not decide *when* a caller invokes these three calls, does not itself watch for movement/search/rest activity, and does not implement any part of `EXP-003`/`EXP-004`/`EXP-005`. It is the minimum seam needed to demonstrate `EXP-001`+`EXP-002` integrating correctly (`DEC-0005`'s "implement and integrate the cluster" step) without inventing a general-purpose engine ahead of a demonstrated need.
-- The larger question — how a *real* future exploration-turn driver (once `EXP-003`/`EXP-005`/movement content exists) will actually decide these three moments' timing from player/DM input — is explicitly **not** answered by this recommendation and is left for whichever future cluster/issue implements that driver.
+The immediately prior draft of this plan proposed a thin production orchestration module (`dungeon_turn_cycle.py`) to sequence Moments A/B/C. Human review determined that module is unnecessary at this stage: the four responsibilities listed at the top of this section (knowing when a Game Turn begins; deciding when player actions complete one; deciding when an encounter resolves; enforcing call order) show it would not itself determine any of that timing from player/DM intent — its only realistic caller at this stage is the deterministic integration-test harness. A production wrapper with no independent simulation responsibility of its own is not warranted merely to give the two Rule Card modules a shared caller.
 
-If the human reviewer prefers a different shape (e.g., folding this seam directly into whatever calls it, with no standalone module at all, since the cluster's own test harness may be the only caller for some time), that is a legitimate alternative; this plan's recommendation is offered as the default rather than the only acceptable answer.
+**Consequence for this plan:**
+
+- **No production orchestration module is implemented in `CLUSTER-001`.** §8/§9/§13/§14 are corrected accordingly.
+- **Cross-card sequencing is instead demonstrated by tests** (`tests/rules/exploration/test_cluster_001_integration.py`, §12/§13) that compose `DungeonTimeAccounting`, `WanderingMonsterCadence`, and `TurnCredit` directly, calling `resolve_arrival()` (Moment A), `complete_ordinary_turn()` + `advance()` (Moment B), and `resolve_encounter()` + `advance()` (Moment C) themselves, in the order the approved sequencing contract requires (§7). No production orchestrator is needed to test the contract — the test *is* the composition.
+- This is **not** a rejection of an eventual Simulation Engine or Game-Turn orchestration layer. It is a deliberate deferral: that responsibility becomes concrete once a real exploration-turn driver exists (§16, "Preserve the future human-playable architecture," below) — not before.
+
+### Preserve the future human-playable architecture
+
+`CLUSTER-001`'s rules modules are simulation-facing mechanical components, not the final player interface. A future exploration-turn driver will consume player/DM intent, determine when the Game Turn Checklist's procedural moments occur, invoke these approved rules components in the required order, mutate authoritative simulation state, and expose outcomes downstream to presentation. Its exact package/API is deliberately deferred until movement/actions and related exploration responsibilities (`EXP-003`/`EXP-005`, a future cluster) make that orchestration concrete. This plan does not create that driver now, and does not create `engine/`, `application/`, or `presentation/` merely to record this future responsibility — those remain correctly deferred per `ARCHITECTURE.md` §13 until a real need for them exists.
 
 ---
 
@@ -357,17 +364,29 @@ Derived directly from each Rule Card's own "Deterministic Test Cases" section �
 
 ## 13. Cross-Card Integration Scenarios
 
-Exercised through `dungeon_turn_cycle.py` (§11) once implemented — not executed by this plan.
+Exercised directly by `tests/rules/exploration/test_cluster_001_integration.py`, composing `DungeonTimeAccounting` and `WanderingMonsterCadence` itself — no production orchestrator exists or is needed (§11). Every scenario below makes the full valid ordinary-turn sequencing explicit, per the approved contract (§7):
 
-| Scenario | Steps | Expected result | Proposed location |
+```text
+begin Game Turn
+    → resolve_arrival()                              (EXP-001 Moment A / Procedure B)
+    → IF arrival occurred: STOP — this turn's own Actions/Results/step-4
+      do not occur; the test asserts this and does not call
+      complete_ordinary_turn() for this same turn
+    → ELSE: the externally-governed ordinary Game Turn executes
+      (opaque to this cluster, per §3)
+    → EXP-002.complete_ordinary_turn()  produces one ORDINARY credit
+    → EXP-001.advance(credit, ...)                    (Moment B / Procedure A)
+```
+
+| Scenario | Steps (explicit) | Expected result | Proposed location |
 |---|---|---|---|
-| 1 — Ordinary wandering trigger | ordinary, ordinary → due check, roll=1 → pending arrival → next `begin_game_turn()` | Encounter arrives; that turn's own Actions/Results/step-4 do not occur | `test_dungeon_turn_cycle.py` |
-| 2 — Ordinary no-trigger | Two ordinary turns → due check, roll∈{2..6} | No pending arrival; normal play continues | same |
-| 3 — Long encounter crosses cadence | Cadence state pre-existing → `resolve_encounter(121)` (3 credits, zero rolls) → next `complete_ordinary_turn()` | Exactly one deferred check, not three, not zero | same |
-| 4 — Pre-decided skip | Due baseline period, pre-decided signal present | Zero RNG operations; cadence resets for the next period | same |
-| 5 — Heightened transition | normal → heightened → normal, spanning several credits | Shared-counter behavior demonstrated across the transition, with no hidden phase restoration | same |
+| 1 — Ordinary wandering trigger | `resolve_arrival()`→no arrival; `complete_ordinary_turn()`+`advance()`→not due; `resolve_arrival()`→no arrival; `complete_ordinary_turn()`+`advance()`→due, scripted roll=1→`TRIGGERED`; then `resolve_arrival()` again | Final `resolve_arrival()` returns `occurred=True`; that turn's own Actions/Results/step-4 do not occur (test does not call `complete_ordinary_turn()` for it) | `test_cluster_001_integration.py` |
+| 2 — Ordinary no-trigger | `resolve_arrival()`→no arrival; two `complete_ordinary_turn()`+`advance()` pairs → due check, scripted roll∈{2..6} | `NO_TRIGGER`; `pending_arrival` remains `False`; subsequent `resolve_arrival()` calls all return `occurred=False` | same |
+| 3 — Long encounter crosses cadence | Cadence state pre-existing (e.g., tally=1) → `resolve_encounter(121)` (3 encounter-derived credits, each passed to `advance()`, zero rolls) → **`begin Game Turn`: `resolve_arrival()`→no arrival (no arrival was ever pending)** → `complete_ordinary_turn()`+`advance()` (the next *ordinary* credit) | Zero rolls across the three encounter-derived `advance()` calls; exactly one roll at the ordinary credit that follows, not three, not zero; the explicit `resolve_arrival()` call before that ordinary credit is part of the asserted sequence, not skipped | same |
+| 4 — Pre-decided skip | `resolve_arrival()`→no arrival; `complete_ordinary_turn()`+`advance(..., skip_signal=True)` on a due ordinary credit | `SKIPPED`; zero RNG operations; tally resets for the next period | same |
+| 5 — Heightened transition | `resolve_arrival()`/`complete_ordinary_turn()`/`advance()` cycles with `heightened_checking` toggled between calls, spanning several credits | Shared-counter behavior demonstrated across the transition, with no hidden phase restoration; `resolve_arrival()` is called at the start of every simulated turn throughout, not only when a trigger is expected | same |
 
-Each scenario is a thin composition of already-unit-tested behavior (§12) — it proves the two Rule Cards' modules integrate correctly through the orchestration seam, and does not re-prove any individual branch already covered at the unit level (`TESTING_STRATEGY.md` §4).
+Each scenario is a thin composition of already-unit-tested behavior (§12) — it proves the two Rule Cards' modules integrate correctly when sequenced per the approved contract, and does not re-prove any individual branch already covered at the unit level (`TESTING_STRATEGY.md` §4). No scenario advances past an unresolved `resolve_arrival()` call, and no scenario calls `complete_ordinary_turn()` for a turn whose own `resolve_arrival()` has not been checked first — both would be a sequencing-contract violation, not a case these tests exercise as valid (§7).
 
 ---
 
@@ -381,11 +400,11 @@ Derived from the dependency graph in §9, not adopted from any illustrative temp
    *Gate: EXP002-01–16 pass; 100% branch coverage per `src/rules/` requirement (`TESTING_STRATEGY.md` §8).*
 3. **`dungeon_wandering_monster_check.py`** (`EXP-001`) — depends only on step 1 and `src/rng`'s existing `RNG` Protocol; does **not** depend on step 2.
    *Gate: EXP001-01–34 pass; 100% branch coverage; RNG-audit cases (EXP001-32–34) specifically verified.*
-4. **`dungeon_turn_cycle.py`** (orchestration seam) — depends on steps 1–3. **Requires the §11 human confirmation before this step begins.**
+4. **`tests/rules/exploration/test_cluster_001_integration.py`** — direct cross-card `CLUSTER-001` integration tests, composing steps 2–3's production modules with no intervening production module (§11: production orchestration is deliberately deferred; this step adds no production module).
    *Gate: cross-card integration scenarios 1–5 (§13) pass, using only already-verified EXP-001/EXP-002 behavior underneath.*
 5. **Completion record** (`DEVELOPMENT_WORKFLOW.md` §5) — written once steps 1–4 are implemented and all gates in this section have passed, documenting exact files, behavior, provenance, tests, and verification commands/results.
 
-Each step is independently reviewable; no step's tests depend on a later step's code existing (step 3 does not need step 2's implementation to exist to be tested, since `EXP-001`'s own tests construct `TurnCredit` values directly rather than obtaining them from a live `DungeonTimeAccounting` instance).
+Each step is independently reviewable; no step's tests depend on a later step's code existing (step 3 does not need step 2's implementation to exist to be tested, since `EXP-001`'s own tests construct `TurnCredit` values directly rather than obtaining them from a live `DungeonTimeAccounting` instance). Step 4 no longer has a human-confirmation prerequisite — the production-orchestration decision point (§11) is resolved, not merely deferred pending confirmation.
 
 ---
 
@@ -398,7 +417,7 @@ Each step is independently reviewable; no step's tests depend on a later step's 
 | Rolling retroactively for encounter-derived credits | Same structural gate as above — the encounter-derived branch returns before reaching the roll; EXP001-27 explicitly asserts zero rolls across a whole long encounter. |
 | Generating multiple deferred checks after a long encounter | Due-ness is recomputed fresh at the next ordinary credit from the accumulated tally, never per encounter-derived credit; EXP001-28 asserts exactly one roll regardless of accumulated excess. |
 | Incorrectly preserving a one-check-per-two-total-credits aggregate rate | EXP001-30 explicitly asserts the collapse is *not* rate-preserving — a regression here is a direct test failure, not merely an omission. |
-| Resetting cadence merely because heightened mode changes | The tally reset happens only inside the "a check actually executed" branch, never inside a heightened-flag setter (there is no such setter — the flag is a call parameter, §5/§6); EXP001-23/24/25 assert no reset on transition alone. |
+| Resetting cadence merely because heightened mode changes | The tally reset happens only inside the branch that resolves a due ordinary period — a performed check or the pre-decided skip — never inside a heightened-flag setter (there is no such setter — the flag is a call parameter, §5/§6); EXP001-23/24/25 assert no reset on transition alone, and EXP001-10/11 assert the skip resets the tally exactly as a performed check does. |
 | Consuming RNG on skipped/due-but-not-executable checks | `roll_die` is called from exactly one branch (due, ordinary, not skipped); EXP001-32/33 audit a `ScriptedRNG` with an exactly-sized queue, which fails loudly (`RollSequenceExhaustedError` or leftover unused values) if the call count is wrong. |
 | Letting monster-selection responsibilities leak into `EXP-001` | `WanderingCheckResult`/`ArrivalResult` carry no monster/direction/distance fields at all — there is no field to populate even by mistake (§7.1, §4.2 "Responsibility boundary"). |
 | Fractionalizing `EXP-002` time | `DungeonTimeAccounting`'s counter is typed as an integer turn count; `TurnCredit.turn_number` is an int; no floating-point or `Fraction` type appears anywhere in the proposed representation. |
@@ -412,7 +431,7 @@ Each step is independently reviewable; no step's tests depend on a later step's 
 - `MON-001`, `MON-002`, `ENC-001`, `ENC-002`, `ENC-003` — not designed, not stubbed.
 - `EXP-008` and the `MON-001` ↔ `EXP-008` circularity — not investigated.
 - `EXP-004` — remains `REVALIDATION_REQUIRED`, excluded from this cluster.
-- `EXP-003`/`EXP-005` (real movement/search content) and any future exploration-turn driver that decides *when* Moments A/B/C actually occur from player/DM input — the orchestration seam (§11) only sequences these moments once told they occurred; it does not decide their timing from game content.
+- `EXP-003`/`EXP-005` (real movement/search content) and any future exploration-turn driver that decides *when* Moments A/B/C actually occur from player/DM input, mutates authoritative simulation state, and exposes outcomes downstream to presentation — deliberately deferred (§11, "Preserve the future human-playable architecture"). This cluster's integration tests sequence the three moments directly, once told they occurred; nothing in this cluster decides their timing from game content.
 - Structured event emission (`ARCHITECTURE.md` §8) and any persistence of campaign/dungeon-turn state (`ARCHITECTURE.md` §7) — no consumer needs either yet.
 - A code formatter, test-order randomization, or any other item `docs/technical/TOOLCHAIN_AND_CI.md` §11 already lists as deferred.
 - Any survivability policy interaction — both cards are structurally excluded from accepting one (`ARCHITECTURE.md` §10).
@@ -427,7 +446,9 @@ Each step is independently reviewable; no step's tests depend on a later step's 
 
 ## 18. Architecture-Decision Requirements
 
-**One.** §11 — where Game-Turn orchestration (the code deciding *when* Moments A/B/C occur and enforcing their required order) lives. `ARCHITECTURE.md` does not yet define an orchestration/engine layer, and this cluster is the first implementation work to need one. A smallest-viable recommendation is proposed (§11) and does not block steps 1–3 of the implementation sequence (§14); it blocks only step 4 (the orchestration seam itself and its cross-card integration tests) pending explicit human confirmation or an alternative direction.
+**None open.** One point was raised and is now resolved:
+
+**`RESOLVED`** — production Game-Turn orchestration (the code deciding *when* Moments A/B/C occur and enforcing their required order) is deferred until a real exploration-turn driver exists; `CLUSTER-001` integration is verified directly through the approved rule-module contracts (§11). `ARCHITECTURE.md` still does not define an orchestration/engine layer, and this plan does not create one, does not fold its responsibility into a placeholder production module, and does not treat this as a rejection of an eventual Simulation Engine — only as a deliberate deferral until movement/actions content makes that layer's responsibility concrete (§11, "Preserve the future human-playable architecture"). This does not block any step of the implementation sequence (§14): step 4 now adds a test module, not a production module, and requires no further human confirmation before it begins.
 
 No other architectural change is proposed. This plan does not add an event bus, ECS, plugin system, generic turn engine, or Application Layer — all remain correctly deferred per `ARCHITECTURE.md` §13.
 
@@ -436,8 +457,11 @@ No other architectural change is proposed. This plan does not add an event bus, 
 ## 19. Implementation-Readiness Assessment
 
 - All five of `DEC-0005`'s cluster-readiness criteria are met for `CLUSTER-001`'s two-card boundary: (1) scope clearly defined (§3); (2) all historical rules directly required identified (§4); (3) both required Rule Cards `APPROVED` (`EXP-001` 2026-08-18, `EXP-002` 2026-08-16); (4) the one external dependency (the RNG abstraction) has a stable, already-approved contract (§10); (5) no unresolved rules ambiguity remains that an implementation agent would need to adjudicate (§17: none found).
-- One architecture decision point remains open (§18), scoped narrowly to the orchestration seam only; it does not block preparing or reviewing this plan, and does not block implementing steps 1–3 of §14.
+- The one architecture-decision point raised in the prior draft (§18) is now resolved — production Game-Turn orchestration is deliberately deferred, and `CLUSTER-001` integrates through direct tests instead. No architecture decision point remains open.
 - Per `ARCHITECTURE.md` §15.2, this plan's human review and acceptance is a step toward, but is not itself, the "(re-)approved implementation readiness" that gate's step (4) requires — that remains a distinct, explicit human authorization to begin production code, separate from approving this document.
+
+**`GOVERNANCE SYNC REQUIRED BEFORE IMPLEMENTATION AUTHORIZATION`:** `ARCHITECTURE.md` §15.2's current-status text still describes the Rules Baseline Migration Gate's steps (2)–(4) as entirely unaddressed and the historical-rules implementation freeze as continuing in force. That text must be updated — after this implementation plan itself receives human approval — so the repository explicitly records `CLUSTER-001` implementation readiness as re-approved before production code begins. This task does not perform that update and does not clear the freeze; it is named here so the formal Pre-Code/Migration Gate (`ARCHITECTURE.md` §16, §15.2) remains intact and accurately reflects repository state until the final human plan approval triggers it.
+
 - No production code, test skeletons, or placeholder classes have been created by this task.
 
-**READY FOR HUMAN IMPLEMENTATION-PLAN REVIEW**
+**READY FOR HUMAN IMPLEMENTATION-PLAN APPROVAL**
