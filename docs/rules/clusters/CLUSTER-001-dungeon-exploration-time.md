@@ -27,10 +27,23 @@
 |---|---|
 | `CLUSTER-001` boundary (this document's current scope) | **`APPROVED`** |
 | `EXP-001` (Dungeon Wandering-Monster Check) | **`APPROVED`** (human-approved 2026-08-18, including Simulator Rulings A–C) |
-| `EXP-002` (Dungeon Turn / Time Accounting) | **`APPROVED`** (human-approved 2026-08-16, including its long-encounter Simulator Ruling) |
+| `EXP-002` (Dungeon Turn / Time Accounting) | **`VERIFIED`** (human-approved 2026-08-16, including its long-encounter Simulator Ruling; implemented and verified 2026-08-18 — `src/rules/exploration/dungeon_turn_time_accounting.py`, `docs/completion-records/ISSUE-004-exp-002-dungeon-turn-time-accounting.md`) |
 | `EXP-004` (Resting Procedure) | `REVALIDATION_REQUIRED` — excluded from this cluster; see below |
 
-**The cluster's required Rule Cards are now human-approved.** The historical-rules research gate for the selected `EXP-001` + `EXP-002` boundary is complete: both `EXP-001` and `EXP-002` have completed Rules Cyclopedia revalidation and human approval. Per `DEC-0005-v1-rules-inventory-and-clustered-implementation.md`'s workflow, the next workflow phase is implementation/integration preparation under the established cluster workflow — this metadata sync does not itself begin implementation, and no implementation-readiness work has been performed by this document.
+**The cluster's required Rule Cards are now human-approved.** The historical-rules research gate for the selected `EXP-001` + `EXP-002` boundary is complete: both `EXP-001` and `EXP-002` have completed Rules Cyclopedia revalidation and human approval. Per `DEC-0005-v1-rules-inventory-and-clustered-implementation.md`'s workflow, implementation/integration preparation has since occurred (`docs/technical/CLUSTER-001_IMPLEMENTATION_PLAN.md`, `IMPLEMENTATION PLAN APPROVED`), and implementation of this boundary was authorized 2026-08-18 (`ARCHITECTURE.md` §15.2). See "Implementation Progress" immediately below for the cluster's current, in-progress implementation state — **`CLUSTER-001` as a whole is not yet implementation-complete.**
+
+### Implementation Progress (2026-08-18)
+
+`CLUSTER-001` implementation is in progress, tracked as four steps in the approved implementation plan:
+
+| Step | Scope | Status |
+|---|---|---|
+| 1 | `TurnCredit` / `TurnCreditOrigin` (shared contract) | **Complete** — `docs/completion-records/ISSUE-003-cluster-001-turn-credit-contract.md` |
+| 2 | `EXP-002` mechanical implementation | **Complete** — `docs/completion-records/ISSUE-004-exp-002-dungeon-turn-time-accounting.md` |
+| 3 | `EXP-001` mechanical implementation | Not begun |
+| 4 | Cross-card integration tests | Not begun |
+
+Do not read Steps 1–2's completion as `CLUSTER-001` itself being implemented or verified — `EXP-001`'s own mechanical implementation and the cross-card integration gate remain outstanding before this cluster's implementation can be considered complete.
 
 ### `EXP-004` — excluded from the current boundary
 
@@ -38,7 +51,7 @@
 
 ### Stable external dependency
 
-The cluster's one currently established external stable dependency is the **already-approved RNG abstraction** (`src/rng/`, `docs/technical/RNG_CONTRACT.md`) — `EXP-001`'s own dependency for its die roll. `EXP-002`'s revalidation is complete and `APPROVED`: it establishes the boundary's authoritative executable time-accounting contract directly — a discrete whole-turn credit model (one credit per completed Game-Turn-Checklist iteration, plus `max(1, ceiling(encounter_rounds / 60))` whole-turn credit(s) for a resolved encounter, produced only once round-mode resolution finishes), not a fractional ledger or a synthetic activity-cost input. See `docs/rules/exploration/dungeon_turn_time_accounting.md` for the full specification. `EXP-001`'s own revalidation is likewise complete and `APPROVED` (human-approved 2026-08-18) — see `docs/rules/exploration/dungeon_wandering_monster_check.md`. The historical-rules research gate for this cluster's boundary is closed; the next workflow phase is implementation/integration preparation, not further Rule Card research.
+The cluster's one currently established external stable dependency is the **already-approved RNG abstraction** (`src/rng/`, `docs/technical/RNG_CONTRACT.md`) — `EXP-001`'s own dependency for its die roll. `EXP-002`'s revalidation is complete and now `VERIFIED` (implemented 2026-08-18): it establishes the boundary's authoritative executable time-accounting contract directly — a discrete whole-turn credit model (one credit per completed Game-Turn-Checklist iteration, plus `max(1, ceiling(encounter_rounds / 60))` whole-turn credit(s) for a resolved encounter, produced only once round-mode resolution finishes), not a fractional ledger or a synthetic activity-cost input. See `docs/rules/exploration/dungeon_turn_time_accounting.md` for the full specification and `src/rules/exploration/dungeon_turn_time_accounting.py` for the implementation. `EXP-001`'s own revalidation is likewise complete and `APPROVED` (human-approved 2026-08-18) — see `docs/rules/exploration/dungeon_wandering_monster_check.md`; its own mechanical implementation has not yet begun (`CLUSTER-001` Step 3, "Implementation Progress" above). The historical-rules research gate for this cluster's boundary is closed; the cluster's own implementation is in progress but not complete.
 
 ### Provenance
 
