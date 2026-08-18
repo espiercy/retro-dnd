@@ -16,7 +16,7 @@ Where the Rules Cyclopedia does not completely specify behavior, search the alte
 
 Import only the portions that are compatible with what the Rules Cyclopedia already establishes.
 
-An alternate source may clarify an omission or fill a gap. It may **not** silently override an explicit Rules Cyclopedia rule. A conflicting earlier-edition rule does not take precedence merely because it is chronologically older or was the project's original baseline.
+An alternate source may clarify an omission or fill a gap. It may **not** silently override an explicit Rules Cyclopedia rule. A conflicting earlier-edition rule does not take precedence merely because it is chronologically older or was part of the project's superseded 1974-primary governance baseline.
 
 ## 3. Source Order
 
