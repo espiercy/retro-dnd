@@ -439,7 +439,7 @@ Implementation/integration feedback from a completed cluster is fed back into th
 
 `DEC-0007-rules-cyclopedia-primary-rules-authority.md` replaced the 1974 three-book OD&D core with the Rules Cyclopedia as the project's primary rules authority. See `docs/rules/RULESET_BASELINE_MIGRATION.md` for the full migration record.
 
-This does not erase the fact that a V1 Rules Inventory (`docs/rules/INVENTORY.md`) and a first cluster, `CLUSTER-001` (dungeon exploration time — `EXP-001`, `EXP-002`, `EXP-004`), were previously researched, human-approved, and merged under the superseded 1974-primary policy. Both remain in the repository as a historical record of completed work and are not deleted or rewritten. Neither currently carries implementation authority: both are marked `REVALIDATION_REQUIRED` (`DEVELOPMENT_WORKFLOW.md` §9.7), pending review against the current source hierarchy.
+This does not erase the fact that a V1 Rules Inventory (`docs/rules/INVENTORY.md`) and a first cluster, `CLUSTER-001` (dungeon exploration time — `EXP-001`, `EXP-002`, `EXP-004`), were previously researched, human-approved, and merged under the superseded 1974-primary policy. Both remain in the repository as a historical record of completed work and are not deleted or rewritten. As of this gate's original 2026-08-16 addition, neither carried implementation authority: both were marked `REVALIDATION_REQUIRED` (`DEVELOPMENT_WORKFLOW.md` §9.7), pending review against the current source hierarchy. **This is no longer true of the revised, two-item `CLUSTER-001` boundary specifically — see "Status update (2026-08-18)" below**, which does not apply to `EXP-004` or to the original three-item boundary referenced in this paragraph.
 
 The progression toward Cluster 1 implementation described in §15.1 is **suspended**, replaced by:
 
@@ -467,6 +467,17 @@ historical-rules implementation
 
 **Status update (2026-08-16).** Step (1) is complete: `docs/rules/INVENTORY.md` (rebuilt against the Rules Cyclopedia, with a companion coverage audit `docs/rules/RC_V1_SCOPE_AUDIT.md` and migration map `docs/rules/INVENTORY_MIGRATION_MAP.md`) is now `APPROVED`. This approval satisfies step (1) only — it does **not** clear this gate as a whole and does **not** reauthorize historical-rules implementation on its own. Steps (2)–(4) remain entirely unaddressed: no cluster boundary has been (re-)approved, no Rule Card has been revalidated under the current hierarchy, and implementation readiness has not been (re-)approved for any cluster. The freeze continues in force.
 
+**Status update (2026-08-18) — `CLUSTER-001` steps (2)–(4) now satisfied.**
+
+- **Step 1 — Rules Cyclopedia V1 inventory:** `COMPLETE / APPROVED` (unchanged from 2026-08-16, above).
+- **Step 2 — revised `CLUSTER-001` boundary:** `COMPLETE / APPROVED`. Current boundary: `EXP-001` (Dungeon Wandering-Monster Check) + `EXP-002` (Dungeon Turn / Time Accounting) — see `docs/rules/clusters/CLUSTER-001-dungeon-exploration-time.md`, Current section. `EXP-004` remains `REVALIDATION_REQUIRED` and is **not** part of `CLUSTER-001`.
+- **Step 3 — required Rule Cards:** `COMPLETE`. `EXP-001 = APPROVED`, human-approved 2026-08-18. `EXP-002 = APPROVED`, human-approved 2026-08-16.
+- **Step 4 — implementation readiness:** `RE-APPROVED`, human-approved 2026-08-18. Authoritative implementation plan: `docs/technical/CLUSTER-001_IMPLEMENTATION_PLAN.md` (Human Implementation-Plan Review: `APPROVED`, 2026-08-18).
+
+**The governance distinction is explicit: this clears the migration-era freeze for `CLUSTER-001` only.** It does not state or imply that historical-rules implementation is now globally unrestricted. Every other cluster, and every Rule Card not part of `CLUSTER-001`'s two-item boundary, remains governed by §15.1 and this gate exactly as before, and must independently satisfy the same four steps — including its own cluster boundary (re-)approval, its own Rule Cards' approval under the current hierarchy, and its own implementation-readiness (re-)approval — before any implementation authorization applies to it. `ARCHITECTURE.md` §16's general Pre-Code Development Gate is unaffected and remains active project-wide; this status update does not weaken or bypass it — it records that `CLUSTER-001` has, in addition, individually satisfied §15.2's own four migration-gate steps.
+
+**`CLUSTER-001` HISTORICAL-RULES IMPLEMENTATION: `AUTHORIZED` — 2026-08-18.** This authorization applies only to the human-approved `EXP-001` + `EXP-002` `CLUSTER-001` boundary and its approved implementation plan (`docs/technical/CLUSTER-001_IMPLEMENTATION_PLAN.md`). It does not authorize implementation of `EXP-004`, another Rule Card, or another cluster.
+
 ## 16. Pre-Code Development Gate
 
 Production code must not begin — including Issue 1 (§15) — until a human has reviewed and approved each of the following foundational items:
@@ -487,6 +498,8 @@ The Rule Card template (item 3) is governance/specification documentation, not p
 As of 2026-08-15, all eight items above have been reviewed and approved by the project owner (`docs/decisions/DEC-0001-project-foundation-baseline.md`, `docs/decisions/DEC-0002-rng-contract.md`, `docs/decisions/DEC-0003-python-toolchain-and-ci.md`). **The Pre-Code Development Gate is CLEARED.**
 
 Clearing this gate is a statement about the foundational documents, not an authorization to begin implementation. Production-code work on Issue 1 (§15) still requires a separate, explicit human authorization to begin — clearing the gate removes the *precondition* for that authorization; it does not substitute for it. A small number of implementation-phase details remain intentionally open even after clearing (e.g., `docs/technical/TOOLCHAIN_AND_CI.md` §12) — these do not block the gate and are expected to be resolved during Issue 1 itself, not before it starts.
+
+This project-level gate remaining `CLEARED` is necessary but not sufficient for any individual cluster's implementation — each cluster additionally requires its own separate authorization under §15.2's Rules Baseline Migration Gate. `CLUSTER-001` has received that separate authorization (§15.2, "Status update (2026-08-18)"); no other cluster or Rule Card has, and this gate's clearance does not extend implementation authorization to any of them.
 
 ## 17. First Agent Assignment (Completed)
 
