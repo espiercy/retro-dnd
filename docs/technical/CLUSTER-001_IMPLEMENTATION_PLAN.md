@@ -8,7 +8,15 @@
 
 **Mechanics cited below are extracted, not reinterpreted.** Every mechanical statement in §4–§9 is sourced to a specific clause of `docs/rules/exploration/dungeon_wandering_monster_check.md` (`EXP-001`) or `docs/rules/exploration/dungeon_turn_time_accounting.md` (`EXP-002`), both `Status: APPROVED`. Where this plan proposes a *representation* (a class, a field, a module path) rather than a *mechanic*, that is called out explicitly as an implementation-shape choice, distinguishable from rules content. Historical (1974-primary) sections of either card are provenance only and are not used as a source of current mechanics anywhere below.
 
-**Ending recommendation:** `READY FOR HUMAN IMPLEMENTATION-PLAN APPROVAL` — see §19. (This document has already been through one human review round; production orchestration was deferred per that review — see §11 — and this revision applies the resulting corrections.)
+**Human Implementation-Plan Review: APPROVED.**
+
+- **Date:** 2026-08-18
+- **This plan is approved as the authoritative implementation plan for `CLUSTER-001`.**
+- **Approval authorizes production implementation only after the `ARCHITECTURE.md` §15.2 Rules Baseline Migration Gate is synchronized to record `CLUSTER-001` implementation readiness as re-approved.** (Synchronized the same day this approval was recorded — see `ARCHITECTURE.md` §15.2's "Status update (2026-08-18)" for the resulting authorization record.)
+- **Resolved orchestration decision, confirmed unchanged by this approval:** Production Game-Turn orchestration is deliberately deferred until movement/actions and related exploration responsibilities create a real exploration-turn driver. `CLUSTER-001` will implement only its approved simulation-facing rules components and will verify their integration through direct deterministic composition tests (§11, §13).
+- This approval does not alter this plan's mechanics, module design, test plan, or implementation sequence (§4–§16 unchanged in substance).
+
+**Ending recommendation:** `IMPLEMENTATION PLAN APPROVED` — see §19.
 
 ---
 
@@ -458,10 +466,10 @@ No other architectural change is proposed. This plan does not add an event bus, 
 
 - All five of `DEC-0005`'s cluster-readiness criteria are met for `CLUSTER-001`'s two-card boundary: (1) scope clearly defined (§3); (2) all historical rules directly required identified (§4); (3) both required Rule Cards `APPROVED` (`EXP-001` 2026-08-18, `EXP-002` 2026-08-16); (4) the one external dependency (the RNG abstraction) has a stable, already-approved contract (§10); (5) no unresolved rules ambiguity remains that an implementation agent would need to adjudicate (§17: none found).
 - The one architecture-decision point raised in the prior draft (§18) is now resolved — production Game-Turn orchestration is deliberately deferred, and `CLUSTER-001` integrates through direct tests instead. No architecture decision point remains open.
-- Per `ARCHITECTURE.md` §15.2, this plan's human review and acceptance is a step toward, but is not itself, the "(re-)approved implementation readiness" that gate's step (4) requires — that remains a distinct, explicit human authorization to begin production code, separate from approving this document.
+- **This plan received Human Implementation-Plan Review: APPROVED, 2026-08-18** (see §1). Per `ARCHITECTURE.md` §15.2, that approval is the human authorization step (4), "(re-)approved implementation readiness," requires — distinct from, and in addition to, the two Rule Cards' own individual approvals.
 
-**`GOVERNANCE SYNC REQUIRED BEFORE IMPLEMENTATION AUTHORIZATION`:** `ARCHITECTURE.md` §15.2's current-status text still describes the Rules Baseline Migration Gate's steps (2)–(4) as entirely unaddressed and the historical-rules implementation freeze as continuing in force. That text must be updated — after this implementation plan itself receives human approval — so the repository explicitly records `CLUSTER-001` implementation readiness as re-approved before production code begins. This task does not perform that update and does not clear the freeze; it is named here so the formal Pre-Code/Migration Gate (`ARCHITECTURE.md` §16, §15.2) remains intact and accurately reflects repository state until the final human plan approval triggers it.
+**`GOVERNANCE SYNC — RESOLVED, 2026-08-18`:** `ARCHITECTURE.md` §15.2's current-status text has been updated in the same task that recorded this plan's approval, to record `CLUSTER-001` historical-rules implementation as `AUTHORIZED — 2026-08-18`, scoped specifically to the `EXP-001` + `EXP-002` boundary and this plan. See `ARCHITECTURE.md` §15.2's "Status update (2026-08-18)" for the authorization record itself. This does not authorize any other cluster or Rule Card, and does not weaken `ARCHITECTURE.md` §16's general Pre-Code Development Gate, which remains active project-wide.
 
 - No production code, test skeletons, or placeholder classes have been created by this task.
 
-**READY FOR HUMAN IMPLEMENTATION-PLAN APPROVAL**
+**IMPLEMENTATION PLAN APPROVED**
