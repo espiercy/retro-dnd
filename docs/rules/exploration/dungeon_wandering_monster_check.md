@@ -16,7 +16,7 @@ Dungeon (Underworld) Wandering-Monster Check
 
 ## Status
 
-APPROVED
+VERIFIED
 
 ## Rules Domain
 
@@ -484,7 +484,15 @@ No `BLOCKS APPROVAL` items remain.
 
 - Approved by: Human project owner
 - Date: 2026-08-18
-- Notes: Stage-A evidence accepted 2026-08-16. Stage-B synthesis corrected per human review 2026-08-16 (commit `cde28a9`), corrected again 2026-08-16 (commit `cb3dfc1`: Gap A reclassified from Alternate-Source Compatible Completion to Simulator Ruling A; cadence-advancement/check-execution split; Simulator Rulings B and C proposed; `pending_arrival` invariant proven), and given final human ruling approval and a consistency pass 2026-08-18. **Simulator Ruling A: APPROVED, 2026-08-18.** **Simulator Ruling B: APPROVED WITH PRECISE INTERPRETATION, 2026-08-18** (deferred execution collapses all accumulated due-ness into exactly one check; the resulting actual check rate can be lower than one check per two total credits — this is intentional, not a defect). **Simulator Ruling C: APPROVED, 2026-08-18.** Exact approved wording for each is recorded under "Simulator Ruling" above. The 2026-08-18 review also directed, and this revision applies, three consistency corrections: Deterministic Test Case 30 no longer claims Ruling B preserves the same aggregate one-check-per-two-credits rate as all-ordinary play; the pending-arrival invariant proof and Test Cases 16–17 are scoped explicitly to valid execution sequences (Procedure B before that turn's own Procedure A), with the prior claim of survival under adversarial/incorrect sequencing withdrawn and no defensive guard added; and Holmes Basic/module-B2 material, having been attempted but not primary-verified, is no longer cited as evidence for Simulator Ruling A's rationale or counted among "sources consulted" (human scope decision specific to this card, not a general change to the Evidence-First protocol's primary-source requirement). No further rules research occurred in this round. Status is `APPROVED`.
+- Notes: Stage-A evidence accepted 2026-08-16. Stage-B synthesis corrected per human review 2026-08-16 (commit `cde28a9`), corrected again 2026-08-16 (commit `cb3dfc1`: Gap A reclassified from Alternate-Source Compatible Completion to Simulator Ruling A; cadence-advancement/check-execution split; Simulator Rulings B and C proposed; `pending_arrival` invariant proven), and given final human ruling approval and a consistency pass 2026-08-18. **Simulator Ruling A: APPROVED, 2026-08-18.** **Simulator Ruling B: APPROVED WITH PRECISE INTERPRETATION, 2026-08-18** (deferred execution collapses all accumulated due-ness into exactly one check; the resulting actual check rate can be lower than one check per two total credits — this is intentional, not a defect). **Simulator Ruling C: APPROVED, 2026-08-18.** Exact approved wording for each is recorded under "Simulator Ruling" above. The 2026-08-18 review also directed, and this revision applies, three consistency corrections: Deterministic Test Case 30 no longer claims Ruling B preserves the same aggregate one-check-per-two-credits rate as all-ordinary play; the pending-arrival invariant proof and Test Cases 16–17 are scoped explicitly to valid execution sequences (Procedure B before that turn's own Procedure A), with the prior claim of survival under adversarial/incorrect sequencing withdrawn and no defensive guard added; and Holmes Basic/module-B2 material, having been attempted but not primary-verified, is no longer cited as evidence for Simulator Ruling A's rationale or counted among "sources consulted" (human scope decision specific to this card, not a general change to the Evidence-First protocol's primary-source requirement). No further rules research occurred in this round. Status was `APPROVED` as of this record — see "Implementation and Verification (2026-08-18)" immediately below for this card's current lifecycle state, added as a later fact rather than a rewrite of this approval.
+
+### Implementation and Verification (2026-08-18)
+
+- **Implementation:** `src/rules/exploration/dungeon_wandering_monster_check.py`.
+- **Completion record:** `docs/completion-records/ISSUE-005-exp-001-dungeon-wandering-monster-check.md`.
+- Production implementation passed human review (`HUMAN IMPLEMENTATION REVIEW: APPROVED`, 2026-08-18; implementation commit `a341a77`, correction commit `2d9f7f9`). The deterministic Rule Card obligations (`EXP001-01` through `EXP001-34`) passed; canonical repository verification (`uv run python scripts/verify.py`) passed; historical-rules branch coverage passed at 100%.
+
+**Status: `VERIFIED`** (see "Status" above), reached from `APPROVED` via `IMPLEMENTED` per the Status Lifecycle at the end of this document — not a new or separate approval, and not a reopening of the 2026-08-18 approval's substance or of Simulator Rulings A, B, or C.
 
 ---
 
