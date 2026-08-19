@@ -9,3 +9,5 @@ Durable per-issue implementation records for the Retro D&D Simulator project (`D
 | [ISSUE-003](ISSUE-003-cluster-001-turn-credit-contract.md) | CLUSTER-001 Turn-Credit Contract | Complete |
 | [ISSUE-004](ISSUE-004-exp-002-dungeon-turn-time-accounting.md) | EXP-002 Dungeon Turn / Time Accounting | Complete |
 | [ISSUE-005](ISSUE-005-exp-001-dungeon-wandering-monster-check.md) | EXP-001 Dungeon Wandering-Monster Check | Complete |
+| [ISSUE-006](ISSUE-006-cluster-001-cross-card-integration.md) | CLUSTER-001 Cross-Card Integration | Complete |
+| [ISSUE-007](ISSUE-007-cluster-001-dungeon-exploration-time.md) | CLUSTER-001 Dungeon Exploration Time | Complete |
