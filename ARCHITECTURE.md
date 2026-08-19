@@ -478,6 +478,8 @@ historical-rules implementation
 
 **`CLUSTER-001` HISTORICAL-RULES IMPLEMENTATION: `AUTHORIZED` — 2026-08-18.** This authorization applies only to the human-approved `EXP-001` + `EXP-002` `CLUSTER-001` boundary and its approved implementation plan (`docs/technical/CLUSTER-001_IMPLEMENTATION_PLAN.md`). It does not authorize implementation of `EXP-004`, another Rule Card, or another cluster.
 
+**`CLUSTER-001` IMPLEMENTATION / INTEGRATION: `VERIFIED` — 2026-08-18.** The authorized `EXP-001` + `EXP-002` `CLUSTER-001` implementation is complete and verified. Steps 1–4 of the approved implementation plan and their required completion records (`docs/completion-records/ISSUE-003` through `ISSUE-006`, summarized in `ISSUE-007`) are complete, and the cross-card integration gate passes using the real production components. This does not authorize or select another cluster; subsequent historical-rules work must independently satisfy the existing cluster workflow and governance gates above, exactly as before. The general Pre-Code Development Gate (§16) and the per-cluster Rules Baseline Migration Gate requirement are unaffected and remain active project-wide.
+
 ## 16. Pre-Code Development Gate
 
 Production code must not begin — including Issue 1 (§15) — until a human has reviewed and approved each of the following foundational items:
