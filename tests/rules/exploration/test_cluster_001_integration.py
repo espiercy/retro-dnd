@@ -93,23 +93,16 @@ def test_scenario_1_ordinary_wandering_trigger() -> None:
     assert arrival_3 == ArrivalResult(occurred=True)
     assert cadence.pending_arrival is False
     # Game Turn 3 is preempted: EXP-002 does NOT produce ordinary credit
-    # #3 for it, and EXP-001.advance() is NOT called for it.
-
-    # DungeonTimeAccounting has no public getter for its running count
-    # (by design -- see turn_credit.py/dungeon_turn_time_accounting.py's
-    # own "no history beyond the running count" contract), so its state
-    # through the preempted turn is proven indirectly but rigorously:
-    # the next *real* Game Turn's own credit must continue the sequence
-    # from 2 (yielding 3), not from an already-advanced 3 (which would
-    # yield 4) -- proving the arrival itself generated no dungeon-turn
-    # credit and DungeonTimeAccounting remained at turn_number 2 through
-    # the preempted turn.
-    arrival_4 = cadence.resolve_arrival()
-    assert arrival_4 == ArrivalResult(occurred=False)
-    credit_4 = accounting.complete_ordinary_turn()
-    assert credit_4 == TurnCredit(turn_number=3, origin=TurnCreditOrigin.ORDINARY)
-    result_4 = cadence.advance(credit_4, rng=rng)
-    assert result_4.outcome is CheckOutcome.NOT_DUE  # fresh cadence period after the trigger
+    # #3 for it, and EXP-001.advance() is NOT called for it. Once
+    # resolve_arrival() reports occurred=True, the Game Turn Checklist
+    # has been left for encounter handling -- CLUSTER-001 does not own,
+    # and this scenario does not assume, that downstream encounter's
+    # resolution procedure. This scenario's approved responsibility ends
+    # here: a wandering arrival itself produces no ordinary Game-Turn
+    # credit, and the preempted Game Turn never reaches ordinary
+    # completion. Any future ordinary-credit numbering depends on
+    # whatever authoritative encounter accounting occurs before ordinary
+    # exploration resumes, which is outside this scenario's scope.
 
 
 # --- Scenario 2: ordinary no-trigger ----------------------------------------
@@ -279,8 +272,11 @@ def test_scenario_5_heightened_transition() -> None:
     )
     assert result_2.outcome is CheckOutcome.NO_TRIGGER
     assert result_2.roll is not None and result_2.roll.total == 3
-    # Reset here is from the executed check itself (Simulator Ruling B),
-    # not merely because heightened mode began.
+    # The tally resets because this due check actually executes, not
+    # because heightened mode was entered -- the normal/heightened
+    # transition behavior itself is approved Simulator Ruling C; this is
+    # not the suspended/deferred-check collapse governed by Ruling B
+    # (no encounter-derived credits are involved in this scenario).
     assert cadence.turns_since_last_check == 0
 
     # Heightened mode ends. Next ordinary Game Turn: tally -> 1, not due
