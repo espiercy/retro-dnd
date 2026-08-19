@@ -37,9 +37,19 @@ integration with `EXP-002` are explicitly **not** part of this issue.
 **Created:**
 - `src/rules/exploration/dungeon_wandering_monster_check.py`
 - `tests/rules/exploration/test_dungeon_wandering_monster_check.py`
-- This completion record.
+- `docs/completion-records/ISSUE-005-exp-001-dungeon-wandering-monster-check.md`
+  (this record).
 
-**Modified:** none. (`src/rules/exploration/turn_credit.py`,
+**Modified:**
+- `docs/completion-records/INDEX.md`
+- `docs/rules/exploration/dungeon_wandering_monster_check.md`
+- `docs/rules/INVENTORY.md`
+- `docs/rules/clusters/CLUSTER-001-dungeon-exploration-time.md`
+- `docs/technical/CLUSTER-001_IMPLEMENTATION_PLAN.md`
+
+These documentation changes record the already-human-approved
+implementation's completion/lifecycle state; they do not alter the
+reviewed production mechanics or tests. (`src/rules/exploration/turn_credit.py`,
 `src/rules/exploration/dungeon_turn_time_accounting.py`, and their tests
 from `ISSUE-003`/`ISSUE-004` are unchanged.)
 
