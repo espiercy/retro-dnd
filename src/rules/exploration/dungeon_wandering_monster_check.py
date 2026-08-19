@@ -190,12 +190,12 @@ class WanderingMonsterCadence:
         if not due:
             return WanderingCheckResult(outcome=CheckOutcome.NOT_DUE, roll=None)
 
-        # A due ordinary period has been identified. Determine whether
-        # this call will actually execute a roll *before* mutating any
-        # state, so a malformed heightened_chance_level that would
-        # actually be used fails cleanly, with no reset and no RNG
-        # consumption (mirrors this project's established RNG-validation
-        # convention: a rejected call never perturbs state).
+        # A due ordinary period has been identified. Validate an active,
+        # actually-used heightened chance before consuming RNG or
+        # consuming/resetting the due period. The authoritative credit's
+        # unconditional cadence advance (above) has already occurred and
+        # is preserved regardless of this validation's outcome — only
+        # the due-period reset and any RNG consumption are guarded by it.
         will_execute = not skip_signal
         if heightened_checking and will_execute:
             _validate_heightened_chance_level(heightened_chance_level)

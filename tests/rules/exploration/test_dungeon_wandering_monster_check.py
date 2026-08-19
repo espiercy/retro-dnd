@@ -11,6 +11,7 @@ from rng import ScriptedRNG, SeededRNG
 from rules.exploration.dungeon_wandering_monster_check import (
     ArrivalResult,
     CheckOutcome,
+    WanderingCheckResult,
     WanderingMonsterCadence,
 )
 from rules.exploration.turn_credit import TurnCredit, TurnCreditOrigin
@@ -361,14 +362,22 @@ def test_exp001_31_no_credit_supplied_means_advance_is_simply_not_invoked() -> N
 
 
 def test_exp001_32_exactly_one_roll_per_performed_check() -> None:
-    rng = ScriptedRNG([1, 2])  # exact length: two due checks need exactly two values
+    # Non-triggering results (2, 3): this is an RNG-consumption test, not
+    # a trigger/arrival test, and must not leave pending_arrival set
+    # without an intervening resolve_arrival() call -- doing so would
+    # violate the Rule Card's valid-sequencing contract for the later
+    # advance() calls below (trigger/arrival sequencing is covered
+    # separately by EXP001-12..17).
+    rng = ScriptedRNG([2, 3])  # exact length: two due checks need exactly two values
     cadence = WanderingMonsterCadence()
     cadence.advance(_ordinary(1), rng=rng)
     result1 = cadence.advance(_ordinary(2), rng=rng)
     cadence.advance(_ordinary(3), rng=rng)
     result2 = cadence.advance(_ordinary(4), rng=rng)
-    assert result1.roll is not None and result1.roll.total == 1
-    assert result2.roll is not None and result2.roll.total == 2
+    assert result1.outcome is CheckOutcome.NO_TRIGGER
+    assert result1.roll is not None and result1.roll.total == 2
+    assert result2.outcome is CheckOutcome.NO_TRIGGER
+    assert result2.roll is not None and result2.roll.total == 3
 
 
 def test_exp001_33_arrival_and_encounter_derived_credits_consume_zero_rolls() -> None:
@@ -384,16 +393,40 @@ def test_exp001_33_arrival_and_encounter_derived_credits_consume_zero_rolls() ->
 
 
 def test_exp001_34_determinism_with_seeded_rng() -> None:
-    def run() -> list[tuple[CheckOutcome, int | None]]:
+    # Records the actual immutable mechanical results (WanderingCheckResult,
+    # ArrivalResult) rather than a reduced (outcome, roll total) summary --
+    # both are frozen dataclasses with field-based equality, and
+    # WanderingCheckResult.roll embeds the complete RollResult (itself a
+    # frozen dataclass), so comparing these sequences proves equality of
+    # CheckOutcome, the full RollResult (expression, dice, die_size,
+    # modifier, sequence_number, total), and ArrivalResult -- not merely
+    # roll totals. A positive trigger is not required for this test;
+    # trigger/arrival-positive behavior is covered separately by
+    # EXP001-12..17.
+    def run() -> list[WanderingCheckResult | ArrivalResult]:
         rng = SeededRNG(seed=12345)
         cadence = WanderingMonsterCadence()
-        credits = [_ordinary(1), _ordinary(2), _encounter_derived(3), _ordinary(4), _ordinary(5)]
-        results = []
-        for credit in credits:
-            result = cadence.advance(credit, rng=rng)
-            roll_total = result.roll.total if result.roll is not None else None
-            results.append((result.outcome, roll_total))
-        return results
+        history: list[WanderingCheckResult | ArrivalResult] = []
+
+        def ordinary_turn(turn_number: int) -> None:
+            # Beginning-of-Game-Turn: resolve any pending arrival first,
+            # per the Rule Card's valid-sequencing contract. If arrival
+            # occurs, this turn's own Procedure A is preempted and must
+            # not run.
+            arrival = cadence.resolve_arrival()
+            history.append(arrival)
+            if arrival.occurred:
+                return
+            history.append(cadence.advance(_ordinary(turn_number), rng=rng))
+
+        ordinary_turn(1)
+        ordinary_turn(2)
+        # An encounter-derived credit is not a Game-Turn boundary -- no
+        # resolve_arrival() call precedes it.
+        history.append(cadence.advance(_encounter_derived(3), rng=rng))
+        ordinary_turn(4)
+        ordinary_turn(5)
+        return history
 
     assert run() == run()
 
@@ -427,6 +460,18 @@ def test_supplemental_malformed_heightened_chance_level_bool_rejected() -> None:
         cadence.advance(
             _ordinary(1), rng=rng, heightened_checking=True, heightened_chance_level=True
         )
+
+
+def test_supplemental_malformed_heightened_chance_level_non_int_rejected() -> None:
+    rng = ScriptedRNG([])  # must not be consumed
+    cadence = WanderingMonsterCadence()
+    with pytest.raises(ValueError, match="heightened_chance_level"):
+        cadence.advance(
+            _ordinary(1), rng=rng, heightened_checking=True, heightened_chance_level="2"  # type: ignore[arg-type]
+        )
+    # The authoritative credit's unconditional cadence advance has
+    # already occurred and is preserved; no due-period reset occurred.
+    assert cadence.turns_since_last_check == 1
 
 
 def test_supplemental_irrelevant_heightened_chance_level_ignored_when_inactive() -> None:
