@@ -26,7 +26,11 @@ EVIDENCE COLLECTION
         ↓
 WHOLE-SOURCE CROSS-REFERENCE SEARCH
         ↓
+PRIMARY-SOURCE OBJECT / TABLE COMPLETENESS AUDIT   ◄── §9.1 (added by DEC-0010)
+        ↓
 FALSIFICATION / CHALLENGE PASS
+        ↓
+INDEPENDENT EVIDENCE-COMPLETENESS REVIEW           ◄── §10.1 (added by DEC-0010)
         ↓
 HUMAN EVIDENCE REVIEW                      ◄── hard gate (§11)
         ↓
@@ -164,6 +168,96 @@ Record, in the evidence report:
 - every cross-reference found, including ones that turned out not to matter (a negative result is still evidence that the search was actually performed);
 - every chapter/section inspected as part of this pass.
 
+## 9.1 Mandatory Primary-Source Object / Table Completeness Audit
+
+> Added by `docs/decisions/DEC-0010-primary-source-completeness-audit.md` (2026-08-23), after `CLUSTER-002` Stage A produced an apparently thorough whole-source cross-reference report while never opening the Elf Experience Table (RC p. 26) — the object that mechanically governs the very question being escalated.
+
+**OCR text and full-text search are locators, not proof of coverage.** Completing §9's keyword pass does **not** establish that the relevant primary-source material has been reviewed. Full-text search tells you where to look. It does not tell you that you have looked.
+
+This matters because mechanically authoritative content routinely lives in objects that keyword search over linearized text cannot reliably reach:
+
+```text
+tables                    class/monster/item/spell stat blocks
+charts                    experience tables
+saving-throw tables       attack tables
+equipment tables          Weapon Mastery tables
+spell tables              sidebars and summary boxes
+chapter summaries         appendices
+indexes                   table indexes
+cross-reference lists     page-layout structures OCR flattens
+```
+
+A table's meaning often lies in its **column relationships** and in **where its rows stop** — neither of which survives linearization, and neither of which a substring query can interrogate.
+
+### Required audit contents
+
+For every Rule Card or coherent research responsibility, Stage A must explicitly inspect and account for all potentially governing primary-source objects:
+
+| # | Object class | Requirement |
+|---|---|---|
+| A | **Table of Contents** | Identify every chapter/section plausibly relevant to the mechanic. |
+| B | **Tables Index / List of Tables** | Search for every table whose title or subject may bear on the mechanic. This is a completeness instrument, not a citation convenience. |
+| C | **Named tables** | Inspect every relevant table **directly**. |
+| D | **Stat blocks** | Where relevant, inspect class/monster/item/spell blocks separately from surrounding prose. |
+| E | **Summary boxes** | Do not assume summary material duplicates detailed prose correctly. It demonstrably sometimes does not. |
+| F | **Detailed prose** | Read the complete governing section, not OCR search snippets. |
+| G | **Cross-references** | Follow every explicit "see Chapter X", "see table", "see page" reference. |
+| H | **Appendices / index entries** | Use as completeness locators; follow any mechanically relevant reference. |
+| I | **Duplicate/parallel presentations** | When the same mechanic appears in a summary, a table, a class entry, a later chapter, a high-level procedure, and/or an optional rule, **record each separately**. Do not treat any one representation as automatically authoritative over another. |
+
+### A failed search is not evidence of absence
+
+Record negative findings as *"not located by the searches performed"* — never as a positive claim that the source does not address the question — unless the objects in class A–I above have themselves been inspected and found silent. Converting a search miss into a finding of absence is the specific error that produced `DEC-0010`.
+
+### Consequence for alternate-source escalation
+
+The precise RC gap statement §15 requires **may not** be written on the strength of keyword-search exhaustion. This audit must be performed for that responsibility first. Escalating to an alternate source on a manufactured precondition is a governance breach, not merely a research miss.
+
+## 9.2 Visual Verification of Mechanically Significant Objects
+
+Mechanically significant tables and structured objects must be verified against the **visual page or PDF**, not OCR alone. Visual verification is required whenever:
+
+- the object governs numbers or progression;
+- column relationships matter;
+- OCR formatting is degraded or the object appears mangled;
+- the object conflicts with prose, or prose conflicts with it;
+- a stat block, chart, or checklist is mechanically operative;
+- OCR may have flattened columns, lost alignment, or dropped rows.
+
+OCR remains fully usable for search and navigation. It must not be the **sole** evidence for a mechanically significant object where a visual page is available.
+
+If the current access method cannot provide usable page images:
+
+```text
+STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED
+```
+
+Do not declare evidence complete. This is a hard gate on the same footing as §4's `STOP — PRIMARY SOURCE ACCESS REQUIRED`.
+
+## 9.3 Primary-Source Coverage Checklist (required packet section)
+
+Every Stage-A evidence packet must contain a section titled **Primary-Source Coverage Checklist** recording:
+
+- relevant TOC sections inspected;
+- Tables Index entries inspected;
+- named tables inspected;
+- structured stat blocks inspected;
+- relevant chapter sections read in full;
+- cross-references followed;
+- appendices/index entries checked where applicable;
+- visual-page verification completed for significant objects, with page numbers;
+- any potentially relevant object **deliberately excluded, with the reason**.
+
+The purpose is auditability: a future reviewer must be able to ask *"what primary-source objects could govern this mechanic, and did the researcher actually inspect each one?"* and get a checkable answer.
+
+## 9.4 Research-Risk Classification
+
+**If mechanically significant tables drive the procedure, the responsibility is high-risk research**, and §9.2 visual table verification plus §10.1 independent completeness review are **mandatory, not discretionary**.
+
+Responsibilities presumed high-risk include: character advancement, combat, saving throws, Weapon Mastery, spells, treasure, monster statistics, monster generation, equipment, encumbrance/movement, experience, and class progression.
+
+No scoring framework is introduced; the rule above is the whole test.
+
 ## 10. Mandatory Falsification Pass
 
 Before proposing any mechanical conclusion of consequence, actively attempt to prove it wrong or incomplete. For every consequential tentative interpretation, record:
@@ -196,6 +290,44 @@ MORE PRIMARY RESEARCH REQUIRED
 ```
 
 Do not immediately replace the rejected interpretation with another speculative model merely to finish the artifact — that reproduces the exact failure mode this protocol exists to prevent. Report the rejection and what would be needed to resolve it, and stop.
+
+## 10.1 Independent Evidence-Completeness Review
+
+> Added by `DEC-0010`.
+
+Research-agent self-review is not sufficient. The researcher who failed to open an object is, by construction, the person least likely to notice its absence.
+
+Before Human Evidence Review, Stage A must include a **distinct completeness-review pass** whose objective is to **identify relevant primary-source material the original research pass may have failed to inspect**.
+
+This is **not** another synthesis pass, and **not** a confirmation pass. It must begin from:
+
+```text
+the source's own Table of Contents
+the source's own Tables Index
+relevant chapter headings
+relevant structured tables / stat blocks
+```
+
+— **not** from the evidence packet. Starting from the packet reproduces the original pass's blind spots.
+
+The reviewer challenges, at minimum:
+
+```text
+Were all relevant tables located?
+Were all relevant stat blocks checked?
+Did the Tables Index reveal anything absent from the packet?
+Did a later chapter restate the mechanic?
+Did OCR flatten, mangle, or drop a meaningful table?
+Did the researcher treat prose as complete when an operational table exists?
+Did the packet follow all explicit cross-references?
+Was any negative finding asserted as absence rather than as "not located"?
+```
+
+The reviewer is **encouraged to discover omissions rather than confirm the original work**. A completeness review that finds nothing must say what it looked for and where, not merely that it agrees.
+
+Record the result in the evidence packet's Coverage Checklist (§9.3) or in a dedicated completeness-audit artifact (§12), whichever is cleaner for the responsibility in question.
+
+**Do not certify completeness merely because no new keyword hits appear.**
 
 ## 11. Required Stage-A Evidence Report Contents
 
@@ -350,6 +482,7 @@ An agent performing rules research under this protocol must stop under each of t
 | Condition | Stop message |
 |---|---|
 | Primary source cannot be accessed | `STOP — PRIMARY SOURCE ACCESS REQUIRED` |
+| Usable page images are unavailable for a mechanically significant table or structured object (§9.2) | `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED` |
 | The governing procedure has not actually been located, even if a related value has | `STOP — PRIMARY PROCEDURE NOT YET ESTABLISHED` |
 | Two or more RC passages conflict and have not been reconciled | `STOP — INTERNAL SOURCE CONFLICT REQUIRES REVIEW` |
 | The falsification pass (§10) rejects a tentative interpretation | `STOP — MORE PRIMARY RESEARCH REQUIRED` |
@@ -368,4 +501,6 @@ An agent performing rules research under this protocol must stop under each of t
 
 ## 19. Status
 
-Adopted `docs/decisions/DEC-0009-evidence-first-rule-research-protocol.md`, `APPROVED`, 2026-08-16. This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full — expected to produce a committed `docs/rules/evidence/EXP-001-evidence.md` Stage-A artifact, not a rewritten Rule Card, as its first deliverable.
+Adopted `docs/decisions/DEC-0009-evidence-first-rule-research-protocol.md`, `APPROVED`, 2026-08-16.
+
+**Amended 2026-08-23 by `docs/decisions/DEC-0010-primary-source-completeness-audit.md`**, which added §9.1–§9.4 (object/table completeness audit, visual verification, coverage checklist, research-risk classification), §10.1 (independent evidence-completeness review), the corresponding Stage-A sequence steps in §3, and the `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED` hard stop in §17. `DEC-0009` is not superseded and its protections are unchanged; `DEC-0010` strengthens Stage A only. This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full — expected to produce a committed `docs/rules/evidence/EXP-001-evidence.md` Stage-A artifact, not a rewritten Rule Card, as its first deliverable.

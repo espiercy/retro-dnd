@@ -1,5 +1,7 @@
 # Stage-A Evidence: EXP-001 — Dungeon Wandering-Monster Check
 
+> **Completeness-audit note (2026-08-23).** This packet was produced before `docs/decisions/DEC-0010-primary-source-completeness-audit.md` introduced the mandatory primary-source object/table completeness audit and visual-verification requirement. It has since been audited against that standard — see `docs/rules/evidence/CLUSTER-001-completeness-audit.md`. **Outcome: no specification-affecting omission and no new internal source conflict were found**; four Category-B completeness gaps were recorded (the `1 day = 144 turns` row of the Measurements of Game Time Table; the "when traveling" qualifier and the nighttime 1d12 path in the Chance of Encounter Table; and the visibility-dependent Encounter Distances Table). This packet's conclusions are unchanged; its coverage claims should be read alongside that audit.
+>
 > **This is a Stage-A evidence artifact, not a Rule Card.** Produced under `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` (`DEC-0009-evidence-first-rule-research-protocol.md`). It is not mechanically authoritative, is not `APPROVED`, and is not permission to implement anything. `EXP-001` remains `REVALIDATION_REQUIRED`; `docs/rules/exploration/dungeon_wandering_monster_check.md` was not read or modified during this task.
 
 ## 1. Research Scope
