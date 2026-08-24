@@ -7,10 +7,12 @@ DEC-0010
 Primary-Source Completeness Audit Required for Rule Research
 
 ## Status
-Approved
+PROPOSED — AWAITING HUMAN APPROVAL
 
 ## Date
 2026-08-23
+
+> **Lifecycle note.** This record is **not approved and is not active authority.** It was previously drafted with `Status: Approved`; that was an error — an implementation agent has no authority to approve a project-wide process decision (`DEVELOPMENT_WORKFLOW.md` §9, `AGENTS.md` §12). The repository's decision-record lifecycle (§9.4) had no prior pre-approval status, so this record adopts `PROPOSED — AWAITING HUMAN APPROVAL`, aligned with the Rule Card lifecycle's existing `AWAITING_APPROVAL` term. Until a human project owner approves it, `DEC-0009` and the pre-amendment protocol remain the operative process, and the amendments this record proposes are drafted-but-not-in-force.
 
 ## Context
 
@@ -54,6 +56,18 @@ Specifically:
 
 **8. Alternate-source escalation requires object-level RC exhaustion.** The precise RC gap statement required by `RULE_CARD_RESEARCH_PROTOCOL.md` §15 may not be written on the basis of keyword-search exhaustion alone; the completeness audit for that responsibility must have been performed first.
 
+**9. Guardrail A — no guessed-answer searches as substitutes for locating governing objects.** A researcher may not search for a guessed *rendering of an answer* — a dice expression, XP total, level title, formula, numeric total, or expected table-cell representation — in place of locating the governing source object. Such searches are legitimate **later**, as supplementary or falsification tools. They may never establish source completeness. A failed guessed-formula search is evidence about the query, not evidence that the rule, table, or value is absent. *(Motivating defect: the `9d6 + 1` Elf query that returned only Ch. 14 Lich material.)*
+
+**10. Guardrail B — negative findings must describe the research performed.** Distinguish `"Not located after inspecting X, Y, Z"` from `"The Rules Cyclopedia contains no such rule."` The stronger source-property claim is permitted only after the relevant governing objects have actually been enumerated and inspected sufficiently to support it. Exhausted keyword searches alone never establish absence.
+
+**11. Guardrail C — per-class / per-entity table attestation.** Where a Rule Card concerns a subject possessing a named class table, experience table, saving-throw table, monster table or stat block, spell table, item table, equipment table, progression table, or analogous per-entity structured object, the evidence packet must explicitly record that object as `OPENED`, `VISUALLY INSPECTED`, and `DISPOSITIONED` — or explicitly excluded with a stated reason. **A named table may not silently exist outside the packet's coverage checklist.** *(This guardrail alone would have caught the Elf Experience Table immediately.)*
+
+**12. Guardrail D — additional mandatory high-risk triggers.** Beyond the table-heavy classification in item 6, the following independently trigger heightened review:
+   - **a per-class/per-entity table exists for the researched subject**;
+   - **searches return only out-of-domain or obviously irrelevant hits.** The required response to (b) is to **question the search strategy before drawing any conclusion about the source**. Lich results from an Elf progression query are evidence that the query is poorly targeted — never evidence that Elf material is absent.
+
+**13. Structure-first ordering of research operations.** Full-text search retains its value as a locator, cross-reference finder, and falsification tool. It is not the primary completeness mechanism. The governing order of operations is source structure → finding aids → object inventory → visual inspection → governing prose → cross-references → whole-source search → falsification → independent completeness review → human evidence review.
+
 ## Rationale
 
 The failure mode `DEC-0009` addressed was *stopping too early in the pipeline* — synthesizing before evidence closed. The failure mode this record addresses is different and was not covered: *believing evidence had closed when an entire class of source object had never been opened*.
@@ -66,7 +80,8 @@ The cost is real: page-image inspection is slower than text search. That cost is
 
 ## Consequences
 
-- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` gains the object/table completeness audit, the visual-verification requirement, the coverage-checklist requirement, the independent completeness-review pass, the research-risk classification, and a new hard-stop condition. Its Stage-A sequence diagram is amended accordingly.
+- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` gains the object/table completeness audit, the visual-verification requirement, the coverage-checklist requirement, the independent completeness-review pass, the research-risk classification, Guardrails A–D, the structure-first operations order, the within-source evidence-type guidance, and a new hard-stop condition. Its Stage-A sequence diagram is amended accordingly. **These amendments take effect only on human approval of this record.**
+- **Prior BECMI research disposition (human ruling, 2026-08-23):** the BECMI material produced from the invalid RC-exhaustion conclusion **must not be used** as current evidence or as synthesis input. It is preserved in session/branch history for research provenance only, and is not deleted. If alternate-source research is later properly justified after genuine RC object-level exhaustion, it must be **performed anew** from the corrected RC evidence state; no conclusion may be inherited merely because it was already generated.
 - Stage A becomes slower and more expensive. This is intended.
 - `CLUSTER-001`'s and `CLUSTER-002`'s existing evidence were audited against this standard as part of adopting it; results are recorded in `docs/rules/evidence/CLUSTER-001-completeness-audit.md` and `docs/rules/evidence/CLUSTER-002-completeness-audit.md`.
 - `CLUSTER-002`'s Human Evidence Review clearance is suspended pending review of that audit. `CLUSTER-002` Stage B is paused.

@@ -175,22 +175,65 @@ Newly inspected structural objects confirm caps the packets asserted from prose:
 
 The **Character Class and Hit Dice Table** (p. 8) is confirmed exactly as recorded, including Druid's "*Does not apply*". The p. 8 "Roll for Hit Points" prose confirms the `CHAR-003 → CHAR-007` dependency in RC's own words (it directs the reader to the Bonuses and Penalties for Ability Scores Table for the Constitution adjustment). The p. 10 Constitution write-up confirms the 1-hit-point-per-roll floor and the high-level cutoff.
 
-## 5. Objects Not Yet Visually Verified — remaining audit work
+## 5. Outstanding-Object Disposition — completed 2026-08-23
 
-Recorded honestly rather than certified. Under §9.2 these require visual verification before `CLUSTER-002` Stage A can be certified complete:
+Every object listed as outstanding by the first audit pass is now dispositioned. **No `outstanding object class` remains.**
 
-| Object | Location | Bears on |
-|---|---|---|
-| Character Classes and Ability Requirements Table | p. 7 | `CHAR-002` (its single governing table), `CHAR-001` |
-| Maximum Hit Points (Humans) Table | p. 129 | `CHAR-003` |
-| Maximum Hit Points (Demihumans) Table | p. 129 | `CHAR-003`, Finding 3 |
-| Ch. 1 "Hit Dice and Hit Points" / "Maximum Levels and Experience Points" | p. 12 | `CHAR-003`, Finding 4's outlier statement |
-| Halfling / Cleric / Fighter / Magic-User / Thief / Druid / Mystic Experience Tables | pp. 14, 16, 19, 22, 27, 29 | `CHAR-002`, `CHAR-003` |
-| Ch. 13 "Creating Characters", "Ability Checks" | pp. 143, 145 | `CHAR-001`, `CHAR-007` |
-| Ch. 19 "Ability Scores and Saving Throws" | p. 266 | `CHAR-007`/`COMBAT-004` boundary |
-| Ch. 10 "Creating High-Level PCs" Step 6 | pp. 130–131 | `CHAR-001`, `CHAR-003` |
+| Object | Location | Disposition | Result |
+|---|---|---|---|
+| **Character Classes and Ability Requirements Table** | p. 7 | **OPENED / VISUALLY INSPECTED** | All nine rows, three columns. **No footnotes, symbols, or columns lost in OCR.** All `CHAR-002` claims **CONFIRMED** |
+| **Adjust Ability Scores** box + numbered rules + worked examples | p. 7 | **OPENED / VISUALLY INSPECTED** | All four trade rules and both worked examples **CONFIRMED** |
+| **Maximum Hit Points (Humans) Table** | p. 129 | **OPENED / VISUALLY INSPECTED** | Cleric 54/27/87/97/108; Fighter 72/27/111/131/153; Magic-user 36/27/69/79/90; Thief 36/27/75/95/117 — **CONFIRMED** |
+| **Maximum Hit Points (Demihumans) Table** | p. 129 | **OPENED / VISUALLY INSPECTED** | Dwarf 72/27/+9/108; **Elf 54/27/+2/83**; Halfling 48/24/—/72. Column header reads literally "Lvl 10-12", shared across rows — **CONFIRMED**, no OCR distortion |
+| Ch. 1 "Hit Dice and Hit Points" / "Maximum Levels and Experience Points" | p. 12 | **OPENED / VISUALLY INSPECTED** | Con-applies-only-to-rolled-dice **CONFIRMED**; the "dwarves and elves… 12th level" outlier **CONFIRMED AS GENUINELY PRINTED** |
+| **Experience Bonuses and Penalties Table** | p. 12 | **OPENED / VISUALLY INSPECTED** | New structure captured — see Finding 9 |
+| **Halfling Experience Table** + Halfling Saving Throws Table | p. 27 | **OPENED / VISUALLY INSPECTED** | Levels 1–8 then Attack Ranks A–K; save bands 1-3/4-6/**7-8**. Cap 8 **CONFIRMED** |
+| **Dwarf Experience Table** + Dwarf Saving Throws Table | p. 24 | **OPENED / VISUALLY INSPECTED** | Levels 1–12 then Ranks C–M; save bands cap **10-12**. Cap 12 **CONFIRMED** |
+| **Elf Experience Table** + Elf Saving Throws Table | p. 26 | **OPENED / VISUALLY INSPECTED** | See §2. Cap 10 **CONFIRMED** |
+| **Mystic Special Abilities Table** | p. 31 | **OPENED / VISUALLY INSPECTED** | Levels 1–16. Cap 16 **CONFIRMED** |
+| Ch. 13 "Creating Characters" | p. 145 | **OPENED / VISUALLY INSPECTED** | Both non-equivalent discard criteria and the switch provision **CONFIRMED AS PRINTED** |
+| Ch. 19 "Ability Scores and Saving Throws" | p. 266 | **OPENED / VISUALLY INSPECTED** | Six-ability mapping + `* Combined modifier cannot exceed +/− 3` **CONFIRMED**; boundary sentence **CONFIRMED** |
+| **Extended Experience Table** | p. 266 | **OPENED / VISUALLY INSPECTED** | **NEWLY DISCOVERED OBJECT** — see Finding 8 |
+| Ch. 10 "Creating High-Level Player Characters" Steps 1–8 | pp. 129–130 | **OPENED / VISUALLY INSPECTED** | **CONTRADICTS a `CHAR-001` negative finding** — see Finding 7 |
+| Cleric / Fighter / Magic-User / Thief Experience Tables | pp. 14, 16, 19, 22 | **EXCLUDED WITH REASON** | Human classes; cap 36 for all four is stated at p. 12 (visually verified) and corroborated per-class at pp. 13–22. Their table **schema** is confirmed by the three visually verified demihuman tables and by the Cleric/Fighter tables read in full as OCR table text, which retained their rows. No cap dispute exists for any human class. Risk assessed **low**; re-open if any human-class progression question arises |
+| Druid / Mystic Experience Tables | p. 29 | **EXCLUDED WITH REASON** | Druid cap 30 and Mystic cap 16 are each stated at p. 12 (visually verified); Mystic cap 16 independently confirmed by the Mystic Special Abilities Table (p. 31, visually verified). Druid is not reachable at character creation, so its progression table bears on `ADV-002`, not on this cluster |
+| Ch. 13 "Ability Checks" | p. 143 | **EXCLUDED WITH REASON** | Short prose, **no structured object, no table, no columns**; read in full in context via text. Fails every §9.2 visual-verification trigger. Risk assessed **low** |
 
-This audit deliberately prioritized the objects bearing on the triggering defect and on the most mechanically decisive tables. It does **not** claim `CLUSTER-002` Stage-A completeness.
+## 5.1 Additional Findings from the Outstanding-Object Pass
+
+### Finding 7 — `CHAR-001`'s "no non-random alternative" negative finding is CONTRADICTED
+**Category: B — INCOMPLETE BUT NON-CONTRADICTORY as to the 1st-level procedure; but the packet's negative claim is falsified.**
+
+`CHAR-001-evidence.md` §7 records as a negative result: *"no non-random ability-generation alternative; no 'roll 4d6 drop lowest'-style variant."*
+
+RC p. 130, "Creating High-Level Player Characters," **Step 2: Generate Ability Scores**, visually verified, gives **two** alternatives:
+
+- **First Method: Rolling And Assigning Scores** — the player rolls 3d6 **eight times**, keeps the **six best scores**, and assigns them to abilities **in whatever order he chooses**.
+- **Second Method: Point Allocation** — the DM gives a point total (60 + 5d6, or an equal allotment of at least 60 and no more than 90) which the player distributes; the 3–18 range still applies.
+
+The second is an explicitly **non-random** generation method. Both are scoped to creating characters above 1st level, so `CHAR-001`'s **baseline 1st-level procedure is unaffected**. But the packet's negative claim was stated unconditionally and is false as written — a textbook instance of the defect Guardrail B now prohibits.
+
+This also **resolves** `CHAR-001-evidence.md` open question 2 ("whether Ch. 10 high-level creation alters the ability-score step"): **yes, materially.**
+
+### Finding 8 — Extended Experience Table (p. 266) never dispositioned
+**Category: B — INCOMPLETE BUT NON-CONTRADICTORY.**
+
+A newly discovered named object, listed in the Tables Index as `Extended Experience Table . 266` and never dispositioned by Stage A. It tabulates Dwarf / Elf / Halfling / Mystic XP for levels **1–36** under the Chapter 19 "Demihuman and Mystic Experience Levels" variant.
+
+That variant is **NOT ENABLED for V1** (`DEC-0008`), so it governs nothing in current scope. It is recorded because (a) a named table must not sit outside the coverage checklist, and (b) its accompanying text is precise about per-level hit points under the variant (e.g. the dwarf gets 2, not 3, per level; Constitution still does not apply), which future `ADV-002`/`CHAR-003` work must not confuse with the core rules.
+
+**It does not bear on the core-rules Elf `+1`/`+2` conflict and must not be used to resolve it.**
+
+### Finding 9 — Experience Bonuses and Penalties Table carries per-class structure OCR flattened
+**Category: B — INCOMPLETE BUT NON-CONTRADICTORY.** Belongs to `ADV-001`.
+
+Visually verified at p. 12, the table is not uniform across classes:
+
+- **Elf** uses a *conjunctive two-ability* rule (Str 13-18 **and** Int 13-15 → +5%; Str 13-18 **and** Int 16-18 → +10%).
+- **Halfling** distinguishes **or** from **and** (either → +5%; both → +10%).
+- **Mystic**'s penalties are **halved** relative to every other class (−10% / −5% rather than −20% / −10%).
+
+`CHAR-002` correctly treats prime-requisite XP effects as an `ADV-001` boundary pointer, so this is not a `CHAR-002` defect. It is recorded as newly captured structure for `ADV-001`, and as further evidence that these tables carry relationships linearization destroys.
 
 ## 6. Independent Completeness Pass
 
@@ -206,19 +249,89 @@ Started from the RC Table of Contents and Tables Index, not from the packets.
 
 **Not certified on keyword grounds.** Every claim of verification above names a page that was read as an image.
 
+## 6.2 Independent Completeness Pass — Second Round (post-remediation)
+
+**Procedural separation.** Performed after the §5 outstanding-object work closed, restarting from the Rules Cyclopedia's **Table of Contents** and **Tables Index** and from the per-class table listings — deliberately **not** from §3's inventory, §5's disposition table, or the four evidence packets. Method: re-read the Tables Index end-to-end, extract every entry whose title names an ability, a class, hit points, experience, or a saving throw, and check each against what the audit already holds.
+
+**Per responsibility:**
+
+| | `CHAR-001` | `CHAR-002` | `CHAR-003` | `CHAR-007` |
+|---|---|---|---|---|
+| **Additional objects discovered** | Ch. 10 Step 2 alternative generation methods (p. 130) | Extended Experience Table (p. 266) | Extended Experience Table (p. 266); Ch. 19 elf/dwarf variant HP statements | Experience Bonuses table structure (p. 12, → `ADV-001`) |
+| **Objects independently confirmed** | p. 7 Adjust box; p. 145 discard/switch | p. 7 requirements table; three demihuman experience tables | p. 8 HD table; p. 129 both max-HP tables; p. 12 progression prose | pp. 9–10 all four tables; p. 266 mapping |
+| **Omissions found** | **Yes — Finding 7** (negative claim falsified) | **None** | Reframing only (Finding 4); no new mechanic | **Yes — Finding 1** (citation) |
+| **Evidence conclusions changed?** | **Yes** — one negative finding struck; one open question resolved | **No** — all claims confirmed | **No mechanic changed**; conflict A reframed, conflict B unchanged | **No content change**; citation only |
+| **Completeness certifiable?** | **Yes**, after correction | **Yes** | **Yes**, after reframing | **Yes**, after citation fix |
+
+**Tables Index entries checked and dispositioned in this round** (beyond those already held): `Character Height and Weight Table . 12` (excluded — not an in-scope mechanic); `Armor Type and Armor Class Table . 8` (inspected on p. 8; `COMBAT-002` boundary); `Saving Throws Table: All Characters . 109` (excluded — `COMBAT-004`); `Attack Rolls Table . 106` (excluded — `COMBAT-002`); `Skill Slot Acquisition (Humans/Demihumans) Tables . 86` (excluded — `CHAR-012`); `Sample Skills Table . 82` (excluded — `CHAR-012`); `Levels of Weapon Mastery Table . 75` (excluded — `CHAR-011`); `Duration of Charm Table . 145` (inspected on p. 145; the NPC-Intelligence context `CHAR-001` cites); `Extended Experience Table . 266` (**newly captured**, Finding 8); every per-class Experience and Saving Throws Table (dispositioned in §5).
+
+**This pass did not merely re-affirm the first.** It falsified a `CHAR-001` negative finding and surfaced a named table (`Extended Experience Table`) that neither Stage A nor the first audit round held. That is the outcome an adversarial pass is supposed to produce.
+
+**Residual risk, stated plainly.** Both passes were executed by the same agent. Procedural separation (restart from finding aids, not from prior work) mitigates but does not eliminate correlated blind spots. A genuinely independent reviewer remains preferable, and the §5 reasoned exclusions (four human-class experience tables; two special-class tables; Ch. 13 Ability Checks prose) are the most likely place a further omission would hide.
+
+## 6.1 Negative-Finding Re-Audit (Guardrail B)
+
+Every negative claim across the four packets, classified by what actually supported it.
+
+| Packet | Claim | Basis | Disposition |
+|---|---|---|---|
+| `CHAR-001` | "no non-random ability-generation alternative; no roll-and-drop variant" | **B — keyword exhaustion** | **CONTRADICTED** by RC p. 130 (Finding 7). Must be struck |
+| `CHAR-001` | "no re-roll-individual-scores provision distinct from whole-character discard" | B | Rephrase: *not located after inspecting Ch. 1 pp. 6–8 and Ch. 13 p. 145* |
+| `CHAR-002` | "no ability-score *maximum* gating any class" | **A — object inspection** (p. 7 table now visually verified) | **STANDS** — the table's "Other Requirements" column contains only minimums |
+| `CHAR-002` | "no requirement expressed in adjustment terms" | **A — object inspection** | **STANDS** |
+| `CHAR-002` | "no Ch. 19 variant alters class eligibility" | **A** — Ch. 19 visually inspected (p. 266); its three sections do not touch eligibility | **STANDS** |
+| `CHAR-003` | "no hit-point reroll provision located" | B | Rephrase to research-operation claim |
+| `CHAR-003` | "no ability other than Constitution modifies hit points" | **A** — Abilities and Adjustments Table (p. 10) visually verified; Constitution is the only HP row | **STANDS** |
+| `CHAR-003` | "no HP variant in Ch. 19's enabled content" | **A** — p. 266 visually inspected | **STANDS**, with Finding 8 noted |
+| `CHAR-007` | "no seventh ability; no alternative adjustment table; no per-class variation of the shared table" | **A** — pp. 9–10 visually verified | **STANDS** |
+| `CHAR-007` | "no ability-score effect on initiative located" | B — Ch. 8 not searched exhaustively | Rephrase; flag for `COMBAT-006` |
+
+**Pattern:** every claim that **stands** does so because a governing object was inspected. Every claim requiring correction rested on keyword exhaustion. This is precisely the distinction Guardrail B encodes.
+
 ## 7. Status After This Audit
 
 ```text
-CHAR-001 Stage-A evidence:  PREVIOUSLY ACCEPTED — COMPLETENESS AUDIT PENDING
-CHAR-002 Stage-A evidence:  PREVIOUSLY ACCEPTED — COMPLETENESS AUDIT PENDING
-CHAR-003 Stage-A evidence:  PREVIOUSLY ACCEPTED — COMPLETENESS AUDIT PENDING
-CHAR-007 Stage-A evidence:  PREVIOUSLY ACCEPTED — COMPLETENESS AUDIT PENDING
-                            (citation correction required — Finding 1)
+CHAR-001 Stage-A evidence:  COMPLETENESS AUDITED — CORRECTION REQUIRED (Finding 7)
+CHAR-002 Stage-A evidence:  COMPLETENESS AUDITED — CONFIRMED, no correction required
+CHAR-003 Stage-A evidence:  COMPLETENESS AUDITED — CORRECTION REQUIRED (Finding 4 reframing)
+CHAR-007 Stage-A evidence:  COMPLETENESS AUDITED — CORRECTION REQUIRED (Finding 1 citation)
+
+Outstanding object classes:  NONE — all dispositioned (§5)
+Objects visually verified:   pp. 7, 8, 9, 10, 12, 24, 25, 26, 27, 31,
+                             87, 91, 92, 93, 129, 130, 145, 266
 
 Elf maximum level:          human-adjudicated at 10; not reopened
-Elf fixed HP +1 vs +2:      UNRESOLVED, deliberately
-BECMI escalation:           void as to authorization (§2)
+Elf fixed HP +1 vs +2:      UNRESOLVED, deliberately (all four statements
+                            now visually verified as printed)
+BECMI escalation:           void as to authorization; excluded from
+                            current evidence and synthesis (§2)
 
 CLUSTER-002 Stage B:        PAUSED
-CLUSTER-002 completeness:   AWAITING HUMAN REVIEW
+CLUSTER-002 completeness:   READY FOR HUMAN REVIEW
 ```
+
+## 8. Elf Level-Cap — Complete Evidence Record and Human Adjudication
+
+Recorded per direction. **The Chapter 1 p. 12 statement is real, printed, and is not erased from this record.**
+
+| RC location | Statement | Verified |
+|---|---|---|
+| Ch. 1, p. 12, "Maximum Levels and Experience Points" | "Dwarves and elves may not progress beyond **12th** level" | **Visually** |
+| Ch. 2, p. 25, Elf stat block | "Maximum Level: **10**" | **Visually** |
+| Ch. 2, p. 25, Elf prose | "An elf may only advance to **10th** level" | **Visually** |
+| Ch. 2, p. 25, Elf Special Abilities | "After reaching maximum level (**10th**)" | **Visually** |
+| **Ch. 2, p. 26, Elf Experience Table** | Level column enumerates **1–10**, then XP→Attack Ranks C–M with no level numbers | **Visually** |
+| **Ch. 2, p. 26, Elf Saving Throws Table** | Highest level band = **10** | **Visually** |
+| Ch. 10, p. 129 | "elves **10th** level" | **Visually** |
+
+**Characterization:** this is a **genuine Rules Cyclopedia textual inconsistency** — six statements at 10, one at 12 — not a research artifact and not a mere summary imprecision to be waved away.
+
+**Human ruling (2026-08-23):**
+
+```text
+For this project:
+    Elf maximum class level = 10
+    Further standard progression = Attack Ranks
+```
+
+**The p. 26 Elf Experience Table is the source of truth for Elf progression.** The operational resolution is established by human adjudication using the detailed Elf progression table and class material. **No alternate-source research is needed or permitted for this question.** Not reopened by this audit.

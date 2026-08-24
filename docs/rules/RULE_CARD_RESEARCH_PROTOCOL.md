@@ -170,7 +170,52 @@ Record, in the evidence report:
 
 ## 9.1 Mandatory Primary-Source Object / Table Completeness Audit
 
-> Added by `docs/decisions/DEC-0010-primary-source-completeness-audit.md` (2026-08-23), after `CLUSTER-002` Stage A produced an apparently thorough whole-source cross-reference report while never opening the Elf Experience Table (RC p. 26) — the object that mechanically governs the very question being escalated.
+> **Proposed by `docs/decisions/DEC-0010-primary-source-completeness-audit.md` (2026-08-23), which is `PROPOSED — AWAITING HUMAN APPROVAL`. §9.1–§9.6 and §10.1 take effect on approval of that record.** They were drafted after `CLUSTER-002` Stage A produced an apparently thorough whole-source cross-reference report while never opening the Elf Experience Table (RC p. 26) — the object that mechanically governs the very question being escalated.
+
+### 9.1.0 The recorded defect this section exists to prohibit
+
+Stated once, precisely, so the prohibited behavior is unambiguous:
+
+```text
+Stage A surfaced the Tables Index entry:  Elf Experience Table . 26
+The table was not opened.
+Stage B later substituted guessed formula searches (9d6 + 1, 9d6 + 2).
+Those searches returned only Ch.14 Lich material.
+The null/irrelevant result was promoted into an RC-exhaustion conclusion.
+That conclusion improperly licensed alternate-source (BECMI) escalation.
+```
+
+The point is not to shame prior research; it is to fix exactly which behaviors are now prohibited.
+
+### 9.1.1 Structure-first order of operations
+
+```text
+SOURCE STRUCTURE FIRST
+        ↓
+TOC / TABLES INDEX
+        ↓
+GOVERNING SOURCE-OBJECT INVENTORY
+        ↓
+VISUAL INSPECTION OF TABLES / STRUCTURED OBJECTS
+        ↓
+DETAILED GOVERNING PROSE
+        ↓
+EXPLICIT CROSS-REFERENCES
+        ↓
+WHOLE-SOURCE SEARCH
+        ↓
+FALSIFICATION
+        ↓
+INDEPENDENT COMPLETENESS REVIEW
+        ↓
+HUMAN EVIDENCE REVIEW
+```
+
+Full-text search remains valuable. Its role is **locator, cross-reference finder, and falsification tool** — never primary completeness mechanism.
+
+> **A full-text search hit is a locator, not an authority category.**
+>
+> **A null search result is information about the query, not automatically about the source.**
 
 **OCR text and full-text search are locators, not proof of coverage.** Completing §9's keyword pass does **not** establish that the relevant primary-source material has been reviewed. Full-text search tells you where to look. It does not tell you that you have looked.
 
@@ -256,7 +301,71 @@ The purpose is auditability: a future reviewer must be able to ask *"what primar
 
 Responsibilities presumed high-risk include: character advancement, combat, saving throws, Weapon Mastery, spells, treasure, monster statistics, monster generation, equipment, encumbrance/movement, experience, and class progression.
 
-No scoring framework is introduced; the rule above is the whole test.
+**Additional mandatory high-risk triggers (Guardrail D):**
+
+1. **A per-class / per-entity table exists for the researched subject.**
+2. **Searches return only out-of-domain or obviously irrelevant hits.**
+
+For trigger 2 the required response is to **question the search strategy before drawing any conclusion about the source**. Lich results from an Elf progression query are evidence that the query is poorly targeted — never evidence that Elf material is absent.
+
+No scoring framework is introduced; the rules above are the whole test.
+
+## 9.5 Prohibited Research Shortcuts
+
+**Guardrail A — no guessed-answer searches as substitutes for locating governing objects.**
+
+> Do not search for a guessed *rendering of an answer* — a dice expression, XP total, level title, formula, numeric total, or expected table-cell representation — as a substitute for locating the governing source object.
+>
+> Such searches may be used **later**, as supplementary searches or falsification tools. **They may not establish source completeness.**
+>
+> A failed guessed-formula search is evidence about the **query**, not evidence that the rule, table, or value is absent. A query that presupposes an object's schema cannot succeed if the schema differs, and its failure carries no information about the source.
+
+**Guardrail B — negative findings must describe the research performed.**
+
+> Distinguish:
+>
+> ```text
+> "Not located after inspecting X, Y, Z…"        ← research-operation claim
+> "The Rules Cyclopedia contains no such rule."  ← source-property claim
+> ```
+>
+> The source-property claim is permitted **only** after the relevant governing objects have been enumerated and inspected sufficiently to support it. Exhausted keyword searches alone never establish absence.
+
+**Guardrail C — per-class / per-entity table attestation.**
+
+> Where a Rule Card concerns a subject possessing a named class table, experience table, saving-throw table, monster table or stat block, spell table, item table, equipment table, progression table, or analogous per-entity structured object, the evidence packet must explicitly record it as:
+>
+> ```text
+> OPENED
+> VISUALLY INSPECTED
+> DISPOSITIONED
+> ```
+>
+> — or explicitly excluded with a stated reason. **A named table may not silently exist outside the packet's coverage checklist.**
+
+## 9.6 Evidence Types Within a Single Source
+
+Distinct from `SOURCE_HIERARCHY.md`, which ranks *editions*. This ranks *object types within one primary source*, as a **guide to locating and weighing governing evidence** — not a mechanical precedence rule.
+
+```text
+1. Mechanically operative table for the responsibility
+2. Structured stat block for the specific subject
+3. Detailed governing procedure text / class-details prose
+4. Explicit cross-reference, followed to its target
+5. Chapter-level or step-list summary
+6. Incidental prose reference elsewhere in the source
+7. Full-text search hit outside the governing procedure — LOCATOR ONLY
+```
+
+**The governing object depends on the rule type. Do not apply this order mechanically:**
+
+- **Class progression** — the class/experience table and the detailed class material are both first-class evidence.
+- **Procedure systems** — a numbered procedure or checklist may itself be the governing operational object, with no table involved. (`EXP-001`'s Game Turn Checklist is of this kind.)
+- **Monster / spell / item catalog entries** — the structured entity entry is the principal source object.
+
+**Do not adopt a rule such as "tables always beat prose."** RC p. 25 states the Elf's 10th-level hit-point gain as `+1` in its stat block and as "two additional hit points" in its own Class Details prose, on the same page. A table or stat block and detailed prose can genuinely conflict.
+
+**The requirement is to identify all governing objects before interpreting conflicts among them** — not to resolve conflicts by object type.
 
 ## 10. Mandatory Falsification Pass
 
@@ -503,4 +612,6 @@ An agent performing rules research under this protocol must stop under each of t
 
 Adopted `docs/decisions/DEC-0009-evidence-first-rule-research-protocol.md`, `APPROVED`, 2026-08-16.
 
-**Amended 2026-08-23 by `docs/decisions/DEC-0010-primary-source-completeness-audit.md`**, which added §9.1–§9.4 (object/table completeness audit, visual verification, coverage checklist, research-risk classification), §10.1 (independent evidence-completeness review), the corresponding Stage-A sequence steps in §3, and the `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED` hard stop in §17. `DEC-0009` is not superseded and its protections are unchanged; `DEC-0010` strengthens Stage A only. This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full — expected to produce a committed `docs/rules/evidence/EXP-001-evidence.md` Stage-A artifact, not a rewritten Rule Card, as its first deliverable.
+**Amendments proposed 2026-08-23 by `docs/decisions/DEC-0010-primary-source-completeness-audit.md`** — §9.1–§9.6 (object/table completeness audit, structure-first ordering, visual verification, coverage checklist, research-risk classification and high-risk triggers, prohibited shortcuts Guardrails A–C, within-source evidence-type guidance), §10.1 (independent evidence-completeness review), the corresponding Stage-A sequence steps in §3, and the `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED` hard stop in §17.
+
+**`DEC-0010` is `PROPOSED — AWAITING HUMAN APPROVAL`. Those sections are drafted but not yet in force**; until it is approved, `DEC-0009` and the pre-amendment protocol remain operative. `DEC-0009` is not superseded and its protections are unchanged; `DEC-0010` strengthens Stage A only. This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full — expected to produce a committed `docs/rules/evidence/EXP-001-evidence.md` Stage-A artifact, not a rewritten Rule Card, as its first deliverable.
