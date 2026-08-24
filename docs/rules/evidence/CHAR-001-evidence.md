@@ -1,5 +1,7 @@
 # Stage-A Evidence: CHAR-001 — Ability Score Generation
 
+> **⚠ Completeness-audit correction (2026-08-23) — a negative finding in this packet is FALSIFIED.** §7 records as a negative result: *"no non-random ability-generation alternative; no 'roll 4d6 drop lowest'-style variant."* **That claim is false as written.** RC p. 130 ("Creating High-Level Player Characters," Step 2: Generate Ability Scores), visually verified, gives two alternatives: a **roll-3d6-eight-times, keep the six best, assign in any order** method, and an explicit **non-random point-allocation** method (60 + 5d6, or an equal allotment of 60–90, with the 3–18 range still applying). Both are scoped to creating characters **above 1st level**, so this packet's **baseline 1st-level procedure is unaffected** — but the negative claim was stated unconditionally and must be struck. This also **resolves open question 2** ("whether Ch. 10 high-level creation alters the ability-score step"): **yes, materially.** The claim rested on keyword exhaustion rather than object inspection — the defect proposed Guardrail B now prohibits. See `docs/rules/evidence/CLUSTER-002-completeness-audit.md` Finding 7.
+>
 > **This is a Stage-A evidence artifact, not a Rule Card.** Produced under `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` (`DEC-0009`). It is not mechanically authoritative, is not `APPROVED`, and authorizes nothing. No `CHAR-*` Rule Card exists or was created. Stage B (mechanical synthesis, legacy comparison, alternate-source research, Simulator Rulings) was **not** begun.
 
 ## 1. Research Scope

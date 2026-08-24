@@ -2,6 +2,14 @@
 
 > **This is a Stage-A evidence artifact, not a Rule Card.** Produced under `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` (`DEC-0009`). It is not mechanically authoritative, is not `APPROVED`, and authorizes nothing. Stage B was **not** begun.
 >
+> **⚠ Completeness-audit reframing (2026-08-23) — Conflict A was a research failure, not a balanced RC conflict.** This packet escalated the Elf maximum level as an unreconciled internal conflict **without ever opening the Elf Experience Table (RC p. 26)** — the mechanically authoritative statement of Elf progression. That table's Level column enumerates 1–10 and then lists only XP thresholds mapped to Attack Ranks C–M; the Elf Saving Throws Table beneath it caps at level 10. With both now visually verified, the evidence is **six statements at level 10 against one Chapter 1 p. 12 summary sentence at 12** — not the 3-to-1 split recorded below.
+>
+> **Human ruling (2026-08-23): Elf maximum class level = 10, then Attack Ranks. The p. 26 Elf Experience Table is the source of truth for Elf progression.** The Ch. 1 p. 12 statement is genuinely printed (visually verified) and is preserved in this record as a real RC textual inconsistency, treated as erroneous summary text for this project. **Conflict A is closed by adjudication and is not reopened.**
+>
+> **Conflict B (`+1` vs `+2`) remains UNRESOLVED and is unchanged.** All four statements are now visually verified as printed — including that the p. 25 stat block (`+1`) and the p. 25 Class Details prose ("Two additional hit points") contradict each other **on a single page**. An earlier speculation that this conflict might be an OCR artifact is **withdrawn: it is real.** The p. 26 table carries no Hit Dice column and contributes nothing to Conflict B.
+>
+> See `docs/rules/evidence/CLUSTER-002-completeness-audit.md` §2 and §8.
+>
 > **⚠ This packet reports a triggered hard-stop condition** — `STOP — INTERNAL SOURCE CONFLICT REQUIRES REVIEW` (§9), covering **two distinct Elf questions**: maximum level (Conflict A) and fixed post-Hit-Dice HP gain (Conflict B). Both are scoped, neither affects this card's core procedure, and both are escalated rather than reconciled.
 >
 > **Revision note (targeted correction).** §4, §8 (Challenge 7) and §9 were corrected after human review of the first version of this packet. The original recorded the Elf problem as a single conflict *between* chapters; re-examination of the primary source established that **each chapter also contradicts itself** on Conflict B, and that maximum level and HP increment are separate questions. No conflict was resolved by the correction — the evidence matrix was completed.
