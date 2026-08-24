@@ -10,6 +10,8 @@
 >
 > See `docs/rules/evidence/CLUSTER-002-completeness-audit.md` §2 and §8.
 >
+> **Open-question closure (2026-08-23).** §10 items 3, 4 and 5, and §4's reroll negative finding, are now dispositioned against visually verified governing objects (pp. 7, 8, 10, 12, 129, 130): **item 3** (first-level special HP treatment) — **RESOLVED**, no such rule in any governing object; **item 4** (does the 1-hp floor govern fixed gains?) — **RETAINED AS GENUINE SOURCE AMBIGUITY**, RC states the floor in terms of rolls only; **item 5** (is Ch. 10 Step 6 an alternative or a restatement?) — **RESOLVED**, it is an explicit alternative high-level-creation procedure with its own DM conventions; **reroll finding** — **RESOLVED BY SOURCE INSPECTION**, no reroll provision in any governing object. Also newly confirmed consistent: Druid HP (p. 28) matches p. 129 and p. 130. See `docs/rules/evidence/CLUSTER-002-completeness-audit.md` §6.3.
+>
 > **⚠ This packet reports a triggered hard-stop condition** — `STOP — INTERNAL SOURCE CONFLICT REQUIRES REVIEW` (§9), covering **two distinct Elf questions**: maximum level (Conflict A) and fixed post-Hit-Dice HP gain (Conflict B). Both are scoped, neither affects this card's core procedure, and both are escalated rather than reconciled.
 >
 > **Revision note (targeted correction).** §4, §8 (Challenge 7) and §9 were corrected after human review of the first version of this packet. The original recorded the Elf problem as a single conflict *between* chapters; re-examination of the primary source established that **each chapter also contradicts itself** on Conflict B, and that maximum level and HP increment are separate questions. No conflict was resolved by the correction — the evidence matrix was completed.

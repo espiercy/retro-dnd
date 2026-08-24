@@ -1,5 +1,17 @@
 # Stage-A Evidence: CHAR-002 — Race & Class Eligibility
 
+> **⚠ Open-question closure (2026-08-23) — §9 item 2 is now ANSWERED, and the answer is "no" for Druid.**
+>
+> This packet recorded as an open question: *"Whether 'Other Requirements' is exhaustive for druid/mystic… Druid and mystic entries were not read in full in this pass."* A first remediation pass then certified `CHAR-002` complete and called the p. 7 table its **"single governing object"** while that question was still open. **That certification and that phrase are both withdrawn** — see `docs/rules/evidence/CLUSTER-002-completeness-audit.md` §5.1a.
+>
+> Both entries have now been read as complete source units (RC pp. 28–31, visually verified):
+>
+> - **Druid — p. 7 is NOT exhaustive.** The entry adds a **9th-to-29th-level upper bound** on the originating cleric (p. 7 gives no upper bound), a requirement to **find and live in a woodland home**, a **1d4-month meditation** period rolled by the DM, and **being found, tested for worthiness, and taught** by a higher-level druid (usually 25th+), followed by admission to the realm of the druids — plus ongoing alignment and residence maintenance. **Proposed owner: `CHAR-013`** (later class-transition procedure), with `CHAR-008` and `ADV-002` dependencies. **Proposed, not adopted; `CLUSTER-002` is not expanded.**
+> - **Druid — new Category D conflict.** Ch. 1 p. 12 says Druids may only achieve **30th** level; the stat block, Higher Experience Levels, the **Druid Experience Table (levels 9–36)** and the Druid Saving Throws Table (bands to 33-36) all say **36**. **Unruled**; owner `ADV-002`.
+> - **Mystic — p. 7 IS complete for creation eligibility.** Wisdom 13 / Dexterity 13 restated verbatim at p. 29. Additional entry material (Strength-only XP-bonus disambiguation, armor/protective-magic prohibition, tithe-and-donate XP condition, oath sanction, 75%-Lawful tendency) is all **downstream**, none of it creation eligibility.
+>
+> **This packet's executable eligibility conclusions are unchanged.** Procedure A already returns *not eligible at creation* for Druid; the Druid Experience Table starting at level 9 **strengthens** that. §9 item 2 is closed; §9 item 1 (Ch. 13 switch vs. demihuman minimum) is **retained as a genuine source ambiguity**.
+>
 > **This is a Stage-A evidence artifact, not a Rule Card.** Produced under `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` (`DEC-0009`). It is not mechanically authoritative, is not `APPROVED`, and authorizes nothing. Stage B was **not** begun.
 
 ## 1. Research Scope
