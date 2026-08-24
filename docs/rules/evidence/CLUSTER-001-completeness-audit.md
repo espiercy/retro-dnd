@@ -144,12 +144,16 @@ The difference is a property of the source objects, not of researcher diligence 
 
 ## 8. Status After This Audit
 
-**`CLUSTER-001 PRIMARY-SOURCE COMPLETENESS AUDIT: PASS — 2026-08-23`** (human-accepted).
+**`CLUSTER-001 PRIMARY-SOURCE COMPLETENESS AUDIT: CANDIDATE PASS — 2026-08-23`.**
+
+> **Downgraded from `PASS` on 2026-08-23.** The substantive audit result is unchanged and was human-accepted, but under proposed `DEC-0010` item 14 and protocol §10.1.2 the researcher that gathered this evidence **may not issue the final completeness certification for its own package**. This artifact therefore records a **candidate** pass, `PREPARED FOR INDEPENDENT REVIEW`. Final certification requires a reviewer context that did not conduct this evidence collection.
 
 ```text
 CLUSTER-001 approved specification:      unchanged
 CLUSTER-001 implementation:              unchanged, remains VERIFIED
-CLUSTER-001 primary-source completeness: PASS — 2026-08-23
+CLUSTER-001 primary-source completeness: CANDIDATE PASS — 2026-08-23
+                                         PREPARED FOR INDEPENDENT REVIEW
+                                         (not self-certified)
 Category C specification-affecting omissions: none
 Category D new internal source conflicts:     none
 Rule Card corrections required:               none

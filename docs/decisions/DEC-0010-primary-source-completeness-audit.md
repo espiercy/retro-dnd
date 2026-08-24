@@ -32,6 +32,12 @@ Three compounding process failures made this possible, and none is caught by the
 
 The Tables Index entry `Elf Experience Table . 26` was present in the researcher's own working notes and was used to source page citations for other tables. It was not followed.
 
+**A second, independent failure was then found during human spot-check of the first remediation, and is the reason items 14–18 exist.** The remediation certified `CHAR-002` complete and described the p. 7 Character Classes and Ability Requirements Table as its *"single governing object"* — while `CHAR-002`'s own Stage-A packet had recorded, as an explicit open question: *"Whether 'Other Requirements' is exhaustive for druid/mystic… Druid and mystic entries were not read in full in this pass."* The remediation then dispositioned the Druid/Mystic Experience Tables as **"excluded with reason"** — excluding the very objects that would have answered its own recorded open question — and certified completeness anyway.
+
+Independent human review of the Rules Cyclopedia found that the detailed Druid entry **does** contain transition requirements beyond the p. 7 table. The process failure is not the ownership question those requirements raise. It is that **an explicitly unresolved Stage-A source question remained unresolved while the same agent certified source completeness.**
+
+Two distinct lessons follow, and neither is covered by items 1–13: a completeness reviewer must reconcile against the packet's *own* declared unfinished work (item 15/16), and **the researcher who gathered the evidence cannot be the party that certifies its completeness** (item 14).
+
 This is a fidelity failure of exactly the kind this project exists to prevent, and it is not adequately addressed by asking researchers to search harder. Tables, stat blocks, and charts are simultaneously the artifacts most likely to carry decisive mechanical content and the artifacts least likely to survive OCR linearization intact.
 
 ## Decision
@@ -65,6 +71,46 @@ Specifically:
 **12. Guardrail D — additional mandatory high-risk triggers.** Beyond the table-heavy classification in item 6, the following independently trigger heightened review:
    - **a per-class/per-entity table exists for the researched subject**;
    - **searches return only out-of-domain or obviously irrelevant hits.** The required response to (b) is to **question the search strategy before drawing any conclusion about the source**. Lich results from an Elf progression query are evidence that the query is poorly targeted — never evidence that Elf material is absent.
+
+**14. Gate A — adversarial self-review is not independent completeness review.** These are distinct and both are required:
+
+- **Adversarial self-review** *may* be performed by the original researcher. It must restart from source structure (TOC, Tables Index, chapter/entry headings) rather than from its own prior conclusions. It remains required and useful.
+- **Independent completeness review** must be performed by a **different reviewer context that did not conduct the evidence collection being certified** — another model/reviewer, a human reviewer, or a genuinely separate research session that does not rely on the original agent's unstated assumptions, if the project later defines that as sufficiently independent.
+
+```text
+INDEPENDENT COMPLETENESS REVIEW:
+REQUIRED BEFORE HUMAN EVIDENCE CLEARANCE
+
+ORIGINAL RESEARCHER MAY NOT ISSUE
+THE FINAL COMPLETENESS CERTIFICATION
+FOR ITS OWN EVIDENCE PACKAGE.
+```
+
+An original researcher may prepare an evidence package **for** independent review and may report `PREPARED FOR INDEPENDENT COMPLETENESS REVIEW`. It may **not** report `SOURCE COMPLETENESS PASSED`, `CERTIFIED`, or `HUMAN EVIDENCE GATE CLEARED`. This is not to be blurred with ordinary falsification (§10) or with adversarial self-review.
+
+**15. Gate B — Open-Question Closure Gate.** Before completeness may be declared, every Stage-A packet must carry an inventory of its own unresolved statements — wording such as *not yet read in full, not exhaustively checked, not searched, not verified visually, may exist elsewhere, needs later confirmation, open question, unresolved by current research, possible interaction not yet checked*. Each item must be classified as exactly one of:
+
+```text
+RESOLVED BY SOURCE INSPECTION
+CONFIRMED OUT OF SCOPE  (with explicit ownership and rationale)
+RETAINED AS GENUINE SOURCE AMBIGUITY
+BLOCKED — MORE PRIMARY-SOURCE RESEARCH REQUIRED
+```
+
+**There may be zero silent unresolved research tasks at the completeness gate.** A packet may contain genuine rule ambiguities; it may **not** contain unfinished source inspection disguised as an ambiguity. The distinction must be explicit.
+
+**16. Open-question reconciliation is mandatory for the completeness reviewer.** The reviewer must not only ask *what objects do the TOC and Tables Index contain?* but also *what did the original packet itself say had not yet been checked?* A reconciliation table is required:
+
+```text
+Original open question | Source region/object implicated | Inspection completed? |
+Result | Responsibility owner | Still blocks completeness?
+```
+
+No card may be marked complete until every row is dispositioned.
+
+**17. Complete-entry inspection rule.** Where a responsibility concerns a character class, race/class, monster, spell, item, or similarly structured entity, the relevant **detailed entity entry must be inspected as a complete source unit** — for a class, its stat block, experience/progression table, saving-throw table, class details, special abilities, entry/transition requirements, and explicit cross-references. Isolated search windows are not equivalent to reading the entry. One summary table is never automatically exhaustive.
+
+**18. No premature "single governing object" claims.** A researcher may identify a *principal* governing object, but may not describe it as the **single** governing object until all related structured and detailed source objects have been enumerated and dispositioned. The existence of a summary table does not prove that detailed entity material adds no qualification.
 
 **13. Structure-first ordering of research operations.** Full-text search retains its value as a locator, cross-reference finder, and falsification tool. It is not the primary completeness mechanism. The governing order of operations is source structure → finding aids → object inventory → visual inspection → governing prose → cross-references → whole-source search → falsification → independent completeness review → human evidence review.
 

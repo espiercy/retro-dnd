@@ -26,12 +26,18 @@ EVIDENCE COLLECTION
         ↓
 WHOLE-SOURCE CROSS-REFERENCE SEARCH
         ↓
-PRIMARY-SOURCE OBJECT / TABLE COMPLETENESS AUDIT   ◄── §9.1 (added by DEC-0010)
+PRIMARY-SOURCE OBJECT / TABLE COMPLETENESS AUDIT   ◄── §9.1 (DEC-0010)
+        ↓
+COMPLETE-ENTRY INSPECTION                          ◄── §9.7 (DEC-0010)
         ↓
 FALSIFICATION / CHALLENGE PASS
         ↓
-INDEPENDENT EVIDENCE-COMPLETENESS REVIEW           ◄── §10.1 (added by DEC-0010)
+OPEN-QUESTION CLOSURE GATE                         ◄── §10.2 (DEC-0010)
         ↓
+ADVERSARIAL SELF-REVIEW                            ◄── §10.1.1 (DEC-0010)
+        ↓
+INDEPENDENT COMPLETENESS REVIEW                    ◄── §10.1.2 hard gate;
+        ↓                                              NOT by the original researcher
 HUMAN EVIDENCE REVIEW                      ◄── hard gate (§11)
         ↓
 MECHANICAL SYNTHESIS
@@ -400,11 +406,95 @@ MORE PRIMARY RESEARCH REQUIRED
 
 Do not immediately replace the rejected interpretation with another speculative model merely to finish the artifact — that reproduces the exact failure mode this protocol exists to prevent. Report the rejection and what would be needed to resolve it, and stop.
 
-## 10.1 Independent Evidence-Completeness Review
+## 9.7 Complete-Entry Inspection Rule
 
-> Added by `DEC-0010`.
+> Proposed by `DEC-0010`. Motivated by the `CHAR-002` failure: the p. 7 summary table was treated as exhaustive while the detailed Druid entry — which carries additional transition requirements — went unread.
 
-Research-agent self-review is not sufficient. The researcher who failed to open an object is, by construction, the person least likely to notice its absence.
+Where a responsibility concerns a **character class, race/class, monster, spell, item, or similarly structured entity**, the relevant detailed entity entry must be inspected **as a complete source unit**. For a class this may include:
+
+```text
+stat block
+experience / progression table
+saving-throw table
+class details
+special abilities
+entry / transition requirements
+explicit cross-references
+```
+
+**Do not treat isolated search windows as equivalent to reading the entry. Do not treat one summary table as automatically exhaustive.**
+
+## 9.8 "Single Governing Object" Claims
+
+A researcher may identify a **principal** governing object. A researcher may **not** call it *the single governing object* until all related structured and detailed source objects have been enumerated and dispositioned.
+
+The existence of a summary table does not prove that detailed entity material adds no qualification. RC p. 7's class/ability table is the principal object for creation eligibility; it is **not** the whole of what RC says about class entry.
+
+## 10.1 Adversarial Self-Review vs. Independent Completeness Review
+
+> Proposed by `DEC-0010`. These are **two different gates**. Do not blur them, and do not blur either with ordinary falsification (§10).
+
+### 10.1.1 Adversarial self-review — may be performed by the original researcher
+
+Required. Must restart from **source structure** — TOC, Tables Index, chapter and entry headings, cross-reference targets — rather than from its own prior conclusions or checklists. Starting from prior work reproduces the original pass's blind spots.
+
+It must also ask, explicitly:
+
+```text
+What did the original packet say was unfinished?
+Did every unfinished region actually get inspected?
+Does any packet claim completeness while still containing
+  "not checked" / "not read" / "not exhaustively searched" /
+  "needs later research" / "source region not inspected"?
+```
+
+If yes: **FAIL COMPLETENESS PREPARATION.** Do not paper over it.
+
+### 10.1.2 Independent completeness review — may NOT be performed by the original researcher
+
+```text
+INDEPENDENT COMPLETENESS REVIEW:
+REQUIRED BEFORE HUMAN EVIDENCE CLEARANCE
+
+ORIGINAL RESEARCHER MAY NOT ISSUE
+THE FINAL COMPLETENESS CERTIFICATION
+FOR ITS OWN EVIDENCE PACKAGE.
+```
+
+Must be performed by a **different reviewer context that did not conduct the evidence collection being certified**: another model/reviewer, a human reviewer, or a genuinely separate research session that does not rely on the original agent's unstated assumptions, if the project later defines that as sufficiently independent.
+
+**Permitted output of an original researcher:** `PREPARED FOR INDEPENDENT COMPLETENESS REVIEW`.
+**Prohibited output of an original researcher:** `SOURCE COMPLETENESS PASSED`, `SOURCE COMPLETENESS CERTIFIED`, `HUMAN EVIDENCE GATE CLEARED`.
+
+## 10.2 Open-Question Closure Gate
+
+> Proposed by `DEC-0010`. **Completeness may not be declared while the packet's own declared unfinished work is outstanding.**
+
+Every Stage-A packet must carry an inventory of its own unresolved statements — wording such as *not yet read in full, not exhaustively checked, not searched, not verified visually, may exist elsewhere, needs later confirmation, open question, unresolved by current research, possible interaction not yet checked*.
+
+Each item must be classified as exactly one of:
+
+```text
+RESOLVED BY SOURCE INSPECTION
+CONFIRMED OUT OF SCOPE  (with explicit ownership and rationale)
+RETAINED AS GENUINE SOURCE AMBIGUITY
+BLOCKED — MORE PRIMARY-SOURCE RESEARCH REQUIRED
+```
+
+**There may be zero silent unresolved research tasks at the completeness gate.**
+
+A packet may contain genuine rule ambiguities. It may **not** contain **unfinished source inspection disguised as an ambiguity**. That distinction must be made explicit for every item.
+
+### 10.2.1 Required reconciliation table
+
+The completeness reviewer must not only ask *what objects do the TOC and Tables Index contain?* but also *what did the original evidence packet itself say had not yet been checked?*
+
+| Original open question | Source region/object implicated | Inspection completed? | Result | Responsibility owner | Still blocks completeness? |
+|---|---|---|---|---|---|
+
+**No card may be marked complete until every row is dispositioned.**
+
+## 10.3 Independent Evidence-Completeness Review — method
 
 Before Human Evidence Review, Stage A must include a **distinct completeness-review pass** whose objective is to **identify relevant primary-source material the original research pass may have failed to inspect**.
 

@@ -196,7 +196,90 @@ Every object listed as outstanding by the first audit pass is now dispositioned.
 | **Extended Experience Table** | p. 266 | **OPENED / VISUALLY INSPECTED** | **NEWLY DISCOVERED OBJECT** — see Finding 8 |
 | Ch. 10 "Creating High-Level Player Characters" Steps 1–8 | pp. 129–130 | **OPENED / VISUALLY INSPECTED** | **CONTRADICTS a `CHAR-001` negative finding** — see Finding 7 |
 | Cleric / Fighter / Magic-User / Thief Experience Tables | pp. 14, 16, 19, 22 | **EXCLUDED WITH REASON** | Human classes; cap 36 for all four is stated at p. 12 (visually verified) and corroborated per-class at pp. 13–22. Their table **schema** is confirmed by the three visually verified demihuman tables and by the Cleric/Fighter tables read in full as OCR table text, which retained their rows. No cap dispute exists for any human class. Risk assessed **low**; re-open if any human-class progression question arises |
-| Druid / Mystic Experience Tables | p. 29 | **EXCLUDED WITH REASON** | Druid cap 30 and Mystic cap 16 are each stated at p. 12 (visually verified); Mystic cap 16 independently confirmed by the Mystic Special Abilities Table (p. 31, visually verified). Druid is not reachable at character creation, so its progression table bears on `ADV-002`, not on this cluster |
+| ~~Druid / Mystic Experience Tables — EXCLUDED WITH REASON~~ | p. 29 | **EXCLUSION WITHDRAWN 2026-08-23 — OPENED / VISUALLY INSPECTED** | **This exclusion was wrong and is retracted.** It excluded the very objects `CHAR-002`'s own open question named as unread. Both entries have now been read as complete source units — see §5.2. **Druid cap is 36, not 30**; the entries carry material requirements beyond p. 7 |
+| **Complete Druid class entry** (stat block, transition prose, Class Details, Abilities and Restrictions, Higher Experience Levels, Druid Experience Table, Druid Saving Throws Table) | pp. 28–29 | **OPENED / VISUALLY INSPECTED** | See §5.2 — **material findings** |
+| **Complete Mystic class entry** (stat block, Class Details, detailed prose, Mystic Experience Table, Mystic Special Abilities Table) | pp. 29–31 | **OPENED / VISUALLY INSPECTED** | See §5.3 |
+| Ch. 13 "Open Doors" Ability / Doors / Secret Doors / Listening | p. 147 | **OPENED / VISUALLY INSPECTED** | Closes `CHAR-007` open question 1 — see §5.4 |
+| Ch. 8 Initiative / "Dexterity Adjustments (Optional)" | p. 102 | **OPENED / VISUALLY INSPECTED** | Closes `CHAR-007` open question 4 — see §5.4 |
+| Ch. 13 Mapping / Multiple Characters / Overusing Dice / Reality Shifts / Record Keeping | p. 148 | **OPENED / VISUALLY INSPECTED** | Closes `CHAR-001`'s residual "sections not exhaustively read" — none bears on ability-score generation |
+
+## 5.1a Withdrawal of the "single governing object" claim
+
+The previous remediation described the p. 7 Character Classes and Ability Requirements Table as `CHAR-002`'s **"single governing object."** **That claim is withdrawn. It was too strong, and it was made while `CHAR-002`'s own packet recorded that the Druid and Mystic entries had not been read in full.**
+
+The p. 7 table is the **principal** governing object for the *common creation-eligibility matrix*. It does **not** exhaust class-specific entry rules. For class-related responsibilities the source must be mapped structurally, entry by entry (protocol §9.7, §9.8).
+
+## 5.2 Complete Druid Entry — findings (RC pp. 28–29)
+
+**Objects read as one unit:** stat block (p. 28); transition prose (p. 28); Class Details (p. 28); Abilities and Restrictions (p. 28); Higher Experience Levels (pp. 28–29); **Druid Experience Table** (p. 29); **Druid Saving Throws Table** (p. 29).
+
+### Finding 10 — the p. 7 "Other Requirements" column is NOT exhaustive for Druid
+**Category: C-adjacent — SPECIFICATION-AFFECTING, but affecting no approved specification** (no `CHAR-*` Rule Card exists).
+
+p. 7 states only *"Neutral alignment, obtain 9th level as a cleric."* The p. 28 entry adds:
+
+| Requirement | RC text (p. 28) | Not in p. 7 |
+|---|---|---|
+| **Upper level bound** | "A Neutral cleric of **9th to 29th level** may choose to study nature…" | **Yes** — p. 7 gives no upper bound |
+| **Woodland residence** | "the cleric **must find and live in a woodland home**" | **Yes** |
+| **Meditation period** | "**meditating for one to four (1d4, rolled by the DM) months**" | **Yes** — and it is a *random duration* |
+| **Instruction and testing** | "a higher level druid (usually 25th level or greater) will find the cleric, **test him for worthiness**, and teach him the principles of druidic philosophy and magic" | **Yes** |
+| **Admission** | "The new druid may then join the realm of the druids" | **Yes** |
+| **Ongoing alignment maintenance** | On changing alignment the druid "will lose all druid benefits including druidic spells **unless he returns to Neutral alignment**" | **Yes** — an ongoing condition, not only an entry condition |
+| **Ongoing residence** | "He **must live in a woodland home**, rather than in a town or city" | **Yes** |
+
+### Finding 11 — NEW INTERNAL SOURCE CONFLICT: Druid maximum level
+**Category: D — NEW INTERNAL SOURCE CONFLICT.**
+
+| RC location | Statement | Verified |
+|---|---|---|
+| Ch. 1, p. 12 | "Druids may only achieve **30th** level (and only then after a special challenge)" | **Visually** |
+| Ch. 2, p. 28, Druid stat block | "**Maximum Level: 36**; Druid must challenge and defeat another Druid of the newly-attained experience level starting at 30th level" | **Visually** |
+| Ch. 2, p. 28, Higher Experience Levels | nine druids of 30th, seven of 31st, five of 32nd, four of 33rd, three of 34th, two of 35th, and **one of 36th (the Great Druid)** | **Visually** |
+| **Ch. 2, p. 29, Druid Experience Table** | Level column enumerates **9 through 36** | **Visually** |
+| Ch. 2, p. 29, Druid Saving Throws Table | bands 9-12 … **33-36** | **Visually** |
+
+**Four objects at 36 against one Ch. 1 p. 12 summary sentence at 30.** This is the **same p. 12 passage** that states the Elf cap as 12 against six statements at 10. That passage is now demonstrably unreliable on **two of its five** class-cap claims.
+
+**Not resolved here** — no ruling exists for the Druid cap, and this audit does not make one. `ADV-002` owns it. Reported as a new Category D finding.
+
+### Finding 12 — Druid HP is consistent (no new conflict)
+**Category: A — COMPLETE.** p. 28: "Starting with 10th level, +1 hit point per level, and Constitution adjustments do not apply"; "A character cannot become a druid until… Name (9th) experience level as a cleric. Therefore, from then on, he will receive only 1 hit point per experience level gained after 9th level." Consistent with p. 129 ("same as those for a cleric") and p. 130 ("As cleric… +1/level thereafter"). `CHAR-003` unaffected.
+
+### Ownership — proposed, not adopted
+
+| Evidence | Proposed owner | Why | Dependency implication |
+|---|---|---|---|
+| Druid **not selectable at creation** | **`CHAR-002`** (already so) | Druid Experience Table starts at level 9; p. 28 "you can't start a character off as a druid" | **None** — `CHAR-002` Procedure A already returns *not eligible at creation*. **Strengthened, not changed** |
+| Cleric→Druid **transition procedure** (9th–29th, woodland home, 1d4 months, testing, instruction, admission) | **`CHAR-013`** (High-Level Class Branches — `INVENTORY.md` already lists Druid under it) | It is a later class-change procedure, not creation eligibility | Would need `CHAR-008` (alignment) and `ADV-002` (level) |
+| Ongoing alignment/residence maintenance | `CHAR-013` with `CHAR-008` | Ongoing conditions on retaining druid status | — |
+| 30th-level challenge progression | `ADV-002` | Advancement mechanic | — |
+
+**PROPOSED — NOT ADOPTED.** `CLUSTER-002` is **not** expanded; no boundary change is made. `CHAR-002`'s executable eligibility rule is **unaffected**.
+
+## 5.3 Complete Mystic Entry — findings (RC pp. 29–31)
+
+**Objects read as one unit:** stat block (p. 29); Class Details (p. 29); detailed prose (p. 29); **Mystic Experience Table** (p. 29); **Mystic Special Abilities Table** (p. 31).
+
+### Finding 13 — Mystic creation eligibility is CONFIRMED complete at p. 7
+**Category: A — COMPLETE.** p. 29 Class Details restates exactly: *"A mystic character must have scores of 13 or better in both his Wisdom and Dexterity abilities."* Mystic **is** a 1st-level creation class (Experience Table runs 1–16, XP 0 at level 1). `CHAR-002`'s Mystic claim **stands** — but it is only now established by entry inspection rather than assumed from the summary table.
+
+### Finding 14 — Mystic carries material downstream requirements, none of them creation eligibility
+**Category: B — INCOMPLETE BUT NON-CONTRADICTORY**, all owned outside `CLUSTER-002`:
+
+- **Two-prime-requisite XP disambiguation** (p. 29): "since he must have a score of at least 13 in Dexterity to be a mystic in the first place, it is **his Strength score that determines his bonus to experience**." → `ADV-001`. Materially qualifies the general two-prime-requisite rule for this class.
+- **Equipment prohibition** (p. 29): "Mystics can **never** wear armor of any type, nor can they ever use protective magical devices (such as rings, cloaks, etc.)" → `CHAR-009`/`TREAS-004`.
+- **Treasure/XP condition** (p. 29): "Mystics receive experience from treasure **only if they donate it to the needy**. Also, they must **donate (tithe) ten percent** of their treasure to their cloister." → `ADV-001`. A genuine XP-award condition.
+- **Oath sanction** (p. 29): forswearing → expelled from cloister, "**may not gain any new experience levels, loses one level per year** away from the cloister" → `ADV-002`.
+- **Alignment tendency** (p. 29): "Most mystics (75%) are Lawful, though other alignments are represented" — a tendency, **not a requirement** → `CHAR-008`.
+- **HP** (p. 29): 1d6/level to 9th; **+2/level** from 10th; Con no longer applies; Max Level 16 — consistent with p. 130 and p. 129. `CHAR-003` unaffected.
+
+**None is creation eligibility.** `CHAR-002` is not expanded.
+
+## 5.4 Closure of `CHAR-007` unfinished inspection
+
+- **Open Doors ownership (open question 1).** Ch. 13 p. 147 carries a dedicated **"Open Doors" Ability** section: 1d6, success on 5–6, **modified by the Strength score adjustment**, natural 6 always opens — and **adds** two rules Ch. 1 omits: the attempt may be made **once per round per character**, and **a failed attempt forfeits surprise** ("monsters on the other side of the door cannot be surprised; they have heard the noise"). **Disposition: RESOLVED BY SOURCE INSPECTION → CONFIRMED OUT OF SCOPE for `CHAR-007`.** `CHAR-007` owns the Strength **adjustment value**; the **procedure** belongs to `EXP-005`, which is where p. 147 sits (alongside Doors, Secret Doors, Special Doors, Listening). New dependency noted: `ENC-002` (surprise).
+- **Ability effect on initiative (open question 4).** Ch. 8 p. 102 carries **"Dexterity Adjustments (Optional)"**: at DM option, Dexterity modifies the **individual** initiative roll per the Bonuses and Penalties table, and "does not affect the party's roll in group initiative." Individual initiative is itself optional and is **declined for V1** by `DEC-0008`. **Disposition: RESOLVED BY SOURCE INSPECTION → CONFIRMED OUT OF SCOPE** (owner `COMBAT-006`). `CHAR-007`'s V1 effect list is correct. RC's own cross-reference here cites the table as "on **page 9**", independently confirming the p. 9 / p. 10 split corrected in Finding 1.
 | Ch. 13 "Ability Checks" | p. 143 | **EXCLUDED WITH REASON** | Short prose, **no structured object, no table, no columns**; read in full in context via text. Fails every §9.2 visual-verification trigger. Risk assessed **low** |
 
 ## 5.1 Additional Findings from the Outstanding-Object Pass
@@ -288,6 +371,49 @@ Every negative claim across the four packets, classified by what actually suppor
 
 **Pattern:** every claim that **stands** does so because a governing object was inspected. Every claim requiring correction rested on keyword exhaustion. This is precisely the distinction Guardrail B encodes.
 
+## 6.3 Open-Question Closure Gate — reconciliation table (protocol §10.2.1)
+
+Built by reading the **original** Stage-A packets' unresolved/challenge sections, not their corrected banners.
+
+| # | Original open question (packet, §) | Source region implicated | Inspected? | Result | Owner | Blocks completeness? |
+|---|---|---|---|---|---|---|
+| 1 | `CHAR-001` §9.1 — discard criterion threshold | Ch. 13 p. 145 | **Yes, visually** | Both non-equivalent criteria confirmed **printed** in one passage | `CHAR-001` | **RETAINED AS GENUINE SOURCE AMBIGUITY** — no |
+| 2 | `CHAR-001` §9.2 — Ch. 10 high-level creation effect on score step ("not established") | Ch. 10 pp. 129–130 | **Yes, visually** | **RESOLVED** — Step 2 gives roll-8-keep-6-assign and point-allocation; falsifies a packet negative finding | `CHAR-001` | No |
+| 3 | `CHAR-001` §9.3 — trade ↔ switch interaction/order | Ch. 1 p. 7; Ch. 13 p. 145 | **Yes, visually (both)** | Neither cross-references the other; RC is silent on the interaction | `CHAR-001` | **RETAINED AS GENUINE SOURCE AMBIGUITY** — no |
+| 4 | `CHAR-001` §9.4 — does "no adjustments later" bind the Ch. 13 provision | Ch. 1 p. 7; Ch. 13 p. 145 | **Yes, visually (both)** | RC silent | `CHAR-001` | **RETAINED AS GENUINE SOURCE AMBIGUITY** — no |
+| 5 | `CHAR-001` §14 — "further DM-facing qualifications may exist in sections not exhaustively read" | Ch. 13 section list (TOC); pp. 143, 145, 147, 148 | **Yes** — list enumerated; generation-relevant sections read | **RESOLVED BY SOURCE INSPECTION** — Mapping / Multiple Characters / Overusing Dice / Reality Shifts / Record Keeping bear on nothing in scope; remaining Ch. 13 sections owned elsewhere by subject | `CHAR-001` | No |
+| 6 | `CHAR-002` §9.1 — can a Ch. 13 switch satisfy a demihuman minimum? | Ch. 1 p. 7; Ch. 13 p. 145 | **Yes, visually (both)** | RC silent on the interaction; Ch. 1 trade cannot touch Constitution at all | `CHAR-002` | **RETAINED AS GENUINE SOURCE AMBIGUITY** — no |
+| 7 | **`CHAR-002` §9.2 — "Other Requirements" exhaustive for druid/mystic? "entries were not read in full"** | **Ch. 2 pp. 28–31** | **Yes, visually — both entries as complete units** | **RESOLVED BY SOURCE INSPECTION. Answer: NO for Druid** (Findings 10–11); **YES for Mystic** creation eligibility (Finding 13) | `CHAR-002` (creation) / `CHAR-013`, `ADV-002` (transition) | **No — this was the defect; it is now closed** |
+| 8 | `CHAR-003` §10.1 — Conflict A, Elf max level | Ch. 1 p. 12; Ch. 2 pp. 25–26; Ch. 10 p. 129 | **Yes, visually (all)** | Human-adjudicated: **10, then Attack Ranks** | `ADV-002` | No — closed by ruling |
+| 9 | `CHAR-003` §10.2 — Conflict B, Elf +1 vs +2 | Ch. 2 p. 25; Ch. 10 pp. 129, 130 | **Yes, visually (all four statements)** | Genuinely irreducible; 2 vs 2, all printed | `CHAR-003` | **RETAINED AS GENUINE SOURCE AMBIGUITY** — no |
+| 10 | `CHAR-003` §10.3 — first-level special HP treatment? | Ch. 1 pp. 7–8, 10, 12 | **Yes, visually** | **RESOLVED** — no special first-level rule in any governing object | `CHAR-003` | No |
+| 11 | `CHAR-003` §10.4 — does the 1-hp floor govern fixed gains? | Ch. 1 p. 10; p. 12; Ch. 2 entries | **Yes, visually** | RC states the floor in terms of rolls only; silent for fixed gains | `CHAR-003` | **RETAINED AS GENUINE SOURCE AMBIGUITY** — no |
+| 12 | `CHAR-003` §10.5 — is Ch. 10 Step 6 an alternative or a restatement? ("not established") | Ch. 10 p. 130 | **Yes, visually** | **RESOLVED** — Step 6 is an explicit alternative high-level-creation procedure with its own DM conventions (averaging, Con multiplier) | `CHAR-003` | No |
+| 13 | `CHAR-003` §4 — "no hit-point reroll provision located" (search-based) | Ch. 1 pp. 8, 10, 12; Ch. 10 pp. 129–130 | **Yes, visually (all)** | **RESOLVED BY SOURCE INSPECTION** — no reroll in any governing object | `CHAR-003` | No |
+| 14 | **`CHAR-007` §9.1 — Open Doors ownership; "Ch. 13 Doors (p. 147) not read in full"** | **Ch. 13 p. 147** | **Yes, visually** | **RESOLVED → CONFIRMED OUT OF SCOPE** (§5.4). Value stays with `CHAR-007`; procedure to `EXP-005`; new `ENC-002` surprise dependency | `EXP-005` | No |
+| 15 | `CHAR-007` §9.2 — Armor Class ownership | Ch. 1 pp. 8–9 | **Yes, visually** | **CONFIRMED OUT OF SCOPE** — AC procedure is `COMBAT-002`; `CHAR-007` owns the Dex adjustment value | `COMBAT-002` | No |
+| 16 | `CHAR-007` §9.3 — Charisma retainer columns ownership | Ch. 1 p. 10 | **Yes, visually** | **CONFIRMED OUT OF SCOPE** — retainer count/morale procedures are `CHAR-006`; `CHAR-007` owns the table values | `CHAR-006` | No |
+| 17 | **`CHAR-007` §9.4 — ability effect on initiative; "Ch. 8 not exhaustively searched"** | **Ch. 8 p. 102** | **Yes, visually** | **RESOLVED → CONFIRMED OUT OF SCOPE** — Dexterity affects only the *optional* individual initiative, declined for V1 by `DEC-0008` | `COMBAT-006` | No |
+| 18 | `CHAR-007` §9.5 — Wisdom `CHAR-007`/`COMBAT-004` overlap | Ch. 1 pp. 9–10; Ch. 19 p. 266 | **Yes, visually** | Boundary preserved per human ruling; one-row overlap recorded | `CHAR-007` / `COMBAT-004` | No |
+
+**Every row is dispositioned. Zero items remain `BLOCKED — MORE PRIMARY-SOURCE RESEARCH REQUIRED`. Zero silent unresolved research tasks.**
+
+Six items are **RETAINED AS GENUINE SOURCE AMBIGUITY** — each verified as a real RC silence or a real printed contradiction with the governing objects inspected, **not** unfinished inspection disguised as ambiguity.
+
+## 6.4 Final Adversarial Self-Review (protocol §10.1.1) — this round
+
+Restarted from the TOC, Tables Index, chapter structure, class-entry headings, and cross-reference targets.
+
+**Does any packet still claim completeness while containing "not checked / not read / not exhaustively searched / needs later research / source region not inspected"?**
+
+Checked by re-grepping the original packets for that wording and matching each hit to §6.3. **Result: no.** All eighteen items are dispositioned; the four items that named an *unread source region* (rows 5, 7, 14, 17) have all had that region inspected visually.
+
+**Additional omissions found this round:** the Druid/Mystic entries (row 7 — the triggering defect), Ch. 13 p. 147 (row 14), Ch. 8 p. 102 (row 17), Ch. 13 p. 148 (row 5). Also newly surfaced: **Finding 11**, a previously unrecorded Category D conflict on the Druid cap.
+
+**Unresolved research tasks remaining: none.** Remaining open items are genuine rule ambiguities (rows 1, 3, 4, 6, 9, 11) plus one new unruled conflict (Finding 11, Druid cap, owned by `ADV-002`).
+
+**Residual risk:** the §5 reasoned exclusions (four human-class Experience Tables) are the only remaining un-opened named tables in scope. They carry no cap dispute and their schema is confirmed by three visually verified sibling tables — but they are the likeliest place a further omission would hide, and an independent reviewer should test that exclusion first.
+
 ## 7. Status After This Audit
 
 ```text
@@ -297,8 +423,15 @@ CHAR-003 Stage-A evidence:  COMPLETENESS AUDITED — CORRECTION REQUIRED (Findin
 CHAR-007 Stage-A evidence:  COMPLETENESS AUDITED — CORRECTION REQUIRED (Finding 1 citation)
 
 Outstanding object classes:  NONE — all dispositioned (§5)
-Objects visually verified:   pp. 7, 8, 9, 10, 12, 24, 25, 26, 27, 31,
-                             87, 91, 92, 93, 129, 130, 145, 266
+Open-question closure gate:  ALL 18 ITEMS DISPOSITIONED (§6.3)
+Objects visually verified:   pp. 7, 8, 9, 10, 12, 24, 25, 26, 27, 28, 29,
+                             31, 87, 91, 92, 93, 102, 129, 130, 145,
+                             147, 148, 266
+
+NEW Category D conflict:     Druid maximum level — Ch.1 p.12 says 30;
+                             stat block, Higher Experience Levels, Druid
+                             Experience Table and Druid Saving Throws
+                             Table all say 36. UNRULED. Owner ADV-002.
 
 Elf maximum level:          human-adjudicated at 10; not reopened
 Elf fixed HP +1 vs +2:      UNRESOLVED, deliberately (all four statements
@@ -307,8 +440,10 @@ BECMI escalation:           void as to authorization; excluded from
                             current evidence and synthesis (§2)
 
 CLUSTER-002 Stage B:        PAUSED
-CLUSTER-002 completeness:   READY FOR HUMAN REVIEW
+CLUSTER-002 completeness:   PREPARED FOR INDEPENDENT COMPLETENESS REVIEW
 ```
+
+**This audit does NOT certify `CLUSTER-002` source completeness.** Under proposed `DEC-0010` item 14 and protocol §10.1.2, the researcher that gathered this evidence may not issue the final completeness certification for its own package. The earlier `READY FOR HUMAN REVIEW` framing is superseded by `PREPARED FOR INDEPENDENT COMPLETENESS REVIEW`, to be performed by a reviewer context that did not conduct this evidence collection.
 
 ## 8. Elf Level-Cap — Complete Evidence Record and Human Adjudication
 
