@@ -16,6 +16,9 @@ The human project owner reviewed the corrected remediation and issued four bindi
 | **SR-2** | May a Mystic raise Dexterity through the 2-for-1 trade? | **Yes** — ordinary two-prime-requisite rule; no Mystic-specific exception | **Simulator Ruling** |
 | **SR-3** | Chapter 13 score switch | **Included in V1**; runs **before** eligibility; **may** establish a class minimum; the trade runs after and **never** can | **Simulator Ruling** + project scope decision |
 | **SR-4** | Discard criterion | **No score above 9 OR two scores below 6**; player may keep the character anyway | **Simulator Ruling** |
+| **SR-5** | May the post-selection trade breach a selected class's creation minimum? | **No.** Eligibility is established before the trade and **must remain true after it** — trade rule **R10** | **Simulator Ruling** |
+
+**SR-5 closes an edge case SR-3's ordering exposed** and which earlier drafts had recorded as accepted behaviour: a character could qualify as a Mystic on Wisdom 13, select Mystic, then trade Wisdom to 12 and finish creation as a Mystic who fails the Mystic requirements. RC's exchange restrictions protect Constitution, Charisma and Dexterity but **not** Wisdom, and RC never composes the trade with the requirements table. The Mystic's Wisdom is the **only** materially binding case. The asymmetry is deliberate: the trade can neither **establish** eligibility nor **destroy** it.
 
 **None is classified as `Rules Cyclopedia Explicit`, `Necessary Mechanical Consequence`, or `Alternate-Source Compatible Completion`.** Each is a project adjudication of a question the sources leave open, and each records the reading it rejected. **The historical conflicts are not resolved by these rulings — only the simulator's behaviour is.**
 
@@ -74,8 +77,8 @@ Corrections applied: §4 (rewritten), §7 (Simulator Rulings — the "none requi
 
 | Card | Core specification | Open blocking gaps | Ratifies on approval |
 |---|---|---|---|
-| `CHAR-001` Ability Score Generation | **Complete and executable** — U1–U4 all resolved | **None** | SR-2, SR-3, SR-4 |
-| `CHAR-002` Race & Class Eligibility | **Complete and executable** | **None** | — (consumes SR-3's output) |
+| `CHAR-001` Ability Score Generation | **Complete and executable** — U1–U4 resolved; Mystic Wisdom edge case closed by SR-5 | **None** | SR-2, SR-3, SR-4, **SR-5** |
+| `CHAR-002` Race & Class Eligibility | **Complete and executable** | **None** | — (consumes SR-3's output; its result is SR-5's invariant) |
 | `CHAR-003` Hit Points & Hit Dice | **Complete and executable** | **None** — W1 resolved | SR-1 |
 | `CHAR-007` Ability Score Effects | **Complete and executable** | **None**. All five Stage-A boundary questions closed | — |
 
@@ -225,9 +228,9 @@ Ordered by consequence.
 Not performed, and not authorized: Rule Card approval; implementation planning; production implementation; implementation tests; any `src/` or `tests/` change; any merge to `main`; broad alternate-source survey; adoption of any P1–P5 proposal; assignment of any new Rule ID; expansion of `CLUSTER-002`.
 
 ```text
-CLUSTER-002 Stage B:   COMPLETE — human rulings SR-1..SR-4 recorded 2026-08-29
+CLUSTER-002 Stage B:   COMPLETE — human rulings SR-1..SR-5 recorded 2026-08-29
 Rule Card status:      AWAITING_APPROVAL (all four)
-    CHAR-001           ready for review — ratifies SR-2, SR-3, SR-4
+    CHAR-001           ready for review — ratifies SR-2, SR-3, SR-4, SR-5
     CHAR-002           ready for review
     CHAR-003           ready for review — ratifies SR-1
     CHAR-007           ready for review

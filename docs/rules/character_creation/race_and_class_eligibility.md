@@ -16,7 +16,11 @@ Race & Class Eligibility
 >
 > **Stage-B correction impact (2026-08-29): NONE substantive.** The research failure and its correction concern the Elf's fixed hit-point gain (`CHAR-003`) and `CHAR-001`'s Mystic trade question. **Neither touches this card** — eligibility is decided entirely by raw-score thresholds, no hit-point value enters it, and the Elf and Druid **maximum levels** (10 and 36) are settled human adjudications the correction did not disturb.
 >
-> **One clarification added from human ruling SR-3 (`CHAR-001`):** the input to §2 is now stated explicitly as the scores **after any authorized Chapter 13 switch** and **before** the Chapter 1 trade. **No eligibility threshold changed.** Former open question V1 is `RESOLVED`.
+> **Two documentation clarifications from human rulings on `CHAR-001`; no eligibility threshold changed by either.**
+> **SR-3** — §1's input is stated explicitly as the scores **after any authorized Chapter 13 switch** and **before** the Chapter 1 trade. Former open question V1 is `RESOLVED`.
+> **SR-5** — §4.1 records that this card's result is an **invariant the subsequent trade must preserve**. The adjustment procedure stays entirely with `CHAR-001`, and **no `CHAR-002 → CHAR-007` dependency is created**.
+>
+> **`READY FOR HUMAN RULE-CARD REVIEW`.**
 
 ## Rules Domain
 
@@ -143,6 +147,21 @@ CHAR-001 §4    optional prime-requisite trade             ← post-eligibility
 
 **The switch is different, and that difference is the point.** It runs *before* the test and **can** establish a class minimum, bounded by §5.
 
+### 4.1 This card's result is an invariant the trade must preserve (SR-5)
+
+Human ruling **SR-5** (2026-08-29, recorded on `CHAR-001` as trade rule **R10**) makes §2's result binding **after** the subsequent adjustment as well as before it:
+
+```text
+Eligibility is established here — and must remain true
+after CHAR-001's 2-for-1 trade.
+```
+
+**This card is unchanged by SR-5.** No threshold moved, no procedure was added here, and **the adjustment procedure remains entirely `CHAR-001`'s** — this section records only that `CHAR-001` R10 consumes this card's minimums as a constraint. **No `CHAR-002 → CHAR-007` dependency is created**; R10 reads raw-score minimums, not adjustment values.
+
+The materially binding case is the **Mystic's Wisdom 13**: it is the one creation minimum sitting on an ability RC's own exchange restrictions do not protect (Constitution and Charisma cannot be exchanged; Dexterity cannot be lowered; the Elf's Intelligence is a prime requisite and can only be raised).
+
+**The asymmetry is deliberate and must not be collapsed:** the trade cannot **establish** eligibility (§4) and cannot **destroy** it (R10).
+
 ### 5. Bounded consequence of the Chapter 13 switch (V1 — `RESOLVED` by SR-3)
 
 The switch is **included in V1** and **may** be authorized to satisfy a class minimum. Because its destination is a *prime requisite*, what it can reach is fully determined — **the ruling does not widen this**:
@@ -252,6 +271,8 @@ Scores are given in RC's order: **Str, Int, Wis, Dex, Con, Cha**.
 | E20 | Dwarf candidate: Str 18, Con 8. Apply every legal `CHAR-001` trade first, then evaluate | Dwarf **still not eligible** — Constitution cannot be exchanged; **no trade ever changes eligibility** |
 | E21 | Eligibility evaluated on adjusted (post-trade) scores | **Contract violation** — the evaluation consumes eligibility scores, never adjusted ones |
 | E22 | Fighter chosen, then trade raises Str 12→13 | Eligibility result unchanged; the trade is `CHAR-001`'s and post-dates this card |
+| E29 | Mystic qualified on Wis 13 / Dex 13, then `CHAR-001` trade lowers Wis to 12 | **Contract violation (SR-5 / R10)** — this card's result is an invariant the trade must preserve. Enforcement lives in `CHAR-001` (V1–V12); this case exists so the requirement is visible from the card that owns the minimum |
+| E30 | Any selected class, after any legal trade | Every creation minimum of that class **still satisfied** |
 | E25 | Elf candidate: as-rolled Int 8, Str 16; **switch authorized** → Int 16 | **Elf eligible.** The switch runs before this card and **can** establish a minimum (SR-3) |
 | E26 | Same candidate, **switch not authorized** | **Elf not eligible** — eligibility scores equal as-rolled scores |
 | E27 | Dwarf candidate: Con 8, Str 18; **switch authorized** | **Still not eligible** — the switch reaches Strength, never Constitution |

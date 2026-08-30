@@ -14,7 +14,9 @@ Ability Score Generation
 
 > Stage-B draft, 2026-08-29. Stage-A evidence (`docs/rules/evidence/CHAR-001-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29. **Not approved. Not implementable.** Only a human project owner may set `APPROVED` (`SOURCE_HIERARCHY.md` §9). The Pre-Code Development Gate (`ARCHITECTURE.md` §16) is independent of this card's status and is not affected by it.
 >
-> **Human rulings recorded 2026-08-29 — all four open questions are now `RESOLVED`.** An earlier draft classified them all as *"non-blocking"*, which was wrong: U3 left standard executable behaviour unspecified for a **required V1 class**. The human project owner has since ruled on U1, U2, U3 and U4/V1. **This card is now mechanically complete for its approved scope.** Three of the rulings are **Simulator Rulings** (SR-2, SR-3, SR-4) — project adjudications, not RC-explicit findings — and approving this card ratifies them.
+> **Human rulings recorded 2026-08-29 — all open questions are `RESOLVED`.** An earlier draft classified them all as *"non-blocking"*, which was wrong: U3 left standard executable behaviour unspecified for a **required V1 class**. The human project owner ruled on U1, U2, U3 and U4/V1, and subsequently added **SR-5** to close a Mystic integration edge case that the SR-3 ordering exposed — a character could qualify as a Mystic on Wisdom 13 and then trade Wisdom away during the same creation procedure.
+>
+> **This card is mechanically complete for its approved scope.** Four **Simulator Rulings** live here — **SR-2, SR-3, SR-4, SR-5** — all project adjudications, none an RC-explicit finding. Approving this card ratifies all four.
 
 ## Rules Domain
 
@@ -90,7 +92,7 @@ Not applicable — no alternate-source candidate was considered, so there is not
 
 ## Simulator Ruling
 
-**Three required, escalated, and GRANTED by the human project owner on 2026-08-29.** Each is stated separately and **not bundled** (`RULE_CARD_RESEARCH_PROTOCOL.md` §16).
+**Four required, escalated, and GRANTED by the human project owner on 2026-08-29.** Each is stated separately and **not bundled** (`RULE_CARD_RESEARCH_PROTOCOL.md` §16).
 
 > An earlier draft paired *"Simulator Rulings: none required"* with *"U3 blocks Mystic trades"* while calling everything non-blocking. That was incoherent and is corrected: U3 did require a ruling, and it has one.
 
@@ -115,6 +117,28 @@ Not applicable — no alternate-source candidate was considered, so there is not
 **The ruling.** The switch is evaluated **before** eligibility and class choice; the 2-for-1 trade **after**. Full sequence at §0.
 
 **Consequence, and the distinction that matters.** The switch is **eligibility-shaping**: it can establish a raw class minimum where the switched score is the required ability. The trade is **post-eligibility**: it cannot retroactively make a character eligible for a class already chosen. §0 and §6.3 state this.
+
+### SR-5 — class eligibility invariant (closes the Mystic Wisdom edge case)
+
+**Missing behavior.** Whether the Chapter 1 trade may reduce an ability below a creation minimum required by the class the character has already selected.
+
+**Why an answer is required.** Without one, a legal V1 character can be produced that does not satisfy its own class's stated requirements: qualify as a Mystic on Wisdom 13, select Mystic, then trade Wisdom down to 12 and finish creation as a Mystic with Wisdom 12.
+
+**Why RC does not answer it.** RC's p. 7 exchange restrictions protect Constitution, Charisma and Dexterity. **They do not protect Wisdom**, and RC never states that a class's creation minimums must survive the trade — the trade and the requirements table are stated independently and never composed. RC's own p. 7 worked example lowers an **elf's** Wisdom to 9, but that does **not** resolve this case: Wisdom is not an Elf creation requirement, so the example demonstrates nothing about a gated ability.
+
+**The smallest ruling.**
+
+```text
+SR-5 — CLASS ELIGIBILITY INVARIANT
+
+The Chapter 1 2-for-1 prime-requisite adjustment may not reduce
+any ability score below a minimum required for the character's
+already-selected class.
+```
+
+Recorded as trade rule **R10** in §4. It adds one constraint to an existing procedure; **no new adjustment rule, exchange rate, or class-specific exception is created**, and no other card changes.
+
+**What it does not do.** It does **not** reopen eligibility and does **not** let the trade establish eligibility. `CHAR-002`'s result is an **invariant the trade must preserve**, not a test the trade may re-run.
 
 ### SR-4 — discard criterion (closes U1)
 
@@ -154,6 +178,7 @@ Not applicable.
 5. Choose a class from the eligible set                    CHAR-002
         ↓
 6. Optional 2-for-1 prime-requisite trade                  §4
+   — must preserve the class's creation minimums    R10  (SR-5)
         ↓
 7. Re-derive prime-requisite / XP effects                  ADV-001
 ```
@@ -164,8 +189,13 @@ Not applicable.
 |---|---|---|
 | Role | **Eligibility-shaping** | **Post-eligibility** |
 | Runs | **before** eligibility is evaluated | **after** a class is chosen |
-| Can it establish a class minimum? | **YES** — where the switched score is the required ability | **NO** — it can never retroactively make a character eligible for a class already chosen |
+| Can it **establish** a class minimum? | **YES** — where the switched score is the required ability | **NO** — it can never make a character eligible for a class already chosen |
+| Can it **destroy** an established minimum? | n/a — it runs before eligibility | **NO** — forbidden by R10 (SR-5) |
 | Gated by | DM / simulation policy | Nothing; it is the player's option |
+
+```text
+Eligibility is established BEFORE the trade — and must remain true AFTER it.
+```
 
 Step 7 exists because the trade can change a prime requisite, which changes the `ADV-001` XP modifier. **`CHAR-001` does not compute that modifier** — it only notes that the value it feeds may have changed.
 
@@ -233,6 +263,34 @@ subject to **all** of:
 | R7 | If `score(D)` is already 10 or less, `D` cannot be lowered at all | p. 7 rule 4 |
 | R8 | The trade is entirely optional | p. 7 |
 | R9 | The trade occurs at this step only; no such adjustment may be made later | p. 7 |
+| **R10** | **After the trade, every creation-eligibility minimum of the selected class must still be satisfied** | **SR-5** — not RC-explicit |
+
+**R10 — the class eligibility invariant (SR-5).** RC's restrictions at R3/R4 protect Constitution, Charisma and Dexterity, but **not** every ability that gates a class. Without R10 a character could qualify for a class and then trade away the score that qualified it. R10 closes that:
+
+```text
+Eligibility is established BEFORE the trade  (§0 step 4)
+                and must remain true AFTER it  (R10)
+```
+
+**R10 does not reopen eligibility, and it does not let the trade create eligibility.** The asymmetry is deliberate:
+
+| | Ch. 13 switch (§6.2) | Ch. 1 trade (§4) |
+|---|---|---|
+| Can **establish** eligibility | **Yes** | **No** |
+| Can **destroy** established eligibility | n/a — runs before | **No** (R10) |
+
+**Where R10 actually binds.** Only where a class's creation minimum sits on an ability the ordinary restrictions leave unprotected:
+
+| Class | Creation minimum | Already protected? | R10 binds? |
+|---|---|---|---|
+| Dwarf | Constitution 9 | Yes — R3 | No |
+| Elf | Intelligence 9 | No, but Intelligence is an Elf **prime requisite**, so it can only be raised (R1) | No |
+| Halfling | Dexterity 9 | Yes — R4 | No |
+| Halfling | Constitution 9 | Yes — R3 | No |
+| Mystic | Dexterity 13 | Yes — R4 | No |
+| **Mystic** | **Wisdom 13** | **No** — Wisdom is not a Mystic prime requisite and is not covered by R3 or R4 | **YES** |
+
+**The Mystic's Wisdom is the one materially binding case**, and R10 exists for it. SR-2 is unaffected: a Mystic may still **raise** Dexterity through the ordinary trade.
 
 **R6 and R7 are consistent, not redundant** (arithmetic shown): a trade removes 2 points, so 11 → 9 is legal and 10 → 8 would breach the floor. R7 is RC restating R6's consequence at the boundary.
 
@@ -363,10 +421,24 @@ All die results are supplied by a scripted RNG (`TESTING_STRATEGY.md`; `src/rng`
 | M3 | Mystic, Dex 16, Str 12, Wis 15 | Lower **Dex** by 2 | **Rejected** (R4) — SR-2 permits raising Dexterity, never lowering it |
 | M4 | Mystic, Wis 15, Dex 13 | Lower Wis by 2, raise **Wis**… | **Rejected** (R1) — Wisdom is a Mystic *requirement*, not a prime requisite |
 | M5 | Mystic | Any trade | Exchange rate is **2:1**, identical to every other class — **no Mystic-specific rate exists** |
-| M6 | Mystic, Wis 13, Dex 13 (both at minimum) | Lower Wis by 2 | **Rejected** (R6/R7) — 13 → 11 would be legal by the floor, but see M7 |
-| M7 | Mystic, Wis 13 → 11 by trade, then re-evaluate eligibility | Eligibility is **unaffected** — it was decided at §0 step 4, before the trade (§3). The character remains a Mystic with Wis 11 |
+### Class eligibility invariant (SR-5, rule R10)
 
-*(M6/M7 record a real consequence of SR-3's ordering: a Mystic may legally trade its Wisdom below the 13 that qualified it, because eligibility has already been decided. RC's own p. 7 worked example does the same thing to an elf's Wisdom.)*
+> These supersede the earlier M6/M7 cases, which recorded the **unguarded** behaviour — a Mystic trading Wisdom below the 13 that qualified it. SR-5 makes that illegal.
+
+| # | Setup | Action | Expected |
+|---|---|---|---|
+| **V1** | Mystic, **Wis 15**, Str 12 | Lower Wis by 2, raise Str by 1 | **LEGAL** — final Wis **13**, exactly at the minimum. R10 is satisfied at the boundary |
+| **V2** | Mystic, **Wis 14**, Str 12 | Lower Wis by 2 | **ILLEGAL** (R10) — would finish at Wis **12**, below the Mystic's required 13. *(R6's floor of 9 would have permitted it; R10 is what forbids it)* |
+| **V3** | Mystic, **Wis 13**, Str 12 | Lower Wis by 2 | **ILLEGAL** (R10) — already at the minimum |
+| V4 | Mystic, Wis 17, Str 12 | Lower Wis by 4, raise Str by 2 | **LEGAL** — final Wis 13 |
+| V5 | Mystic, Wis 17, Str 12 | Lower Wis by 6, raise Str by 3 | **ILLEGAL** (R10) — final Wis 11 |
+| V6 | Mystic, Wis 15, Dex 14, Str 12 | Lower Wis by 2 → raise **Dex**; then lower Wis by 2 again | **First trade legal** (Wis 13, Dex 15 — SR-2 permits raising Dexterity); **second ILLEGAL** (R10) |
+| V7 | **Any class**, any trade that would breach a creation minimum of the **selected** class | — | **ILLEGAL** (R10) — stated generally, not as a Mystic special case |
+| V8 | Elf, Int 9 (at its minimum), Wis 15 | Lower Wis by 2, raise **Int** | **LEGAL** — Intelligence is raised, never lowered; R10 is not engaged |
+| V9 | Dwarf, Con 9 | Lower Con | **ILLEGAL** — already barred by **R3**; R10 adds nothing here |
+| V10 | Halfling, Dex 9 | Lower Dex | **ILLEGAL** — already barred by **R4** |
+| V11 | Mystic, Wis 15 → 13 by trade, then re-evaluate eligibility | Character **remains a Mystic**, and now still satisfies Wis 13 / Dex 13 — **the invariant holds after the trade** |
+| V12 | Fighter (no creation minimum), Wis 18 | Lower Wis by 8, raise Str by 4 | **LEGAL** — final Wis 10, above R6's floor of 9. R10 binds nothing, because the Fighter has no creation minimum |
 
 ### Chapter 13 switch (SR-3)
 
@@ -384,7 +456,7 @@ All die results are supplied by a scripted RNG (`TESTING_STRATEGY.md`; `src/rng`
 
 | # | Case | Expected |
 |---|---|---|
-| O1 | Fighter chosen; trade raises Str 12 → 13; re-test eligibility for Dwarf | **Rejected** — the trade cannot retroactively establish eligibility for any class (§3). Contrast W1, where the *switch* can |
+| O1 | Fighter chosen; trade raises Str 12 → 13; re-test eligibility for Dwarf | **Rejected** — the trade **cannot establish** eligibility for any class (§3). Contrast W1, where the *switch* can. **Retained and unchanged by SR-5** — R10 forbids the trade *destroying* eligibility; it does not let the trade *create* it |
 | O2 | Elf: switch establishes Int 9, class chosen, then trade raises Int further | Legal — the switch established eligibility, the trade then operates as ordinary post-eligibility adjustment |
 | O3 | Trade attempted before eligibility is evaluated | **Rejected** — §0 step 6 follows step 5 |
 | O4 | Full sequence run for a character discarded at §6.1 | Restarts at §1; no switch, eligibility, or trade occurs for the discarded character |
@@ -414,6 +486,7 @@ All die results are supplied by a scripted RNG (`TESTING_STRATEGY.md`; `src/rng`
 | **§6.1 discard criterion (SR-4)** | **Simulator Ruling** — human-granted 2026-08-29. RC states two non-equivalent predicates; the detailed one is adopted and the narrower one characterized as an introductory summary |
 | **§4 Mystic Dexterity raise (SR-2)** | **Simulator Ruling** — human-granted 2026-08-29. RC's general principle is applied over an under-inclusive enumeration |
 | **§0 / §6.2 / §6.4 switch inclusion and ordering (SR-3)** | **Simulator Ruling** — human-granted 2026-08-29. RC states both provisions but never composes them. The *inclusion* of the switch is additionally a **project scope decision**; the switch procedure itself is **Rules Cyclopedia Explicit** |
+| **§4 rule R10 — class eligibility invariant (SR-5)** | **Simulator Ruling** — human-granted 2026-08-29. RC's exchange restrictions protect Constitution, Charisma and Dexterity but **not** every gating ability, and RC never states that a class's creation minimums must survive the trade. **Not RC Explicit** — RC's p. 7 elf example lowers Wisdom, but Wisdom is not an Elf creation requirement, so it settles nothing here |
 
 **No Alternate-Source Compatible Completion and no Human-Approved Variant is claimed by this card.** No alternate-source research was performed for it, and none of SR-2/3/4 departs from an explicit RC rule — each selects among readings RC's own text admits.
 
@@ -421,7 +494,9 @@ All die results are supplied by a scripted RNG (`TESTING_STRATEGY.md`; `src/rng`
 
 ## Open Questions
 
-**All four are `RESOLVED` by human ruling, 2026-08-29. None blocks approval.**
+**All are `RESOLVED` by human ruling, 2026-08-29. None blocks approval.**
+
+**Additionally closed: the Mystic Wisdom edge case.** Earlier drafts of this card recorded, as an accepted consequence of SR-3's ordering, that a Mystic could legally trade Wisdom below the 13 that qualified it — producing a Mystic who does not meet the Mystic requirements. **SR-5 (rule R10) forbids that.** There is now **no unresolved question about a character qualifying for a class and then ceasing to satisfy its minimums during the same creation procedure.**
 
 | # | Question | Disposition | Where |
 |---|---|---|---|
@@ -447,4 +522,4 @@ All die results are supplied by a scripted RNG (`TESTING_STRATEGY.md`; `src/rng`
 - Date: `<pending>`
 - Notes: `<pending>`
 
-**Mechanically complete and ready for review.** U1–U4 are all resolved. **Approving this card ratifies Simulator Rulings SR-2, SR-3 and SR-4** — three project adjudications of questions RC leaves open, each stated separately and none bundled.
+**Mechanically complete — `READY FOR HUMAN RULE-CARD REVIEW`.** U1–U4 resolved, and the Mystic Wisdom edge case closed by SR-5. **Approving this card ratifies Simulator Rulings SR-2, SR-3, SR-4 and SR-5** — four project adjudications of questions RC leaves open, each stated separately and none bundled.
