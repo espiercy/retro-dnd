@@ -185,7 +185,7 @@ Record, in the evidence report:
 
 ## 9.1 Mandatory Primary-Source Object / Table Completeness Audit
 
-> **Proposed by `docs/decisions/DEC-0010-primary-source-completeness-audit.md` (2026-08-23), which is `PROPOSED — AWAITING HUMAN APPROVAL`. §9.1–§9.8, §10.1–§10.3, the corresponding Stage-A sequence steps in §3, and the §17 hard stops added by that record take effect on approval of it.** They were drafted after `CLUSTER-002` Stage A produced an apparently thorough whole-source cross-reference report while never opening the Elf Experience Table (RC p. 26) — the object that mechanically governs the very question being escalated.
+> **Adopted by `docs/decisions/DEC-0010-primary-source-completeness-audit.md`, `Approved` 2026-08-29. §9.1–§9.8, §10.1–§10.3, the corresponding Stage-A sequence steps in §3, and the §17 hard stops added by that record are in force.** They were drafted after `CLUSTER-002` Stage A produced an apparently thorough whole-source cross-reference report while never opening the Elf Experience Table (RC p. 26) — the object that mechanically governs the very question being escalated.
 
 ### 9.1.0 The recorded defect this section exists to prohibit
 
@@ -394,7 +394,7 @@ Distinct from `SOURCE_HIERARCHY.md`, which ranks *editions*. This ranks *object 
 
 ## 9.7 Complete-Entry Inspection Rule
 
-> Proposed by `DEC-0010`. Motivated by the `CHAR-002` failure: the p. 7 summary table was treated as exhaustive while the detailed Druid entry — which carries additional transition requirements — went unread.
+> Adopted by `DEC-0010`. Motivated by the `CHAR-002` failure: the p. 7 summary table was treated as exhaustive while the detailed Druid entry — which carries additional transition requirements — went unread.
 
 Where a responsibility concerns a **character class, race/class, monster, spell, item, or similarly structured entity**, the relevant detailed entity entry must be inspected **as a complete source unit**. For a class this may include:
 
@@ -451,7 +451,7 @@ Do not immediately replace the rejected interpretation with another speculative 
 
 ## 10.1 Adversarial Self-Review vs. Independent Completeness Review
 
-> Proposed by `DEC-0010`. These are **two different gates**. Do not blur them, and do not blur either with ordinary falsification (§10).
+> Adopted by `DEC-0010`. These are **two different gates**. Do not blur them, and do not blur either with ordinary falsification (§10).
 
 ### 10.1.1 Adversarial self-review — may be performed by the original researcher
 
@@ -487,7 +487,7 @@ Must be performed by a **different reviewer context that did not conduct the evi
 
 ## 10.2 Open-Question Closure Gate
 
-> Proposed by `DEC-0010`. **Completeness may not be declared while the packet's own declared unfinished work is outstanding.**
+> Adopted by `DEC-0010`. **Completeness may not be declared while the packet's own declared unfinished work is outstanding.**
 
 Every Stage-A packet must carry an inventory of its own unresolved statements — wording such as *not yet read in full, not exhaustively checked, not searched, not verified visually, may exist elsewhere, needs later confirmation, open question, unresolved by current research, possible interaction not yet checked*.
 
@@ -748,6 +748,6 @@ An agent performing rules research under this protocol must stop under each of t
 
 Adopted `docs/decisions/DEC-0009-evidence-first-rule-research-protocol.md`, `APPROVED`, 2026-08-16.
 
-**Amendments proposed 2026-08-23 by `docs/decisions/DEC-0010-primary-source-completeness-audit.md`** — §9.1–§9.6 (object/table completeness audit, structure-first ordering, visual verification, coverage checklist, research-risk classification and high-risk triggers, prohibited shortcuts Guardrails A–C, within-source evidence-type guidance), §9.7 (complete-entry inspection), §9.8 ("single governing object" caution), §10.1.1 (adversarial self-review), §10.1.2 (independent completeness review — not by the original researcher), §10.2, §10.2.1 and §10.2.2 (open-question closure gate, reconciliation table, and the genuine-conflict-versus-incompleteness distinction), §10.3 (independent completeness-review method), the object-level precondition note in §15, the corresponding Stage-A sequence steps in §3, and the `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED`, `STOP — MORE PRIMARY RESEARCH REQUIRED` (closure-gate blockage) and `FAIL COMPLETENESS PREPARATION` hard stops in §17.
+**Amendments adopted by `docs/decisions/DEC-0010-primary-source-completeness-audit.md`, `Approved` 2026-08-29 (drafted 2026-08-23)** — §9.1–§9.6 (object/table completeness audit, structure-first ordering, visual verification, coverage checklist, research-risk classification and high-risk triggers, prohibited shortcuts Guardrails A–C, within-source evidence-type guidance), §9.7 (complete-entry inspection), §9.8 ("single governing object" caution), §10.1.1 (adversarial self-review), §10.1.2 (independent completeness review — not by the original researcher), §10.2, §10.2.1 and §10.2.2 (open-question closure gate, reconciliation table, and the genuine-conflict-versus-incompleteness distinction), §10.3 (independent completeness-review method), the object-level precondition note in §15, the corresponding Stage-A sequence steps in §3, and the `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED`, `STOP — MORE PRIMARY RESEARCH REQUIRED` (closure-gate blockage) and `FAIL COMPLETENESS PREPARATION` hard stops in §17.
 
-**`DEC-0010` is `PROPOSED — AWAITING HUMAN APPROVAL`. Those sections are drafted but not yet in force**; until it is approved, `DEC-0009` and the pre-amendment protocol remain operative. `DEC-0009` is not superseded and its protections are unchanged; `DEC-0010` strengthens Stage A only. This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full — expected to produce a committed `docs/rules/evidence/EXP-001-evidence.md` Stage-A artifact, not a rewritten Rule Card, as its first deliverable.
+**`DEC-0010` is `Approved` and those sections are in force.** `DEC-0009` is not superseded and its protections are unchanged; `DEC-0010` strengthens Stage A only. This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full — expected to produce a committed `docs/rules/evidence/EXP-001-evidence.md` Stage-A artifact, not a rewritten Rule Card, as its first deliverable.

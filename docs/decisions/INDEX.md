@@ -13,7 +13,7 @@ Durable architectural and process decisions for the Retro D&D Simulator project.
 | [DEC-0007](DEC-0007-rules-cyclopedia-primary-rules-authority.md) | Rules Cyclopedia as Primary Rules Authority | Approved | 2026-08-16 |
 | [DEC-0008](DEC-0008-rules-cyclopedia-v1-rules-profile.md) | Rules Cyclopedia V1 Rules Profile — Selected Core/Optional Systems | Approved | 2026-08-16 |
 | [DEC-0009](DEC-0009-evidence-first-rule-research-protocol.md) | Evidence-First Rule Research Protocol | Approved | 2026-08-16 |
-| [DEC-0010](DEC-0010-primary-source-completeness-audit.md) | Primary-Source Completeness Audit Required for Rule Research | PROPOSED — AWAITING HUMAN APPROVAL | 2026-08-23 |
+| [DEC-0010](DEC-0010-primary-source-completeness-audit.md) | Primary-Source Completeness Audit Required for Rule Research | Approved | 2026-08-29 |
 
 ## Adding a Decision Record
 

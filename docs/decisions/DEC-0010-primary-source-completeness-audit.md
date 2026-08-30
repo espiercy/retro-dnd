@@ -7,12 +7,19 @@ DEC-0010
 Primary-Source Completeness Audit Required for Rule Research
 
 ## Status
-PROPOSED — AWAITING HUMAN APPROVAL
+Approved
 
 ## Date
-2026-08-23
+2026-08-29
 
-> **Lifecycle note.** This record is **not approved and is not active authority.** It was previously drafted with `Status: Approved`; that was an error — an implementation agent has no authority to approve a project-wide process decision (`DEVELOPMENT_WORKFLOW.md` §9, `AGENTS.md` §12). The repository's decision-record lifecycle (§9.4) had no prior pre-approval status, so this record adopts `PROPOSED — AWAITING HUMAN APPROVAL`, aligned with the Rule Card lifecycle's existing `AWAITING_APPROVAL` term. Until a human project owner approves it, `DEC-0009` and the pre-amendment protocol remain the operative process, and the amendments this record proposes are drafted-but-not-in-force.
+> **Lifecycle history.** Drafted 2026-08-23; **approved by the human project owner 2026-08-29.** The `Date` field above carries the approval date, per this repository's decision-record convention. The proposal history is recorded here rather than erased, because how this record reached approval is itself part of what it governs:
+>
+> - It was **initially drafted with `Status: Approved`. That was an error** — an implementation agent has no authority to approve a project-wide process decision (`DEVELOPMENT_WORKFLOW.md` §9, `AGENTS.md` §12).
+> - It was corrected to `PROPOSED — AWAITING HUMAN APPROVAL`, a status adopted because the repository's decision-record lifecycle (§9.4) had no prior pre-approval term; it was aligned with the Rule Card lifecycle's existing `AWAITING_APPROVAL`.
+> - While proposed, it underwent human review and **several rounds of consistency correction** — a true-independent-review gate and open-question closure gate; a genuine-conflict-versus-incompleteness distinction; clarification that independent completeness review is universally required; and reconciliation of the Stage-A ordering into a single canonical structure-first sequence.
+> - Final human approval: **2026-08-29**.
+>
+> **This record is now active authority, and the `RULE_CARD_RESEARCH_PROTOCOL.md` amendments it makes are in force.** `DEC-0009` remains `Approved` and is not superseded; this record amends its Stage-A process by adding required steps.
 
 ## Context
 
@@ -145,7 +152,7 @@ The cost is real: page-image inspection is slower than text search. That cost is
 
 ## Consequences
 
-- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` gains the object/table completeness audit (§9.1), the structure-first operations order (§9.1.1), the visual-verification requirement (§9.2), the coverage-checklist requirement (§9.3), the research-risk classification and Guardrail D triggers (§9.4), Guardrails A–C (§9.5), the within-source evidence-type guidance (§9.6), the complete-entry inspection rule (§9.7), the "single governing object" caution (§9.8), the adversarial-self-review / independent-completeness-review split (§10.1.1, §10.1.2), the open-question closure gate and its reconciliation table (§10.2, §10.2.1), the independent completeness-review method (§10.3), the genuine-conflict-versus-incompleteness distinction (§10.2.2), the object-level precondition for alternate-source escalation (§15), and four new hard-stop rows plus an amended internal-source-conflict row (§17). Its Stage-A sequence diagram is amended accordingly. **These amendments take effect only on human approval of this record.**
+- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` gains the object/table completeness audit (§9.1), the structure-first operations order (§9.1.1), the visual-verification requirement (§9.2), the coverage-checklist requirement (§9.3), the research-risk classification and Guardrail D triggers (§9.4), Guardrails A–C (§9.5), the within-source evidence-type guidance (§9.6), the complete-entry inspection rule (§9.7), the "single governing object" caution (§9.8), the adversarial-self-review / independent-completeness-review split (§10.1.1, §10.1.2), the open-question closure gate and its reconciliation table (§10.2, §10.2.1), the independent completeness-review method (§10.3), the genuine-conflict-versus-incompleteness distinction (§10.2.2), the object-level precondition for alternate-source escalation (§15), and four new hard-stop rows plus an amended internal-source-conflict row (§17). Its Stage-A sequence diagram is amended accordingly. **These amendments are in force as of this record's approval, 2026-08-29.**
 - **Prior BECMI research disposition (human ruling, 2026-08-23):** the BECMI material produced from the invalid RC-exhaustion conclusion **must not be used** as current evidence or as synthesis input. It is preserved in session/branch history for research provenance only, and is not deleted. If alternate-source research is later properly justified after genuine RC object-level exhaustion, it must be **performed anew** from the corrected RC evidence state; no conclusion may be inherited merely because it was already generated.
 - Stage A becomes slower and more expensive. This is intended.
 - `CLUSTER-001`'s and `CLUSTER-002`'s existing evidence were audited against this standard as part of adopting it; results are recorded in `docs/rules/evidence/CLUSTER-001-completeness-audit.md` and `docs/rules/evidence/CLUSTER-002-completeness-audit.md`.
