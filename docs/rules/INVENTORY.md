@@ -169,7 +169,7 @@ Three distinct concepts, used consistently throughout this document (do not conf
 | ID | Title | RC Source | RC Classification / Project Selection | Dependencies | Downstream Consumers | V1 Reachable | Status | Risk / Notes |
 |---|---|---|---|---|---|---|---|---|
 | `ADV-001` | Experience Point Awards (treasure + monsters defeated) | Experience chapter | RC Core | `TREAS-001`, `COMBAT-003`, `MON-001` | `ADV-002` | Yes | Unresearched | Medium. |
-| `ADV-002` | Level Advancement & Titles | Experience chapter | RC Core | `ADV-001`, `CHAR-002` | `MAGIC-*` (spell-level access), `CHAR-011` (Weapon Mastery gates), `CHAR-013` (high-level branches) | Yes — full standard progression per class, see "Progression-Scope Findings" | Unresearched | No mandatory gold/time training procedure appears to exist in this lineage; progression is now correctly stated per-class rather than a flat 1–36. |
+| `ADV-002` | Level Advancement & Titles | Experience chapter | RC Core | `ADV-001`, `CHAR-002` | `MAGIC-*` (spell-level access), `CHAR-011` (Weapon Mastery gates), `CHAR-013` (high-level branches) | Yes — full standard progression per class, see "Progression-Scope Findings" | Unresearched | No mandatory gold/time training procedure appears to exist in this lineage; progression is now correctly stated per-class rather than a flat 1–36. **Two human-adjudicated class caps are binding on this entry (Elf 10, Druid 36) and overrule RC Ch. 1 p. 12 — see "Human-adjudicated class level caps" below before researching.** |
 | `ADV-003` | Between-Expedition Resupply & Town Services | Equipment / Nonplayer Characters | RC Core | `CHAR-004`, `TREAS-004` | — | Yes | Unresearched | Low-medium; possible merge candidate once researched. |
 
 ## Simulator Specifications (Non-Historical Design Requirements)
@@ -220,6 +220,19 @@ Weapon Mastery, General Skills, Druid, Mystic, Morale, Nonlethal Combat, Ability
 ## Progression-Scope Findings (corrected)
 
 The prior draft's "full 1–36 level range" statement is corrected: V1 supports the **full standard Rules Cyclopedia progression for each included class**, which is not identical across classes. The four human classes (Cleric, Fighter, Magic-User, Thief) advance conventionally to level 36. Each demihuman race-class (Dwarf, Elf, Halfling) has its own lower level cap, followed by continued advancement via Attack Rank progression rather than further character levels — independently corroborated this revision (multiple sources confirm demihumans "have level limits, but still have ways to improve with experience"). The Mystic class has its own level cap and progression structure, standard (not extended) for V1 per `DEC-0008`. Standard progression for every included class — including the demihuman Attack Rank structure and the Mystic's own cap — does **not** block eventual Immortality candidacy: the Rules Cyclopedia supports demihuman/Mystic Immortality through a distinct experience-based prerequisite independent of Chapter 19's extended-progression variant, so declining that variant for V1 does not foreclose the project's longer-term Immortality ambition (see "Future Scope: Immortality" below). Magic-User spells still run 9 levels and Cleric 7 (both confirmed, unchanged from the prior draft); Druid's spell-level range is not yet confirmed and is flagged for `MAGIC-006`'s own future research.
+
+### Human-adjudicated class level caps (2026-08-29) — binding on `ADV-002`
+
+Two RC internal inconsistencies over class level caps were found during `CLUSTER-002` primary-source completeness auditing and adjudicated by the human project owner. **Both are recorded here because they govern advancement (`ADV-002`), not character creation** — `CLUSTER-002`'s boundary is unchanged and is not expanded by either.
+
+| Class | Adjudicated cap | Then | Conflicting text, overruled |
+|---|---|---|---|
+| **Elf** | **10** | Attack Ranks C–M | Ch. 1 p. 12, "dwarves and elves may not progress beyond 12th level" |
+| **Druid** | **36** (standard progression levels 9–36) | special-challenge / limited-rank progression begins at **30th** | Ch. 1 p. 12, "Druids may only achieve 30th level" |
+
+**Source of truth in both cases: the detailed class progression material and the class Experience Table** — RC p. 26 (Elf) and RC pp. 28–29 (Druid). **RC Chapter 1 p. 12 is treated as erroneous summary text on both points.** That passage is now demonstrably unreliable on two of its five class-cap claims; a future `ADV-002` researcher must not rely on it without checking the per-class tables. The overruled sentences are real and printed and are preserved verbatim in the audit record — not deleted.
+
+**No alternate-source (BECMI/B/X/other) research is needed or permitted for either question**; both are resolved from RC's own detailed material. Full evidence records: `docs/rules/evidence/CLUSTER-002-completeness-audit.md` §8 (Elf) and §5.2 Finding 11 (Druid).
 
 ## Future Scope: Immortality (Post-V1)
 
