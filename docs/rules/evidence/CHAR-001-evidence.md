@@ -1,0 +1,148 @@
+# Stage-A Evidence: CHAR-001 — Ability Score Generation
+
+> **⚠ Completeness-audit correction (2026-08-23) — a negative finding in this packet is FALSIFIED.** §7 records as a negative result: *"no non-random ability-generation alternative; no 'roll 4d6 drop lowest'-style variant."* **That claim is false as written.** RC p. 130 ("Creating High-Level Player Characters," Step 2: Generate Ability Scores), visually verified, gives two alternatives: a **roll-3d6-eight-times, keep the six best, assign in any order** method, and an explicit **non-random point-allocation** method (60 + 5d6, or an equal allotment of 60–90, with the 3–18 range still applying). Both are scoped to creating characters **above 1st level**, so this packet's **baseline 1st-level procedure is unaffected** — but the negative claim was stated unconditionally and must be struck. This also **resolves open question 2** ("whether Ch. 10 high-level creation alters the ability-score step"): **yes, materially.** The claim rested on keyword exhaustion rather than object inspection — the defect proposed Guardrail B now prohibits. See `docs/rules/evidence/CLUSTER-002-completeness-audit.md` Finding 7.
+>
+> **Open-question closure (2026-08-23).** §9 items 1, 3 and 4 are **RETAINED AS GENUINE SOURCE AMBIGUITIES** — each verified against visually inspected governing objects (Ch. 1 p. 7 and Ch. 13 p. 145), where RC genuinely states two non-equivalent discard criteria in one passage and is genuinely silent on the trade↔switch interaction. §14's residual *"further DM-facing qualifications may exist in sections not exhaustively read"* is **RESOLVED BY SOURCE INSPECTION**: the Ch. 13 section list was enumerated from the TOC and the generation-relevant sections inspected (pp. 143, 145, 147, 148); Mapping, Multiple Characters, Overusing Dice, Reality Shifts and Record Keeping bear on nothing in this card's scope, and the remaining Ch. 13 sections are owned elsewhere by subject. See `docs/rules/evidence/CLUSTER-002-completeness-audit.md` §6.3.
+>
+> **This is a Stage-A evidence artifact, not a Rule Card.** Produced under `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` (`DEC-0009`). It is not mechanically authoritative, is not `APPROVED`, and authorizes nothing. No `CHAR-*` Rule Card exists or was created. Stage B (mechanical synthesis, legacy comparison, alternate-source research, Simulator Rulings) was **not** begun.
+
+> **Independent completeness review — PASS (human, 2026-08-29).** The human project owner completed the independent primary-source completeness review required by proposed `DEC-0010` item 14 / protocol §10.1.2 and returned **`CHAR-001: source coverage PASS`**, with genuine ambiguities retained. This certifies that the source was **fully mapped**; it does **not** assert that RC is unambiguous here — §9 items 1, 3 and 4 remain open as genuine source ambiguities and are Stage-B problems, not evidence gaps. **Stage B remains PAUSED.**
+
+## 1. Research Scope
+
+**Investigating:** the Rules Cyclopedia's complete procedure for generating a new character's ability scores — which abilities, the die method, ordering, adjustment/reroll/replacement provisions, whether the procedure distinguishes PCs from other character types, and any cross-references elsewhere in RC that qualify the Chapter 1 procedure.
+
+**Excluded from this task:** Rule Card drafting; alternate-source research; mechanical synthesis; any implementation or RNG-contract design (see §9).
+
+## 2. Primary-Source Access
+
+**Source:** *Dungeons & Dragons Rules Cyclopedia* (Allston, Aaron, ed. TSR, 1991), full OCR transcription, `archive.org/stream/TSR1071TheDDRulesCyclopedia/TSR-1071-The-DD-Rules-Cyclopedia_djvu.txt` — the same primary-text representation used for `EXP-001`/`EXP-002`.
+
+**Access method:** the full transcription (1,937,448 characters as loaded) was opened in-browser and searched via in-page full-text search over the loaded page's own text. Surrounding context, table rows, and internal cross-references were read in full, not sampled as isolated snippets.
+
+**Citation method:** page numbers are taken from the RC Table of Contents and the book's own Tables index, both present in the transcription, and from in-body chapter/section headings. Table names are given as RC prints them so a reviewer can locate them directly.
+
+**Access limitation carried forward from prior tasks:** OCR inserts line breaks mid-phrase, so naive exact-substring search can produce false negatives. All findings below were confirmed by reading surrounding context, not by a single substring match.
+
+No access failure occurred. `STOP — PRIMARY SOURCE ACCESS REQUIRED` was **not** triggered.
+
+## 3. Research Questions
+
+A. How are initial ability scores generated, and with what dice?
+B. Which abilities exist, and in what order are they generated?
+C. Are there ordering/arrangement requirements or freedoms?
+D. Are there reroll, replacement, discard, or adjustment provisions?
+E. Does the procedure distinguish player characters from other character types?
+F. What directly linked steps materially change the resulting scores?
+G. What cross-references elsewhere in RC modify or constrain the Chapter 1 procedure?
+
+## 4. Evidence Map
+
+| Question | RC Location | What RC Establishes | Provenance | Confidence |
+|---|---|---|---|---|
+| A. Die method | Ch. 1, "Roll for Ability Scores," p. 6 | Each ability score is generated by rolling three six-sided dice and summing them (RC's own shorthand: "rolling 3d6"). Resulting range is 3–18 inclusive, with 3 stated as the least and 18 the highest possible. | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| B. Which abilities, and order | Ch. 1, p. 6 | Exactly six abilities, listed in this order: Strength, Intelligence, Wisdom, Dexterity, Constitution, Charisma. Each is given a one-sentence functional description at this location. | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| B/C. Roll-in-order framing | Ch. 1, p. 6 | The procedure instructs the player to roll for each ability and record the scores "as you roll them, next to the names of the abilities" — i.e. the baseline procedure pairs each roll with its listed ability rather than generating a pool for free assignment. RC does not, at this location, offer an arrange-to-taste option. | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| C/G. Arrangement permitted by DM option | **Ch. 13, "Creating Characters," p. 145** | A DM *may* allow a player who "wants a certain class of character but rolls abilities that strongly favor another class" to switch scores around — specifically, to switch the highest rolled score into the prime-requisite ability for the desired class. Framed as DM permission ("you may allow"), not a baseline player entitlement. | Rules Cyclopedia Explicit | PRIMARY TEXT + CROSS-REFERENCE CONFIRMED (Ch. 1 baseline + Ch. 13 DM option) |
+| D. Discard / recreate provision | **Ch. 13, "Creating Characters," p. 145** | A newly created character with uniformly low scores should be allowed to be discarded. RC gives the criterion twice in the same passage, and the two statements are **not identical** — see §8 Challenge 3. The passage also states that a player who nonetheless wants such a character may keep it. | Rules Cyclopedia Explicit (that a discard provision exists) / Unresolved by RC (its exact threshold) | DIRECT PRIMARY TEXT |
+| D/F. Point-trade adjustment | Ch. 1, "Adjust Ability Scores," p. 7 | An optional trade: lower one ability by 2 to raise the prime requisite by 1, repeatable. Constraints stated: only the prime requisite may be raised; if a class has two prime requisites, both may be raised; Constitution and Charisma may not be exchanged; Dexterity may not be lowered (but may be raised where it is a prime requisite); no score may be lowered below 9, and a score already at 10 or less cannot be lowered at all. Explicitly optional. | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| F. Procedural position of the trade | Ch. 1, pp. 6–7 | The trade occurs **after** the character class is chosen (RC states the class must be decided first) and is **time-boxed**: it must be done at that step, and RC states no such adjustments can be made later. | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E. PC vs. other character types | Ch. 13, Charm Person / Duration of Charm area, ~pp. 144–145 | For randomly determining an existing human NPC's Intelligence in that context, RC specifies a **different** method (3d6 for most humans, 2d6+6 for elves treating a result of 8 as 9, 1d6+12 for magic-users). This is a context-specific NPC determination, not the PC creation procedure, and demonstrates the 3d6-per-ability method is **not** presented as universal across all character types. | Rules Cyclopedia Explicit (for that NPC context) | DIRECT PRIMARY TEXT |
+| G. Alternate entry point above 1st level | Ch. 10, "Creating High-Level Player Characters," p. 129 | RC provides a DM-facing procedure for creating a new PC starting above 1st level, with recommended starting levels for three named circumstances. Its effect on the ability-score step specifically was not established in this pass — see §9. | Rules Cyclopedia Explicit (that the entry point exists) / Unresolved by RC (its interaction with ability-score generation) | DIRECT PRIMARY TEXT (existence) / NOT YET VERIFIED (score-step interaction) |
+| A. Randomness requirement | Ch. 1, p. 6 | The procedure is explicitly dice-driven; RC provides no non-random ("point-buy"-style) alternative at this location, and none was located elsewhere (§7). | Rules Cyclopedia Explicit | PRIMARY TEXT + CROSS-REFERENCE CONFIRMED (negative search, §7) |
+| C. Arithmetic check on the trade's floor | Ch. 1, p. 7 (derived) | RC's stated "a score already at 10 or less cannot be lowered" is arithmetically consistent with its own "no score below 9" floor, since a trade removes 2 points (11→9 legal; 10→8 would breach the floor). The two stated constraints corroborate rather than conflict. | Necessary Mechanical Consequence (derivation shown) | NECESSARY CONSEQUENCE |
+
+## 5. Governing Procedure (evidence-supported, not a specification)
+
+RC presents character creation as a numbered 12-step sequence (Ch. 1, p. 6). Within it, ability-score generation is **not one contiguous step**: score generation (step 1) is separated from score adjustment (step 3) by class choice (step 2). RC's own text makes the ordering dependency explicit — the trade cannot be evaluated until the prime requisite is known, and the prime requisite is a property of the chosen class.
+
+Chapter 13's DM-facing "Creating Characters" material (p. 145) sits outside the Chapter 1 sequence entirely and supplies two further provisions (discard, and score-switching) that a reader of Chapter 1 alone would not find.
+
+## 6. Research Questions Belonging to Other Rule Cards
+
+- Which class has which prime requisite, and demihuman ability minimums → `CHAR-002` (see `CHAR-002-evidence.md`).
+- What the ability-score adjustments *do* → `CHAR-007`.
+- Prime-requisite XP bonuses/penalties → advancement domain (`ADV-001`/`ADV-002`), not eligibility and not generation.
+- Starting money (also 3d6-based, Ch. 1 p. 8) → `CHAR-004`.
+- Height/weight, alignment, languages → `CHAR-008` and adjacent cards.
+
+## 7. Whole-Source Cross-Reference Pass
+
+**Search terms used:** `3d6` (56 occurrences reviewed for relevance); `Roll 3d6 for each ability`; `roll 3d6`; `Roll for Ability Scores`; `Adjust Ability Scores`; `Prime Requisites`; `prime requisite` (56 occurrences); `Steps in Character Creation`; `Creating Characters`; `Creating High-Level Player Characters`; `reroll` (6); `re-roll` (1); `ability score`; `Bonuses and Penalties for Ability Scores`.
+
+**Sections inspected:** Table of Contents; Tables index; Ch. 1 in full (all sections pp. 6–12); Ch. 2 class entries; Ch. 10 (pp. 127–129); Ch. 13 ("Ability Checks," "Creating Characters," Charm Person area); Ch. 19 (p. 266).
+
+**Cross-references discovered:**
+- Ch. 1 p. 6 → forward reference to the "Bonuses and Penalties for Ability Scores Table" (`CHAR-007`) and to step 3.
+- Ch. 1 p. 6 → forward reference to Chapter 2 for class choice.
+- **Ch. 13 p. 145 → materially qualifies Ch. 1's procedure** (discard + score-switching). This is the single most consequential cross-reference found for this card and would have been missed by a Chapter 1-only pass.
+- Ch. 10 p. 129 → alternate high-level creation entry point.
+- Ch. 13 (charm area) → distinct NPC Intelligence-determination method.
+
+**Negative results (searched, nothing found):** no non-random ability-generation alternative; no "roll 4d6 drop lowest"-style variant; no ability-score-generation variant in Ch. 19 (Ch. 19 contains only Ability Scores and Saving Throws, Demihuman/Mystic Experience Levels, and combat/death-related variants); no re-roll-individual-scores provision distinct from the Ch. 13 whole-character discard.
+
+## 8. Falsification Pass
+
+**Challenge 1 — "Scores are generated by 3d6 per ability, in the listed order, full stop."**
+*Sought:* any RC passage offering a different method, an arrangement freedom, or an exception. *Searched:* `3d6` (all 56 hits scanned by context), `roll 3d6`, Ch. 19 in full, Ch. 13 in full, Ch. 10 creation material.
+*Found:* Ch. 13 p. 145's DM-permitted score-switching, and a distinct NPC Intelligence method in the charm-duration context.
+**Disposition: QUALIFIED.** The 3d6 method stands as the baseline PC procedure, but "in the listed order, full stop" does not survive — a DM-discretion switching provision exists in a different chapter, and the method is not universal across character types.
+
+**Challenge 2 — "The point-trade is the only post-roll modification of starting scores."**
+*Sought:* other provisions altering scores at creation. *Searched:* `Adjust Ability Scores`, `Creating Characters`, `prime requisite`, Ch. 13 in full.
+*Found:* Ch. 13 p. 145's switching provision is a second, mechanically different modification (relocating a rolled score, versus trading points at 2:1).
+**Disposition: REJECTED as stated; replaced by the qualified finding** that RC contains at least two distinct modification provisions in two different chapters, one player-facing and time-boxed, one DM-discretionary.
+
+**Challenge 3 — "The discard criterion is 'all scores under 9.'"**
+*Sought:* internal consistency within the Ch. 13 passage itself. *Searched:* full passage read in context.
+*Found:* the same passage states the criterion twice, in non-identical terms — an "all scores under 9" formulation and a "no score above 9, or two scores below 6" formulation. These are not equivalent conditions.
+**Disposition: QUALIFIED — recorded as an RC ambiguity, not reconciled here.** Stage B must not silently pick one. See §10.
+
+**Challenge 4 — "Constitution/Charisma/Dexterity restrictions in the trade are absolute."**
+*Sought:* contradictions between RC's summary box and its numbered rules at p. 7.
+*Found:* the summary states Dexterity cannot be lowered; the numbered rule adds that Dexterity may be *raised* for a thief or halfling. These are consistent, because Dexterity is a prime requisite for those classes and only the prime requisite may be raised.
+**Disposition: CONFIRMED (apparent tension resolved by RC's own text, not by inference).**
+
+## 9. Unresolved RC Questions
+
+1. **The discard criterion's exact threshold** (Challenge 3) — RC states it two ways in one passage.
+2. **Whether "Creating High-Level Player Characters" (p. 129) alters the ability-score step**, or only the starting level/equipment. Not established in this pass; the section's opening was read, its full body was not exhausted for score-step effects.
+3. **Whether the Ch. 13 score-switching provision interacts with the Ch. 1 point-trade** (e.g. whether both may be applied to the same character, and in what order). RC does not address this where either provision is stated.
+4. **Whether the Ch. 1 trade's "no adjustments later" statement is intended to bind the Ch. 13 DM provision**, which appears in a DM-facing chapter and is not cross-referenced from Ch. 1.
+
+`POTENTIAL COMPLETION QUESTION — NOT YET RESEARCHED` applies to items 1, 3, and 4: alternate-source research is **not** authorized at this stage and was not performed (`RULE_CARD_RESEARCH_PROTOCOL.md` §15).
+
+## 10. Notes for the RNG Question (rules fact only)
+
+The cluster record (`docs/rules/clusters/CLUSTER-002-character-foundation.md` §8, question 4) asked whether `CHAR-001` consumes the established RNG contract. **Rules fact established:** RC's procedure is explicitly random, requiring three six-sided dice summed, once per ability, six times; a second 3d6 roll (money, p. 8) sits in the same chapter but belongs to `CHAR-004`. No non-random alternative was located.
+
+**No implementation contract is proposed here.** Mapping this requirement onto `src/rng` is a Stage-B/implementation concern and is deliberately not designed in this artifact.
+
+## 11. Alternate-Source Research Requirement
+
+**Not established as required at this stage.** RC supplies a complete baseline generation procedure. The unresolved items in §9 are internal ambiguities and interaction questions, not RC silences that obviously require an alternate source — whether any of them warrants gap-directed research is a Stage-B determination to be made after human evidence review, per `RULE_CARD_RESEARCH_PROTOCOL.md` §15.
+
+## 12. Possible Simulator Ruling Areas (named, not drafted)
+
+- The discard criterion's threshold, if RC's two formulations cannot be reconciled and no compatible source resolves it.
+- The interaction/ordering of the Ch. 1 trade and the Ch. 13 switching provision.
+
+Neither is drafted, proposed, or self-approved (`RULE_CARD_RESEARCH_PROTOCOL.md` §16).
+
+## 13. Legacy Rule Card Withholding
+
+**Not applicable.** `CHAR-001` has no prior Rule Card in this repository — no `docs/rules/character_creation/` directory exists. There was no legacy card to withhold, and none was consulted.
+
+## 14. Confidence Assessment
+
+**High** for the baseline procedure (die method, six abilities, range, ordering framing, the point-trade and its constraints, procedural position) — multiple mutually consistent passages, all read in full context.
+
+**Moderate** for the completeness of the qualifying provisions: the Ch. 13 material was found only by the whole-source pass, which is direct evidence that Chapter 1 alone under-describes this responsibility, and raises a reasonable possibility that further DM-facing qualifications exist in sections not exhaustively read.
+
+## 15. Recommendation
+
+```text
+EVIDENCE READY FOR HUMAN REVIEW
+```
+
+with the four §9 items carried forward as explicitly unresolved, and Challenge 3's ambiguity flagged for adjudication rather than Stage-B guesswork.
