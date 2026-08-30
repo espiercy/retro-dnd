@@ -14,7 +14,14 @@ General Ability Score Mechanical Effects
 
 > Stage-B draft, 2026-08-29. Stage-A evidence (`docs/rules/evidence/CHAR-007-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29. **Not approved. Not implementable.**
 >
-> **Stage-B correction impact (2026-08-29): NONE.** The Stage-B research failure and its correction concern `CHAR-003`'s Elf hit-point value and `CHAR-001`'s Mystic trade question. This card supplies the **Constitution adjustment value** consumed by `CHAR-003`; that value is drawn from RC p. 9 and is **not in dispute** — the `CHAR-003` conflict is about a *fixed gain to which Constitution expressly does not apply*. No mechanical content changed. **Candidate for approval.**
+> **Stage-B correction and human-ruling impact (2026-08-29): NONE.** Neither the research correction nor human rulings SR-1 through SR-4 touches this card:
+>
+> - **SR-1** (Elf `+2`) governs a *fixed* gain to which **Constitution expressly does not apply**; the p. 9 adjustment value this card owns was never in dispute.
+> - **SR-2** (Mystic may raise Dexterity) is a `CHAR-001` trade rule. This card supplies **no** trade rule and **no** prime-requisite logic.
+> - **SR-3** (Chapter 13 switch) relocates *which scores* reach eligibility; this card maps a score to an adjustment and is indifferent to how the score arose.
+> - **SR-4** (discard criterion) operates on raw scores before any adjustment is read.
+>
+> No mechanical content changed. **Candidate for approval.**
 
 ## Rules Domain
 

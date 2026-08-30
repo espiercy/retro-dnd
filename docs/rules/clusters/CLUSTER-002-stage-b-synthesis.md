@@ -6,7 +6,32 @@
 
 ---
 
-## 0. ⚠ CORRECTED 2026-08-29 — Stage B is NOT complete
+## 0a. Human rulings recorded 2026-08-29 — Stage B complete, cards ready for review
+
+The human project owner reviewed the corrected remediation and issued four binding rulings. **All executable ambiguity in this cluster is now either resolved transparently or explicitly deferred.**
+
+| Ruling | Question | Decision | Provenance |
+|---|---|---|---|
+| **SR-1** | Elf fixed HP at 10th level | **`+2`** | **Simulator Ruling** |
+| **SR-2** | May a Mystic raise Dexterity through the 2-for-1 trade? | **Yes** — ordinary two-prime-requisite rule; no Mystic-specific exception | **Simulator Ruling** |
+| **SR-3** | Chapter 13 score switch | **Included in V1**; runs **before** eligibility; **may** establish a class minimum; the trade runs after and **never** can | **Simulator Ruling** + project scope decision |
+| **SR-4** | Discard criterion | **No score above 9 OR two scores below 6**; player may keep the character anyway | **Simulator Ruling** |
+
+**None is classified as `Rules Cyclopedia Explicit`, `Necessary Mechanical Consequence`, or `Alternate-Source Compatible Completion`.** Each is a project adjudication of a question the sources leave open, and each records the reading it rejected. **The historical conflicts are not resolved by these rulings — only the simulator's behaviour is.**
+
+**Full three-stage history of the Elf value, preserved deliberately:**
+
+```text
+Stage-B draft 1   +2         WITHDRAWN — rested on a false claim of BECMI unanimity
+Correction        UNRESOLVED research outcome INCONCLUSIVE; BECMI itself split
+Human ruling      +2         Simulator Ruling over sources that demonstrably disagree
+```
+
+**The final `+2` is not the withdrawn `+2` restored.** The first asserted the sources agreed; this one adjudicates sources that do not. That distinction is the whole governance value of the episode and must not be flattened in later summaries.
+
+**Governance outcome:** the alternate-source failure is converted into durable governance rather than institutional memory — `DEC-0011` (`PROPOSED — AWAITING HUMAN APPROVAL`) with a drafted, **not-in-force** `RULE_CARD_RESEARCH_PROTOCOL.md` §15.1.
+
+## 0. ⚠ CORRECTED 2026-08-29 — the research failure this cluster exposed
 
 **A material Stage-B research failure was found by independent human review after the first version of this record.**
 
@@ -45,14 +70,16 @@ Corrections applied: §4 (rewritten), §7 (Simulator Rulings — the "none requi
 
 *(Corrected 2026-08-29.)*
 
-| Card | Core specification | Blocking gaps | Approval status |
-|---|---|---|---|
-| `CHAR-001` Ability Score Generation | Complete and executable **except the trade step for the Mystic** | **U3** (Mystic Dexterity raise — required V1 class); **U2** (scope decision on the Ch. 13 switch) | **NOT READY** |
-| `CHAR-002` Race & Class Eligibility | **Complete and executable** | None | **CANDIDATE** |
-| `CHAR-003` Hit Points & Hit Dice | Complete and executable **except the Elf's 10th-level gain** | **W1** (`UNRESOLVED — HUMAN RULING REQUIRED`) | **NOT READY** |
-| `CHAR-007` Ability Score Effects | **Complete and executable** | None. All five Stage-A boundary questions closed | **CANDIDATE** |
+*(Updated 2026-08-29 after the human rulings.)*
 
-**Two cards are blocked.** The first version of this record said none were — that was the second defect this correction fixes, and it was a wording failure rather than a research one: "non-blocking" was used for questions that leave required V1 behaviour unspecified.
+| Card | Core specification | Open blocking gaps | Ratifies on approval |
+|---|---|---|---|
+| `CHAR-001` Ability Score Generation | **Complete and executable** — U1–U4 all resolved | **None** | SR-2, SR-3, SR-4 |
+| `CHAR-002` Race & Class Eligibility | **Complete and executable** | **None** | — (consumes SR-3's output) |
+| `CHAR-003` Hit Points & Hit Dice | **Complete and executable** | **None** — W1 resolved | SR-1 |
+| `CHAR-007` Ability Score Effects | **Complete and executable** | **None**. All five Stage-A boundary questions closed | — |
+
+**All four are ready for human Rule Card review.** Note the sequence this record has been through: the first version claimed no card was blocked (wrong — it used *non-blocking* for questions that left required V1 behaviour unspecified); the correction found two blocked; the human rulings unblocked both. **The middle step was not a detour** — it is what made the rulings explicit rather than assumed.
 
 ## 3. The two ambiguity classes, kept apart
 
@@ -141,13 +168,17 @@ All are evidence-backed metadata corrections in `docs/rules/INVENTORY.md`. **No 
 
 `RULE_CARD_RESEARCH_PROTOCOL.md` and `AGENTS.md` §12 reserve these for the human project owner. Assigning a new Rule ID, or moving a responsibility between cards, is not an agent action.
 
-| # | Proposal | Detail |
-|---|---|---|
-| P1 | **Druid transition → `CHAR-013`**, with `CHAR-008` and `ADV-002` dependencies | The complete Druid entry adds a 29th-level upper bound, woodland residence, a DM-rolled 1d4-month meditation, testing and instruction by a higher-level druid, admission to the realm, and ongoing alignment/residence maintenance. **None is creation eligibility**; `CHAR-002` is unaffected and `CLUSTER-002` is **not** expanded |
-| P2 | **Mystic downstream material** → `ADV-001` (Strength-determines-XP-bonus disambiguation; tithe-and-donate XP condition), `CHAR-009`/`TREAS-004` (never armor or protective magic), `ADV-002` (oath sanction: expelled, no new levels, −1 level/year), `CHAR-008` (75%-Lawful *tendency*, not a requirement) | Creation eligibility is complete at p. 7 and stays with `CHAR-002` |
-| P3 | **Chapter 13 Ability Checks: assign a Rule ID** | Established as **not** `CHAR-007`'s (different mechanic, audience, and location). It shares its resolution mechanic with `CHAR-012` (General Skills), which should inform where it lands. `CHAR-007` does not name it |
-| P4 | **`CHAR-001` scope note** | The card's real surface includes Chapter 13 DM provisions and Chapter 10 above-1st-level methods. `INVENTORY.md` lists `CHAR-001`'s RC source as "Character Creation" only; a source-location note (Ch. 1, Ch. 10 p. 130, Ch. 13 p. 145) would help the next researcher |
-| P5 | **`ADV-001` structural note** | The Experience Bonuses and Penalties Table is **not uniform across classes** — the Elf uses a conjunctive two-ability rule, the Halfling distinguishes *or* from *and*, and the Mystic's penalties are halved. Recorded for `ADV-001`, whose card does not exist |
+**Dispositioned 2026-08-29 on human direction. Each is `ADOPT NOW`, `DEFER`, or `REJECT`.**
+
+| # | Proposal | Disposition | Rationale (one sentence) |
+|---|---|---|---|
+| **P1** | Druid transition → `CHAR-013`, with `CHAR-008` / `ADV-002` dependencies | **DEFER FOR HUMAN GOVERNANCE** | Moving a whole transition procedure into `CHAR-013` is a scope decision about what that entry owns, not a metadata correction, and `CHAR-013` is already flagged `SPLIT CANDIDATE` — the evidence is recorded on `CHAR-002` §B so nothing is lost by waiting. |
+| **P2** | Mystic downstream material → `ADV-001`, `ADV-002`, `CHAR-008`, `CHAR-009`/`TREAS-004` | **ADOPT NOW** | These are pointer notes onto **existing** entries for material RC plainly locates outside creation eligibility; no new ID, no scope change, and a future `ADV-001` researcher would otherwise have to rediscover the tithe/donation XP condition. |
+| **P3** | Assign a Rule ID to the Chapter 13 general Ability Check | **DEFER FOR HUMAN GOVERNANCE** | Creating a new Rule ID is exactly the meaningful scope decision that must not be silently invented; `CHAR-007` §4.4 already establishes it is *not* `CHAR-007`'s, which is all this task needed to settle. |
+| **P4** | `CHAR-001` RC source-location note | **ADOPTED — already applied** | Pure factual correction of a source citation (Ch. 1 + Ch. 10 p. 130 + Ch. 13 p. 145), and the omission is precisely what let a false negative finding stand in Stage A. |
+| **P5** | `ADV-001` structural note on the Experience Bonuses and Penalties Table | **ADOPT NOW** | Records a verified structural fact — the table is **not** uniform (Elf conjunctive; Halfling distinguishes *or* from *and*; Mystic penalties halved) — onto an existing entry, as a warning against reading it as a single rule. |
+
+**Adopted in this task: P2, P4, P5** (all onto existing entries). **Deferred: P1, P3** — both would assign or materially redefine ownership of a Rule ID.
 
 ### 6.3 Explicitly **not** proposed
 
@@ -194,15 +225,17 @@ Ordered by consequence.
 Not performed, and not authorized: Rule Card approval; implementation planning; production implementation; implementation tests; any `src/` or `tests/` change; any merge to `main`; broad alternate-source survey; adoption of any P1–P5 proposal; assignment of any new Rule ID; expansion of `CLUSTER-002`.
 
 ```text
-CLUSTER-002 Stage B:   NOT COMPLETE — remediation performed 2026-08-29,
-                       awaiting human Stage-B remediation review
+CLUSTER-002 Stage B:   COMPLETE — human rulings SR-1..SR-4 recorded 2026-08-29
 Rule Card status:      AWAITING_APPROVAL (all four)
-    CHAR-001           NOT READY  — U3, U2
-    CHAR-002           CANDIDATE
-    CHAR-003           NOT READY  — W1
-    CHAR-007           CANDIDATE
+    CHAR-001           ready for review — ratifies SR-2, SR-3, SR-4
+    CHAR-002           ready for review
+    CHAR-003           ready for review — ratifies SR-1
+    CHAR-007           ready for review
+Governance:            DEC-0011  PROPOSED — AWAITING HUMAN APPROVAL
+                       protocol §15.1  DRAFTED, NOT IN FORCE
+Deferred:              P1 (Druid transition owner), P3 (Ability Check Rule ID)
 Implementation:        NOT AUTHORIZED
-Next gate:             HUMAN STAGE-B REMEDIATION REVIEW
+Next gate:             HUMAN DEC-0011 AND RULE-CARD REVIEW
 ```
 
 ## 10. Postmortem and 11. Proposed guardrail

@@ -14,7 +14,9 @@ Race & Class Eligibility
 
 > Stage-B draft, 2026-08-29. Stage-A evidence (`docs/rules/evidence/CHAR-002-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29. **Not approved. Not implementable.**
 >
-> **Stage-B correction impact (2026-08-29): NONE.** The Stage-B research failure and its correction concern the Elf's fixed hit-point gain (`CHAR-003` W1) and `CHAR-001`'s Mystic trade question (U3). **Neither touches this card** — eligibility is decided entirely by raw-score thresholds, no hit-point value enters it, and the Elf and Druid **maximum levels** (10 and 36) are settled human adjudications that the correction did not disturb. No mechanical content changed. **Candidate for approval**, subject to V1 below.
+> **Stage-B correction impact (2026-08-29): NONE substantive.** The research failure and its correction concern the Elf's fixed hit-point gain (`CHAR-003`) and `CHAR-001`'s Mystic trade question. **Neither touches this card** — eligibility is decided entirely by raw-score thresholds, no hit-point value enters it, and the Elf and Druid **maximum levels** (10 and 36) are settled human adjudications the correction did not disturb.
+>
+> **One clarification added from human ruling SR-3 (`CHAR-001`):** the input to §2 is now stated explicitly as the scores **after any authorized Chapter 13 switch** and **before** the Chapter 1 trade. **No eligibility threshold changed.** Former open question V1 is `RESOLVED`.
 
 ## Rules Domain
 
@@ -53,7 +55,7 @@ Race & Class Eligibility
 
 ## Rules Cyclopedia Leaves Undefined / Ambiguous
 
-**V1 — Whether the Chapter 13 score switch may be used to reach a class ability minimum.** Owned as an ambiguity by `CHAR-001` (U4); its consequence for *this* card is bounded and stated in §5 below. `HUMAN RULING REQUIRED`.
+**V1 — Whether the Chapter 13 score switch may be used to reach a class ability minimum.** RC states the switch's trigger as a class-preference mismatch and never addresses minimums; the two provisions sit in different chapters with no cross-reference. **`RESOLVED` for this project by Simulator Ruling SR-3** (`CHAR-001`, human-granted 2026-08-29): **yes**, within the §5 envelope. The RC silence itself is real and is recorded here rather than presented as an RC answer.
 
 **V2 — Nothing else.** Specifically **not** ambiguous, though each was tested: whether a character failing every demihuman/special requirement has any constrained outcome (RC's universal human-class availability makes the question moot — every character has at least four legal classes); whether any ability-score *maximum* gates a class (none located across the p. 7 table, all nine class entries, and Ch. 19); whether any eligibility requirement is expressed as an adjustment rather than a raw score (none located).
 
@@ -71,7 +73,7 @@ Not applicable — no alternate-source candidate was considered.
 
 ## Simulator Ruling
 
-**Not applicable — none proposed.**
+**None proposed by this card.** `CHAR-001`'s **SR-3** governs the switch's inclusion and ordering, and this card consumes its output; the ruling is recorded there, not duplicated here.
 
 ## Human-Approved Variant
 
@@ -83,7 +85,17 @@ Not applicable. Druid and Mystic are **Project-Selected RC Options** (`DEC-0008`
 
 ### 1. Inputs
 
-The six **as-rolled** ability scores from `CHAR-001` §1. **Not** the adjusted scores — see §4.
+The six **eligibility scores** — i.e. `CHAR-001` §1's as-rolled scores, **after** any Chapter 13 switch the DM / simulation policy authorized at `CHAR-001` §0 step 3, and **before** the Chapter 1 trade (SR-3).
+
+```text
+as-rolled scores  →  [optional authorized Ch.13 switch]  →  ELIGIBILITY SCORES  →  this card
+                                                                                       ↓
+                                                                            class chosen
+                                                                                       ↓
+                                                                         Ch.1 2-for-1 trade
+```
+
+**Never the adjusted (post-trade) scores** — see §4. Where no switch is authorized, eligibility scores are identical to as-rolled scores.
 
 ### 2. Creation-time eligibility
 
@@ -114,20 +126,26 @@ eligible_classes(scores) -> set of classes
 ### 4. Ordering, and why it is fixed
 
 ```text
-CHAR-001 §1  generate as-rolled scores
+CHAR-001 §1    generate as-rolled scores
      ↓
-CHAR-002     evaluate eligibility  ← THIS CARD, on as-rolled scores
+CHAR-001 §6.1  discard / replacement determination        (SR-4)
      ↓
-             choose a class from the eligible set
+CHAR-001 §6.2  optional authorized Ch.13 switch           (SR-3)  ← eligibility-shaping
      ↓
-CHAR-001 §4  optional prime-requisite trade
+CHAR-002       evaluate eligibility  ← THIS CARD
+     ↓
+               choose a class from the eligible set
+     ↓
+CHAR-001 §4    optional prime-requisite trade             ← post-eligibility
 ```
 
-**Necessary mechanical consequence, derivation shown:** RC requires class choice before the trade, and the trade raises only a prime requisite while Constitution may not be exchanged at all. Therefore the trade cannot manufacture eligibility, and evaluating on adjusted scores would be both circular (the trade needs the class) and mechanically inert.
+**Necessary mechanical consequence, derivation shown:** RC requires class choice before the trade, and the trade raises only a prime requisite while Constitution may not be exchanged at all. Therefore **the trade can never manufacture eligibility** — the test has already run — and evaluating on adjusted scores would be both circular (the trade needs the class) and mechanically inert.
 
-### 5. Bounded consequence of the unresolved switch (V1)
+**The switch is different, and that difference is the point.** It runs *before* the test and **can** establish a class minimum, bounded by §5.
 
-`CHAR-001` §6.3 establishes what the Chapter 13 switch could ever reach, because its destination is a *prime requisite*:
+### 5. Bounded consequence of the Chapter 13 switch (V1 — `RESOLVED` by SR-3)
+
+The switch is **included in V1** and **may** be authorized to satisfy a class minimum. Because its destination is a *prime requisite*, what it can reach is fully determined — **the ruling does not widen this**:
 
 | Gate | Reachable by switch? |
 |---|---|
@@ -138,9 +156,9 @@ CHAR-001 §4  optional prime-requisite trade
 | Mystic — Dexterity 13 | Yes, if the highest rolled score ≥ 13 |
 | Mystic — Wisdom 13 | **No** (prime reqs are Strength, Dexterity) |
 
-So **no ruling on V1 can ever make a Dwarf eligible on Constitution 8, or a Halfling on Constitution 8, or a Mystic on Wisdom 12.** V1's scope is confined to the Elf's Intelligence gate, the Halfling's Dexterity gate, and the Mystic's Dexterity gate.
+So **no authorization can ever make a Dwarf eligible on Constitution 8, a Halfling on Constitution 8, or a Mystic on Wisdom 12** — those gates are not prime requisites of their classes. The switch's reach is confined to the **Elf's Intelligence gate**, the **Halfling's Dexterity gate**, and the **Mystic's Dexterity gate**.
 
-**Default until ruled:** the switch is **not** applied. §2 evaluates as-rolled scores exactly. A flow that attempts to apply it must fail loudly (`CHAR-001` test X3).
+**When no switch is authorized, §2 evaluates as-rolled scores exactly.** Authorization is a per-character DM / simulation-policy decision, not a global toggle (`CHAR-001` §6.2).
 
 ## Scope Boundaries
 
@@ -231,15 +249,19 @@ Scores are given in RC's order: **Str, Int, Wis, Dex, Con, Cha**.
 
 | # | Case | Expected |
 |---|---|---|
-| E20 | Dwarf candidate: Str 18, Con 8. Apply every legal `CHAR-001` trade first, then evaluate | Dwarf **still not eligible** — Constitution cannot be exchanged; eligibility is unchanged by any trade |
-| E21 | Eligibility evaluated on adjusted rather than as-rolled scores | **Contract violation** — the evaluation must consume as-rolled scores |
+| E20 | Dwarf candidate: Str 18, Con 8. Apply every legal `CHAR-001` trade first, then evaluate | Dwarf **still not eligible** — Constitution cannot be exchanged; **no trade ever changes eligibility** |
+| E21 | Eligibility evaluated on adjusted (post-trade) scores | **Contract violation** — the evaluation consumes eligibility scores, never adjusted ones |
 | E22 | Fighter chosen, then trade raises Str 12→13 | Eligibility result unchanged; the trade is `CHAR-001`'s and post-dates this card |
+| E25 | Elf candidate: as-rolled Int 8, Str 16; **switch authorized** → Int 16 | **Elf eligible.** The switch runs before this card and **can** establish a minimum (SR-3) |
+| E26 | Same candidate, **switch not authorized** | **Elf not eligible** — eligibility scores equal as-rolled scores |
+| E27 | Dwarf candidate: Con 8, Str 18; **switch authorized** | **Still not eligible** — the switch reaches Strength, never Constitution |
+| E28 | Mystic candidate: Wis 12, Dex 11, Cha 17; **switch authorized** | **Still not eligible** — the switch reaches Dexterity, never Wisdom |
 
 ### Guard
 
 | # | Case | Expected |
 |---|---|---|
-| E23 | Ch. 13 switch applied before eligibility | Raises/returns *unresolved* (V1) — must not default to permit or deny |
+| E23 | Ch. 13 switch applied **after** a class is chosen | **Rejected** — the switch runs before this card (SR-3) |
 | E24 | Druid transition requirements queried | Out of scope: directs to `CHAR-013`/`ADV-002`; **not** answered by this card |
 
 ## Provenance Classification
@@ -249,13 +271,13 @@ Scores are given in RC's order: **Str, Int, Wis, Dex, Con, Cha**.
 | §2 table; the human-class exemption; Druid non-reachability; §3 | **Rules Cyclopedia Explicit** |
 | §4 ordering; §5 switch envelope; "the eligible set is never empty" | **Necessary Mathematical-Mechanical Consequence** (derivations shown) |
 | §B/§C ownership proposals | **Not rules** — repository responsibility recommendations, for human decision |
-| V1 | **Unresolved by RC** |
+| §1 eligibility-score input; §5 switch permission (V1) | **Unresolved by RC**, resolved for this project by **Simulator Ruling SR-3** (recorded on `CHAR-001`). RC never composes the two provisions; this card consumes the ruling's output and asserts no RC finding of its own |
 
 ---
 
 ## Open Questions
 
-1. **V1 — may the Chapter 13 switch be granted to satisfy a class ability minimum?** Owned as `CHAR-001` U4, and **contingent on `CHAR-001` U2** (whether V1 includes the switch at all). **Classification A — does not block approval of this card.** §2's specification is a faithful, complete reading of RC on its own terms: RC evaluates eligibility on as-rolled scores, and the switch is a DM permission RC does not oblige a simulator to implement. If V1 excludes the switch, V1 is moot; if V1 includes it, the consequence here is bounded to three gates (§5) and this card gains a documented input, not a changed rule.
+1. **V1 — `RESOLVED`** by human ruling SR-3 (2026-08-29, recorded on `CHAR-001`). The Chapter 13 switch is **included in V1**, runs **before** eligibility, and **may** be authorized to satisfy a class minimum — bounded by §5 to three gates. **No eligibility threshold changed**; this card gained a precisely specified input, not a changed rule.
 2. **Druid transition ownership** (§B) — a proposed `CHAR-013` assignment with `CHAR-008`/`ADV-002` dependencies. **Proposed, not adopted.** Assigning it is a scope decision for the human project owner, not an agent action.
 3. **Mystic downstream ownership** (§C) — five items proposed against `ADV-001`, `ADV-002`, `CHAR-008`, `CHAR-009`. Recommendations only.
 

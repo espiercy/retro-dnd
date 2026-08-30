@@ -14,7 +14,7 @@ Ability Score Generation
 
 > Stage-B draft, 2026-08-29. Stage-A evidence (`docs/rules/evidence/CHAR-001-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29. **Not approved. Not implementable.** Only a human project owner may set `APPROVED` (`SOURCE_HIERARCHY.md` §9). The Pre-Code Development Gate (`ARCHITECTURE.md` §16) is independent of this card's status and is not affected by it.
 >
-> **`NOT READY FOR APPROVAL` — corrected 2026-08-29.** An earlier draft classified all four open questions as *"non-blocking"*. That was wrong: **U3** (may a Mystic raise Dexterity through the trade?) leaves standard executable behaviour unspecified for a **required V1 class**, and **U2** requires a scope decision on whether V1 includes the Chapter 13 switch at all. See Open Questions for the corrected A–E classification.
+> **Human rulings recorded 2026-08-29 — all four open questions are now `RESOLVED`.** An earlier draft classified them all as *"non-blocking"*, which was wrong: U3 left standard executable behaviour unspecified for a **required V1 class**. The human project owner has since ruled on U1, U2, U3 and U4/V1. **This card is now mechanically complete for its approved scope.** Three of the rulings are **Simulator Rulings** (SR-2, SR-3, SR-4) — project adjudications, not RC-explicit findings — and approving this card ratifies them.
 
 ## Rules Domain
 
@@ -51,7 +51,7 @@ Ability Score Generation
 
 ## Rules Cyclopedia Leaves Undefined / Ambiguous
 
-Four items, each narrow. None blocks the core procedure.
+Four items, each narrow. **All four are now settled for this project by human ruling (SR-2, SR-3, SR-4 — see Simulator Ruling below), but the underlying RC ambiguity is real and is recorded here rather than papered over.** What follows is what RC does and does not say; what the simulator does about it is in the specification.
 
 **U1 — The discard criterion has two non-equivalent formulations in one passage (p. 145).**
 - *"When a newly created character has all low scores (all scores under 9), the player should be allowed to discard it."* → every score ≤ 8.
@@ -77,7 +77,7 @@ These differ at a score of exactly 9, and the second adds an independent trigger
 |---|---|
 | **U1** | RC prints **both** formulations deliberately, in consecutive paragraphs, as DM guidance. A single-formulation BECMI ancestor would establish what an earlier edition said; it would not establish which of two statements RC itself intends to bind. The prior question is whether V1 models a player-discretionary discard affordance at all — a project scope decision, not a historical one. |
 | **U2** | This is a **composition question between two RC provisions**, one of which (the Ch. 13 switch) RC introduces without cross-referencing the other. An alternate source cannot supply an ordering RC never contemplated. |
-| **U3** | An RC-internal under-inclusive enumeration versus an RC-internal general principle, concerning a class (Mystic) whose RC treatment is explicitly optional. Lineage research would address a different corpus's class list, not RC's own inconsistency. |
+| **U3** | An RC-internal under-inclusive enumeration versus an RC-internal general principle. **Additionally established by inspection during the `CHAR-003` lineage audit: the Mystic is not a BECMI core class** — the Master Set offers it only as *"suggestions… for converting a new monster, the mystic, into a character class if the DM desires"* (Master Players' Book p. 2, visually verified). No BECMI volume carries a Mystic prime-requisite trade rule, so no lineage source could answer this. |
 | **U4** | Permission/scope question about a DM-discretionary provision; the mechanics are already determined from RC. |
 
 This is a **positive determination that the §15 precondition is not met**, not an omission. Contrast `CHAR-003`, where gap-directed BECMI research *was* justified and *was* performed (`docs/rules/evidence/CHAR-003-elf-hp-alternate-source-research.md`).
@@ -90,18 +90,41 @@ Not applicable — no alternate-source candidate was considered, so there is not
 
 ## Simulator Ruling
 
-**None proposed.** But the earlier framing of this section was misleading and is corrected here.
+**Three required, escalated, and GRANTED by the human project owner on 2026-08-29.** Each is stated separately and **not bundled** (`RULE_CARD_RESEARCH_PROTOCOL.md` §16).
 
-An earlier draft paired *"Simulator Rulings: none required"* with *"U3 blocks Mystic trades"*, while calling U1–U4 **non-blocking**. Those cannot both be true: the Mystic is **required V1 content** (`DEC-0008`), the prime-requisite trade is standard executable behaviour, and a card that cannot complete that step for a required class is not fully specified. The wording obscured a real approval gate.
+> An earlier draft paired *"Simulator Rulings: none required"* with *"U3 blocks Mystic trades"* while calling everything non-blocking. That was incoherent and is corrected: U3 did require a ruling, and it has one.
 
-**Corrected position.** `RULE_CARD_RESEARCH_PROTOCOL.md` §16 permits a Simulator Ruling only after gap-directed research fails; §16 also forbids self-approval and forbids bundling. For U1–U4:
+### SR-2 — a Mystic **may** raise Dexterity through the 2-for-1 trade (closes U3)
 
-- **U3 meets §16's preconditions** — RC does not establish it, and lineage research cannot (below). It is escalated as a question with its alternatives stated, **not drafted as a ruling and not self-approved**, and it **blocks approval of this card**.
-- **U1, U2, U4** do not reach §16 at all — they are project-scope and RC-composition questions, not missing mechanics.
+**Missing behavior.** Whether the Mystic may raise Dexterity, which is one of its two prime requisites.
 
-**Why lineage research cannot resolve U3.** The Mystic is **not a BECMI core class**: the Master Set introduces it only as *"suggestions… for converting a new monster, the mystic, into a character class if the DM desires"* (Master Players' Book p. 2, visually verified — `CHAR-003-elf-hp-alternate-source-research.md` Finding E8). No BECMI volume carries a Mystic prime-requisite trade rule, so no lineage source can say whether a Mystic may raise Dexterity. This is a **positive determination from an inspected object**, not an assumption.
+**Why an answer is required.** The Mystic is required V1 content (`DEC-0008`); the trade is standard creation behaviour. Without a ruling the step cannot execute for a legal V1 character.
 
-U1–U4 are therefore carried to **human decision** and listed under Open Questions with an explicit blocking classification.
+**Why RC does not answer it.** RC p. 7's box states the general permission — *"You can only raise your character's prime requisite score"* — and its numbered rule 3 states *"Dexterity cannot be lowered (but it may be raised for a thief or halfling character)."* The p. 7 table on the same page gives the Mystic prime requisites **Strength and Dexterity**. The general principle admits the Mystic; the enumeration omits it.
+
+**Why compatible sources do not answer it.** The Mystic is **not a BECMI core class** — the Master Set offers it only as *"suggestions… for converting a new monster, the mystic, into a character class if the DM desires"* (Master Players' Book p. 2, visually verified). No BECMI volume carries a Mystic prime-requisite trade rule. A positive determination from an inspected object, not an assumption.
+
+**The smallest ruling.** RC's general two-prime-requisite rule — *"If a character has two prime requisites, both can be raised"* — applies to the Mystic's Strength and Dexterity. The thief/halfling wording in rule 3 is treated as an **editorial carryover not updated when the Mystic was integrated**. **No Mystic-only exchange rate, exception, or new adjustment rule is created**; every ordinary constraint (R1–R9) applies unchanged, including that Dexterity may never be *lowered*.
+
+### SR-3 — canonical ordering of the Chapter 13 switch (closes U2, U4, and `CHAR-002` V1)
+
+**Missing behavior.** RC states the Chapter 1 trade and the Chapter 13 switch in different chapters with no cross-reference and no stated order.
+
+**Scope decision, first.** The Chapter 13 switch is **INCLUDED IN V1**. It is an explicit RC procedure and is not dropped merely for being DM-discretionary. Its **discretionary character is preserved** — see §6.2.
+
+**The ruling.** The switch is evaluated **before** eligibility and class choice; the 2-for-1 trade **after**. Full sequence at §0.
+
+**Consequence, and the distinction that matters.** The switch is **eligibility-shaping**: it can establish a raw class minimum where the switched score is the required ability. The trade is **post-eligibility**: it cannot retroactively make a character eligible for a class already chosen. §0 and §6.3 state this.
+
+### SR-4 — discard criterion (closes U1)
+
+**Missing behavior.** RC p. 145 states the discard condition twice, non-equivalently.
+
+**The ruling.** The **detailed** formulation governs: the player may be offered a discard when **no ability score is above 9**, **or** at least **two** ability scores are **below 6**. The earlier "all scores under 9" wording is treated as an **introductory summary**, not an exclusive competing criterion. RC's own override is preserved: **the player may keep the character anyway.**
+
+---
+
+**Provenance for all three: `Simulator Ruling`** (`GAME_CONSTITUTION.md` §5 / `SOURCE_HIERARCHY.md` §10), granted by the human project owner. **None is a claim that RC objectively resolves the question**, and none is a Human-Approved Variant — each selects among readings RC's own text admits.
 
 ## Human-Approved Variant
 
@@ -111,7 +134,40 @@ Not applicable.
 
 ## Approved Mechanical Specification
 
-> Terminology: **as-rolled scores** are the six values produced by §1 before any modification. **Adjusted scores** are the values after the §4 trade. Eligibility (`CHAR-002`) is evaluated on as-rolled scores; see §3.
+> Terminology: **as-rolled scores** are the six values produced by §1. **Eligibility scores** are the values after any authorized §6.2 switch — these are what `CHAR-002` evaluates. **Adjusted scores** are the values after the §4 trade. Where no switch is authorized, eligibility scores are identical to as-rolled scores.
+
+### 0. Canonical V1 character-creation ordering (SR-3)
+
+**This is rules ordering only. It specifies no orchestration object, and none may be inferred from it.**
+
+```text
+1. Roll six ability scores in place                        §1
+        ↓
+2. Discard / replacement determination                     §6.1  (SR-4)
+        ↓   (if discarded, return to step 1)
+3. DM / simulation policy MAY authorize the Ch.13
+   highest-score switch for the desired class              §6.2  (SR-3)
+        ↓
+4. Evaluate creation eligibility on the scores
+   AFTER any authorized switch                             CHAR-002
+        ↓
+5. Choose a class from the eligible set                    CHAR-002
+        ↓
+6. Optional 2-for-1 prime-requisite trade                  §4
+        ↓
+7. Re-derive prime-requisite / XP effects                  ADV-001
+```
+
+**The load-bearing distinction:**
+
+| | Chapter 13 switch (step 3) | Chapter 1 trade (step 6) |
+|---|---|---|
+| Role | **Eligibility-shaping** | **Post-eligibility** |
+| Runs | **before** eligibility is evaluated | **after** a class is chosen |
+| Can it establish a class minimum? | **YES** — where the switched score is the required ability | **NO** — it can never retroactively make a character eligible for a class already chosen |
+| Gated by | DM / simulation policy | Nothing; it is the player's option |
+
+Step 7 exists because the trade can change a prime requisite, which changes the `ADV-001` XP modifier. **`CHAR-001` does not compute that modifier** — it only notes that the value it feeds may have changed.
 
 ### 1. Standard generation (1st-level characters) — the baseline procedure
 
@@ -145,9 +201,13 @@ Prime requisites, reproduced from the p. 7 table **for the trade's use only** (a
 | Mystic | Strength, Dexterity |
 | Druid | Wisdom *(not reachable at creation — `CHAR-002`)* |
 
-### 3. Eligibility is evaluated on as-rolled scores
+### 3. Eligibility is evaluated on eligibility scores, never on adjusted scores
 
-**Necessary mechanical consequence, derived and shown:** the trade may raise only a prime requisite (§4 rule R5); Constitution and Charisma may not be exchanged at all (R3); and class must be chosen before the trade (RC p. 7). Therefore no trade can create eligibility for a class the as-rolled scores did not already permit **except** where the gating ability is itself a prime requisite of that class — and even then only if the trade is legal, which requires a donor score ≥ 11. The dwarf's Constitution 9 gate can never be reached by trade, because Constitution cannot be exchanged.
+Eligibility (`CHAR-002`) consumes the scores **after** any authorized §6.2 switch and **before** the §4 trade (SR-3, §0 step 4).
+
+**Necessary mechanical consequence, derived and shown:** the trade may raise only a prime requisite (R1); Constitution and Charisma may not be exchanged at all (R3); and class must be chosen before the trade (RC p. 7). **Therefore the trade can never create eligibility for a class already chosen** — the eligibility test has already run. The dwarf's Constitution 9 gate in particular can never be reached by trade, because Constitution cannot be exchanged at all.
+
+The switch, by contrast, runs *before* the test and **can** establish a minimum — bounded by §6.3.
 
 ### 4. The prime-requisite trade (optional)
 
@@ -176,7 +236,7 @@ subject to **all** of:
 
 **R6 and R7 are consistent, not redundant** (arithmetic shown): a trade removes 2 points, so 11 → 9 is legal and 10 → 8 would breach the floor. R7 is RC restating R6's consequence at the boundary.
 
-**Dexterity as a target.** Dexterity may be *raised* where it is a prime requisite — RC names the thief and the halfling. **The Mystic case is `HUMAN RULING REQUIRED` (U3) and must not be implemented until ruled.** An implementation must treat "may a Mystic raise Dexterity?" as an explicit, unset configuration point that fails loudly rather than defaulting.
+**Dexterity as a target.** Dexterity may be **raised** wherever it is a prime requisite of the chosen class — **Thief, Halfling, and Mystic**. RC's rule 3 enumerates only the thief and halfling; **SR-2** rules that the general two-prime-requisite principle governs and that the enumeration is an editorial carryover from before the Mystic was integrated. Dexterity may **never be lowered** for any class, Mystic included (R4), and **no Mystic-specific exchange rate or exception exists** — R1–R9 apply unchanged.
 
 ### 5. Above-1st-level generation (Chapter 10) — a separate, DM-facing procedure
 
@@ -192,15 +252,31 @@ Method Two is **non-random**. Its existence is recorded because a Stage-A negati
 
 **V1 default:** the standard §1 procedure. §5 is specified so it is not lost, and is **not** wired to any V1 flow by this card.
 
-### 6. DM-discretionary provisions (Chapter 13, p. 145)
+### 6. Chapter 13 provisions (p. 145) — **INCLUDED IN V1** (SR-3)
 
-Both are DM permissions, not deterministic mechanics. Neither is part of the §1–§4 procedure.
+Both are **DM / simulation-policy discretionary decisions**. They are part of the V1 sequence at the positions §0 gives them.
 
-**6.1 Discard.** A newly created character with uniformly poor scores *should be allowed* to be discarded and a new one created; a player who nonetheless wants the character *may keep it*. **The threshold is `HUMAN RULING REQUIRED` (U1).** Both RC predicates are recorded verbatim above. An implementation must not choose one.
+> **Discretionary means discretionary.** Neither is a generic user-facing optional-rule toggle, and **no toggle architecture is specified or implied**. The switch in particular is a permission the DM (or, in an unattended simulation, the governing policy) may grant for a given character — not a global on/off setting.
 
-**6.2 Score switch.** If a player wants a certain class but rolls abilities that strongly favour another, the DM *may* allow switching the **highest rolled score** into the **prime requisite** ability appropriate to the desired class.
+**6.1 Discard (SR-4).** After generation, the player **may be offered** the opportunity to discard the character and roll another when:
 
-**6.3 Envelope of the switch — necessary mechanical consequence.** Because the switch's destination is *a prime requisite*, and because the class ability minimums are fixed (`CHAR-002`), the set of minimums the switch could ever satisfy is fully determined:
+```text
+no ability score is above 9
+        OR
+at least two ability scores are below 6
+```
+
+**The player may keep the character anyway** — RC states this explicitly (*"a player might want to play this character; if he does, let him"*), and it is part of the rule, not a courtesy.
+
+RC's other, narrower formulation — *"all low scores (all scores under 9)"* — is treated by SR-4 as an **introductory summary**, not an exclusive competing criterion. It is not deleted from the record; see "Rules Cyclopedia Leaves Undefined / Ambiguous" above.
+
+If the character is discarded, generation restarts at §1. If retained, creation continues at §6.2.
+
+**6.2 Score switch (SR-3).** If a player wants a certain class but rolls abilities that strongly favour another, the DM / simulation policy **may** authorize switching the **highest rolled score** into the **prime requisite** ability appropriate to the desired class. This is a **swap of two scores**, not a free rearrangement, and at most one such switch is authorized.
+
+**It runs before eligibility (§0 step 3), so it CAN establish a class minimum** — bounded by §6.3.
+
+**6.3 Envelope of the switch — necessary mechanical consequence.** Because the switch's destination is *a prime requisite*, and because the class ability minimums are fixed (`CHAR-002`), the set of minimums the switch can satisfy is fully determined — **the ruling does not widen it**:
 
 | Class | Minimum(s) | Is the gated ability a prime requisite? | Could the switch satisfy it? |
 |---|---|---|---|
@@ -211,9 +287,9 @@ Both are DM permissions, not deterministic mechanics. Neither is part of the §1
 | Mystic | Dexterity 13 | **Yes** | Yes, if the highest score is ≥ 13 |
 | Mystic | Wisdom 13 | No (prime reqs: Str, Dex) | **No** |
 
-**Whether the DM may grant the switch for that purpose is `HUMAN RULING REQUIRED` (U4).** The table states what is mechanically possible, not what is permitted.
+**SR-3 permits the switch to be granted for that purpose** (closing U4 / `CHAR-002` V1). The table remains the hard boundary: **no ruling can make a Dwarf eligible on Constitution 8, a Halfling on Constitution 8, or a Mystic on Wisdom 12**, because the switch's destination must be a prime requisite and Constitution and Wisdom are not prime requisites of those classes.
 
-**6.4 Ordering.** The switch's position relative to §2 and §4 is `HUMAN RULING REQUIRED` (U2).
+**6.4 Ordering.** Fixed by SR-3 — see §0. Switch before eligibility; trade after class choice.
 
 ### 7. Explicitly out of scope
 
@@ -278,13 +354,53 @@ All die results are supplied by a scripted RNG (`TESTING_STRATEGY.md`; `src/rng`
 | H5 | Second Method, equal-allotment form with total 59 or 91 | **Rejected** — RC bounds the allotment at 60–90 |
 | H6 | Any 1st-level creation flow | Neither Chapter 10 method is reachable — §1 is the only generation path |
 
-### Guard tests — unresolved items must fail loudly
+### Mystic Dexterity trade (SR-2)
+
+| # | Setup | Action | Expected |
+|---|---|---|---|
+| M1 | Mystic, Dex 13, Str 12, Wis 15 | Lower Wis by 2, raise **Dex** by 1 | Dex 14, Wis 13 — **legal** (SR-2: Dexterity is a Mystic prime requisite) |
+| M2 | Mystic, Str 12, Wis 15 | Lower Wis by 2, raise **Str** by 1 | Str 13, Wis 13 — legal (R2, both prime requisites raisable) |
+| M3 | Mystic, Dex 16, Str 12, Wis 15 | Lower **Dex** by 2 | **Rejected** (R4) — SR-2 permits raising Dexterity, never lowering it |
+| M4 | Mystic, Wis 15, Dex 13 | Lower Wis by 2, raise **Wis**… | **Rejected** (R1) — Wisdom is a Mystic *requirement*, not a prime requisite |
+| M5 | Mystic | Any trade | Exchange rate is **2:1**, identical to every other class — **no Mystic-specific rate exists** |
+| M6 | Mystic, Wis 13, Dex 13 (both at minimum) | Lower Wis by 2 | **Rejected** (R6/R7) — 13 → 11 would be legal by the floor, but see M7 |
+| M7 | Mystic, Wis 13 → 11 by trade, then re-evaluate eligibility | Eligibility is **unaffected** — it was decided at §0 step 4, before the trade (§3). The character remains a Mystic with Wis 11 |
+
+*(M6/M7 record a real consequence of SR-3's ordering: a Mystic may legally trade its Wisdom below the 13 that qualified it, because eligibility has already been decided. RC's own p. 7 worked example does the same thing to an elf's Wisdom.)*
+
+### Chapter 13 switch (SR-3)
+
+| # | Setup | Expected |
+|---|---|---|
+| W1 | Elf desired; as-rolled Str 16, Int 8, others ≤ 12; switch **authorized** | Highest score (16) switches into **Intelligence** (an Elf prime requisite) → Int 16, Str 8. **Elf now eligible** — the switch **can** establish a class minimum |
+| W2 | Same, switch **not authorized** | Int stays 8 → **Elf not eligible**. Eligibility scores equal as-rolled scores |
+| W3 | Dwarf desired; as-rolled Con 8, Str 18; switch authorized | Highest score switches into **Strength** (the Dwarf's only prime requisite). **Con remains 8 → still not eligible.** No authorization can reach a non-prime-requisite gate |
+| W4 | Halfling desired; Dex 8, Con 8, Str 17; switch authorized | Switch can reach **Dex** but never **Con** → **still not eligible** |
+| W5 | Mystic desired; Wis 12, Dex 11, Cha 17; switch authorized | Switch can reach **Dex** but never **Wis** → **still not eligible** |
+| W6 | Any character | **At most one** switch, and it is a **swap of two scores** — not a free rearrangement |
+| W7 | Switch attempted **after** a class is chosen | **Rejected** — the switch runs at §0 step 3, before eligibility |
+
+### Ordering (SR-3)
 
 | # | Case | Expected |
 |---|---|---|
-| X1 | Query the discard criterion | Raises/returns *unresolved* — **must not** silently evaluate either U1 predicate |
-| X2 | Mystic attempts to raise Dexterity by trade | Raises/returns *unresolved* (U3) — must not default to permit or deny |
-| X3 | Attempt to apply the Ch. 13 switch in an automated flow | Raises/returns *unresolved* (U2/U4) |
+| O1 | Fighter chosen; trade raises Str 12 → 13; re-test eligibility for Dwarf | **Rejected** — the trade cannot retroactively establish eligibility for any class (§3). Contrast W1, where the *switch* can |
+| O2 | Elf: switch establishes Int 9, class chosen, then trade raises Int further | Legal — the switch established eligibility, the trade then operates as ordinary post-eligibility adjustment |
+| O3 | Trade attempted before eligibility is evaluated | **Rejected** — §0 step 6 follows step 5 |
+| O4 | Full sequence run for a character discarded at §6.1 | Restarts at §1; no switch, eligibility, or trade occurs for the discarded character |
+
+### Discard determination (SR-4)
+
+| # | Scores (Str, Int, Wis, Dex, Con, Cha) | Expected |
+|---|---|---|
+| D1 | `9, 9, 8, 7, 6, 5` | **Discard offered** — no score above 9 |
+| D2 | `10, 5, 5, 9, 9, 9` | **Discard offered** — two scores below 6 (the 10 does not prevent it) |
+| D3 | `10, 9, 9, 9, 9, 9` | **Not offered** — a score above 9, and only one score below 6 (none) |
+| D4 | `18, 5, 5, 12, 12, 12` | **Discard offered** — the second predicate is independent of the first |
+| D5 | `18, 6, 6, 12, 12, 12` | **Not offered** — 6 is not *below* 6, and a score exceeds 9 |
+| D6 | `9, 9, 9, 9, 9, 9` | **Discard offered** — no score above 9 (boundary: 9 is not above 9) |
+| D7 | Any qualifying array; player elects to keep | **Character retained** and creation continues — the offer is never compulsory |
+| D8 | `8, 8, 8, 8, 8, 8` | **Discard offered.** Also satisfies RC's narrower "all scores under 9" summary — the two formulations agree here, which is why the summary reads as a summary |
 
 ## Provenance Classification
 
@@ -295,32 +411,31 @@ All die results are supplied by a scripted RNG (`TESTING_STRATEGY.md`; `src/rng`
 | §4 R6/R7 arithmetic consistency | **Necessary Mathematical-Mechanical Consequence** (derivation shown) |
 | §3 eligibility on as-rolled scores | **Necessary Mathematical-Mechanical Consequence** (derivation shown) |
 | §6.3 envelope of the switch | **Necessary Mathematical-Mechanical Consequence** (derivation shown) |
-| U1–U4 | **Unresolved by RC** — no classification; carried to human decision |
+| **§6.1 discard criterion (SR-4)** | **Simulator Ruling** — human-granted 2026-08-29. RC states two non-equivalent predicates; the detailed one is adopted and the narrower one characterized as an introductory summary |
+| **§4 Mystic Dexterity raise (SR-2)** | **Simulator Ruling** — human-granted 2026-08-29. RC's general principle is applied over an under-inclusive enumeration |
+| **§0 / §6.2 / §6.4 switch inclusion and ordering (SR-3)** | **Simulator Ruling** — human-granted 2026-08-29. RC states both provisions but never composes them. The *inclusion* of the switch is additionally a **project scope decision**; the switch procedure itself is **Rules Cyclopedia Explicit** |
 
-No Alternate-Source Compatible Completion, Simulator Ruling, or Human-Approved Variant is claimed by this card.
+**No Alternate-Source Compatible Completion and no Human-Approved Variant is claimed by this card.** No alternate-source research was performed for it, and none of SR-2/3/4 departs from an explicit RC rule — each selects among readings RC's own text admits.
 
 ---
 
 ## Open Questions
 
-> **Corrected 2026-08-29.** An earlier draft described all four as *"non-blocking"*. **One of them blocks approval.** Each is now classified explicitly.
->
-> Classifications: **A** genuine ambiguity, optional behaviour may remain unspecified · **B** human ruling required **before Rule Card approval** · **C** human ruling required before implementation · **D** deferred to another responsibility · **E** not actually unresolved after synthesis.
+**All four are `RESOLVED` by human ruling, 2026-08-29. None blocks approval.**
 
-| # | Question | Class | Blocks approval? |
+| # | Question | Disposition | Where |
 |---|---|---|---|
-| **U3** | **May a Mystic raise Dexterity through the 2-for-1 trade?** | **B** | **YES** |
-| U2 | Ordering of the Chapter 13 switch vs. class choice and the trade; does "no adjustments later" bind it? | **B** | **YES** (as a scope decision — see below) |
-| U4 / `CHAR-002` V1 | May the switch be granted to satisfy a class ability minimum? | **A**, contingent on U2 | No, once U2 is decided |
-| U1 | Discard criterion threshold | **A** | No |
+| **U1** | Discard criterion threshold | **RESOLVED** — `SR-4`: no score above 9 **or** two scores below 6; player may keep anyway | §6.1 |
+| **U2** | Ordering of the Chapter 13 switch; does "no adjustments later" bind it? | **RESOLVED** — `SR-3`: switch **included in V1**, evaluated **before** eligibility; trade after class choice. Chapter 1's "no adjustments later" binds the **trade**, which is the step it appears in | §0, §6.4 |
+| **U3** | May a Mystic raise Dexterity through the trade? | **RESOLVED** — `SR-2`: **yes**, under the ordinary two-prime-requisite rule; no Mystic-specific exception | §4 |
+| **U4 / `CHAR-002` V1** | May the switch be granted to satisfy a class ability minimum? | **RESOLVED** — `SR-3`: **yes**, within the §6.3 envelope, which the ruling does not widen | §6.3 |
 
-**U3 — `HUMAN RULING REQUIRED`, blocking.** Rule 3's exception names *"a thief or halfling character"*; the p. 7 table on the same page gives the Mystic prime requisites **Strength and Dexterity**, and the box's general principle is *"You can only raise your character's prime requisite score."* The general principle admits the Mystic; the enumeration omits it. **Mystic is required V1 content**, so the trade step cannot be executed for a legal V1 character until this is answered. RC does not resolve it in any inspected governing object, and lineage research cannot (see Simulator Ruling above — the Mystic is not a BECMI core class). *Contextual observation, offered as analysis and expressly not acted on: RC p. 7 sets the special classes aside as ones "the DM might not want to use", which may explain an enumeration written for the seven core classes — but explanation is not authorisation.* Guarded by X2.
+**What remains genuinely open is nothing in this card's scope.** The rulings are recorded as `Simulator Ruling` provenance rather than presented as RC findings, and each states the reading it rejected:
 
-**U2 — `HUMAN RULING REQUIRED`, blocking, but the decision may be a scope decision rather than a rules one.** The switch is a DM permission, not required V1 content; RC does not oblige a simulator to implement it. **Deciding that V1 omits the switch entirely would close U2 and U4 together** and unblock this card without resolving any RC ambiguity. That choice is the human project owner's, not an agent's, which is why it is classified **B** rather than **A**. Guarded by X3.
+- **U1** — RC's narrower "all scores under 9" wording is retained in the record as an introductory summary, not deleted.
+- **U3** — RC rule 3's thief/halfling enumeration is retained and characterized as an editorial carryover, not treated as erroneous text.
 
-**U4 / `CHAR-002` V1 — class A, contingent.** §6.3 already fixes what is mechanically possible: the switch's destination is a prime requisite, so it could only ever reach the Elf's Intelligence 9, the Halfling's Dexterity 9, and the Mystic's Dexterity 13 — never the Dwarf's or Halfling's Constitution 9, nor the Mystic's Wisdom 13. If U2 excludes the switch from V1, U4 is moot.
-
-**U1 — class A, genuinely non-blocking.** The discard provision is a DM permission that produces no game-state outcome, and both RC statements are overridden by player choice. **V1 may simply not model it**, in which case the threshold never needs deciding. If V1 does model it, the two RC predicates must be adjudicated. Guarded by X1.
+**Non-questions, recorded so they are not re-raised:** whether RC offers a non-random generation method (it does, but only above 1st level — §5); whether Chapter 13 contains further generation qualifications (section list enumerated from the TOC, pp. 143/145/147/148 inspected — it does not); whether an individual score may be rerolled (no such provision in any inspected governing object — the §6.1 whole-character discard is the only recreate path).
 
 **Non-questions, recorded so they are not re-raised:** whether RC offers a non-random generation method (it does, but only above 1st level — §5); whether Chapter 13 contains further generation qualifications (section list enumerated from the TOC, pp. 143/145/147/148 inspected — it does not); whether an individual score may be rerolled (no such provision in any inspected governing object).
 
@@ -332,4 +447,4 @@ No Alternate-Source Compatible Completion, Simulator Ruling, or Human-Approved V
 - Date: `<pending>`
 - Notes: `<pending>`
 
-**`NOT READY FOR APPROVAL` (corrected 2026-08-29).** §1–§5 and §6.2–§6.3 are complete and executable, but **U3 blocks approval** — the trade step cannot be executed for the Mystic, which is required V1 content — and **U2 requires a scope decision** on whether V1 includes the Chapter 13 switch at all. U1 and U4 do not block. Guarded by X1–X3.
+**Mechanically complete and ready for review.** U1–U4 are all resolved. **Approving this card ratifies Simulator Rulings SR-2, SR-3 and SR-4** — three project adjudications of questions RC leaves open, each stated separately and none bundled.

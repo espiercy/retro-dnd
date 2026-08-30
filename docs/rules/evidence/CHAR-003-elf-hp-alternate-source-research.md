@@ -8,6 +8,30 @@
 
 ## 0. Revision history — the first version of this document was WRONG
 
+**Revision 3 — 2026-08-29 (human adjudication recorded).** The corrected research stands; the question it left open has been decided by the human project owner.
+
+```text
+Initial Stage-B finding    +2 proposed, from an INCORRECTLY declared
+                              unanimous BECMI lineage
+        ↓
+Independent review         identified the omitted Master Set
+        ↓
+Remediation                full BECMI core-volume disposition performed
+                              (all five volumes)
+        ↓
+Corrected finding          BECMI lineage EVOLVED / CONFLICTING
+                              → Outcome C, INCONCLUSIVE
+        ↓
+Human adjudication         Elf fixed HP at 10th level = +2
+                              Simulator Ruling, 2026-08-29
+```
+
+**The final `+2` is not this document's revision-1 `+2` reinstated.** Revision 1 asserted the sources agreed; they do not. The value now rests on **human authority adjudicating sources that demonstrably conflict**, recorded on `docs/rules/character_creation/hit_points_and_hit_dice.md` as **SR-1** with `Simulator Ruling` provenance. §8's Outcome C — that alternate-source research does **not** disambiguate RC — is unchanged and remains this document's research finding.
+
+**The failure record below is retained as governance provenance and must not be tidied away.** It is the motivating case for `DEC-0011`.
+
+---
+
 **Revision 2 — 2026-08-29 (corrected).** **Revision 1's conclusion is withdrawn.**
 
 | | Revision 1 (withdrawn) | Revision 2 (current) |
@@ -238,6 +262,12 @@ DISPOSITION:               HUMAN RULING REQUIRED
 | The originating statement, preserved across two sets | RC's stat-block wording tracks Master's phrasing closely |
 
 Both columns rest on visually verified source objects. **Neither is obviously stronger, which is why this is the human's call and not the researcher's.**
+
+### Adjudicated 2026-08-29 — `+2`
+
+The human project owner adjudicated in favour of the **left column**: RC's detailed Class Details prose and its Maximum Hit Points calculation. Recorded as **Simulator Ruling SR-1** on `docs/rules/character_creation/hit_points_and_hit_dice.md` §4.1.
+
+**This does not change the research finding.** Outcome C stands: the lineage did **not** disambiguate RC, and the right column remains a live, printed, rejected reading — not an error. The ruling settles what the simulator does, not what the sources say.
 
 ## 9. What this research does NOT establish
 
