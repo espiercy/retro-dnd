@@ -13,6 +13,8 @@ Race & Class Eligibility
 `AWAITING_APPROVAL`
 
 > Stage-B draft, 2026-08-29. Stage-A evidence (`docs/rules/evidence/CHAR-002-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29. **Not approved. Not implementable.**
+>
+> **Stage-B correction impact (2026-08-29): NONE.** The Stage-B research failure and its correction concern the Elf's fixed hit-point gain (`CHAR-003` W1) and `CHAR-001`'s Mystic trade question (U3). **Neither touches this card** — eligibility is decided entirely by raw-score thresholds, no hit-point value enters it, and the Elf and Druid **maximum levels** (10 and 36) are settled human adjudications that the correction did not disturb. No mechanical content changed. **Candidate for approval**, subject to V1 below.
 
 ## Rules Domain
 
@@ -253,7 +255,7 @@ Scores are given in RC's order: **Str, Int, Wis, Dex, Con, Cha**.
 
 ## Open Questions
 
-1. **V1 — may the Chapter 13 switch be granted to satisfy a class ability minimum?** `HUMAN RULING REQUIRED`, owned as `CHAR-001` U4. Consequence here is bounded to three gates (§5); the default until ruled is that eligibility uses as-rolled scores untouched.
+1. **V1 — may the Chapter 13 switch be granted to satisfy a class ability minimum?** Owned as `CHAR-001` U4, and **contingent on `CHAR-001` U2** (whether V1 includes the switch at all). **Classification A — does not block approval of this card.** §2's specification is a faithful, complete reading of RC on its own terms: RC evaluates eligibility on as-rolled scores, and the switch is a DM permission RC does not oblige a simulator to implement. If V1 excludes the switch, V1 is moot; if V1 includes it, the consequence here is bounded to three gates (§5) and this card gains a documented input, not a changed rule.
 2. **Druid transition ownership** (§B) — a proposed `CHAR-013` assignment with `CHAR-008`/`ADV-002` dependencies. **Proposed, not adopted.** Assigning it is a scope decision for the human project owner, not an agent action.
 3. **Mystic downstream ownership** (§C) — five items proposed against `ADV-001`, `ADV-002`, `CHAR-008`, `CHAR-009`. Recommendations only.
 

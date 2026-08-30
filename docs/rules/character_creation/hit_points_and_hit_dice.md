@@ -14,7 +14,7 @@ Hit Points & Hit Dice
 
 > Stage-B draft, 2026-08-29. Stage-A evidence (`docs/rules/evidence/CHAR-003-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29. **Not approved. Not implementable.**
 >
-> **This card carries one proposed resolution of a genuine RC self-contradiction** — the Elf's fixed hit-point gain at 10th level. See §4.1 and Open Question W1. Approving this card ratifies that resolution; it should be approved deliberately, not incidentally.
+> **`NOT READY FOR APPROVAL` — 2026-08-29 (corrected).** An earlier draft of this card specified the Elf's 10th-level fixed hit-point gain as **`+2`**, on the strength of a BECMI lineage claim that has since been shown false. **That specification is withdrawn.** Corrected research found the BECMI **Master** Set states `+1`, so the lineage is split and does **not** disambiguate RC. The value is now `UNRESOLVED — HUMAN RULING REQUIRED` (§4.1, W1). **This card cannot be approved until that ruling is made.** See `docs/rules/evidence/CHAR-003-elf-hp-alternate-source-research.md` §0 for the withdrawal record.
 
 ## Rules Domain
 
@@ -71,47 +71,56 @@ All four are visually verified as printed. The first two are on the **same page*
 
 ## Alternate-Source Completion Research
 
-**Performed, for W1 only.** Full record: `docs/rules/evidence/CHAR-003-elf-hp-alternate-source-research.md`.
+**Performed, for W1 only.** Full record, including the withdrawal of the first attempt: `docs/rules/evidence/CHAR-003-elf-hp-alternate-source-research.md`.
 
-**Precondition satisfied.** Object-level RC exhaustion is established (`CLUSTER-002` Stage-A completeness `INDEPENDENT REVIEW — PASS`, 2026-08-29). The gap has an unusual shape and it was stated precisely: RC does not *fail* to answer, it answers **inconsistently**, so BECMI is used to identify which RC presentation preserves the lineage mechanic — **not** as a substitute authority.
+**Precondition satisfied.** Object-level RC exhaustion is established (`CLUSTER-002` Stage-A completeness `INDEPENDENT REVIEW — PASS`, 2026-08-29). RC does not *fail* to answer, it answers **inconsistently**, so BECMI was consulted to identify which RC presentation preserves the lineage mechanic — **not** as a substitute authority.
 
-**Prior BECMI work was not used.** The earlier research produced from the invalid RC-exhaustion conclusion is `NOT VALID AS CURRENT SYNTHESIS INPUT` (human ruling). This research was performed anew from the corrected RC evidence state, and inherited no conclusion from it.
+**Prior BECMI work (pre-2026-08-29) was not used**; `NOT VALID AS CURRENT SYNTHESIS INPUT` by human ruling.
 
-**Sources, in `SOURCE_HIERARCHY.md` §3 order:**
+> **⚠ The first version of this research was wrong and its conclusion is withdrawn.** It inspected only the **Expert** and **Companion** sets, found them to agree, and declared the BECMI lineage *"unanimous at +2"*. **It never dispositioned the Master Set.** The corrected audit dispositions **all five** BECMI volumes.
 
-| Source | Object | Statement | Verified |
+**Corrected source inventory — every core volume accounted for:**
+
+| Volume | Levels | Elf fixed-gain statement | Verified |
 |---|---|---|---|
-| *D&D Set 2: Expert Rules* (Mentzer, TSR, 1983), Players Manual **p. 18** | Elf class entry, "Hit Dice:" line | *"1d6 per level, 9d6 maximum; **+2 hit points at 10th level**."* | **Visually** |
-| Same page | Elf Experience Table | Levels **1–10**, terminating at `10* 10th Level Lord Wizard 600,000`; footnote *"Constitution adjustments no longer apply"* | **Visually** |
-| Same page | Dwarf "Hit Dice:" line | *"1d8 per level, 9d8 maximum; +3 hit points per level thereafter"* | **Visually** |
-| *D&D Set 3: Companion Rules* (Mentzer, TSR, 1984), DM's Book **p. 22** | Demihuman maximum hit points | Dwarf 72/27/+9/108; **Elf 54/27/+2/83**; Halfling 48/24/–/72 | **Visually** |
-| Same book, **p. 23** | Hit Roll Charts, Elf column | Attack Ranks C–M at 600/850/1,100/…/3,100 thousand XP | **Visually** |
+| **Basic** (Set 1) | 1–3 | *None* — entry states only `Hit Dice: 1d6 per level`; **zero** `10th level` occurrences in the volume | Inspected |
+| **Expert** (Set 2) p. 18 | 4–14 | *"1d6 per level, 9d6 maximum; **+2 hit points at 10th level**."* | **Visually** |
+| **Companion** (Set 3) DM p. 22 | 15–25 | Demihuman maximum HP: **Elf 54 / 27 / +2 / 83** (no class HP line in this set) | **Visually** |
+| **Master** (Set 4) p. 12 | 26–36 | *"1d6 per level through 9th level, modified by Constitution if applicable. **Add 1 hp at 10th level**, with no Constitution effect."* | **Visually** |
+| **Immortals** (Set 5) | post-36 | *None* — **zero** occurrences of "elf" in the volume | Inspected |
 
-**B/X, Holmes and OD&D were not consulted, deliberately.** BECMI is the highest-priority lineage source and answered the exact question unanimously with no internal conflict; descending further would be the broad edition browse §15 prohibits. Recorded as a scope boundary, not an omission.
+**BECMI is NOT unanimous.** It **revised** the rule: `+2` (Expert, Companion) → `+1` (Master). Master's Elf Experience Table also revises the Elf's spell progression in the same object, so this is a deliberate change, not a slip.
 
-**No BECMI statement of `+1` was located** after inspecting the complete Elf entry, every `Hit Dice:` line and every `10th level` occurrence in the Expert Players Manual, and the Companion's demihuman material. Stated as a research-operation claim, per Guardrail B.
+**Master additionally carries a conflict-precedence rule** (Players' Book p. 2, visually verified): *"If you discover a contradiction between this set and previous sets, the rules given here should be used."* Recorded as a source fact; **not applied to RC** — it is a BECMI-internal instruction, and RC does not incorporate it.
+
+**B/X, Holmes and OD&D remain not consulted.** The disagreement is *inside* BECMI; a lower-priority edition cannot settle which BECMI branch RC intended.
 
 ## Compatibility Analysis
 
 | Finding | Classification (`SOURCE_HIERARCHY.md` §6) |
 |---|---|
-| BECMI Elf `+2 hit points at 10th level` versus RC's `+2` statements | **Preserved** — RC carries the BECMI mechanic forward in two of its four statements |
-| BECMI demihuman maximum-HP table versus RC p. 129 | **Preserved** — RC p. 129 reproduces BECMI Companion p. 22 number for number, including the shared `L 10-12` column header and the explanatory note |
-| BECMI Elf Attack Rank thresholds versus RC p. 26 | **Preserved** — identical XP progression; corroborates direct descent, though it does not itself bear on the HP value |
-| Every other class's fixed gain (Cleric +1, Fighter +2, Magic-user +1, Dwarf +3) | **Preserved** — RC matches BECMI exactly for all four; the Elf is the sole discrepancy |
-| Any Evolved-Different or Conflicting finding | **None** |
+| Expert `+2` → Companion `+2` | **Preserved** within BECMI |
+| Companion `+2` → **Master `+1`** | **Evolved-Different** — a deliberate revision within the lineage |
+| BECMI Companion p. 22 table → RC p. 129 | **Preserved** — reproduced number for number, header and note included; carries `+2` into RC |
+| **BECMI Expert Elf Experience Table → RC p. 26** | **Preserved** — RC's level-10 spell row is `3 3 3 3 2`, matching **Expert**; Master's is `5 4 3 2 1`. **RC did not adopt Master's revised Elf table** |
+| BECMI Master p. 12 → RC p. 25 stat block / RC p. 130 Step 6 | **Preserved** — carries `+1` into RC |
+| Other classes' fixed gains (Cleric +1, Fighter +2, Magic-user +1, Dwarf +3) | **Preserved** — but **non-discriminating**: Expert and Master agree for those classes, so RC matching them says nothing about which Elf branch RC follows |
 
-No mechanic is imported. Nothing encountered incidentally in BECMI — strongholds, Clans, Combat Options, breath-weapon resistance — is used.
+**Net effect: RC inherited from both branches and reconciled neither.** That explains the contradiction; it does not resolve it. **No mechanic is imported and no value is selected.**
 
 ---
 
 ## Simulator Ruling
 
-**Not applicable — none proposed.** W1 is resolved by lineage evidence, so §16's precondition (gap-directed research having failed) is not met. W2 and W3 do not require rulings; see Open Questions.
+**Not applicable — no ruling is proposed, and none may be.**
+
+W1 now meets §16's *preconditions* (RC research complete, falsification done, gap-directed research performed and **inconclusive**). But §16 also forbids self-approval, and this question is not a gap in the rules requiring an invented mechanic — it is a choice between **two values RC itself explicitly states**. That is a **human adjudication**, of exactly the kind already made for the Elf and Druid maximum levels. It is escalated, not ruled on.
+
+W2 and W3 require no ruling; see Open Questions.
 
 ## Human-Approved Variant
 
-Not applicable. Selecting the `+2` reading is **not** a departure from an explicit RC rule — it selects between two things RC itself explicitly states.
+Not applicable. Selecting either RC value would not be a departure from an explicit RC rule — it would select between two things RC explicitly states.
 
 ---
 
@@ -171,27 +180,44 @@ hp += fixed_gain(class)          # no die, no Constitution adjustment
 | Magic-User | +1 | 10–36 |
 | Thief | +2 | 10–36 |
 | Dwarf | +3 | 10–12 |
-| **Elf** | **+2** — *proposed, see §4.1* | **10 only** |
+| **Elf** | **`UNRESOLVED — HUMAN RULING REQUIRED`** — see §4.1. Candidate values `+1` or `+2`; **neither is specified** | **10 only** |
 | Halfling | *(none — maximum level equals Name level)* | — |
 | Mystic | +2 | 10–16 |
 | Druid | as cleric to the point of becoming a druid, then +1 | 10–36 |
 
 **Constitution never applies to any value in this table.**
 
-#### 4.1 The Elf's `+2` — a proposed resolution, not a settled RC fact
+#### 4.1 The Elf's fixed gain — `UNRESOLVED`
 
-RC says `+1` twice and `+2` twice (W1). **`+2` is specified here on the following basis, which the approver is ratifying:**
+```text
+Elf fixed HP at 10th level:  UNRESOLVED — HUMAN RULING REQUIRED
+```
 
-- BECMI is **unanimous at +2** across two independent objects in two different books, with no BECMI `+1` statement located.
-- RC p. 129's demihuman table — one of the two RC `+2` statements — is a **verbatim descendant** of BECMI Companion p. 22: every number in both its tables, the shared column header, and the explanatory note are identical. Its `83` total is itself inherited and is internally consistent only with `+2`.
-- RC **preserves BECMI's fixed gain unchanged for every other class checked** (Cleric, Fighter, Magic-user, Dwarf). An Elf-only change would be the sole departure.
-- RC's own Elf Class Details prose states `+2` in RC's own words, contradicting the stat block **on the same page**.
+**No value is specified.** An implementation must treat this as an unset parameter that **fails loudly**; it must not default to either candidate.
 
-**The competing reading, stated fairly:** RC may have *deliberately* reduced the Elf's gain to `+1` and failed to update the inherited p. 129 table, leaving `83` stale. That is coherent and cannot be excluded from the text alone. It is weaker because it requires an unannounced class-specific change that is the only departure from BECMI across five classes, was not propagated to the table RC reprinted from the very source being revised, and is contradicted within its own page. **But it is not impossible, and this card does not pretend otherwise.**
+**Both RC sides, preserved:**
 
-Neither majority-counting nor arithmetic consistency was used to select the value; the argument is genealogical, and its source facts and editorial inferences are separated in the research record.
+| Value | RC objects |
+|---|---|
+| **`+1`** | p. 25 Elf **stat block**; p. 130 **Step 6** high-level procedure |
+| **`+2`** | p. 25 Elf **Class Details prose**; p. 129 **Maximum Hit Points (Demihumans)** calculation (54 + 27 + 2 = 83) |
 
-`STOP — INTERNAL SOURCE CONFLICT REQUIRES REVIEW` is **not** triggered: §10.2.2 case 2 prohibits an agent *silently* choosing between conflicting passages. Nothing here is silent.
+All four visually verified as printed; the p. 25 pair contradict each other **on one page**.
+
+**Corrected lineage evidence — it does not settle the question:**
+
+| BECMI volume | Value | Bearing |
+|---|---|---|
+| Expert p. 18 | `+2` | Originating statement |
+| Companion DM p. 22 | `+2` | Preserved; **inherited verbatim into RC p. 129** |
+| **Master p. 12** | **`+1`** | **Deliberate revision** — the same table also revises Elf spell progression |
+| Master p. 2 | *precedence rule* | *"If you discover a contradiction between this set and previous sets, the rules given here should be used"* — **BECMI-internal; not incorporated by RC** |
+
+**Why lineage does not decide it.** RC is a composite: p. 129 descends from the Companion (`+2`), the stat block and Step 6 track Master (`+1`) — and **RC p. 26's Elf Experience Table descends from *Expert*, not Master** (RC's level-10 spell row is `3 3 3 3 2`, Expert's exactly; Master's is `5 4 3 2 1`). So RC did **not** wholesale adopt Master's revised Elf, and "Master is later" does not establish what RC intends.
+
+**Explicitly not used to select a value:** majority-counting; privileging tables over prose or prose over tables; the p. 129 arithmetic; Master's precedence rule; recency. `RULE_CARD_RESEARCH_PROTOCOL.md` §9.6 and §10.2.2 case 2 forbid an agent choosing between conflicting passages on such grounds, and the earlier draft of this card did exactly that on evidence that proved incomplete.
+
+**Impact if ruled:** whichever value is chosen, only §4's Elf row, §6's Elf row, and tests H22–H23 change. Nothing else in this card depends on it.
 
 ### 5. Constitution's boundary
 
@@ -215,10 +241,10 @@ RC p. 129, for 18 Constitution (+3) and maximum die rolls. These are **check val
 | Class | Dice | Con | Above Name level | Maximum |
 |---|---|---|---|---|
 | Dwarf | 72 | 27 | +9 | 108 |
-| **Elf** | 54 | 27 | **+2** | **83** |
+| **Elf** | 54 | 27 | **`+2` as printed by RC** | **`83` as printed by RC** |
 | Halfling | 48 | 24 | — | 72 |
 
-**The Elf row reproduces the §4.1 resolution and is consistent with it.** Under the `+1` reading this row would read 82, contradicting RC's printed total.
+**The Elf row is reproduced as RC prints it and is NOT a specification of the §4.1 value.** RC's printed total `83` is arithmetically consistent with `+2` and inconsistent with `+1` (which yields 82). **That arithmetic is recorded, not used** — this table is itself one of the four contested statements, inherited verbatim from BECMI Companion p. 22, so treating its internal consistency as decisive would beg the question W1 asks. Until W1 is ruled, the Elf row is evidence, not a check value.
 
 ### 7. Above-1st-level construction (Chapter 10 Step 6) — specified, not V1-wired
 
@@ -275,38 +301,46 @@ Saving throws and saving-throw progression (`COMBAT-004`) — deliberately not p
 | H20 | Dwarf at level 12 | No further gains — maximum level reached |
 | H21 | Thief, levels 10 → 36 | +54 total (2 per level) — Thief is **+2**, not +1 |
 
-### The Elf resolution (W1)
+### The Elf fixed gain (W1) — **guard tests, no value asserted**
+
+> These were previously written as `+2` assertions. **That is withdrawn.** They are now guards, so the card cannot be approved or implemented while silently carrying either candidate.
 
 | # | Case | Expected |
 |---|---|---|
-| H22 | Elf advancing 9 → 10 | **+2** hit points, unmodified by Constitution |
-| H23 | Elf, 18 Con, all nine d6 = 6, advanced to level 10 | **83** = 54 + 27 + 2 — reproduces RC p. 129's printed total exactly |
-| H24 | Elf at level 10 | No further hit points — maximum level; Attack Ranks confer none |
-| H25 | Regression guard | If §4.1 is ever changed to `+1`, H23 must fail with 82 ≠ 83 — the test exists to make the resolution's reversal visible rather than silent |
+| H22 | Elf advancing 9 → 10 | **Raises/returns `UNRESOLVED`** (W1). Must **not** return 2, and must **not** return 1 |
+| H23 | Elf, 18 Con, all nine d6 = 6, advanced to level 10 | **Raises/returns `UNRESOLVED`.** Neither `83` (`+2`) nor `82` (`+1`) may be produced |
+| H24 | Elf at level 10 | No further hit points — maximum level; Attack Ranks confer none. **Unaffected by W1** |
+| H25 | Any Elf hit-point total at level 10 hard-coded to `83` **or** `82` | **Contract violation** — a concrete total may exist only after W1 is ruled |
+| H26 | Elf advancing 1 → 9 | Fully specified and testable — nine d6 rolls with Constitution. **W1 blocks only the 10th-level step** |
+
+**After a ruling**, H22/H23 become value assertions again (`+2` → 83, or `+1` → 82) and H25 is narrowed to the rejected value. Until then, no expected total for a 10th-level Elf exists.
 
 ### Maximum-total regressions (RC p. 129)
 
+> The **Elf row is deliberately absent** from this block — it is blocked by W1 and is covered by guard tests H22–H25 instead. Every other class is unaffected by W1 and fully testable.
+
 | # | Case | Expected |
 |---|---|---|
-| H26 | Fighter, 18 Con, nine d8 = 8, level 36 | **153** = 72 + 27 + 54 |
-| H27 | Cleric, 18 Con, nine d6 = 6, level 36 | **108** = 54 + 27 + 27 |
-| H28 | Magic-User, 18 Con, nine d4 = 4, level 36 | **90** = 36 + 27 + 27 |
-| H29 | Thief, 18 Con, nine d4 = 4, level 36 | **117** = 36 + 27 + 54 |
-| H30 | Dwarf, 18 Con, nine d8 = 8, level 12 | **108** = 72 + 27 + 9 |
-| H31 | Halfling, 18 Con, eight d6 = 6, level 8 | **72** = 48 + 24 |
-| H32 | Cleric, 18 Con, nine d6 = 6, level 15 | **87** |
-| H33 | Cleric at level 25 | **97** |
+| H27 | Fighter, 18 Con, nine d8 = 8, level 36 | **153** = 72 + 27 + 54 |
+| H28 | Cleric, 18 Con, nine d6 = 6, level 36 | **108** = 54 + 27 + 27 |
+| H29 | Magic-User, 18 Con, nine d4 = 4, level 36 | **90** = 36 + 27 + 27 |
+| H30 | Thief, 18 Con, nine d4 = 4, level 36 | **117** = 36 + 27 + 54 |
+| H31 | Dwarf, 18 Con, nine d8 = 8, level 12 | **108** = 72 + 27 + 9 |
+| H32 | Halfling, 18 Con, eight d6 = 6, level 8 | **72** = 48 + 24 |
+| H33 | Cleric, 18 Con, nine d6 = 6, level 15 | **87** |
+| H34 | Cleric at level 25 | **97** |
 
 ### Dependency and prohibitions
 
 | # | Case | Expected |
 |---|---|---|
-| H34 | `CHAR-003` invoked without a `CHAR-007` Constitution adjustment | **Contract violation** — this card cannot produce an authoritative value alone |
-| H35 | Constitution 9–12 | Adjustment 0; totals equal the raw dice sum |
-| H36 | Any attempt to reroll a hit-point die | **Rejected** — no reroll provision exists |
-| H37 | Druid requested at 1st level | **Rejected** — no Druid Hit Die (`CHAR-002`) |
-| H38 | Druid reached from cleric at 9th, advancing to 10th | Cleric progression to that point, then +1/level |
-| H39 | Chapter 19 extended-progression figures used | **Rejected** — variant `NOT ENABLED` for V1 |
+| H35 | `CHAR-003` invoked without a `CHAR-007` Constitution adjustment | **Contract violation** — this card cannot produce an authoritative value alone |
+| H36 | Constitution 9–12 | Adjustment 0; totals equal the raw dice sum |
+| H37 | Any attempt to reroll a hit-point die | **Rejected** — no reroll provision exists |
+| H38 | Druid requested at 1st level | **Rejected** — no Druid Hit Die (`CHAR-002`) |
+| H39 | Druid reached from cleric at 9th, advancing to 10th | Cleric progression to that point, then +1/level |
+| H40 | Chapter 19 extended-progression figures used | **Rejected** — variant `NOT ENABLED` for V1 |
+| H41 | Chapter 19 **Extended Experience Table** (RC p. 266) figures used for the Elf | **Rejected** — that variant is `NOT ENABLED`, its per-level figures differ, and it **must not** be used to resolve W1 |
 
 ## Provenance Classification
 
@@ -314,7 +348,7 @@ Saving throws and saving-throw progression (`COMBAT-004`) — deliberately not p
 |---|---|
 | §1 Hit Dice; §2/§3 rolling; §4 fixed gains for all classes **except the Elf**; §5 Constitution boundary; §6 totals; §7 Ch. 10 construction | **Rules Cyclopedia Explicit** |
 | The 1-hp floor; the 9-dice ceiling | **Rules Cyclopedia Explicit** |
-| **§4.1 Elf `+2`** | **Rules Cyclopedia Explicit (contested passage), selected by closest-lineage disambiguation.** RC remains primary; BECMI identified which RC statement preserves the mechanic. **Not** an Alternate-Source Compatible Completion — RC is not silent here — and **not** a Human-Approved Variant |
+| **§4.1 Elf fixed gain** | **UNRESOLVED — no classification.** RC states both values explicitly and the BECMI lineage is itself split (`+2` Expert/Companion, `+1` Master), so no provenance category applies until a human ruling selects a value. It is **not** an Alternate-Source Compatible Completion (RC is not silent), **not** a Simulator Ruling (no mechanic is missing), and **not** a Human-Approved Variant (either choice is an RC value) |
 | Elf maximum level 10, Druid maximum level 36 | **Human adjudication**, 2026-08-29, recorded against `ADV-002` |
 | W2, W3 | **Unresolved by RC** |
 
@@ -322,7 +356,7 @@ Saving throws and saving-throw progression (`COMBAT-004`) — deliberately not p
 
 ## Open Questions
 
-1. **W1 — the Elf's fixed gain.** §4.1 proposes `+2` on lineage grounds. **This is the one substantive interpretive call in this cluster, and approving this card ratifies it.** The competing `+1` reading is recorded in §4.1 and in the research record; test H25 exists so a future reversal is loud rather than silent. If the reviewer prefers `+1`, only §4.1, the §4 table row, §6's Elf row, and tests H22/H23 change.
+1. **W1 — the Elf's fixed gain. `HUMAN RULING REQUIRED` — this card cannot be approved until it is made.** Classification **B** (blocks Rule Card approval): the Elf is core V1 content and this is a value the specification must state. RC gives `+1` twice and `+2` twice; BECMI **also** splits (`+2` Expert/Companion → `+1` Master), and RC demonstrably inherited from both branches, so lineage does not decide it. Both cases are laid out in §4.1 and in the research record's "evidence for each choice" table. **No value is written into the specification, and none is defaulted.** Guarded by H22–H25.
 2. **W2 — does the 1-hp floor govern fixed gains?** Currently **moot** — every fixed gain is positive. No specification depends on it. Revisit only if a future rule can produce a negative fixed gain.
 3. **W3 — is Chapter 10 Step 6 an alternative or a restatement?** Not wired to V1, so nothing depends on it. Both readings agree on outputs for a maximum-level character; they differ only in the DM conventions Step 6 adds.
 
@@ -334,4 +368,4 @@ Saving throws and saving-throw progression (`COMBAT-004`) — deliberately not p
 - Date: `<pending>`
 - Notes: `<pending>`
 
-**Approving this card ratifies the Elf `+2` resolution in §4.1.** It does not resolve W2 or W3.
+**`NOT READY FOR APPROVAL`.** W1 must be ruled first — the card carries no Elf 10th-level value and will not silently supply one. W2 and W3 remain open but block nothing.

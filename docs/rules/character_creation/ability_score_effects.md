@@ -13,6 +13,8 @@ General Ability Score Mechanical Effects
 `AWAITING_APPROVAL`
 
 > Stage-B draft, 2026-08-29. Stage-A evidence (`docs/rules/evidence/CHAR-007-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29. **Not approved. Not implementable.**
+>
+> **Stage-B correction impact (2026-08-29): NONE.** The Stage-B research failure and its correction concern `CHAR-003`'s Elf hit-point value and `CHAR-001`'s Mystic trade question. This card supplies the **Constitution adjustment value** consumed by `CHAR-003`; that value is drawn from RC p. 9 and is **not in dispute** — the `CHAR-003` conflict is about a *fixed gain to which Constitution expressly does not apply*. No mechanical content changed. **Candidate for approval.**
 
 ## Rules Domain
 

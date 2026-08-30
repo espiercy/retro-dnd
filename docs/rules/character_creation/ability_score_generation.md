@@ -13,6 +13,8 @@ Ability Score Generation
 `AWAITING_APPROVAL`
 
 > Stage-B draft, 2026-08-29. Stage-A evidence (`docs/rules/evidence/CHAR-001-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29. **Not approved. Not implementable.** Only a human project owner may set `APPROVED` (`SOURCE_HIERARCHY.md` §9). The Pre-Code Development Gate (`ARCHITECTURE.md` §16) is independent of this card's status and is not affected by it.
+>
+> **`NOT READY FOR APPROVAL` — corrected 2026-08-29.** An earlier draft classified all four open questions as *"non-blocking"*. That was wrong: **U3** (may a Mystic raise Dexterity through the trade?) leaves standard executable behaviour unspecified for a **required V1 class**, and **U2** requires a scope decision on whether V1 includes the Chapter 13 switch at all. See Open Questions for the corrected A–E classification.
 
 ## Rules Domain
 
@@ -88,9 +90,18 @@ Not applicable — no alternate-source candidate was considered, so there is not
 
 ## Simulator Ruling
 
-**Not applicable — none proposed.** `RULE_CARD_RESEARCH_PROTOCOL.md` §16 permits a Simulator Ruling only after gap-directed compatible-source research fails. That research was not justified (above), so the precondition for a ruling is not met either.
+**None proposed.** But the earlier framing of this section was misleading and is corrected here.
 
-U1–U4 are therefore carried to **human decision**, not resolved by this card, and are listed under Open Questions. The specification below is written so that **the core procedure is fully executable without any of them**.
+An earlier draft paired *"Simulator Rulings: none required"* with *"U3 blocks Mystic trades"*, while calling U1–U4 **non-blocking**. Those cannot both be true: the Mystic is **required V1 content** (`DEC-0008`), the prime-requisite trade is standard executable behaviour, and a card that cannot complete that step for a required class is not fully specified. The wording obscured a real approval gate.
+
+**Corrected position.** `RULE_CARD_RESEARCH_PROTOCOL.md` §16 permits a Simulator Ruling only after gap-directed research fails; §16 also forbids self-approval and forbids bundling. For U1–U4:
+
+- **U3 meets §16's preconditions** — RC does not establish it, and lineage research cannot (below). It is escalated as a question with its alternatives stated, **not drafted as a ruling and not self-approved**, and it **blocks approval of this card**.
+- **U1, U2, U4** do not reach §16 at all — they are project-scope and RC-composition questions, not missing mechanics.
+
+**Why lineage research cannot resolve U3.** The Mystic is **not a BECMI core class**: the Master Set introduces it only as *"suggestions… for converting a new monster, the mystic, into a character class if the DM desires"* (Master Players' Book p. 2, visually verified — `CHAR-003-elf-hp-alternate-source-research.md` Finding E8). No BECMI volume carries a Mystic prime-requisite trade rule, so no lineage source can say whether a Mystic may raise Dexterity. This is a **positive determination from an inspected object**, not an assumption.
+
+U1–U4 are therefore carried to **human decision** and listed under Open Questions with an explicit blocking classification.
 
 ## Human-Approved Variant
 
@@ -292,12 +303,26 @@ No Alternate-Source Compatible Completion, Simulator Ruling, or Human-Approved V
 
 ## Open Questions
 
-Four, none blocking approval of §1–§5. Each is a **human decision**, and each has a guard test (X1–X3, and S3 for the envelope) so that no implementation can resolve one silently.
+> **Corrected 2026-08-29.** An earlier draft described all four as *"non-blocking"*. **One of them blocks approval.** Each is now classified explicitly.
+>
+> Classifications: **A** genuine ambiguity, optional behaviour may remain unspecified · **B** human ruling required **before Rule Card approval** · **C** human ruling required before implementation · **D** deferred to another responsibility · **E** not actually unresolved after synthesis.
 
-1. **U1 — discard criterion threshold.** Two non-equivalent RC predicates. Also a prior scope question: does V1 model a player-discretionary discard at all? If not, U1 need never be answered.
-2. **U2 — ordering of the Chapter 13 switch relative to class choice and the Chapter 1 trade**, and whether "no adjustments later" binds it.
-3. **U3 — may a Mystic raise Dexterity through the trade?** RC's enumeration says thief and halfling; RC's general principle and its own p. 7 table admit the Mystic. *Reader's note, offered as analysis and not adopted: the general principle appears to govern and the enumeration appears to be under-inclusive — but this card does not act on that reading.*
-4. **U4 — may the switch be granted to satisfy a class ability minimum?** §6.3 fixes what is mechanically possible; permission is unresolved.
+| # | Question | Class | Blocks approval? |
+|---|---|---|---|
+| **U3** | **May a Mystic raise Dexterity through the 2-for-1 trade?** | **B** | **YES** |
+| U2 | Ordering of the Chapter 13 switch vs. class choice and the trade; does "no adjustments later" bind it? | **B** | **YES** (as a scope decision — see below) |
+| U4 / `CHAR-002` V1 | May the switch be granted to satisfy a class ability minimum? | **A**, contingent on U2 | No, once U2 is decided |
+| U1 | Discard criterion threshold | **A** | No |
+
+**U3 — `HUMAN RULING REQUIRED`, blocking.** Rule 3's exception names *"a thief or halfling character"*; the p. 7 table on the same page gives the Mystic prime requisites **Strength and Dexterity**, and the box's general principle is *"You can only raise your character's prime requisite score."* The general principle admits the Mystic; the enumeration omits it. **Mystic is required V1 content**, so the trade step cannot be executed for a legal V1 character until this is answered. RC does not resolve it in any inspected governing object, and lineage research cannot (see Simulator Ruling above — the Mystic is not a BECMI core class). *Contextual observation, offered as analysis and expressly not acted on: RC p. 7 sets the special classes aside as ones "the DM might not want to use", which may explain an enumeration written for the seven core classes — but explanation is not authorisation.* Guarded by X2.
+
+**U2 — `HUMAN RULING REQUIRED`, blocking, but the decision may be a scope decision rather than a rules one.** The switch is a DM permission, not required V1 content; RC does not oblige a simulator to implement it. **Deciding that V1 omits the switch entirely would close U2 and U4 together** and unblock this card without resolving any RC ambiguity. That choice is the human project owner's, not an agent's, which is why it is classified **B** rather than **A**. Guarded by X3.
+
+**U4 / `CHAR-002` V1 — class A, contingent.** §6.3 already fixes what is mechanically possible: the switch's destination is a prime requisite, so it could only ever reach the Elf's Intelligence 9, the Halfling's Dexterity 9, and the Mystic's Dexterity 13 — never the Dwarf's or Halfling's Constitution 9, nor the Mystic's Wisdom 13. If U2 excludes the switch from V1, U4 is moot.
+
+**U1 — class A, genuinely non-blocking.** The discard provision is a DM permission that produces no game-state outcome, and both RC statements are overridden by player choice. **V1 may simply not model it**, in which case the threshold never needs deciding. If V1 does model it, the two RC predicates must be adjudicated. Guarded by X1.
+
+**Non-questions, recorded so they are not re-raised:** whether RC offers a non-random generation method (it does, but only above 1st level — §5); whether Chapter 13 contains further generation qualifications (section list enumerated from the TOC, pp. 143/145/147/148 inspected — it does not); whether an individual score may be rerolled (no such provision in any inspected governing object).
 
 **Non-questions, recorded so they are not re-raised:** whether RC offers a non-random generation method (it does, but only above 1st level — §5); whether Chapter 13 contains further generation qualifications (the section list was enumerated from the TOC and pp. 143/145/147/148 inspected — it does not); whether an individual score may be rerolled (no such provision exists in any inspected governing object).
 
@@ -307,4 +332,4 @@ Four, none blocking approval of §1–§5. Each is a **human decision**, and eac
 - Date: `<pending>`
 - Notes: `<pending>`
 
-**Approving this card ratifies §1–§5 and §6.2–§6.3's mechanical envelope. It does not resolve U1–U4**, which remain open by design and are guarded by tests X1–X3.
+**`NOT READY FOR APPROVAL` (corrected 2026-08-29).** §1–§5 and §6.2–§6.3 are complete and executable, but **U3 blocks approval** — the trade step cannot be executed for the Mystic, which is required V1 content — and **U2 requires a scope decision** on whether V1 includes the Chapter 13 switch at all. U1 and U4 do not block. Guarded by X1–X3.

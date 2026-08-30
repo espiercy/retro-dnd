@@ -4,6 +4,33 @@
 >
 > **This document is not a Rule Card and authorizes nothing.** The four cards it accompanies are `AWAITING_APPROVAL`. No implementation is authorized (`ARCHITECTURE.md` §15.2, §16).
 
+---
+
+## 0. ⚠ CORRECTED 2026-08-29 — Stage B is NOT complete
+
+**A material Stage-B research failure was found by independent human review after the first version of this record.**
+
+The first version stated:
+
+```text
+BECMI is unanimous at +2.  No +1 statement located.  No internal BECMI conflict.
+Outcome A — lineage clearly supports +2.
+```
+
+**That is withdrawn.** BECMI is a **five**-volume lineage; the research inspected **two**, found them to agree, and generalised to the lineage. The **Master Set** (Players' Book p. 12) states the Elf gains **`+1` hp at 10th level**, and Master p. 2 carries an explicit conflict-precedence rule. **BECMI is not unanimous — it was revised.**
+
+| | Withdrawn | Corrected |
+|---|---|---|
+| BECMI lineage | unanimous `+2` | `+2` (Expert, Companion) → **`+1` (Master)** — **NOT UNANIMOUS** |
+| Elf outcome | **A** — `+2` proposed and written into `CHAR-003` | **C** — inconclusive → **`HUMAN RULING REQUIRED`**; no value specified |
+| `CHAR-003` | ready for approval | **NOT READY** |
+| `CHAR-001` | "four non-blocking questions" | **NOT READY** — U3 blocks (Mystic, required V1 content); U2 needs a scope decision |
+| Stage B | **COMPLETE** | **NOT COMPLETE — remediation required** |
+
+Corrections applied: §4 (rewritten), §7 (Simulator Rulings — the "none required" framing was misleading), §8 (blocking status), plus §10 postmortem and §11 proposed guardrail. **§5 legacy comparison and §6 dependency findings are unaffected and stand.** `CHAR-002` and `CHAR-007` are **materially unaffected**.
+
+**RC Stage-A source completeness is NOT reopened** (`INDEPENDENT REVIEW — PASS`). The defect was Stage-B alternate-source incompleteness. The Elf and Druid **maximum-level** adjudications are untouched.
+
 ## 1. What Stage B consumed, and what it refused to consume
 
 **Consumed:** the four human-cleared Stage-A evidence packets; `CLUSTER-002-completeness-audit.md`; the approved cluster boundary; the human adjudications of 2026-08-23 and 2026-08-29.
@@ -16,14 +43,16 @@
 
 ## 2. Synthesis outcome by card
 
-| Card | Core specification | Blocking gaps |
-|---|---|---|
-| `CHAR-001` Ability Score Generation | **Complete and executable** | None. Four narrow items carried as human decisions, each guarded by a test |
-| `CHAR-002` Race & Class Eligibility | **Complete and executable** | None |
-| `CHAR-003` Hit Points & Hit Dice | **Complete and executable** | None. Carries one proposed resolution of an RC self-contradiction (§4) |
-| `CHAR-007` Ability Score Effects | **Complete and executable** | None. All five Stage-A boundary questions closed |
+*(Corrected 2026-08-29.)*
 
-**No card is blocked. No `STOP —` condition is triggered.**
+| Card | Core specification | Blocking gaps | Approval status |
+|---|---|---|---|
+| `CHAR-001` Ability Score Generation | Complete and executable **except the trade step for the Mystic** | **U3** (Mystic Dexterity raise — required V1 class); **U2** (scope decision on the Ch. 13 switch) | **NOT READY** |
+| `CHAR-002` Race & Class Eligibility | **Complete and executable** | None | **CANDIDATE** |
+| `CHAR-003` Hit Points & Hit Dice | Complete and executable **except the Elf's 10th-level gain** | **W1** (`UNRESOLVED — HUMAN RULING REQUIRED`) | **NOT READY** |
+| `CHAR-007` Ability Score Effects | **Complete and executable** | None. All five Stage-A boundary questions closed | **CANDIDATE** |
+
+**Two cards are blocked.** The first version of this record said none were — that was the second defect this correction fixes, and it was a wording failure rather than a research one: "non-blocking" was used for questions that leave required V1 behaviour unspecified.
 
 ## 3. The two ambiguity classes, kept apart
 
@@ -46,26 +75,37 @@
 
 ## 4. The Elf `+1`/`+2` conflict — the one gap-directed research question
 
-Full record: `docs/rules/evidence/CHAR-003-elf-hp-alternate-source-research.md`. Summary:
+**Rewritten 2026-08-29.** Full record, including the withdrawal: `docs/rules/evidence/CHAR-003-elf-hp-alternate-source-research.md`.
 
-**Preconditions met.** Object-level RC exhaustion established (Stage-A completeness `INDEPENDENT REVIEW — PASS`). The gap statement was written in an unusual but honest shape: RC does not fail to answer, it answers inconsistently, so BECMI disambiguates rather than completes.
+**Corrected source inventory — all five BECMI volumes dispositioned, none on assumption:**
 
-**Sources, structure-first, visually verified.** BECMI Expert Players Manual p. 18 (Elf class entry, complete); BECMI Companion DM's Book pp. 22–23 (demihuman maximum hit points; Hit Roll Charts). The Expert OCR for the Elf region is severely degraded — mixed Cyrillic substitution — which is precisely why `DEC-0010` §9.2 makes visual verification mandatory rather than advisory.
+| Volume | Levels | Elf fixed gain | How dispositioned |
+|---|---|---|---|
+| Basic (Set 1) | 1–3 | *none* | **Inspected** — entry gives only `Hit Dice: 1d6 per level`; zero `10th level` occurrences |
+| **Expert** (Set 2) p. 18 | 4–14 | **`+2`** | **Visually verified** |
+| **Companion** (Set 3) DM p. 22 | 15–25 | **`+2`** | **Visually verified** |
+| **Master** (Set 4) p. 12 | 26–36 | **`+1`** | **Visually verified — missed entirely by the first pass** |
+| Immortals (Set 5) | post-36 | *none* | **Inspected** — zero occurrences of "elf" in the volume |
 
-**Result: BECMI is unanimous at `+2`.** Two independent objects in two books; no `+1` statement located; no internal BECMI conflict.
+**BECMI is NOT unanimous. It was REVISED:** `+2` → `+1` at Master. Master's Elf Experience Table also revises the Elf's spell progression in the same object, so this was deliberate. Master p. 2 additionally carries a precedence rule: *"If you discover a contradiction between this set and previous sets, the rules given here should be used."*
 
-**Genealogy, source facts separated from inference:**
+**Genealogy — RC is a composite that inherited from both branches:**
 
-- *Fact:* RC p. 129's two maximum-hit-point tables reproduce BECMI Companion p. 22 **number for number**, including the shared column header and the explanatory note — and the Elf row's `83` is arithmetically consistent only with `+2`.
-- *Fact:* RC p. 26's Elf Attack Rank thresholds reproduce BECMI Companion p. 23 exactly.
-- *Fact:* RC preserves BECMI's fixed gain **unchanged for Cleric, Fighter, Magic-user and Dwarf**. The Elf is the sole discrepancy.
-- *Inference:* the `+1` statements are condensation artifacts rather than a deliberate revision.
+- *Fact:* RC p. 129's maximum-hit-point tables reproduce BECMI **Companion** p. 22 number for number, header and note included — carrying `+2` into RC.
+- *Fact:* RC p. 25's stat block and RC p. 130 Step 6 track **Master**'s `+1`, the stat block closely echoing Master's phrasing.
+- *Fact:* **RC p. 26's Elf Experience Table matches EXPERT, not Master** — RC's level-10 spell row is `3 3 3 3 2` (Expert's exactly); Master's is `5 4 3 2 1`.
+- *Inference (well-supported, explanatory only):* RC absorbed both branches and never reconciled them. This explains all four RC statements and the same-page contradiction — but knowing **how** RC became inconsistent does not establish **which** value it intends.
+- *Retired:* the first pass's "RC matches BECMI for every other class" argument is **non-discriminating** — Expert and Master agree for those classes.
 
-**The competing reading is recorded, not buried:** RC may have deliberately reduced the Elf to `+1` and left the inherited table stale. Weaker, but not impossible. `CHAR-003` §4.1 states it, and test H25 exists so that reversing the resolution fails loudly.
+**Master's precedence rule does not settle it.** It is a BECMI-internal instruction for using the boxed sets together. RC is a later consolidating product that does not incorporate it, and `SOURCE_HIERARCHY.md` gives no basis for importing an alternate source's meta-rule into interpretation of the primary source. Treating "Master is later, therefore `+1`" as decisive would be the mirror image of the error being corrected. It is recorded as an argument available to the adjudicator.
 
-**Outcome A — lineage clearly supports `+2`**, proposed with provenance *"RC internal conflict, disambiguated by closest-lineage evidence."* **RC remains primary; BECMI is not the authority for this value.** B/X, Holmes and OD&D were deliberately not consulted — BECMI answered unanimously and descending further would be the broad browse §15 prohibits.
+**Outcome C — inconclusive.** Alternate-source research **does not cleanly disambiguate RC**.
 
-**This is a proposal.** The two comparable RC self-contradictions in this cluster — Elf maximum level, Druid maximum level — were both settled by **human adjudication**. This one is of the same kind and is listed in §8.
+```text
+Elf fixed HP at 10th level:  UNRESOLVED — HUMAN RULING REQUIRED
+```
+
+Neither value is written into `CHAR-003`. The card's Elf gain is unset and its tests are guards (H22–H25). Both cases are laid out for the adjudicator in the research record §8.
 
 ## 5. Legacy Comparison (protocol §13)
 
@@ -117,38 +157,58 @@ All are evidence-backed metadata corrections in `docs/rules/INVENTORY.md`. **No 
 
 ## 7. Simulator Rulings
 
-**None proposed. None required.**
+**Corrected 2026-08-29.** The first version said *"None proposed. None required"* while simultaneously recording that U3 "blocks Mystic trades". **Those were inconsistent**, and the wording hid a real approval gate behind the phrase *non-blocking*.
 
-`RULE_CARD_RESEARCH_PROTOCOL.md` §16 permits a ruling only after RC research, the cross-reference pass, falsification, and gap-directed compatible-source research **together** fail to establish the required behavior. For every open item, an earlier gate stops the chain first:
+**No Simulator Ruling is drafted or self-approved** — §16 forbids both. But two questions now leave **required V1 behaviour unspecified** and are escalated as blocking:
 
-| Item | Where the chain stops |
-|---|---|
-| Elf `+1`/`+2` | Gap-directed research **succeeded** (§4). No ruling needed |
-| `CHAR-001` U1–U4, `CHAR-002` V1 | Gap-directed research **was not justified** (§3), so §16's precondition is unmet. These are human decisions about RC-internal composition and project scope, not missing mechanics |
-| `CHAR-003` W2, W3 | Moot / not V1-wired. No specification depends on either |
-| `CHAR-007` | No unresolved mechanics at all |
+| Item | Chain status | Blocking? |
+|---|---|---|
+| **`CHAR-003` W1 — Elf fixed gain** | Gap-directed research **performed and INCONCLUSIVE** (§4). Not a missing mechanic — a choice between two values RC states. **Human adjudication**, like the Elf and Druid level caps | **YES — blocks `CHAR-003`** |
+| **`CHAR-001` U3 — Mystic Dexterity raise** | RC does not establish it; lineage research **cannot** — the Mystic is not a BECMI core class (Master p. 2 offers it as a DM conversion suggestion). Meets §16's preconditions; escalated as a question with alternatives, **not drafted, not self-approved** | **YES — blocks `CHAR-001`** |
+| `CHAR-001` U2 — Ch. 13 switch scope/ordering | A **project scope decision** (does V1 include the switch?) before it is a rules question | **YES — blocks `CHAR-001`** until scoped |
+| `CHAR-001` U4 / `CHAR-002` V1 | Contingent on U2; mechanically bounded already | No |
+| `CHAR-003` W2, W3 | Moot / not V1-wired | No |
+| `CHAR-007` | No unresolved mechanics | No |
+
+**Rule applied going forward:** a question may be called *non-blocking* only if the card remains fully executable for **all required V1 content** without it. U3 fails that test, and the earlier draft should not have called it non-blocking.
 
 ## 8. Remaining Human Decisions
 
 Ordered by consequence.
 
-| # | Decision | Where | Consequence if deferred |
-|---|---|---|---|
-| **1** | **Ratify or reject the Elf `+2` resolution** | `CHAR-003` §4.1, W1 | `CHAR-003` cannot be approved without a decision. Reversing it changes §4.1, one table row, §6's Elf row, and tests H22/H23 — nothing else |
-| 2 | **Mystic and the Dexterity raise** (U3) | `CHAR-001` §4 | Mystic characters cannot complete the trade step. Guarded by test X2 |
-| 3 | **Discard criterion**, and first: does V1 model discretionary discard at all? (U1) | `CHAR-001` §6.1 | None — the core procedure does not depend on it. Guarded by X1 |
-| 4 | **Ordering and permitted use of the Chapter 13 switch** (U2, U4/V1) | `CHAR-001` §6.2–§6.4, `CHAR-002` §5 | None — default is that the switch is not applied. Scope bounded to three gates. Guarded by X3 |
-| 5 | **Adopt or reject P1–P5** | §6.2 | None for this cluster; affects future cards |
+*(Corrected 2026-08-29 — three decisions block approval, not one.)*
 
-**Decisions 2–4 do not block approval of any card's core specification.** Decision 1 does.
+| # | Decision | Where | Blocking | Notes |
+|---|---|---|---|---|
+| **1** | **Elf fixed HP at 10th level — `+1` or `+2`** | `CHAR-003` §4.1, W1 | **Blocks `CHAR-003`** | RC 2-v-2; BECMI split (Expert/Companion `+2` → Master `+1`); RC inherited from both. Evidence for each side in the research record §8. **No default exists** — guarded by H22–H25 |
+| **2** | **May a Mystic raise Dexterity through the trade?** (U3) | `CHAR-001` §4 | **Blocks `CHAR-001`** | Mystic is required V1 content, so this is not optional behaviour. Lineage cannot help — Mystic is not a BECMI core class. Guarded by X2 |
+| **3** | **Does V1 include the Chapter 13 score switch at all?** (U2) | `CHAR-001` §6.2–§6.4 | **Blocks `CHAR-001`** | A **scope** decision. Deciding "no" closes U2 **and** U4/V1 at once without resolving any RC ambiguity. Guarded by X3 |
+| 4 | Discard criterion, and whether V1 models discard at all (U1) | `CHAR-001` §6.1 | No | Class A. If V1 omits it, the threshold never needs deciding. Guarded by X1 |
+| 5 | Adopt or reject P1–P5 | §6.2 | No | Affects future cards, not this cluster |
+| 6 | Adopt or reject the proposed **alternate-source completeness guardrail** | research record §11 | No | Governance; prevents recurrence of this failure |
+
+**`CHAR-002` and `CHAR-007` require no decision from this list** and are candidates for approval on their own merits.
 
 ## 9. What was not done
 
 Not performed, and not authorized: Rule Card approval; implementation planning; production implementation; implementation tests; any `src/` or `tests/` change; any merge to `main`; broad alternate-source survey; adoption of any P1–P5 proposal; assignment of any new Rule ID; expansion of `CLUSTER-002`.
 
 ```text
-CLUSTER-002 Stage B:   COMPLETE — four Rule Cards drafted
+CLUSTER-002 Stage B:   NOT COMPLETE — remediation performed 2026-08-29,
+                       awaiting human Stage-B remediation review
 Rule Card status:      AWAITING_APPROVAL (all four)
+    CHAR-001           NOT READY  — U3, U2
+    CHAR-002           CANDIDATE
+    CHAR-003           NOT READY  — W1
+    CHAR-007           CANDIDATE
 Implementation:        NOT AUTHORIZED
-Next gate:             HUMAN RULE-CARD REVIEW
+Next gate:             HUMAN STAGE-B REMEDIATION REVIEW
 ```
+
+## 10. Postmortem and 11. Proposed guardrail
+
+Both live in `docs/rules/evidence/CHAR-003-elf-hp-alternate-source-research.md` §10 and §11, alongside the evidence they concern, rather than being duplicated here.
+
+**§10 — postmortem**, in one line each: research stopped at the point of *apparent confirmation* rather than *coverage*; volume selection was driven by where the answer was expected (level 10 ∈ Expert's 4–14) rather than by what the lineage contains, so Master was filed as "levels 26–36, not relevant" and never tested; "unanimous" rested on two positive hits plus a **volume-scoped** negative search generalised to the lineage — Guardrail B's error committed one level up; **no alternate-source completeness checklist exists** (`DEC-0010` §9.3 requires one only for the primary source), so object-level rigour was applied *within* chosen volumes and none at all to *choosing* them; and yes, "closest source that answers the question" was mistaken for "complete relevant lineage". Compounding it, the deliberate, reasoned decision **not** to consult B/X, Holmes and OD&D created an appearance of considered completeness while an unexamined volume of the same higher-priority source sat undispositioned. The adversarial self-review could not catch it because it restarted from the objects *within the already-chosen volumes* — the same lesson `DEC-0010` §10.1.2 drew for primary sources.
+
+**§11 — proposed guardrail (NOT adopted).** A minimal `RULE_CARD_RESEARCH_PROTOCOL.md` §15.1: enumerate and disposition **every core volume** of a named multi-volume lineage before calling it exhaustive, unanimous, consistent or silent; scope-based exclusions must be **verified, not assumed**; lineage-level negative findings are source-property claims under Guardrail B; a later volume restating an earlier class entry is a **duplicate presentation** (§9.1 class I) and must be inspected; and a later volume's **conflict-precedence rule is a mandatory source object** whose scope must be stated — it governs its own lineage and does **not** by itself determine what a later consolidating product intends. **No new decision record is proposed** — this extends `DEC-0010`'s existing principle rather than adding one.
