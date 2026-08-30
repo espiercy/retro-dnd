@@ -176,7 +176,7 @@ Record, in the evidence report:
 
 ## 9.1 Mandatory Primary-Source Object / Table Completeness Audit
 
-> **Proposed by `docs/decisions/DEC-0010-primary-source-completeness-audit.md` (2026-08-23), which is `PROPOSED — AWAITING HUMAN APPROVAL`. §9.1–§9.6 and §10.1 take effect on approval of that record.** They were drafted after `CLUSTER-002` Stage A produced an apparently thorough whole-source cross-reference report while never opening the Elf Experience Table (RC p. 26) — the object that mechanically governs the very question being escalated.
+> **Proposed by `docs/decisions/DEC-0010-primary-source-completeness-audit.md` (2026-08-23), which is `PROPOSED — AWAITING HUMAN APPROVAL`. §9.1–§9.8, §10.1–§10.3, the corresponding Stage-A sequence steps in §3, and the §17 hard stops added by that record take effect on approval of it.** They were drafted after `CLUSTER-002` Stage A produced an apparently thorough whole-source cross-reference report while never opening the Elf Experience Table (RC p. 26) — the object that mechanically governs the very question being escalated.
 
 ### 9.1.0 The recorded defect this section exists to prohibit
 
@@ -373,6 +373,30 @@ Distinct from `SOURCE_HIERARCHY.md`, which ranks *editions*. This ranks *object 
 
 **The requirement is to identify all governing objects before interpreting conflicts among them** — not to resolve conflicts by object type.
 
+## 9.7 Complete-Entry Inspection Rule
+
+> Proposed by `DEC-0010`. Motivated by the `CHAR-002` failure: the p. 7 summary table was treated as exhaustive while the detailed Druid entry — which carries additional transition requirements — went unread.
+
+Where a responsibility concerns a **character class, race/class, monster, spell, item, or similarly structured entity**, the relevant detailed entity entry must be inspected **as a complete source unit**. For a class this may include:
+
+```text
+stat block
+experience / progression table
+saving-throw table
+class details
+special abilities
+entry / transition requirements
+explicit cross-references
+```
+
+**Do not treat isolated search windows as equivalent to reading the entry. Do not treat one summary table as automatically exhaustive.**
+
+## 9.8 "Single Governing Object" Claims
+
+A researcher may identify a **principal** governing object. A researcher may **not** call it *the single governing object* until all related structured and detailed source objects have been enumerated and dispositioned.
+
+The existence of a summary table does not prove that detailed entity material adds no qualification. RC p. 7's class/ability table is the principal object for creation eligibility; it is **not** the whole of what RC says about class entry.
+
 ## 10. Mandatory Falsification Pass
 
 Before proposing any mechanical conclusion of consequence, actively attempt to prove it wrong or incomplete. For every consequential tentative interpretation, record:
@@ -405,30 +429,6 @@ MORE PRIMARY RESEARCH REQUIRED
 ```
 
 Do not immediately replace the rejected interpretation with another speculative model merely to finish the artifact — that reproduces the exact failure mode this protocol exists to prevent. Report the rejection and what would be needed to resolve it, and stop.
-
-## 9.7 Complete-Entry Inspection Rule
-
-> Proposed by `DEC-0010`. Motivated by the `CHAR-002` failure: the p. 7 summary table was treated as exhaustive while the detailed Druid entry — which carries additional transition requirements — went unread.
-
-Where a responsibility concerns a **character class, race/class, monster, spell, item, or similarly structured entity**, the relevant detailed entity entry must be inspected **as a complete source unit**. For a class this may include:
-
-```text
-stat block
-experience / progression table
-saving-throw table
-class details
-special abilities
-entry / transition requirements
-explicit cross-references
-```
-
-**Do not treat isolated search windows as equivalent to reading the entry. Do not treat one summary table as automatically exhaustive.**
-
-## 9.8 "Single Governing Object" Claims
-
-A researcher may identify a **principal** governing object. A researcher may **not** call it *the single governing object* until all related structured and detailed source objects have been enumerated and dispositioned.
-
-The existence of a summary table does not prove that detailed entity material adds no qualification. RC p. 7's class/ability table is the principal object for creation eligibility; it is **not** the whole of what RC says about class entry.
 
 ## 10.1 Adversarial Self-Review vs. Independent Completeness Review
 
@@ -495,6 +495,8 @@ The completeness reviewer must not only ask *what objects do the TOC and Tables 
 **No card may be marked complete until every row is dispositioned.**
 
 ## 10.3 Independent Evidence-Completeness Review — method
+
+> **Who performs it is fixed by §10.1.2, not by this section.** §10.3 states the *method* only. It does not create a second, self-servable form of independent review: the pass described here **must** be carried out by a reviewer context that did not conduct the evidence collection being certified. An original researcher applying this method is performing **adversarial self-review** (§10.1.1), and its output is `PREPARED FOR INDEPENDENT COMPLETENESS REVIEW` — never a completeness certification.
 
 Before Human Evidence Review, Stage A must include a **distinct completeness-review pass** whose objective is to **identify relevant primary-source material the original research pass may have failed to inspect**.
 
@@ -637,6 +639,8 @@ over statements like:
 
 Do not broadly browse earlier editions merely to see what they did, and do not begin alternate-source research until a precise RC gap has been documented in this shape:
 
+> **Object-level precondition (`DEC-0010` item 8).** The gap statement below **may not** be written on the strength of keyword-search exhaustion. The §9.1 object/table completeness audit and the §9.7 complete-entry inspection must have been performed for that responsibility first, and the objects they enumerate must have been inspected and found silent. Escalating on a gap statement manufactured by a failed search is a governance breach, not merely a research miss.
+
 ```text
 RC establishes:
     A
@@ -685,6 +689,8 @@ An agent performing rules research under this protocol must stop under each of t
 | The governing procedure has not actually been located, even if a related value has | `STOP — PRIMARY PROCEDURE NOT YET ESTABLISHED` |
 | Two or more RC passages conflict and have not been reconciled | `STOP — INTERNAL SOURCE CONFLICT REQUIRES REVIEW` |
 | The falsification pass (§10) rejects a tentative interpretation | `STOP — MORE PRIMARY RESEARCH REQUIRED` |
+| An open-question closure-gate item (§10.2) is classified `BLOCKED — MORE PRIMARY-SOURCE RESEARCH REQUIRED` | `STOP — MORE PRIMARY RESEARCH REQUIRED` |
+| Adversarial self-review (§10.1.1) finds a packet claiming completeness while a declared unfinished source region remains uninspected | `FAIL COMPLETENESS PREPARATION` |
 | An alternate-source completion candidate's compatibility with RC cannot be established with confidence | `STOP — COMPLETION COMPATIBILITY NOT ESTABLISHED` |
 | Substantial simulator-level behavior remains undefined after §14–§16 | `STOP — HUMAN RULING REQUIRED` |
 
@@ -702,6 +708,6 @@ An agent performing rules research under this protocol must stop under each of t
 
 Adopted `docs/decisions/DEC-0009-evidence-first-rule-research-protocol.md`, `APPROVED`, 2026-08-16.
 
-**Amendments proposed 2026-08-23 by `docs/decisions/DEC-0010-primary-source-completeness-audit.md`** — §9.1–§9.6 (object/table completeness audit, structure-first ordering, visual verification, coverage checklist, research-risk classification and high-risk triggers, prohibited shortcuts Guardrails A–C, within-source evidence-type guidance), §10.1 (independent evidence-completeness review), the corresponding Stage-A sequence steps in §3, and the `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED` hard stop in §17.
+**Amendments proposed 2026-08-23 by `docs/decisions/DEC-0010-primary-source-completeness-audit.md`** — §9.1–§9.6 (object/table completeness audit, structure-first ordering, visual verification, coverage checklist, research-risk classification and high-risk triggers, prohibited shortcuts Guardrails A–C, within-source evidence-type guidance), §9.7 (complete-entry inspection), §9.8 ("single governing object" caution), §10.1.1 (adversarial self-review), §10.1.2 (independent completeness review — not by the original researcher), §10.2 and §10.2.1 (open-question closure gate and reconciliation table), §10.3 (independent completeness-review method), the object-level precondition note in §15, the corresponding Stage-A sequence steps in §3, and the `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED`, `STOP — MORE PRIMARY RESEARCH REQUIRED` (closure-gate blockage) and `FAIL COMPLETENESS PREPARATION` hard stops in §17.
 
 **`DEC-0010` is `PROPOSED — AWAITING HUMAN APPROVAL`. Those sections are drafted but not yet in force**; until it is approved, `DEC-0009` and the pre-amendment protocol remain operative. `DEC-0009` is not superseded and its protections are unchanged; `DEC-0010` strengthens Stage A only. This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full — expected to produce a committed `docs/rules/evidence/EXP-001-evidence.md` Stage-A artifact, not a rewritten Rule Card, as its first deliverable.

@@ -69,8 +69,12 @@ Specifically:
 **11. Guardrail C — per-class / per-entity table attestation.** Where a Rule Card concerns a subject possessing a named class table, experience table, saving-throw table, monster table or stat block, spell table, item table, equipment table, progression table, or analogous per-entity structured object, the evidence packet must explicitly record that object as `OPENED`, `VISUALLY INSPECTED`, and `DISPOSITIONED` — or explicitly excluded with a stated reason. **A named table may not silently exist outside the packet's coverage checklist.** *(This guardrail alone would have caught the Elf Experience Table immediately.)*
 
 **12. Guardrail D — additional mandatory high-risk triggers.** Beyond the table-heavy classification in item 6, the following independently trigger heightened review:
-   - **a per-class/per-entity table exists for the researched subject**;
-   - **searches return only out-of-domain or obviously irrelevant hits.** The required response to (b) is to **question the search strategy before drawing any conclusion about the source**. Lich results from an Elf progression query are evidence that the query is poorly targeted — never evidence that Elf material is absent.
+   - **(a) a per-class/per-entity table exists for the researched subject**;
+   - **(b) searches return only out-of-domain or obviously irrelevant hits.**
+
+   The required response to (b) is to **question the search strategy before drawing any conclusion about the source**. Lich results from an Elf progression query are evidence that the query is poorly targeted — never evidence that Elf material is absent.
+
+**13. Structure-first ordering of research operations.** Full-text search retains its value as a locator, cross-reference finder, and falsification tool. It is not the primary completeness mechanism. The governing order of operations is source structure → finding aids → object inventory → visual inspection → governing prose → cross-references → whole-source search → falsification → independent completeness review → human evidence review.
 
 **14. Gate A — adversarial self-review is not independent completeness review.** These are distinct and both are required:
 
@@ -112,8 +116,6 @@ No card may be marked complete until every row is dispositioned.
 
 **18. No premature "single governing object" claims.** A researcher may identify a *principal* governing object, but may not describe it as the **single** governing object until all related structured and detailed source objects have been enumerated and dispositioned. The existence of a summary table does not prove that detailed entity material adds no qualification.
 
-**13. Structure-first ordering of research operations.** Full-text search retains its value as a locator, cross-reference finder, and falsification tool. It is not the primary completeness mechanism. The governing order of operations is source structure → finding aids → object inventory → visual inspection → governing prose → cross-references → whole-source search → falsification → independent completeness review → human evidence review.
-
 ## Rationale
 
 The failure mode `DEC-0009` addressed was *stopping too early in the pipeline* — synthesizing before evidence closed. The failure mode this record addresses is different and was not covered: *believing evidence had closed when an entire class of source object had never been opened*.
@@ -126,7 +128,7 @@ The cost is real: page-image inspection is slower than text search. That cost is
 
 ## Consequences
 
-- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` gains the object/table completeness audit, the visual-verification requirement, the coverage-checklist requirement, the independent completeness-review pass, the research-risk classification, Guardrails A–D, the structure-first operations order, the within-source evidence-type guidance, and a new hard-stop condition. Its Stage-A sequence diagram is amended accordingly. **These amendments take effect only on human approval of this record.**
+- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` gains the object/table completeness audit (§9.1), the structure-first operations order (§9.1.1), the visual-verification requirement (§9.2), the coverage-checklist requirement (§9.3), the research-risk classification and Guardrail D triggers (§9.4), Guardrails A–C (§9.5), the within-source evidence-type guidance (§9.6), the complete-entry inspection rule (§9.7), the "single governing object" caution (§9.8), the adversarial-self-review / independent-completeness-review split (§10.1.1, §10.1.2), the open-question closure gate and its reconciliation table (§10.2, §10.2.1), the independent completeness-review method (§10.3), the object-level precondition for alternate-source escalation (§15), and three new hard-stop conditions (§17). Its Stage-A sequence diagram is amended accordingly. **These amendments take effect only on human approval of this record.**
 - **Prior BECMI research disposition (human ruling, 2026-08-23):** the BECMI material produced from the invalid RC-exhaustion conclusion **must not be used** as current evidence or as synthesis input. It is preserved in session/branch history for research provenance only, and is not deleted. If alternate-source research is later properly justified after genuine RC object-level exhaustion, it must be **performed anew** from the corrected RC evidence state; no conclusion may be inherited merely because it was already generated.
 - Stage A becomes slower and more expensive. This is intended.
 - `CLUSTER-001`'s and `CLUSTER-002`'s existing evidence were audited against this standard as part of adopting it; results are recorded in `docs/rules/evidence/CLUSTER-001-completeness-audit.md` and `docs/rules/evidence/CLUSTER-002-completeness-audit.md`.

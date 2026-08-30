@@ -144,21 +144,30 @@ The difference is a property of the source objects, not of researcher diligence 
 
 ## 8. Status After This Audit
 
-**`CLUSTER-001 PRIMARY-SOURCE COMPLETENESS AUDIT: CANDIDATE PASS — 2026-08-23`.**
+**`CLUSTER-001 PRIMARY-SOURCE COMPLETENESS: INDEPENDENT REVIEW — PASS`.**
 
-> **Downgraded from `PASS` on 2026-08-23.** The substantive audit result is unchanged and was human-accepted, but under proposed `DEC-0010` item 14 and protocol §10.1.2 the researcher that gathered this evidence **may not issue the final completeness certification for its own package**. This artifact therefore records a **candidate** pass, `PREPARED FOR INDEPENDENT REVIEW`. Final certification requires a reviewer context that did not conduct this evidence collection.
+**Lifecycle of this result, in order (none of these steps is rewritten):**
+
+| Date | State | By |
+|---|---|---|
+| 2026-08-23 | `PASS` — self-issued | original researcher (**not a valid certification**) |
+| 2026-08-23 | **Downgraded** to `CANDIDATE PASS — PREPARED FOR INDEPENDENT REVIEW` | original researcher, under proposed `DEC-0010` item 14 / protocol §10.1.2 |
+| **2026-08-29** | **`INDEPENDENT REVIEW — PASS`** | **human reviewer** |
+
+> **Recorded 2026-08-29.** The human project owner completed the independent primary-source completeness review required by proposed `DEC-0010` item 14 and protocol §10.1.2, and returned `INDEPENDENT REVIEW — PASS`. The candidate pass is thereby certified by a party other than the researcher that gathered the evidence. **The certification is the human reviewer's, not this artifact's** — the intermediate `CANDIDATE PASS` step above is retained deliberately, because the ordering is the point of `DEC-0010`.
 
 ```text
 CLUSTER-001 approved specification:      unchanged
 CLUSTER-001 implementation:              unchanged, remains VERIFIED
-CLUSTER-001 primary-source completeness: CANDIDATE PASS — 2026-08-23
-                                         PREPARED FOR INDEPENDENT REVIEW
-                                         (not self-certified)
+CLUSTER-001 primary-source completeness: INDEPENDENT REVIEW — PASS
+                                         (human, 2026-08-29)
 Category C specification-affecting omissions: none
 Category D new internal source conflicts:     none
 Rule Card corrections required:               none
 Implementation corrections required:          none
 Test corrections required:                    none
 ```
+
+**The four Category-B completeness gaps (Findings 1–4) remain open and are unaffected by this pass.** They are recorded non-contradictory gaps, not defects; Finding 3 retains its flagged upgrade path to Category C under a future scope expansion.
 
 **Relationship to the 2026-08-18 verification.** `CLUSTER-001`'s `VERIFIED` status was granted on 2026-08-18 against its approved specification and its implementation's passing verification. That history is unchanged and is **not** retroactively rewritten: this completeness audit did not exist at that time, and the original verification is not represented as having included it. This audit is a **later, separate** check of a different question — whether the underlying primary-source evidence was complete — and it passed.

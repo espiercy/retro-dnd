@@ -5,6 +5,8 @@
 > This audit is the direct consequence of the process defect recorded in `DEC-0010`. It is **not** a synthesis, **not** Stage B, and **not** authorization to change any mechanic. No Rule Card exists for any `CHAR-*` entry and none was created.
 >
 > **Status of the four Stage-A packets during this audit:** `PREVIOUSLY ACCEPTED — COMPLETENESS AUDIT PENDING`. Human Evidence Review clearance for `CLUSTER-002` is suspended; Stage B is paused.
+>
+> **Current status (updated 2026-08-29):** the human project owner completed the independent completeness review and returned `CLUSTER-002 STAGE-A PRIMARY-SOURCE COMPLETENESS: INDEPENDENT REVIEW — PASS` for all four cards — see **§7.1**. The Druid maximum-level conflict raised as Finding 11 was **human-adjudicated at 36** — see **§5.2**. **Stage B remains PAUSED** pending finalization of the governance remediation. The line above is preserved as the state that obtained while the audit was performed; it is not the current state.
 
 ## 1. Method
 
@@ -241,7 +243,26 @@ p. 7 states only *"Neutral alignment, obtain 9th level as a cleric."* The p. 28 
 
 **Four objects at 36 against one Ch. 1 p. 12 summary sentence at 30.** This is the **same p. 12 passage** that states the Elf cap as 12 against six statements at 10. That passage is now demonstrably unreliable on **two of its five** class-cap claims.
 
-**Not resolved here** — no ruling exists for the Druid cap, and this audit does not make one. `ADV-002` owns it. Reported as a new Category D finding.
+**Not resolved by this audit** — this artifact made no ruling and had no authority to. Reported as a new Category D finding, owner `ADV-002`.
+
+#### Human adjudication recorded — 2026-08-29
+
+The independent human review confirmed the conflict is genuine and adjudicated it. **This is a human adjudication, not an agent-derived resolution.**
+
+```text
+Standard RC Druid progression:            levels 9–36
+Maximum Druid level:                      36
+Special challenge / limited-rank progression:
+                                          begins with advancement to 30th level
+RC Ch. 1 p. 12, "Druids may only achieve 30th level":
+                                          treated as erroneous summary text
+```
+
+**Source of truth for this question: the detailed Druid class progression material and the Druid Experience Table (RC pp. 28–29).** The Ch. 1 p. 12 sentence is **not deleted from this record** — it is real, printed, and retained in the table above; it is simply not authoritative for this project on this point.
+
+**No alternate-source research is needed or permitted for this conflict.** It is resolved from RC's own detailed material, exactly as the Elf cap was (§8).
+
+**Ownership is unchanged and `CLUSTER-002` is not expanded.** The cap governs advancement, so it belongs downstream to `ADV-002`; recorded there via `docs/rules/INVENTORY.md` "Progression-Scope Findings". Nothing in `CHAR-001`/`CHAR-002`/`CHAR-003`/`CHAR-007` changes: `CHAR-002` already returns *Druid not selectable at creation*, which this adjudication **strengthens rather than alters** (the Druid Experience Table begins at level 9).
 
 ### Finding 12 — Druid HP is consistent (no new conflict)
 **Category: A — COMPLETE.** p. 28: "Starting with 10th level, +1 hit point per level, and Constitution adjustments do not apply"; "A character cannot become a druid until… Name (9th) experience level as a cleric. Therefore, from then on, he will receive only 1 hit point per experience level gained after 9th level." Consistent with p. 129 ("same as those for a cleric") and p. 130 ("As cleric… +1/level thereafter"). `CHAR-003` unaffected.
@@ -431,19 +452,57 @@ Objects visually verified:   pp. 7, 8, 9, 10, 12, 24, 25, 26, 27, 28, 29,
 NEW Category D conflict:     Druid maximum level — Ch.1 p.12 says 30;
                              stat block, Higher Experience Levels, Druid
                              Experience Table and Druid Saving Throws
-                             Table all say 36. UNRULED. Owner ADV-002.
+                             Table all say 36.
+                             HUMAN-ADJUDICATED 2026-08-29 at 36, with the
+                             special-challenge hierarchy beginning at 30th
+                             (§5.2 Finding 11). Owner ADV-002.
 
 Elf maximum level:          human-adjudicated at 10; not reopened
 Elf fixed HP +1 vs +2:      UNRESOLVED, deliberately (all four statements
                             now visually verified as printed)
+                            GENUINE PRIMARY-SOURCE CONFLICT
+                            STAGE-B RESOLUTION REQUIRED
 BECMI escalation:           void as to authorization; excluded from
                             current evidence and synthesis (§2)
 
 CLUSTER-002 Stage B:        PAUSED
-CLUSTER-002 completeness:   PREPARED FOR INDEPENDENT COMPLETENESS REVIEW
+CLUSTER-002 completeness:   INDEPENDENT REVIEW — PASS (human, 2026-08-29)
 ```
 
-**This audit does NOT certify `CLUSTER-002` source completeness.** Under proposed `DEC-0010` item 14 and protocol §10.1.2, the researcher that gathered this evidence may not issue the final completeness certification for its own package. The earlier `READY FOR HUMAN REVIEW` framing is superseded by `PREPARED FOR INDEPENDENT COMPLETENESS REVIEW`, to be performed by a reviewer context that did not conduct this evidence collection.
+**This audit did not, and could not, certify its own completeness.** Under proposed `DEC-0010` item 14 and protocol §10.1.2, the researcher that gathered this evidence may not issue the final completeness certification for its own package. It was prepared and submitted as `PREPARED FOR INDEPENDENT COMPLETENESS REVIEW`.
+
+## 7.1 Independent Review Result — recorded 2026-08-29
+
+The human project owner completed the independent primary-source completeness review and returned:
+
+```text
+CLUSTER-002 STAGE-A PRIMARY-SOURCE COMPLETENESS:
+INDEPENDENT REVIEW — PASS
+
+CHAR-001:  source coverage PASS   (genuine ambiguities retained)
+CHAR-002:  source coverage PASS
+CHAR-003:  source coverage PASS   (Elf fixed-HP conflict retained)
+CHAR-007:  source coverage PASS
+```
+
+**The certification is the human reviewer's, not this artifact's.** The lifecycle is retained in order — self-issued claim withdrawn → `PREPARED FOR INDEPENDENT COMPLETENESS REVIEW` → independent `PASS` — because that ordering is the substance of `DEC-0010`, not a formality to be compressed after the fact.
+
+**The prior source-completeness defect is considered remediated.**
+
+### What this PASS does and does not mean
+
+```text
+Evidence completeness   and   rules ambiguity   are separate concepts.
+```
+
+| | Status at the completeness gate |
+|---|---|
+| **Unfinished source inspection** | **NOT ACCEPTABLE** — none remains (§6.3: all 18 items dispositioned, zero `BLOCKED`) |
+| **Fully mapped but contradictory source** | **ACCEPTABLE** — carried forward as a documented Stage-B problem |
+
+A source-complete evidence packet **may** contain a real contradiction. `CLUSTER-002` does: the Elf `+1` vs `+2` fixed-HP conflict (§4 Finding 3) survives this PASS untouched, classified `GENUINE PRIMARY-SOURCE CONFLICT — STAGE-B RESOLUTION REQUIRED`. So do the retained `CHAR-001` procedural ambiguities (§6.3 rows 1, 3, 4, 6, 9, 11). **This PASS certifies that the source was fully mapped. It does not assert that RC speaks with one voice where it does not.**
+
+**Stage B remains PAUSED** pending finalization of the governance remediation. No mechanical synthesis, legacy comparison, alternate-source research, Simulator Ruling, or Rule Card drafting is authorized by this result.
 
 ## 8. Elf Level-Cap — Complete Evidence Record and Human Adjudication
 
