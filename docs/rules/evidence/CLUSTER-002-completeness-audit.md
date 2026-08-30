@@ -6,7 +6,7 @@
 >
 > **Status of the four Stage-A packets during this audit:** `PREVIOUSLY ACCEPTED — COMPLETENESS AUDIT PENDING`. Human Evidence Review clearance for `CLUSTER-002` is suspended; Stage B is paused.
 >
-> **Current status (updated 2026-08-29):** the human project owner completed the independent completeness review and returned `CLUSTER-002 STAGE-A PRIMARY-SOURCE COMPLETENESS: INDEPENDENT REVIEW — PASS` for all four cards — see **§7.1**. The Druid maximum-level conflict raised as Finding 11 was **human-adjudicated at 36** — see **§5.2**. **Stage B remains PAUSED** pending finalization of the governance remediation. The line above is preserved as the state that obtained while the audit was performed; it is not the current state.
+> **Current status (updated 2026-08-29):** the human project owner completed the independent completeness review and returned `CLUSTER-002 STAGE-A PRIMARY-SOURCE COMPLETENESS: INDEPENDENT REVIEW — PASS` for all four cards — see **§7.1**. The Druid maximum-level conflict raised as Finding 11 was **human-adjudicated at 36** — see **§5.2**. With `DEC-0010` approved and landed on 2026-08-29, the **Human Evidence Review clearance is restored** (all four packets `ACCEPTED`) and **Stage B is unpaused — eligible, not begun.** The line above is preserved as the state that obtained while the audit was performed; it is not the current state.
 
 ## 1. Method
 
@@ -465,11 +465,12 @@ Elf fixed HP +1 vs +2:      UNRESOLVED, deliberately (all four statements
 BECMI escalation:           void as to authorization; excluded from
                             current evidence and synthesis (§2)
 
-CLUSTER-002 Stage B:        PAUSED
 CLUSTER-002 completeness:   INDEPENDENT REVIEW — PASS (human, 2026-08-29)
+CLUSTER-002 evidence gate:  CLEARED (human, 2026-08-29)
+CLUSTER-002 Stage B:        UNPAUSED — eligible, not begun (2026-08-29)
 ```
 
-**This audit did not, and could not, certify its own completeness.** Under proposed `DEC-0010` item 14 and protocol §10.1.2, the researcher that gathered this evidence may not issue the final completeness certification for its own package. It was prepared and submitted as `PREPARED FOR INDEPENDENT COMPLETENESS REVIEW`.
+**This audit did not, and could not, certify its own completeness.** Under `DEC-0010` item 14 and protocol §10.1.2, the researcher that gathered this evidence may not issue the final completeness certification for its own package. It was prepared and submitted as `PREPARED FOR INDEPENDENT COMPLETENESS REVIEW`.
 
 ## 7.1 Independent Review Result — recorded 2026-08-29
 
@@ -502,7 +503,7 @@ Evidence completeness   and   rules ambiguity   are separate concepts.
 
 A source-complete evidence packet **may** contain a real contradiction. `CLUSTER-002` does: the Elf `+1` vs `+2` fixed-HP conflict (§4 Finding 3) survives this PASS untouched, classified `GENUINE PRIMARY-SOURCE CONFLICT — STAGE-B RESOLUTION REQUIRED`. So do the retained `CHAR-001` procedural ambiguities (§6.3 rows 1, 3, 4, 6, 9, 11). **This PASS certifies that the source was fully mapped. It does not assert that RC speaks with one voice where it does not.**
 
-**Stage B remains PAUSED** pending finalization of the governance remediation. No mechanical synthesis, legacy comparison, alternate-source research, Simulator Ruling, or Rule Card drafting is authorized by this result.
+**Update — 2026-08-29.** `DEC-0010` is `Approved` and landed, and on that basis the human project owner **restored `CLUSTER-002`'s Human Evidence Review clearance** (all four packets `ACCEPTED`) and **unpaused Stage B**. Stage B is now **eligible to begin under a separate assignment; it has not begun.** Nothing in this artifact authorizes mechanical synthesis, legacy comparison, alternate-source research, a Simulator Ruling, or Rule Card drafting — those proceed only under that assignment. Implementation remains unauthorized (`ARCHITECTURE.md` §15.2). The full clearance history, including the suspension, is preserved at `docs/rules/clusters/CLUSTER-002-character-foundation.md` §3.
 
 ## 8. Elf Level-Cap — Complete Evidence Record and Human Adjudication
 

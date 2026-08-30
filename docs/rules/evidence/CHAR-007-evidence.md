@@ -13,7 +13,9 @@
 >
 > **⚠ This packet flags one finding that bears on an approved ownership boundary** (§6). It is escalated for human review, not acted upon.
 
-> **Independent completeness review — PASS (human, 2026-08-29).** The human project owner completed the independent primary-source completeness review required by proposed `DEC-0010` item 14 / protocol §10.1.2 and returned **`CHAR-007: source coverage PASS`**. This certifies that the source was **fully mapped**. The §6 ownership finding remains escalated for human review and is unaffected. **Stage B remains PAUSED.**
+> **Independent completeness review — PASS (human, 2026-08-29).** The human project owner completed the independent primary-source completeness review required by `DEC-0010` item 14 / protocol §10.1.2 and returned **`CHAR-007: source coverage PASS`**. This certifies that the source was **fully mapped**. The §6 ownership finding remains escalated for human review and is unaffected.
+>
+> **Human Evidence Review — `ACCEPTED` (human, 2026-08-29).** With `DEC-0010` `Approved` and landed, this packet's clearance is **restored**. Stage B is **unpaused — eligible, not begun**; it proceeds only under a separate assignment. The suspension is preserved in the clearance history at `docs/rules/clusters/CLUSTER-002-character-foundation.md` §3.
 
 ## 1. Research Scope
 

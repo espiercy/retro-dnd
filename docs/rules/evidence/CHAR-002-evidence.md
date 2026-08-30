@@ -14,7 +14,9 @@
 >
 > **This is a Stage-A evidence artifact, not a Rule Card.** Produced under `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` (`DEC-0009`). It is not mechanically authoritative, is not `APPROVED`, and authorizes nothing. Stage B was **not** begun.
 
-> **Independent completeness review — PASS (human, 2026-08-29).** The human project owner completed the independent primary-source completeness review required by proposed `DEC-0010` item 14 / protocol §10.1.2 and returned **`CHAR-002: source coverage PASS`**. The prior source-completeness defect recorded above — the withdrawn self-certification over an open Druid/Mystic question — is **remediated**. **Stage B remains PAUSED.**
+> **Independent completeness review — PASS (human, 2026-08-29).** The human project owner completed the independent primary-source completeness review required by `DEC-0010` item 14 / protocol §10.1.2 and returned **`CHAR-002: source coverage PASS`**. The prior source-completeness defect recorded above — the withdrawn self-certification over an open Druid/Mystic question — is **remediated**.
+>
+> **Human Evidence Review — `ACCEPTED` (human, 2026-08-29).** With `DEC-0010` `Approved` and landed, this packet's clearance is **restored**. Stage B is **unpaused — eligible, not begun**; it proceeds only under a separate assignment. The suspension is preserved in the clearance history at `docs/rules/clusters/CLUSTER-002-character-foundation.md` §3.
 >
 > **Druid maximum level — human adjudication (2026-08-29).** The Category D conflict raised above is confirmed genuine and is now adjudicated:
 >

@@ -154,7 +154,7 @@ The difference is a property of the source objects, not of researcher diligence 
 | 2026-08-23 | **Downgraded** to `CANDIDATE PASS — PREPARED FOR INDEPENDENT REVIEW` | original researcher, under proposed `DEC-0010` item 14 / protocol §10.1.2 |
 | **2026-08-29** | **`INDEPENDENT REVIEW — PASS`** | **human reviewer** |
 
-> **Recorded 2026-08-29.** The human project owner completed the independent primary-source completeness review required by proposed `DEC-0010` item 14 and protocol §10.1.2, and returned `INDEPENDENT REVIEW — PASS`. The candidate pass is thereby certified by a party other than the researcher that gathered the evidence. **The certification is the human reviewer's, not this artifact's** — the intermediate `CANDIDATE PASS` step above is retained deliberately, because the ordering is the point of `DEC-0010`.
+> **Recorded 2026-08-29.** The human project owner completed the independent primary-source completeness review required by `DEC-0010` item 14 and protocol §10.1.2, and returned `INDEPENDENT REVIEW — PASS`. The candidate pass is thereby certified by a party other than the researcher that gathered the evidence. **The certification is the human reviewer's, not this artifact's** — the intermediate `CANDIDATE PASS` step above is retained deliberately, because the ordering is the point of `DEC-0010`.
 
 ```text
 CLUSTER-001 approved specification:      unchanged

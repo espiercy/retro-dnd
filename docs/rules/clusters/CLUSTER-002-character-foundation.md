@@ -25,10 +25,28 @@ Do not conflate these distinct gates (`ARCHITECTURE.md` §15.1/§15.2,
 |---|---|
 | Cluster selection | **Complete** — `CLUSTER-002` selected as the work following `CLUSTER-001` |
 | Cluster boundary approval | **Complete** — this document, 2026-08-23 |
-| Rule Card research (Evidence-First, `DEC-0009`) | **Not begun** |
-| Rule Card approval (`CHAR-001`, `CHAR-002`, `CHAR-003`, `CHAR-007`) | **Not granted — all four remain `Unresearched`** |
+| Stage-A evidence research (Evidence-First, `DEC-0009`) | **Complete** — four packets in `docs/rules/evidence/CHAR-00{1,2,3,7}-evidence.md` |
+| Stage-A primary-source completeness (`DEC-0010`) | **`INDEPENDENT REVIEW — PASS`** — human, 2026-08-29; all four cards `source coverage PASS` |
+| **Human Evidence Review (`DEC-0009` §11)** | **`CLEARED`** — human, 2026-08-29 (see the clearance history below) |
+| Stage B — mechanical synthesis / Rule Card drafting | **Eligible, not begun** — unpaused 2026-08-29; awaits a separate Stage-B assignment |
+| Rule Card approval (`CHAR-001`, `CHAR-002`, `CHAR-003`, `CHAR-007`) | **Not granted — no `CHAR-*` Rule Card exists** |
 | Implementation-readiness approval | **Not granted** |
 | Implementation authorization | **Not granted** |
+
+### Human Evidence Review clearance history (2026-08-23 → 2026-08-29)
+
+Recorded in order, and deliberately **not** rewritten as though the suspension never occurred — the sequence is the evidence that `DEC-0010`'s gates did their job:
+
+| # | Event | Date |
+|---|---|---|
+| 1 | Stage-A evidence packets produced for all four cards; **initial human evidence clearance granted** | 2026-08-23 |
+| 2 | **Primary-source completeness defect discovered** — RC p. 26 Elf Experience Table never inspected; a failed keyword search had been recorded as a finding of absence | 2026-08-23 |
+| 3 | **Clearance suspended**; Stage B paused; `DEC-0010` opened | 2026-08-23 |
+| 4 | Remediation — object/table audit, visual verification of 23 RC pages, complete Druid and Mystic entry inspection, all 18 open questions reconciled and dispositioned; a second defect (self-certification over an open question) found and corrected | 2026-08-23 |
+| 5 | **Independent completeness review — `PASS`**, performed by the human project owner, not by the researcher that gathered the evidence (`DEC-0010` item 14 / protocol §10.1.2) | 2026-08-29 |
+| 6 | **Human Evidence Review clearance restored** for `CHAR-001`, `CHAR-002`, `CHAR-003`, `CHAR-007` — all `ACCEPTED`; Stage B unpaused | 2026-08-29 |
+
+**A cleared evidence gate is not a claim that RC is unambiguous.** Genuine, fully mapped primary-source conflicts remain open and are Stage-B problems, not evidence gaps (`RULE_CARD_RESEARCH_PROTOCOL.md` §10.2.2) — chiefly the **Elf 10th-level fixed hit-point gain, `+1` versus `+2`**, whose four contradictory RC statements are all visually verified as printed.
 
 **Current authority:** Rules Cyclopedia
 (`docs/decisions/DEC-0007-rules-cyclopedia-primary-rules-authority.md`), as
