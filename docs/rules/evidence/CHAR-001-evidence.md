@@ -6,6 +6,8 @@
 >
 > **This is a Stage-A evidence artifact, not a Rule Card.** Produced under `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` (`DEC-0009`). It is not mechanically authoritative, is not `APPROVED`, and authorizes nothing. No `CHAR-*` Rule Card exists or was created. Stage B (mechanical synthesis, legacy comparison, alternate-source research, Simulator Rulings) was **not** begun.
 
+> **Independent completeness review — PASS (human, 2026-08-29).** The human project owner completed the independent primary-source completeness review required by proposed `DEC-0010` item 14 / protocol §10.1.2 and returned **`CHAR-001: source coverage PASS`**, with genuine ambiguities retained. This certifies that the source was **fully mapped**; it does **not** assert that RC is unambiguous here — §9 items 1, 3 and 4 remain open as genuine source ambiguities and are Stage-B problems, not evidence gaps. **Stage B remains PAUSED.**
+
 ## 1. Research Scope
 
 **Investigating:** the Rules Cyclopedia's complete procedure for generating a new character's ability scores — which abilities, the die method, ordering, adjustment/reroll/replacement provisions, whether the procedure distinguishes PCs from other character types, and any cross-references elsewhere in RC that qualify the Chapter 1 procedure.

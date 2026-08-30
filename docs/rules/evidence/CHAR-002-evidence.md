@@ -14,6 +14,21 @@
 >
 > **This is a Stage-A evidence artifact, not a Rule Card.** Produced under `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` (`DEC-0009`). It is not mechanically authoritative, is not `APPROVED`, and authorizes nothing. Stage B was **not** begun.
 
+> **Independent completeness review — PASS (human, 2026-08-29).** The human project owner completed the independent primary-source completeness review required by proposed `DEC-0010` item 14 / protocol §10.1.2 and returned **`CHAR-002: source coverage PASS`**. The prior source-completeness defect recorded above — the withdrawn self-certification over an open Druid/Mystic question — is **remediated**. **Stage B remains PAUSED.**
+>
+> **Druid maximum level — human adjudication (2026-08-29).** The Category D conflict raised above is confirmed genuine and is now adjudicated:
+>
+> ```text
+> Standard RC Druid progression:   levels 9–36
+> Maximum Druid level:             36
+> Special challenge / limited-rank progression:
+>                                  begins with advancement to 30th level
+> RC Ch. 1 p. 12 ("Druids may only achieve 30th level"):
+>                                  treated as erroneous summary text
+> ```
+>
+> **Source of truth: the detailed Druid class progression material and the Druid Experience Table (RC pp. 28–29).** This is a **human adjudication**, not an agent-derived resolution, and no alternate-source research is needed or permitted for it. **Ownership is downstream (`ADV-002`), recorded in `docs/rules/INVENTORY.md` "Human-adjudicated class level caps"; `CLUSTER-002` is not expanded and this packet's executable eligibility conclusions are unchanged** — Procedure A already returns *not eligible at creation*, which a progression table beginning at level 9 strengthens.
+
 ## 1. Research Scope
 
 **Investigating:** what the Rules Cyclopedia requires when determining which race/class options are available to a newly generated character — the choices that exist, whether ability scores restrict eligibility, whether prime requisites gate eligibility or something else, whether race and class are unified or separate concepts, and what prerequisites are genuinely required versus merely referenced.

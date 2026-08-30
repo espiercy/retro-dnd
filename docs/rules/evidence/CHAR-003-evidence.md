@@ -16,6 +16,18 @@
 >
 > **Revision note (targeted correction).** §4, §8 (Challenge 7) and §9 were corrected after human review of the first version of this packet. The original recorded the Elf problem as a single conflict *between* chapters; re-examination of the primary source established that **each chapter also contradicts itself** on Conflict B, and that maximum level and HP increment are separate questions. No conflict was resolved by the correction — the evidence matrix was completed.
 
+> **Independent completeness review — PASS (human, 2026-08-29).** The human project owner completed the independent primary-source completeness review required by proposed `DEC-0010` item 14 / protocol §10.1.2 and returned **`CHAR-003: source coverage PASS`**, with the Elf fixed-HP conflict retained.
+>
+> **Conflict B is retained, not resolved, and does not block completeness:**
+>
+> ```text
+> Elf fixed HP at 10th level: +1 versus +2
+> GENUINE PRIMARY-SOURCE CONFLICT
+> STAGE-B RESOLUTION REQUIRED
+> ```
+>
+> All four contradictory RC statements are visually verified as printed. **A source-complete evidence packet may contain a real contradiction** — the distinction that governs the completeness gate is *unfinished research* (not acceptable; none remains here) versus *fully mapped but contradictory source* (acceptable, carried forward as a Stage-B problem). **Conflict A (Elf maximum level) stays closed by the 2026-08-23 human adjudication and is not reopened.** No alternate-source research is authorized for Conflict B yet. **Stage B remains PAUSED.**
+
 ## 1. Research Scope
 
 **Investigating:** RC's HP/HD-only responsibility — starting hit points, Hit Die by class, the level-based HP/HD procedure, minimums/maxima/adjustments, and whether an ability score modifies hit points (and where that modifier's magnitude is authoritatively defined).
