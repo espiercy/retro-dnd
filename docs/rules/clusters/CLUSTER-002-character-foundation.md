@@ -28,8 +28,8 @@ Do not conflate these distinct gates (`ARCHITECTURE.md` §15.1/§15.2,
 | Stage-A evidence research (Evidence-First, `DEC-0009`) | **Complete** — four packets in `docs/rules/evidence/CHAR-00{1,2,3,7}-evidence.md` |
 | Stage-A primary-source completeness (`DEC-0010`) | **`INDEPENDENT REVIEW — PASS`** — human, 2026-08-29; all four cards `source coverage PASS` |
 | **Human Evidence Review (`DEC-0009` §11)** | **`CLEARED`** — human, 2026-08-29 (see the clearance history below) |
-| Stage B — mechanical synthesis / Rule Card drafting | **Eligible, not begun** — unpaused 2026-08-29; awaits a separate Stage-B assignment |
-| Rule Card approval (`CHAR-001`, `CHAR-002`, `CHAR-003`, `CHAR-007`) | **Not granted — no `CHAR-*` Rule Card exists** |
+| Stage B — mechanical synthesis / Rule Card drafting | **Complete** — 2026-08-29. Four Rule Cards drafted in `docs/rules/character_creation/`; synthesis, legacy comparison and dependency findings in `CLUSTER-002-stage-b-synthesis.md`; one gap-directed BECMI research record at `docs/rules/evidence/CHAR-003-elf-hp-alternate-source-research.md` |
+| Rule Card approval (`CHAR-001`, `CHAR-002`, `CHAR-003`, `CHAR-007`) | **Not granted — all four are `AWAITING_APPROVAL`.** `CHAR-003` carries one proposed resolution of an RC self-contradiction (Elf `+2`) that approval would ratify |
 | Implementation-readiness approval | **Not granted** |
 | Implementation authorization | **Not granted** |
 
