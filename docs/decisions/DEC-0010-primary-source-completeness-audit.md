@@ -56,7 +56,7 @@ Specifically:
 
 **5. An Independent Evidence-Completeness Review pass is required before Human Evidence Review.** Its objective is to discover material the original pass failed to inspect, starting from the source's own Table of Contents and Tables Index rather than from the evidence packet. It is not a second synthesis pass, and it is not a confirmation pass.
 
-**6. Table-heavy responsibilities are high-risk research.** Where mechanically significant tables drive the procedure — character advancement, combat, saving throws, Weapon Mastery, spells, treasure, monster statistics and generation, equipment, encumbrance/movement, experience, class progression — visual table verification and independent completeness review are mandatory rather than discretionary.
+**6. Table-heavy responsibilities are high-risk research.** Where mechanically significant tables drive the procedure — character advancement, combat, saving throws, Weapon Mastery, spells, treasure, monster statistics and generation, equipment, encumbrance/movement, experience, class progression — visual table verification is mandatory rather than discretionary, and the responsibility carries heightened review scrutiny. **This does not make independent completeness review conditional:** item 14 and `RULE_CARD_RESEARCH_PROTOCOL.md` §10.1.2 require it universally, for every substantial Stage-A evidence package, whatever the risk classification.
 
 **7. A failed search is not evidence of absence.** Negative findings must be recorded as "not located by the searches performed," never as a positive claim that the source does not address the question, unless the relevant objects have themselves been inspected and found silent.
 
@@ -74,7 +74,24 @@ Specifically:
 
    The required response to (b) is to **question the search strategy before drawing any conclusion about the source**. Lich results from an Elf progression query are evidence that the query is poorly targeted — never evidence that Elf material is absent.
 
-**13. Structure-first ordering of research operations.** Full-text search retains its value as a locator, cross-reference finder, and falsification tool. It is not the primary completeness mechanism. The governing order of operations is source structure → finding aids → object inventory → visual inspection → governing prose → cross-references → whole-source search → falsification → independent completeness review → human evidence review.
+**13. Structure-first ordering of research operations.** Full-text search retains its value as a locator, cross-reference finder, and falsification tool. It is not the primary completeness mechanism. The governing order of operations is:
+
+```text
+source structure
+    → TOC / Tables Index
+    → governing source-object inventory
+    → visual inspection of tables / structured objects
+    → complete-entry / detailed governing material
+    → explicit cross-references
+    → whole-source search
+    → falsification
+    → open-question closure gate
+    → adversarial self-review
+    → independent completeness review
+    → human evidence review
+```
+
+This is the same Stage-A sequence the protocol's §3 diagram states, expressed as research operations; it is not a second, competing sequence. It includes every required gate, in order. `RULE_CARD_RESEARCH_PROTOCOL.md` §9.1.1 carries the authoritative form with section references.
 
 **14. Gate A — adversarial self-review is not independent completeness review.** These are distinct and both are required:
 
@@ -128,7 +145,7 @@ The cost is real: page-image inspection is slower than text search. That cost is
 
 ## Consequences
 
-- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` gains the object/table completeness audit (§9.1), the structure-first operations order (§9.1.1), the visual-verification requirement (§9.2), the coverage-checklist requirement (§9.3), the research-risk classification and Guardrail D triggers (§9.4), Guardrails A–C (§9.5), the within-source evidence-type guidance (§9.6), the complete-entry inspection rule (§9.7), the "single governing object" caution (§9.8), the adversarial-self-review / independent-completeness-review split (§10.1.1, §10.1.2), the open-question closure gate and its reconciliation table (§10.2, §10.2.1), the independent completeness-review method (§10.3), the object-level precondition for alternate-source escalation (§15), and three new hard-stop conditions (§17). Its Stage-A sequence diagram is amended accordingly. **These amendments take effect only on human approval of this record.**
+- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` gains the object/table completeness audit (§9.1), the structure-first operations order (§9.1.1), the visual-verification requirement (§9.2), the coverage-checklist requirement (§9.3), the research-risk classification and Guardrail D triggers (§9.4), Guardrails A–C (§9.5), the within-source evidence-type guidance (§9.6), the complete-entry inspection rule (§9.7), the "single governing object" caution (§9.8), the adversarial-self-review / independent-completeness-review split (§10.1.1, §10.1.2), the open-question closure gate and its reconciliation table (§10.2, §10.2.1), the independent completeness-review method (§10.3), the genuine-conflict-versus-incompleteness distinction (§10.2.2), the object-level precondition for alternate-source escalation (§15), and four new hard-stop rows plus an amended internal-source-conflict row (§17). Its Stage-A sequence diagram is amended accordingly. **These amendments take effect only on human approval of this record.**
 - **Prior BECMI research disposition (human ruling, 2026-08-23):** the BECMI material produced from the invalid RC-exhaustion conclusion **must not be used** as current evidence or as synthesis input. It is preserved in session/branch history for research provenance only, and is not deleted. If alternate-source research is later properly justified after genuine RC object-level exhaustion, it must be **performed anew** from the corrected RC evidence state; no conclusion may be inherited merely because it was already generated.
 - Stage A becomes slower and more expensive. This is intended.
 - `CLUSTER-001`'s and `CLUSTER-002`'s existing evidence were audited against this standard as part of adopting it; results are recorded in `docs/rules/evidence/CLUSTER-001-completeness-audit.md` and `docs/rules/evidence/CLUSTER-002-completeness-audit.md`.

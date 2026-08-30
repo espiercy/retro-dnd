@@ -198,24 +198,30 @@ The point is not to shame prior research; it is to fix exactly which behaviors a
 ```text
 SOURCE STRUCTURE FIRST
         ↓
-TOC / TABLES INDEX
+TOC / TABLES INDEX                                 ◄── §9.1 audit classes A, B
         ↓
-GOVERNING SOURCE-OBJECT INVENTORY
+GOVERNING SOURCE-OBJECT INVENTORY                  ◄── §9.1 audit classes C–I
         ↓
-VISUAL INSPECTION OF TABLES / STRUCTURED OBJECTS
+VISUAL INSPECTION OF TABLES / STRUCTURED OBJECTS   ◄── §9.2
         ↓
-DETAILED GOVERNING PROSE
+COMPLETE-ENTRY / DETAILED GOVERNING MATERIAL       ◄── §9.7
         ↓
-EXPLICIT CROSS-REFERENCES
+EXPLICIT CROSS-REFERENCES                          ◄── §9.1 audit class G
         ↓
-WHOLE-SOURCE SEARCH
+WHOLE-SOURCE SEARCH                                ◄── §9
         ↓
-FALSIFICATION
+FALSIFICATION                                      ◄── §10
         ↓
-INDEPENDENT COMPLETENESS REVIEW
+OPEN-QUESTION CLOSURE GATE                         ◄── §10.2
         ↓
-HUMAN EVIDENCE REVIEW
+ADVERSARIAL SELF-REVIEW                            ◄── §10.1.1
+        ↓
+INDEPENDENT COMPLETENESS REVIEW                    ◄── §10.1.2; NOT by the
+        ↓                                              original researcher
+HUMAN EVIDENCE REVIEW                              ◄── §11
 ```
+
+**This is the same Stage-A sequence as §3, not a second one.** It lists every required gate in the same order, expressed as *research operations* rather than as pipeline stages. The one apparent difference is deliberate and is the whole point of this section: §3 shows the §9 whole-source cross-reference pass earlier, because that pass is an existing `DEC-0009` stage that may legitimately be run at any time. This ordering shows where it counts — **after** the structural work, because search is a locator and may never be the instrument by which completeness is established. Running the keyword pass early is fine; treating it as having closed the evidence is not.
 
 Full-text search remains valuable. Its role is **locator, cross-reference finder, and falsification tool** — never primary completeness mechanism.
 
@@ -303,7 +309,9 @@ The purpose is auditability: a future reviewer must be able to ask *"what primar
 
 ## 9.4 Research-Risk Classification
 
-**If mechanically significant tables drive the procedure, the responsibility is high-risk research**, and §9.2 visual table verification plus §10.1 independent completeness review are **mandatory, not discretionary**.
+> **Independent completeness review is universally required by §10.1.2 for every substantial Stage-A evidence package under this protocol.** It is **not** conditional on the high-risk classification below, and nothing in this section makes it so. What this section adds for high-risk responsibilities is **heightened scrutiny** and the removal of any discretion over §9.2 visual verification.
+
+**If mechanically significant tables drive the procedure, the responsibility is high-risk research**, and §9.2 visual verification of structured objects is **mandatory, not discretionary** — as is the heightened scrutiny described below. The §10.1.2 independent completeness review applies regardless.
 
 Responsibilities presumed high-risk include: character advancement, combat, saving throws, Weapon Mastery, spells, treasure, monster statistics, monster generation, equipment, encumbrance/movement, experience, and class progression.
 
@@ -493,6 +501,24 @@ The completeness reviewer must not only ask *what objects do the TOC and Tables 
 |---|---|---|---|---|---|
 
 **No card may be marked complete until every row is dispositioned.**
+
+### 10.2.2 Genuine source conflict is not source incompleteness
+
+```text
+SOURCE COMPLETE  ≠  SOURCE UNAMBIGUOUS
+```
+
+A primary source may be **fully mapped and still contradict itself.** Stage A's job is to establish that everything governing has been inspected — not to make the Rules Cyclopedia consistent. Three cases must be distinguished, and only the first two are stops:
+
+| Case | Condition | Disposition |
+|---|---|---|
+| **1. Incomplete conflict research** | Conflicting passages found **and** potentially governing objects remain uninspected | `BLOCKED — MORE PRIMARY-SOURCE RESEARCH REQUIRED` → `STOP — MORE PRIMARY RESEARCH REQUIRED`. **Completeness cannot pass.** |
+| **2. Unauthorized mechanical resolution** | The agent would pick one side, silently prefer one object type, or proceed as though the conflict did not exist | `STOP — INTERNAL SOURCE CONFLICT REQUIRES REVIEW` |
+| **3. Fully mapped genuine conflict** | All relevant governing objects inspected; contradictory passages accurately recorded; the completeness reviewer confirms no obvious governing material remains uninspected; no unfinished inspection is disguised as ambiguity | `RETAINED AS GENUINE SOURCE AMBIGUITY`. **This may pass source completeness** and proceeds to the appropriate later human/Stage-B resolution path. |
+
+Case 3 is not a loophole for case 1. It requires every one of its listed conditions, and the reconciliation table (§10.2.1) is where a reviewer checks that the difference is real: a row saying *"the source says two different things, and here is each object I opened"* is case 3; a row saying *"the source seems to conflict and I did not check X"* is case 1.
+
+**Live reference case: the Elf 10th-level fixed hit-point gain, `+1` versus `+2`** (`docs/rules/evidence/CLUSTER-002-completeness-audit.md` Finding 3). Four RC statements were located and **visually verified as printed**, including a stat block and its own Class Details prose contradicting each other on a single page (p. 25). Nothing governing it remains uninspected. It is `RETAINED AS GENUINE SOURCE AMBIGUITY`, its card passed source completeness, and its mechanical resolution is a **Stage-B** problem — not evidence of a Stage-A failure.
 
 ## 10.3 Independent Evidence-Completeness Review — method
 
@@ -687,12 +713,15 @@ An agent performing rules research under this protocol must stop under each of t
 | Primary source cannot be accessed | `STOP — PRIMARY SOURCE ACCESS REQUIRED` |
 | Usable page images are unavailable for a mechanically significant table or structured object (§9.2) | `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED` |
 | The governing procedure has not actually been located, even if a related value has | `STOP — PRIMARY PROCEDURE NOT YET ESTABLISHED` |
-| Two or more RC passages conflict and have not been reconciled | `STOP — INTERNAL SOURCE CONFLICT REQUIRES REVIEW` |
+| Two or more RC passages conflict and the agent would choose between them, silently prefer one object type, or proceed as though the conflict did not exist, outside the authorized resolution path (§10.2.2 case 2) | `STOP — INTERNAL SOURCE CONFLICT REQUIRES REVIEW` |
+| Two or more RC passages conflict **and** potentially governing objects remain uninspected (§10.2.2 case 1) | `STOP — MORE PRIMARY RESEARCH REQUIRED` |
 | The falsification pass (§10) rejects a tentative interpretation | `STOP — MORE PRIMARY RESEARCH REQUIRED` |
 | An open-question closure-gate item (§10.2) is classified `BLOCKED — MORE PRIMARY-SOURCE RESEARCH REQUIRED` | `STOP — MORE PRIMARY RESEARCH REQUIRED` |
 | Adversarial self-review (§10.1.1) finds a packet claiming completeness while a declared unfinished source region remains uninspected | `FAIL COMPLETENESS PREPARATION` |
 | An alternate-source completion candidate's compatibility with RC cannot be established with confidence | `STOP — COMPLETION COMPATIBILITY NOT ESTABLISHED` |
 | Substantial simulator-level behavior remains undefined after §14–§16 | `STOP — HUMAN RULING REQUIRED` |
+
+**`STOP — INTERNAL SOURCE CONFLICT REQUIRES REVIEW` prevents an agent silently resolving a conflict. It does not mean a fully mapped conflict can never pass source completeness** — see §10.2.2. A contradiction whose governing objects have all been inspected and accurately recorded is `RETAINED AS GENUINE SOURCE AMBIGUITY` and is a Stage-B problem, not a Stage-A failure.
 
 **Stopping is a successful research outcome when the evidence does not support synthesis.** Completing a polished artifact is never more important than preserving provenance integrity. An agent that stops correctly under this section has done its job; an agent that pushes through to a plausible-looking Rule Card without clearing the relevant gate has not, regardless of how well-written the result reads.
 
@@ -708,6 +737,6 @@ An agent performing rules research under this protocol must stop under each of t
 
 Adopted `docs/decisions/DEC-0009-evidence-first-rule-research-protocol.md`, `APPROVED`, 2026-08-16.
 
-**Amendments proposed 2026-08-23 by `docs/decisions/DEC-0010-primary-source-completeness-audit.md`** — §9.1–§9.6 (object/table completeness audit, structure-first ordering, visual verification, coverage checklist, research-risk classification and high-risk triggers, prohibited shortcuts Guardrails A–C, within-source evidence-type guidance), §9.7 (complete-entry inspection), §9.8 ("single governing object" caution), §10.1.1 (adversarial self-review), §10.1.2 (independent completeness review — not by the original researcher), §10.2 and §10.2.1 (open-question closure gate and reconciliation table), §10.3 (independent completeness-review method), the object-level precondition note in §15, the corresponding Stage-A sequence steps in §3, and the `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED`, `STOP — MORE PRIMARY RESEARCH REQUIRED` (closure-gate blockage) and `FAIL COMPLETENESS PREPARATION` hard stops in §17.
+**Amendments proposed 2026-08-23 by `docs/decisions/DEC-0010-primary-source-completeness-audit.md`** — §9.1–§9.6 (object/table completeness audit, structure-first ordering, visual verification, coverage checklist, research-risk classification and high-risk triggers, prohibited shortcuts Guardrails A–C, within-source evidence-type guidance), §9.7 (complete-entry inspection), §9.8 ("single governing object" caution), §10.1.1 (adversarial self-review), §10.1.2 (independent completeness review — not by the original researcher), §10.2, §10.2.1 and §10.2.2 (open-question closure gate, reconciliation table, and the genuine-conflict-versus-incompleteness distinction), §10.3 (independent completeness-review method), the object-level precondition note in §15, the corresponding Stage-A sequence steps in §3, and the `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED`, `STOP — MORE PRIMARY RESEARCH REQUIRED` (closure-gate blockage) and `FAIL COMPLETENESS PREPARATION` hard stops in §17.
 
 **`DEC-0010` is `PROPOSED — AWAITING HUMAN APPROVAL`. Those sections are drafted but not yet in force**; until it is approved, `DEC-0009` and the pre-amendment protocol remain operative. `DEC-0009` is not superseded and its protections are unchanged; `DEC-0010` strengthens Stage A only. This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full — expected to produce a committed `docs/rules/evidence/EXP-001-evidence.md` Stage-A artifact, not a rewritten Rule Card, as its first deliverable.
