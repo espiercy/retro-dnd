@@ -20,17 +20,24 @@ This protocol exists to make **stopping on inadequate evidence an expected, succ
 This replaces the prior single-pass pipeline (`Source → Research → Rule Card Draft → Human Review`) with:
 
 ```text
-PRIMARY-SOURCE ACQUISITION
+PRIMARY-SOURCE ACQUISITION                         ◄── hard gate (§4)
         ↓
-EVIDENCE COLLECTION
+EVIDENCE COLLECTION                                ◄── §5
         ↓
-WHOLE-SOURCE CROSS-REFERENCE SEARCH
+SOURCE-STRUCTURE / FINDING-AID REVIEW              ◄── §9.1.1; TOC / Tables Index
         ↓
 PRIMARY-SOURCE OBJECT / TABLE COMPLETENESS AUDIT   ◄── §9.1 (DEC-0010)
         ↓
-COMPLETE-ENTRY INSPECTION                          ◄── §9.7 (DEC-0010)
+VISUAL INSPECTION OF MECHANICALLY
+SIGNIFICANT OBJECTS                                ◄── §9.2 (DEC-0010)
         ↓
-FALSIFICATION / CHALLENGE PASS
+COMPLETE-ENTRY / DETAILED GOVERNING MATERIAL       ◄── §9.7 (DEC-0010)
+        ↓
+EXPLICIT CROSS-REFERENCES                          ◄── §9.1 audit class G
+        ↓
+WHOLE-SOURCE CROSS-REFERENCE SEARCH                ◄── §9
+        ↓
+FALSIFICATION / CHALLENGE PASS                     ◄── §10
         ↓
 OPEN-QUESTION CLOSURE GATE                         ◄── §10.2 (DEC-0010)
         ↓
@@ -38,7 +45,7 @@ ADVERSARIAL SELF-REVIEW                            ◄── §10.1.1 (DEC-0010)
         ↓
 INDEPENDENT COMPLETENESS REVIEW                    ◄── §10.1.2 hard gate;
         ↓                                              NOT by the original researcher
-HUMAN EVIDENCE REVIEW                      ◄── hard gate (§11)
+HUMAN EVIDENCE REVIEW                              ◄── hard gate (§11)
         ↓
 MECHANICAL SYNTHESIS
         ↓
@@ -52,6 +59,8 @@ RULE CARD DRAFT / REVALIDATION
         ↓
 HUMAN RULE CARD APPROVAL
 ```
+
+**This is the project's single canonical Stage-A order.** §9.1.1 states the same sequence at finer granularity, with the structure-first rationale; `DEC-0010` item 13 restates it. There is no alternative or interchangeable ordering of these stages.
 
 **Core principle: evidence must close before mechanical synthesis begins.** Everything above the "Human Evidence Review" gate is **Stage A — Evidence**. Everything from "Mechanical Synthesis" downward is **Stage B — Synthesis / Rule Card Draft**. A research agent must not produce a polished executable specification from incomplete primary evidence, and must not cross from Stage A into Stage B without explicit human authorization (§11).
 
@@ -153,7 +162,7 @@ A numeric fact must be interpreted inside its governing procedure, not treated a
 
 ## 9. Mandatory Whole-Source Cross-Reference Pass
 
-Once initial evidence is collected, deliberately search the **entire** available primary text for related terminology before treating the evidence map as complete. Do not assume the full mechanic is located in one chapter merely because the first relevant passage was found there.
+This is the **formal** whole-source search pass. It occurs **after** the source's structure and governing objects have been mapped and inspected (§9.1, §9.2, §9.7) — exploratory searching may of course happen earlier, but an incidental search is not this stage and never closes the evidence (§9.1.1). Once that structural work is done, deliberately search the **entire** available primary text for related terminology before treating the evidence map as complete. Do not assume the full mechanic is located in one chapter merely because the first relevant passage was found there.
 
 Derive search terms from the rule under research and search for:
 
@@ -208,9 +217,9 @@ COMPLETE-ENTRY / DETAILED GOVERNING MATERIAL       ◄── §9.7
         ↓
 EXPLICIT CROSS-REFERENCES                          ◄── §9.1 audit class G
         ↓
-WHOLE-SOURCE SEARCH                                ◄── §9
+WHOLE-SOURCE CROSS-REFERENCE SEARCH                ◄── §9
         ↓
-FALSIFICATION                                      ◄── §10
+FALSIFICATION / CHALLENGE PASS                     ◄── §10
         ↓
 OPEN-QUESTION CLOSURE GATE                         ◄── §10.2
         ↓
@@ -221,7 +230,9 @@ INDEPENDENT COMPLETENESS REVIEW                    ◄── §10.1.2; NOT by th
 HUMAN EVIDENCE REVIEW                              ◄── §11
 ```
 
-**This is the same Stage-A sequence as §3, not a second one.** It lists every required gate in the same order, expressed as *research operations* rather than as pipeline stages. The one apparent difference is deliberate and is the whole point of this section: §3 shows the §9 whole-source cross-reference pass earlier, because that pass is an existing `DEC-0009` stage that may legitimately be run at any time. This ordering shows where it counts — **after** the structural work, because search is a locator and may never be the instrument by which completeness is established. Running the keyword pass early is fine; treating it as having closed the evidence is not.
+**This is the same Stage-A sequence as §3, at finer granularity — not a second, competing one.** Every required gate appears in the same order.
+
+**Exploratory search may occur opportunistically, whenever it is useful.** The **formal whole-source cross-reference search pass (§9)** shown here occurs *after* structural mapping and governing-object inspection, and **only the formal sequence governs evidence-completeness closure.** An incidental search that happens earlier is a research convenience; it is not this stage, and it never closes the evidence.
 
 Full-text search remains valuable. Its role is **locator, cross-reference finder, and falsification tool** — never primary completeness mechanism.
 

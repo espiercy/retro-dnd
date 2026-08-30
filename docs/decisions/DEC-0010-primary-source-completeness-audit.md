@@ -48,7 +48,7 @@ Specifically:
 
 **1. OCR and full-text search are locators, not proof of coverage.** A researcher may not claim primary-source completeness on the basis that keyword searches have been exhausted. Full-text search establishes where to look; it does not establish that everything relevant has been looked at.
 
-**2. A Primary-Source Object / Table Completeness Audit becomes a required Stage-A step**, inserted between the whole-source cross-reference search and the falsification pass. For each rules responsibility, the researcher must enumerate and account for every potentially governing primary-source object — Table of Contents entries, Tables Index entries, named tables, class/monster/item/spell stat blocks, summary boxes, complete governing prose sections, followed cross-references, and appendix/index entries — recording each as inspected or deliberately excluded with a reason.
+**2. A Primary-Source Object / Table Completeness Audit becomes a required Stage-A step**, performed after source-structure / finding-aid review and **before** the formal whole-source cross-reference search and the falsification pass (item 13). For each rules responsibility, the researcher must enumerate and account for every potentially governing primary-source object — Table of Contents entries, Tables Index entries, named tables, class/monster/item/spell stat blocks, summary boxes, complete governing prose sections, followed cross-references, and appendix/index entries — recording each as inspected or deliberately excluded with a reason.
 
 **3. Mechanically significant tables and structured objects must be verified against the visual page**, not OCR alone, whenever the object governs numbers or progression, column relationships matter, OCR formatting is degraded, the object conflicts with prose, or the object is otherwise mechanically operative. If usable page images cannot be obtained, Stage A stops with `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED`.
 
@@ -83,15 +83,15 @@ source structure
     → visual inspection of tables / structured objects
     → complete-entry / detailed governing material
     → explicit cross-references
-    → whole-source search
-    → falsification
+    → whole-source cross-reference search
+    → falsification / challenge pass
     → open-question closure gate
     → adversarial self-review
     → independent completeness review
     → human evidence review
 ```
 
-This is the same Stage-A sequence the protocol's §3 diagram states, expressed as research operations; it is not a second, competing sequence. It includes every required gate, in order. `RULE_CARD_RESEARCH_PROTOCOL.md` §9.1.1 carries the authoritative form with section references.
+This is the project's **single canonical Stage-A order**. `RULE_CARD_RESEARCH_PROTOCOL.md` §3 and §9.1.1 state the same sequence, with section references. There is no alternative or interchangeable ordering of these stages: exploratory searching may occur opportunistically, but the formal whole-source search pass occurs where shown, and only the formal sequence governs evidence-completeness closure.
 
 **14. Gate A — adversarial self-review is not independent completeness review.** These are distinct and both are required:
 
