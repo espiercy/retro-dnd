@@ -44,25 +44,27 @@ proposed +2 as the resolution, and wrote it into the Rule Card draft
 
 > *"If you discover a contradiction between this set and previous sets, the rules given here should be used."*
 
-The corrected audit dispositioned every BECMI core source unit and established that the lineage is **evolved and conflicting**, not unanimous: `+2` (Expert Rulebook, Companion DM's Book) revised to `+1` (Master Players' Book). Master's Elf Experience Table revises the Elf's spell progression in the same object, so the change was deliberate.
+The remediation **dispositioned all five top-level BECMI sets** — the lineage model in force at the time — and inspected the governing source material that produced the corrected finding. It established that the lineage is **evolved and conflicting**, not unanimous: `+2` (Expert Rulebook, Companion DM's Book) revised to `+1` (Master Players' Book). Master's Elf Experience Table revises the Elf's spell progression in the same object, so the change was deliberate.
 
-**Note where that governing statement actually lives.** It is in the **Master Players' Book**, one of the two core rulebooks in the Master Set — not in "the Master Set" as an undifferentiated unit. That detail is what makes item 1's hierarchy necessary rather than pedantic: see "The second-level form of the same defect" below.
+**What the remediation did not do, stated precisely.** It corrected the **top-level** omission. It **did not** document a disposition of every constituent core rulebook inside every set, because the flat set-level model then in force did not call for one. **This record does not claim otherwise, and no retroactive audit was performed to make such a claim true.** The Elf mechanic was settled by human adjudication (SR-1) and does not depend on the alternate-source research being made exhaustive after the fact.
+
+**Note where the governing statement actually lives.** It is in the **Master Players' Book**, one of the two core rulebooks in the Master Set — not in "the Master Set" as an undifferentiated unit. That detail is what makes item 1's hierarchy necessary rather than pedantic: see "The second-level form of the same defect" below.
 
 ### The defect, precisely
 
 ```text
-Object-level rigor existed INSIDE the volumes that were selected.
-No completeness discipline governed the SELECTION of volumes
+Object-level rigor existed INSIDE the source units that were selected.
+No completeness discipline governed the SELECTION of source units
 comprising the alternate-source lineage.
 ```
 
-Within each opened volume the researcher did enumerate the governing entry, open the tables, verify visually, and search for duplicate presentations — `DEC-0010` §9.1 discipline, correctly applied. The failure was one layer up, in deciding that two volumes constituted the lineage.
+Within each opened source unit the researcher did enumerate the governing entry, open the tables, verify visually, and search for duplicate presentations — `DEC-0010` §9.1 discipline, correctly applied. The failure was one layer up, in deciding that two sets constituted the lineage.
 
 Three compounding factors, each of which this record addresses:
 
-1. **Volume selection was driven by where the answer was expected, not by what the lineage contains.** The Elf caps at level 10; level 10 falls in the Expert Set's stated 4–14 range; Master was filed as "levels 26–36" and never tested. That reasoning is unsound because **a later volume can restate and revise an earlier class entry** — and Master p. 12 reprints the entire Elf entry.
-2. **A volume-scoped negative finding was generalized to the lineage.** "No `+1` statement located" was accurate for the two volumes inspected and was stated as a property of BECMI. This is `DEC-0010` §9.5 Guardrail B's prohibited move, committed one level up from where Guardrail B is written.
-3. **The word "unanimous" was applied to a five-volume lineage on the strength of two agreeing volumes.** Compounding this, the researcher recorded a *deliberate, reasoned* decision not to consult B/X, Holmes and OD&D — producing an appearance of considered completeness while an unexamined volume of the **same, higher-priority** source sat undispositioned.
+1. **Selection was driven by where the answer was expected, not by what the lineage contains.** The Elf caps at level 10; level 10 falls in the Expert Set's stated 4–14 range; Master was filed as "levels 26–36" and never tested. That reasoning is unsound because **a later source unit can restate and revise an earlier class entry** — and the Master Players' Book p. 12 reprints the entire Elf entry.
+2. **A negative finding scoped to what was inspected was generalized to the lineage.** "No `+1` statement located" was accurate for the material actually opened and was stated as a property of BECMI. This is `DEC-0010` §9.5 Guardrail B's prohibited move, committed one level up from where Guardrail B is written.
+3. **The word "unanimous" was applied to a five-set lineage on the strength of two agreeing sets.** Compounding this, the researcher recorded a *deliberate, reasoned* decision not to consult B/X, Holmes and OD&D — producing an appearance of considered completeness while an unexamined set of the **same, higher-priority** source sat undispositioned.
 
 **This is not a "search harder" problem, and framing it that way would reproduce it.** No additional keyword search of the Expert and Companion material could have found a statement in Master. The instrument was not underused; the corpus was misdefined. As with `DEC-0010`, the remedy is enumeration and disposition, not diligence.
 
@@ -80,13 +82,36 @@ Immortals Set    Players' Guide to Immortals · DM's Guide to Immortals
 
 Under a set-only enumeration, a researcher could write `Master Set — INSPECTED` while having opened only the Master DM's Book — **and the governing `+1` statement is in the Master Players' Book.** The identical omission would recur one level down, with the paperwork looking complete.
 
+**The first remediation did not fix this, and did not claim to.** It operated under exactly that set-only model: it corrected which *sets* were on the list, which is what the model asked of it. **The nested weakness survived the remediation**, and was found only by human review of this record's own first draft. Saying otherwise would erase the reason the hierarchical refinement was needed.
+
 The exact packaging vocabulary matters far less than the governance consequence:
 
 > **Enumerating a set is not sufficient when that set contains multiple core source units that can independently restate, qualify, revise, or contradict the mechanic.**
 
 Item 1 is therefore **hierarchical**, and item 3 makes a parent-level disposition explicitly insufficient. BECMI's boxed-set packaging is used as an **illustration, not as a universal model** — other lineages are organized differently, and the requirement is stated in terms that do not presume boxes.
 
-**What caught it was a human reviewer, not the process.** The Stage-B adversarial self-review restarted from the objects *within the volumes already chosen*, so it could not surface a volume that was never on the list — the same structural lesson `DEC-0010` §10.1.2 drew for primary sources, now shown to apply to alternate sources too. That is the basis for item 9 below.
+### Both defects, and who caught each
+
+```text
+FIRST-LEVEL DEFECT — which sets were selected
+    Expert + Companion inspected; Master omitted
+    → lineage falsely called "unanimous at +2"
+    Caught by:   human independent review
+    Remediation: all five top-level BECMI sets dispositioned
+    → Master Players' Book +1 discovered
+    → lineage corrected to EVOLVED / CONFLICTING
+
+SECOND-LEVEL DEFECT — which core rulebooks within a set
+    This record's first draft treated each set as one "volume"
+    → a parent-level disposition could still conceal an
+      uninspected constituent core rulebook
+    Caught by:   human review of DEC-0011's own text
+    Remediation: hierarchical corpus enumeration (item 1),
+                 parent-level disposition declared insufficient (item 3)
+    NOT remediated by the first audit — it survived it
+```
+
+**Neither was caught by the process; both were caught by a human reader.** The Stage-B adversarial self-review restarted from the objects *within the source units already chosen*, so it could not surface a unit that was never on the list — the same structural lesson `DEC-0010` §10.1.2 drew for primary sources, now shown to apply to alternate sources too, and now shown to apply at **two** levels of the corpus. That is the basis for item 9 below.
 
 ## Decision
 
