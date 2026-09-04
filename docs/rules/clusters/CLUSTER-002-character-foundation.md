@@ -28,10 +28,13 @@ Do not conflate these distinct gates (`ARCHITECTURE.md` §15.1/§15.2,
 | Stage-A evidence research (Evidence-First, `DEC-0009`) | **Complete** — four packets in `docs/rules/evidence/CHAR-00{1,2,3,7}-evidence.md` |
 | Stage-A primary-source completeness (`DEC-0010`) | **`INDEPENDENT REVIEW — PASS`** — human, 2026-08-29; all four cards `source coverage PASS` |
 | **Human Evidence Review (`DEC-0009` §11)** | **`CLEARED`** — human, 2026-08-29 (see the clearance history below) |
-| Stage B — mechanical synthesis / Rule Card drafting | **Eligible, not begun** — unpaused 2026-08-29; awaits a separate Stage-B assignment |
-| Rule Card approval (`CHAR-001`, `CHAR-002`, `CHAR-003`, `CHAR-007`) | **Not granted — no `CHAR-*` Rule Card exists** |
+| Stage B — mechanical synthesis / Rule Card drafting | **Complete — 2026-08-29.** Four Rule Cards in `docs/rules/character_creation/`; synthesis, legacy comparison, dependency findings and P1–P5 dispositions in `CLUSTER-002-stage-b-synthesis.md`. En route, a **Stage-B alternate-source research failure** was found by independent review — the BECMI lineage was declared "unanimous at +2" after inspecting two of five volumes, and the **Master Set** in fact states `+1`. Corrected record with full failure history: `docs/rules/evidence/CHAR-003-elf-hp-alternate-source-research.md`. **RC Stage-A completeness was unaffected and was not reopened** |
+| **Human rulings (2026-08-29)** | **SR-1** Elf fixed HP at 10th = **+2**; **SR-2** a Mystic **may** raise Dexterity through the 2-for-1 trade; **SR-3** the Ch. 13 score switch is **included in V1**, runs **before** eligibility and may establish a class minimum, while the trade runs after and never can; **SR-4** discard offered when no score is above 9 **or** two are below 6, player may keep anyway; **SR-5** the post-selection 2-for-1 trade **may not reduce any ability below a creation minimum of the selected class** — eligibility is established before the trade and must remain true after it (closes the Mystic Wisdom 13 edge case). **All five are `Simulator Ruling` provenance — project adjudications, not RC findings** |
+| **Human Rule Card Review** | **PASSED — 2026-09-04.** All four contracts reviewed in full, exact text, and corrected across four review rounds before approval |
+| Rule Card approval (`CHAR-001`, `CHAR-002`, `CHAR-003`, `CHAR-007`) | **GRANTED — 2026-09-04. All four `APPROVED`** by the human project owner. `CHAR-003`'s approval ratified **SR-1**; `CHAR-001`'s ratified **SR-2, SR-3, SR-4 and SR-5**. `CHAR-002` and `CHAR-007` own **no** Simulator Ruling |
+| Alternate-source governance | **`DEC-0011` `Approved` 2026-09-04**; `RULE_CARD_RESEARCH_PROTOCOL.md` §15.1 **IN FORCE** |
 | Implementation-readiness approval | **Not granted** |
-| Implementation authorization | **Not granted** |
+| **Implementation authorization** | **NOT GRANTED — `CLUSTER-002` implementation is NOT AUTHORIZED.** Rule Card approval is **not** implicit implementation permission; the next phase requires separate explicit human authorization (`ARCHITECTURE.md` §15.2, §16) |
 
 ### Human Evidence Review clearance history (2026-08-23 → 2026-08-29)
 
