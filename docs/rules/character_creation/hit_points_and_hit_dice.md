@@ -85,21 +85,35 @@ All four are visually verified as printed. The first two are on the **same page*
 
 **Prior BECMI work (pre-2026-08-29) was not used**; `NOT VALID AS CURRENT SYNTHESIS INPUT` by human ruling.
 
-> **⚠ The first version of this research was wrong and its conclusion is withdrawn.** It inspected only the **Expert** and **Companion** sets, found them to agree, and declared the BECMI lineage *"unanimous at +2"*. **It never dispositioned the Master Set.** The corrected audit dispositions **all five** BECMI volumes.
+> **⚠ The first version of this research was wrong and its conclusion is withdrawn.** It inspected only the **Expert** and **Companion** sets, found them to agree, and declared the BECMI lineage *"unanimous at +2"*. **It never dispositioned the Master Set.** The remediation corrected that **top-level set omission** and located the contradicting statement.
 
-**Corrected source inventory — every core volume accounted for:**
+**What was inspected, and what that supports:**
 
-| Volume | Levels | Elf fixed-gain statement | Verified |
+| Inspected source / source unit | Levels | Elf fixed-gain statement | Verified |
 |---|---|---|---|
-| **Basic** (Set 1) | 1–3 | *None* — entry states only `Hit Dice: 1d6 per level`; **zero** `10th level` occurrences in the volume | Inspected |
-| **Expert** (Set 2) p. 18 | 4–14 | *"1d6 per level, 9d6 maximum; **+2 hit points at 10th level**."* | **Visually** |
-| **Companion** (Set 3) DM p. 22 | 15–25 | Demihuman maximum HP: **Elf 54 / 27 / +2 / 83** (no class HP line in this set) | **Visually** |
-| **Master** (Set 4) p. 12 | 26–36 | *"1d6 per level through 9th level, modified by Constitution if applicable. **Add 1 hp at 10th level**, with no Constitution effect."* | **Visually** |
-| **Immortals** (Set 5) | post-36 | *None* — **zero** occurrences of "elf" in the volume | Inspected |
+| **Basic Set** (Set 1) | 1–3 | *None* — entry states only `Hit Dice: 1d6 per level`; **zero** `10th level` occurrences | Inspected |
+| **Expert Rulebook** p. 18 | 4–14 | *"1d6 per level, 9d6 maximum; **+2 hit points at 10th level**."* | **Visually** |
+| **Dungeon Masters Companion** p. 22 | 15–25 | Demihuman maximum HP: **Elf 54 / 27 / +2 / 83** (no class HP line in this material) | **Visually** |
+| **Master Players' Book** p. 12 | 26–36 | *"1d6 per level through 9th level, modified by Constitution if applicable. **Add 1 hp at 10th level**, with no Constitution effect."* | **Visually** |
+| **Immortals Set** (Set 5) | post-36 | *None* — **zero** occurrences of "elf" | Inspected |
 
-**BECMI is NOT unanimous.** It **revised** the rule: `+2` (Expert, Companion) → `+1` (Master). Master's Elf Experience Table also revises the Elf's spell progression in the same object, so this is a deliberate change, not a slip.
+**What this establishes, stated exactly:**
 
-**Master additionally carries a conflict-precedence rule** (Players' Book p. 2, visually verified): *"If you discover a contradiction between this set and previous sets, the rules given here should be used."* Recorded as a source fact; **not applied to RC** — it is a BECMI-internal instruction, and RC does not incorporate it.
+```text
+The earlier claim that BECMI is "unanimous at +2" is FALSE.
+The inspected BECMI sources contain BOTH +2 and +1 treatments:
+    Expert Rulebook              +2
+    Dungeon Masters Companion    +2
+    Master Players' Book         +1   ← deliberate revision
+```
+
+The Master Players' Book's Elf Experience Table also revises the Elf's spell progression in the same object, so the change is deliberate, not a slip.
+
+> **⚠ This card does NOT claim hierarchical lineage completeness.** The remediation operated under the **top-level set model** in force at the time; it did **not** perform a disposition of every constituent core rulebook inside every set, and **no retroactive hierarchical audit has been performed** (`DEC-0011`, which records this precisely). **The above is a record of what was inspected, not a claim that the BECMI corpus is exhaustively mapped.**
+>
+> **Nothing here depends on such a claim.** SR-1 is a **human adjudication**, not an Alternate-Source Compatible Completion — it needs only the finding that BECMI does **not** supply the clean unanimous `+2` resolution previously asserted, and that finding rests on statements read directly.
+
+**The Master Players' Book additionally carries a conflict-precedence rule** (p. 2, visually verified): *"If you discover a contradiction between this set and previous sets, the rules given here should be used."* Recorded as a source fact; **not applied to RC** — it is a BECMI-internal instruction governing that lineage's own sets, and RC does not incorporate it (`DEC-0011` item 10).
 
 **B/X, Holmes and OD&D remain not consulted.** The disagreement is *inside* BECMI; a lower-priority edition cannot settle which BECMI branch RC intended.
 
@@ -107,11 +121,11 @@ All four are visually verified as printed. The first two are on the **same page*
 
 | Finding | Classification (`SOURCE_HIERARCHY.md` §6) |
 |---|---|
-| Expert `+2` → Companion `+2` | **Preserved** within BECMI |
-| Companion `+2` → **Master `+1`** | **Evolved-Different** — a deliberate revision within the lineage |
-| BECMI Companion p. 22 table → RC p. 129 | **Preserved** — reproduced number for number, header and note included; carries `+2` into RC |
+| Expert Rulebook `+2` → Dungeon Masters Companion `+2` | **Preserved** within BECMI |
+| Dungeon Masters Companion `+2` → **Master Players' Book `+1`** | **Evolved-Different** — a deliberate revision within the lineage |
+| Dungeon Masters Companion p. 22 table → RC p. 129 | **Preserved** — reproduced number for number, header and note included; carries `+2` into RC |
 | **BECMI Expert Elf Experience Table → RC p. 26** | **Preserved** — RC's level-10 spell row is `3 3 3 3 2`, matching **Expert**; Master's is `5 4 3 2 1`. **RC did not adopt Master's revised Elf table** |
-| BECMI Master p. 12 → RC p. 25 stat block / RC p. 130 Step 6 | **Preserved** — carries `+1` into RC |
+| Master Players' Book p. 12 → RC p. 25 stat block / RC p. 130 Step 6 | **Preserved** — carries `+1` into RC |
 | Other classes' fixed gains (Cleric +1, Fighter +2, Magic-user +1, Dwarf +3) | **Preserved** — but **non-discriminating**: Expert and Master agree for those classes, so RC matching them says nothing about which Elf branch RC follows |
 
 **Net effect: RC inherited from both branches and reconciled neither.** That explains the contradiction; it does not resolve it. **No mechanic is imported and no value is selected.**
@@ -130,15 +144,15 @@ All four are visually verified as printed. The first two are on the **same page*
 
 **Why RC does not answer it.** Not silence — **self-contradiction**, fully mapped and visually verified across four objects, with one pair contradicting on a single printed page (§4.1). Stage-A primary-source completeness passed independent review; no further RC object bears on it.
 
-**Why compatible historical sources do not answer it either.** Gap-directed BECMI research was performed under `DEC-0010` discipline and returned **INCONCLUSIVE**. All five BECMI core volumes were dispositioned: Expert `+2`, Companion `+2`, **Master `+1`** — the lineage **evolved and conflicts**, and RC demonstrably inherited from **both** branches (RC p. 129 from the Companion; RC p. 25's stat block and p. 130 from Master; **RC p. 26's Elf Experience Table from Expert**). Master's own conflict-precedence rule governs the BECMI boxed sets and does not travel to RC.
+**Why compatible historical sources do not answer it either.** Gap-directed BECMI research returned **INCONCLUSIVE**. The inspected sources contain **both** treatments — Expert Rulebook `+2`, Dungeon Masters Companion `+2`, **Master Players' Book `+1`** — so the lineage **evolved and conflicts**, and RC demonstrably inherited from **both** branches (RC p. 129 from the Companion; RC p. 25's stat block and p. 130 from the Master Players' Book; **RC p. 26's Elf Experience Table from Expert**). The Master Players' Book's conflict-precedence rule governs the BECMI boxed sets and does not travel to RC. **No claim of hierarchical lineage completeness is made or needed** — see Alternate-Source Completion Research above.
 
 **The smallest ruling that closes the gap.** Select `+2`, and nothing else. No adjacent mechanic is changed; no other class is touched; Constitution's exclusion from fixed gains is unaffected.
 
 **Authority.** Human project owner, 2026-08-29. Adjudicated in favour of RC's **detailed Class Details prose** and its **Maximum Hit Points calculation** over the stat-block summary and the Step 6 list. **This is a project decision, not a finding that RC or BECMI objectively resolves the conflict.**
 
-### SR-2 and SR-3 — recorded on `CHAR-001`
+### Scope of this card's rulings
 
-The Mystic Dexterity trade and the discard criterion are `CHAR-001`'s; both were likewise granted 2026-08-29.
+**SR-1 is the only Simulator Ruling owned by `CHAR-003`.** Other character-creation Simulator Rulings are owned by `CHAR-001` and are outside this card's responsibility; they are not summarised or restated here.
 
 W2 and W3 require no ruling; see Open Questions.
 
@@ -236,14 +250,14 @@ All four visually verified as printed; the p. 25 pair contradict each other **on
 
 **Corrected lineage evidence — it does not settle the question:**
 
-| BECMI volume | Value | Bearing |
+| Inspected source unit | Value | Bearing |
 |---|---|---|
-| Expert p. 18 | `+2` | Originating statement |
-| Companion DM p. 22 | `+2` | Preserved; **inherited verbatim into RC p. 129** |
-| **Master p. 12** | **`+1`** | **Deliberate revision** — the same table also revises Elf spell progression |
-| Master p. 2 | *precedence rule* | *"If you discover a contradiction between this set and previous sets, the rules given here should be used"* — **BECMI-internal; not incorporated by RC** |
+| Expert Rulebook p. 18 | `+2` | Originating statement |
+| Dungeon Masters Companion p. 22 | `+2` | Preserved; **inherited verbatim into RC p. 129** |
+| **Master Players' Book p. 12** | **`+1`** | **Deliberate revision** — the same table also revises Elf spell progression |
+| Master Players' Book p. 2 | *precedence rule* | *"If you discover a contradiction between this set and previous sets, the rules given here should be used"* — **BECMI-internal; not incorporated by RC** |
 
-**The lineage does not decide it, and was not used to.** RC is a composite: p. 129 descends from the Companion (`+2`), the stat block and Step 6 track Master (`+1`), and **RC p. 26's Elf Experience Table descends from *Expert*, not Master** (RC's level-10 spell row is `3 3 3 3 2`, Expert's exactly; Master's is `5 4 3 2 1`). RC did **not** wholesale adopt Master's revised Elf, so "Master is later" establishes nothing about RC's intent — and Master's precedence rule governs the BECMI boxed sets, not a later consolidation.
+**The lineage does not decide it, and was not used to.** RC is a composite: p. 129 descends from the Dungeon Masters Companion (`+2`), the stat block and Step 6 track the Master Players' Book (`+1`), and **RC p. 26's Elf Experience Table descends from the *Expert Rulebook*, not Master** (RC's level-10 spell row is `3 3 3 3 2`, Expert's exactly; the Master Players' Book's is `5 4 3 2 1`). RC did **not** wholesale adopt Master's revised Elf, so "Master is later" establishes nothing about RC's intent — and that precedence rule governs the BECMI boxed sets, not a later consolidation.
 
 **BECMI is retained as contextual evidence only.** It explains *how* RC became inconsistent. It does not support `+2` over `+1`, and this card does not claim it does.
 
@@ -251,16 +265,41 @@ All four visually verified as printed; the p. 25 pair contradict each other **on
 
 #### Reversal
 
-If the ruling is ever revisited, exactly four places change and nothing else:
+> **An earlier version of this section claimed "exactly four places change." That was false and is corrected.** A text audit of this card for `+2`, `83`, `82`, `SR-1`, *Elf fixed gain* and *Elf maximum* found the edit surface is larger, and — more importantly — that it divides into **two kinds of occurrence that must be treated differently.**
+
+**If SR-1 is revisited, every normative / check-value occurrence below must be changed together.**
 
 | # | Location | Current (`+2`) | Under `+1` |
 |---|---|---|---|
-| 1 | §4 fixed-gain table, Elf row | `+2` | `+1` |
-| 2 | §4.1 (this section) | SR-1 adopts the Class Details / p. 129 reading | SR-1 adopts the stat-block / Step 6 reading |
-| 3 | §6 maximum-total table, Elf row | 83 | 82 |
-| 4 | Tests H22, H23, H25 | 2 / 83 | 1 / 82 |
+| 1 | Status banner, human-ruling row | `+2` | `+1` |
+| 2 | §4 fixed-gain table, Elf row | `+2` | `+1` |
+| 3 | §4.1 heading and code block | `+2 fixed hit points` | `+1 fixed hit point` |
+| 4 | §4.1 "Both RC sides" table, **Status after SR-1** column | `+2` ADOPTED / `+1` REJECTED | inverted |
+| 5 | §6 maximum-total table, Elf row | `+2` / `83` | `+1` / `82` |
+| 6 | §6 note below that table | `54 + 27 + 2 = 83`; rejected reading gives 82 | `54 + 27 + 1 = 82`; rejected reading gives 83 |
+| 7 | Simulator Ruling **SR-1** — heading, "smallest ruling", and Authority paragraph | selects `+2`; adjudicated for Class Details / p. 129 | selects `+1`; adjudicated for stat block / Step 6 |
+| 8 | Test **H22** | `+2` | `+1` |
+| 9 | Test **H23** | `83` | `82` |
+| 10 | Test **H25** (reversal guard) | rejects `+1` / `82` | rejects `+2` / `83` |
+| 11 | Test **H27** | `9 + 2 = 11` | `9 + 1 = 10` |
+| 12 | Test-section heading above H22 | `SR-1 (+2)` | `SR-1 (+1)` |
+| 13 | Provenance Classification, `§4.1 Elf fixed gain` row | `= +2` | `= +1` |
+| 14 | Open Questions W1; Approval footer | ratifies `+2` | ratifies `+1` |
 
-**No other class, procedure, or dependency is affected.** Test H25 exists so that a change made anywhere but here fails loudly.
+**Narrative provenance also needing consistency editing:** the Status banner's three-stage history note (*"the final `+2` is not the withdrawn `+2` restored"*) would need rewriting, since under `+1` the project would no longer be adopting the value the withdrawn draft had proposed.
+
+**Historical evidence does NOT change under reversal.** These record what the sources *say*, not what the project selects, and altering them would destroy the evidence the ruling rests on:
+
+| Unchanged under reversal | Why |
+|---|---|
+| §W1's four-object RC matrix (p. 25 stat block `+1`; p. 25 Class Details `+2`; p. 129 `+2`/`83`; p. 130 Step 6 `+1`) | RC's printed content |
+| "Rules Cyclopedia Explicitly Establishes" item 8, incl. `Elf 54/27/+2 → 83` | Reports RC p. 129 **as printed** — not the project mechanic |
+| §4.1's "Both RC sides" table, **Value** and **RC objects** columns | RC's printed content (only the *Status* column flips — row 4 above) |
+| Alternate-Source inventory: Expert Rulebook `+2`, Dungeon Masters Companion `+2`, Master Players' Book `+1` | What those sources say |
+| Compatibility Analysis rows; the lineage-evidence table in §4.1 | Historical descent findings |
+| The withdrawn-claim record and the two-level governance history | Governance provenance — must not be tidied away |
+
+**No other class, procedure, dependency, or card is affected.** Test **H25** exists so a change made anywhere but here fails loudly rather than drifting silently.
 
 ### 5. Constitution's boundary
 
@@ -289,7 +328,7 @@ RC p. 129, for 18 Constitution (+3) and maximum die rolls. These are **check val
 
 **The Elf row now agrees with SR-1** and is a usable check value: `54 + 27 + 2 = 83`, matching RC's printed total. Under the rejected `+1` reading it would be 82, contradicting RC p. 129 as printed.
 
-**That arithmetic did not select the value.** This table is itself one of the four contested statements — inherited verbatim from BECMI Companion p. 22 — so treating its internal consistency as decisive would have begged the question. It is recorded as *consistency with* the ruling, never as *evidence for* it.
+**That arithmetic did not select the value.** This table is itself one of the four contested statements — inherited verbatim from the Dungeon Masters Companion p. 22 — so treating its internal consistency as decisive would have begged the question. It is recorded as *consistency with* the ruling, never as *evidence for* it.
 
 ### 7. Above-1st-level construction (Chapter 10 Step 6) — specified, not V1-wired
 
@@ -312,7 +351,7 @@ Saving throws and saving-throw progression (`COMBAT-004`) — deliberately not p
 | H1 | Fighter, +0, d8 = 5 | 5 |
 | H2 | Fighter, +3, d8 = 8 | 11 |
 | H3 | Magic-User, −3, d4 = 1 | **1** — floor, not −2 |
-| H4 | Magic-User, −3, d4 = 4 | **1** — floor, not 1… (4 − 3 = 1, floor coincides) |
+| H4 | Magic-User, −3, d4 = 4 | **1** — the arithmetic result is already 1; **the floor does not change it** |
 | H5 | Magic-User, −2, d4 = 1 | **1** — floor |
 | H6 | Cleric, −1, d6 = 1 | **1** — floor |
 | H7 | Cleric, +1, d6 = 1 | 2 — floor not engaged |
@@ -399,7 +438,7 @@ Saving throws and saving-throw progression (`COMBAT-004`) — deliberately not p
 
 ## Open Questions
 
-1. **W1 — the Elf's fixed gain. `RESOLVED` by Simulator Ruling SR-1 (`+2`), human project owner, 2026-08-29.** It remains listed here, rather than being deleted, because **the underlying historical conflict is not resolved and never will be** — RC contradicts itself and BECMI evolved away from itself. What is settled is what this simulator does. The rejected `+1` reading, the full four-object RC matrix, and the corrected five-volume BECMI disposition are retained in §4.1 and in the research record, and §4.1's Reversal table names the exact four places a future change would touch.
+1. **W1 — the Elf's fixed gain. `RESOLVED` by Simulator Ruling SR-1 (`+2`), human project owner, 2026-08-29.** It remains listed here, rather than being deleted, because **the underlying historical conflict is not resolved and never will be** — RC contradicts itself and BECMI evolved away from itself. What is settled is what this simulator does. The rejected `+1` reading, the full four-object RC matrix, and the corrected BECMI research record — including the Expert Rulebook / Dungeon Masters Companion `+2` findings and the **Master Players' Book `+1`** finding — are retained in §4.1 and in the research record. §4.1's Reversal section names the full normative edit surface and separates it from the historical evidence a reversal would leave untouched.
 2. **W2 — does the 1-hp floor govern fixed gains?** Currently **moot** — every fixed gain is positive. No specification depends on it. Revisit only if a future rule can produce a negative fixed gain.
 3. **W3 — is Chapter 10 Step 6 an alternative or a restatement?** Not wired to V1, so nothing depends on it. Both readings agree on outputs for a maximum-level character; they differ only in the DM conventions Step 6 adds.
 
