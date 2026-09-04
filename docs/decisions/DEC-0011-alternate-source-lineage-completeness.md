@@ -20,7 +20,7 @@ PROPOSED — AWAITING HUMAN APPROVAL
 
 `DEC-0010` (`Approved` 2026-08-29) established primary-source completeness discipline: enumerate and disposition every governing **object** in the primary source before claiming coverage. It closed the defect in which the Elf Experience Table (RC p. 26) was never opened.
 
-`DEC-0010` governs the **primary** source. It says nothing about how a researcher chooses **which volumes of an alternate-source lineage** to open. `CLUSTER-002` Stage B demonstrated that this is a distinct and independently sufficient failure mode.
+`DEC-0010` governs the **primary** source. It says nothing about how a researcher chooses **which source units of an alternate-source lineage** to open. `CLUSTER-002` Stage B demonstrated that this is a distinct and independently sufficient failure mode — **twice, at two different levels of the corpus.**
 
 ### The motivating failure, stated factually
 
@@ -44,7 +44,9 @@ proposed +2 as the resolution, and wrote it into the Rule Card draft
 
 > *"If you discover a contradiction between this set and previous sets, the rules given here should be used."*
 
-The corrected audit dispositioned all five BECMI core volumes and established that the lineage is **evolved and conflicting**, not unanimous: `+2` (Expert, Companion) revised to `+1` (Master). Master's Elf Experience Table revises the Elf's spell progression in the same object, so the change was deliberate.
+The corrected audit dispositioned every BECMI core source unit and established that the lineage is **evolved and conflicting**, not unanimous: `+2` (Expert Rulebook, Companion DM's Book) revised to `+1` (Master Players' Book). Master's Elf Experience Table revises the Elf's spell progression in the same object, so the change was deliberate.
+
+**Note where that governing statement actually lives.** It is in the **Master Players' Book**, one of the two core rulebooks in the Master Set — not in "the Master Set" as an undifferentiated unit. That detail is what makes item 1's hierarchy necessary rather than pedantic: see "The second-level form of the same defect" below.
 
 ### The defect, precisely
 
@@ -62,31 +64,78 @@ Three compounding factors, each of which this record addresses:
 2. **A volume-scoped negative finding was generalized to the lineage.** "No `+1` statement located" was accurate for the two volumes inspected and was stated as a property of BECMI. This is `DEC-0010` §9.5 Guardrail B's prohibited move, committed one level up from where Guardrail B is written.
 3. **The word "unanimous" was applied to a five-volume lineage on the strength of two agreeing volumes.** Compounding this, the researcher recorded a *deliberate, reasoned* decision not to consult B/X, Holmes and OD&D — producing an appearance of considered completeness while an unexamined volume of the **same, higher-priority** source sat undispositioned.
 
-**This is not a "search harder" problem, and framing it that way would reproduce it.** No additional keyword search of the Expert and Companion volumes could have found a statement in Master. The instrument was not underused; the corpus was misdefined. As with `DEC-0010`, the remedy is enumeration and disposition, not diligence.
+**This is not a "search harder" problem, and framing it that way would reproduce it.** No additional keyword search of the Expert and Companion material could have found a statement in Master. The instrument was not underused; the corpus was misdefined. As with `DEC-0010`, the remedy is enumeration and disposition, not diligence.
+
+### The second-level form of the same defect
+
+Human review of this record's own first draft caught a defect **in the proposed fix**. That draft enumerated the lineage as *"BECMI = Basic, Expert, Companion, Master, Immortals — five volumes"*, which is structurally unsafe: **a BECMI set is a boxed set, and most of them contain more than one core rulebook.**
+
+```text
+Basic Set        Players Manual  ·  Dungeon Masters Rulebook
+Expert Set       Expert Rulebook
+Companion Set    Players Companion (Book One) · Dungeon Masters Companion (Book Two)
+Master Set       Master Players' Book · Master DM's Book
+Immortals Set    Players' Guide to Immortals · DM's Guide to Immortals
+```
+
+Under a set-only enumeration, a researcher could write `Master Set — INSPECTED` while having opened only the Master DM's Book — **and the governing `+1` statement is in the Master Players' Book.** The identical omission would recur one level down, with the paperwork looking complete.
+
+The exact packaging vocabulary matters far less than the governance consequence:
+
+> **Enumerating a set is not sufficient when that set contains multiple core source units that can independently restate, qualify, revise, or contradict the mechanic.**
+
+Item 1 is therefore **hierarchical**, and item 3 makes a parent-level disposition explicitly insufficient. BECMI's boxed-set packaging is used as an **illustration, not as a universal model** — other lineages are organized differently, and the requirement is stated in terms that do not presume boxes.
 
 **What caught it was a human reviewer, not the process.** The Stage-B adversarial self-review restarted from the objects *within the volumes already chosen*, so it could not surface a volume that was never on the list — the same structural lesson `DEC-0010` §10.1.2 drew for primary sources, now shown to apply to alternate sources too. That is the basis for item 9 below.
 
 ## Decision
 
-**When gap-directed alternate-source research relies on a named multi-volume rules lineage, every materially relevant core volume must be enumerated and dispositioned before the researcher may claim that the lineage is exhaustive, unanimous, internally consistent, or silent.**
+**When gap-directed alternate-source research relies on a named multi-unit rules lineage, the researcher must enumerate that lineage's structural units, then enumerate and disposition the constituent core source units within each materially relevant structural unit, before claiming that the lineage is exhaustive, unanimous, internally consistent, or silent.**
 
 Specifically:
 
-**1. Enumerate the lineage first.** Before opening any volume, record the lineage's constituent volumes as a list, from the lineage's own structure. For BECMI that list is **Basic, Expert, Companion, Master, Immortals** — five volumes, not "the one that covers the relevant level range."
+**1. Enumerate the lineage hierarchically, before opening anything.** Record the corpus as a structure, not a flat list, working down until the level at which a rule can actually be stated:
 
-**2. Identify every materially relevant core volume.** Relevance is assessed against the research question, not against convenience, and the assessment is recorded.
+```text
+LINEAGE
+    ↓
+STRUCTURAL UNITS          stages, sets, editions, printings —
+    ↓                     whatever the lineage's own organization uses
+CORE SOURCE UNITS         the individual rulebooks/volumes within each
+    ↓                     structural unit
+GOVERNING OBJECTS         entries, tables, stat blocks, procedures
+                          inside each source unit (`DEC-0010` §9.1)
+```
 
-**3. Inspect or explicitly exclude each volume, with a verified reason.** Every volume in the enumeration receives a disposition — `INSPECTED` or `EXCLUDED WITH VERIFIED REASON`. **A volume may not silently sit outside the lineage inventory.** This is the direct analogue of `DEC-0010` item 2 and Guardrail C.
+The vocabulary is deliberately generic. **A lineage organized as boxed sets, as single volumes, as numbered printings, or as a rulebook plus errata is covered equally**, and no packaging model is privileged. What must be identified is the level at which a rule can be independently stated — that is the level requiring disposition.
 
-**4. A level-range assumption is not sufficient to exclude a later volume.** A volume whose nominal level range or subject matter appears not to reach the question must still be dispositioned by inspection where it **can restate, revise, or supersede** earlier rules. Scope-based exclusion requires verification, not inference. *(Motivating instance: the Master Set was excluded as "levels 26–36" and contains the governing Elf statement.)*
+*Illustration only, not a mandated shape:* for BECMI, the structural units are the five boxed sets, and the core source units are the rulebooks within them — Basic (Players Manual; Dungeon Masters Rulebook), Expert (Expert Rulebook), Companion (Players Companion; Dungeon Masters Companion), Master (Master Players' Book; Master DM's Book), Immortals (Players' Guide to Immortals; DM's Guide to Immortals).
 
-**5. Later duplicate presentations are governing source objects.** A later volume that reprints or revises an earlier volume's class entry, table, or procedure is a **duplicate presentation** in the sense of `DEC-0010` §9.1 class I, and must be recorded separately. No presentation is automatically authoritative over another by virtue of position.
+**2. Identify every materially relevant core source unit.** Relevance is assessed against the research question, not against convenience, and the assessment is recorded.
 
-**6. Explicit conflict-precedence statements must be located, and their scope recorded.** Where a lineage volume states how contradictions with other volumes resolve, that statement is a **mandatory source object** for lineage research. Its **scope must be stated explicitly** — see item 10.
+**The corpus is the lineage's core rules, not everything ever published for the game.** Adventures/modules, accessories, magazine articles, setting supplements, and unrelated products are **not** automatically in scope. Determining what constitutes the core rules corpus for the named lineage is itself part of the researcher's recorded assessment, and reaching beyond that corpus remains gap-directed under §15.
 
-**7. "No statement located" remains volume-scoped.** A negative finding must name the volumes inspected. It may not be restated as a property of the lineage unless lineage completeness under items 1–3 has been established.
+**3. Disposition every enumerated core source unit — a parent-level disposition is insufficient.** Each receives `INSPECTED` or `EXCLUDED WITH VERIFIED REASON`. **A core source unit may not silently sit outside the inventory**, and dispositioning a structural unit does **not** disposition the source units inside it:
 
-**8. Lineage-level claims require lineage-level completeness.** The words **unanimous**, **exhaustive**, **internally consistent**, and **absent from the lineage** are lineage-level claims. Each is prohibited until every materially relevant core volume has been dispositioned.
+```text
+INSUFFICIENT     Master Set — INSPECTED
+
+SUFFICIENT       Master Set
+                   ├── Master Players' Book — INSPECTED → GOVERNING
+                   └── Master DM's Book     — INSPECTED / EXCLUDED WITH VERIFIED REASON
+```
+
+This is the direct analogue of `DEC-0010` item 2 and Guardrail C, and it is what prevents the founding defect recurring one level below the set enumeration.
+
+**4. A level-range or subject-matter assumption is not sufficient to exclude anything, at either level.** A structural unit or a core source unit whose nominal level range or apparent subject does not reach the question must still be dispositioned **by inspection** where it can **restate, revise, or supersede** earlier rules. Scope-based exclusion requires verification, not inference. *(Motivating instance: the Master Set was excluded as "levels 26–36", and its Players' Book carries the governing Elf statement.)*
+
+**5. Later duplicate presentations are governing source objects.** A later source unit that reprints or revises an earlier one's class entry, table, or procedure is a **duplicate presentation** in the sense of `DEC-0010` §9.1 class I, and must be recorded separately. No presentation is automatically authoritative over another by virtue of position.
+
+**6. Explicit conflict-precedence statements must be located, and their scope recorded.** Where any source unit states how contradictions with other units resolve, that statement is a **mandatory source object** for lineage research. Its **scope must be stated explicitly** — see item 10.
+
+**7. "No statement located" remains scoped to what was actually inspected.** A negative finding must name the **core source units** inspected — not merely the structural units. It may not be restated as a property of the lineage unless completeness under items 1–3 has been established.
+
+**8. Lineage-level claims require lineage-level completeness.** The words **unanimous**, **exhaustive**, **internally consistent**, and **absent from the lineage** are lineage-level claims. Each is prohibited until every materially relevant **core source unit** — not merely every structural unit — has been dispositioned.
 
 **9. Independent Alternate-Source Completeness Review.** Where an alternate-source finding will **materially resolve** a documented RC ambiguity or gap:
 
@@ -107,15 +156,21 @@ Where the finding is **not** materially consequential — it corroborates withou
 
 ### Why this is not covered by `DEC-0010`
 
-`DEC-0010`'s object-level audit operates *within* a source that has already been chosen. It presumes the source is the Rules Cyclopedia, which is a single volume. A multi-volume lineage has an enumerable structure **above** the object level, and that structure is exactly where this failure occurred. Applying `DEC-0010`'s principle to it is a scope extension, not a new principle — which is why this record **amends** rather than supersedes.
+`DEC-0010`'s object-level audit operates *within* a source that has already been chosen. It presumes the source is the Rules Cyclopedia, which is a single volume. A multi-unit lineage has enumerable structure **above** the object level — and, as human review of this record's own first draft established, **more than one level of it**. That structure is exactly where both forms of this failure occur. Applying `DEC-0010`'s principle to it is a scope extension, not a new principle — which is why this record **amends** rather than supersedes.
+
+### Why the enumeration has to be hierarchical rather than flat
+
+A flat enumeration fixes the level at which the last omission happened and leaves the level below it unguarded. That is not a hypothetical: the governing `+1` statement is in the **Master Players' Book**, so a set-only inventory reading `Master Set — INSPECTED` would have satisfied a flat rule while still missing the statement — with the paperwork now *looking* complete, which is worse than the original defect.
+
+The rule therefore descends to **the level at which a rule can be independently stated**, and stops there. It does not descend into every product bearing the game's name; item 2 bounds the corpus to the lineage's **core rules**.
 
 ### Why the safeguard has to be structural rather than exhortative
 
-The researcher who declared BECMI unanimous had, in the same document, written out Guardrail B's caveat about volume-scoped negatives and then used the word "unanimous" three sentences later. Reminding researchers to be careful does not fix a defect that survives the researcher's own care. Enumeration makes the omission visible to a reviewer, which care does not.
+The researcher who declared BECMI unanimous had, in the same document, written out Guardrail B's caveat about scoped negatives and then used the word "unanimous" three sentences later. Reminding researchers to be careful does not fix a defect that survives the researcher's own care. Enumeration makes the omission visible to a reviewer, which care does not — and a **hierarchical** enumeration makes the nested omission visible too.
 
 ### Source authority is unchanged — the point that most needs protecting
 
-**RC remains primary** (`DEC-0007`). This record does **not** imply, and must not be read to imply, that a later alternate-source volume overrides RC. Alternate-source lineage research exists only to **clarify, complete, or help interpret** a documented RC gap or conflict (`SOURCE_HIERARCHY.md` §3, `RULE_CARD_RESEARCH_PROTOCOL.md` §15).
+**RC remains primary** (`DEC-0007`). This record does **not** imply, and must not be read to imply, that a later alternate-source unit overrides RC. Alternate-source lineage research exists only to **clarify, complete, or help interpret** a documented RC gap or conflict (`SOURCE_HIERARCHY.md` §3, `RULE_CARD_RESEARCH_PROTOCOL.md` §15).
 
 **A conflict-precedence statement inside a lineage governs that lineage's own internal relationships.** It does not automatically govern a later consolidating product that draws on the lineage.
 
@@ -131,14 +186,17 @@ Reading "Master is later, and Master says its rules win" as decisive for RC woul
 
 Alternate-source research becomes slower, and some lineage questions will end `INCONCLUSIVE` that would previously have ended with a confident answer. The Elf question did exactly that. **That is the correct outcome**: it surfaced a real historical conflict for human adjudication instead of concealing it behind a false claim of lineage unanimity.
 
+The hierarchical requirement adds roughly a doubling of the enumeration for a boxed-set lineage — ten core rulebooks rather than five sets, for BECMI. **It does not multiply the corpus indefinitely**, because item 2 confines it to the core rules and leaves everything beyond that gap-directed.
+
 ## Consequences
 
-- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` gains **§15.1 (Multi-Volume Lineage Completeness)** and a cross-reference from §10.1.2. **These amendments take effect only on human approval of this record**, and are marked in the protocol as proposed and not in force, following the convention used during `DEC-0010`'s drafting.
+- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` gains **§15.1 (Multi-Unit Lineage Corpus Completeness)** and a cross-reference from §10.1.2. **These amendments take effect only on human approval of this record**, and are marked in the protocol as proposed and not in force, following the convention used during `DEC-0010`'s drafting.
 - `DEC-0010` is **not rewritten and not superseded.** It remains `Approved` and in force. The division of responsibility is:
 
   ```text
-  DEC-0010  primary-source evidence completeness
-  DEC-0011  alternate-source lineage completeness during Stage B
+  DEC-0010  primary-source evidence completeness      (objects within one source)
+  DEC-0011  alternate-source corpus completeness      (which source units, at
+            during Stage B                             every level of the lineage)
   ```
 
 - `DEC-0009`'s two-stage lifecycle, hard gates, and human evidence-review gate are unchanged. `DEC-0007`'s source hierarchy is unchanged. `DEC-0008`'s V1 rules profile is unchanged.
