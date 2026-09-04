@@ -10,9 +10,11 @@ Hit Points & Hit Dice
 
 ## Status
 
-`AWAITING_APPROVAL`
+`APPROVED`
 
-> Stage-B draft, 2026-08-29. Stage-A evidence (`docs/rules/evidence/CHAR-003-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29. **Not approved. Not implementable.**
+> **Approved by the human project owner, 2026-09-04, expressly ratifying Simulator Ruling SR-1 (Elf `+2`).** Stage-A evidence (`docs/rules/evidence/CHAR-003-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29.
+>
+> **Approval of this card does not authorize implementation.** `CLUSTER-002` implementation is **NOT AUTHORIZED** and requires separate explicit human authorization.
 >
 > **Human ruling recorded 2026-08-29 — the Elf gain is now specified.** The three-stage history is preserved deliberately and must not be flattened:
 >
@@ -446,8 +448,22 @@ Saving throws and saving-throw progression (`COMBAT-004`) — deliberately not p
 
 ## Approval
 
-- Approved by: `<pending>`
-- Date: `<pending>`
-- Notes: `<pending>`
+- Approved by: **Human project owner**
+- Date: **2026-09-04**
+- Notes: Ratifies the mechanical contract **and Simulator Ruling SR-1** (Elf `+2`). Implementation is not authorized by this approval.
 
-**Mechanically complete and ready for review.** SR-1 closes the only blocking question. **Approving this card ratifies Simulator Ruling SR-1** (Elf `+2`) as this project's adjudication of a conflict the sources do not resolve. W2 and W3 remain open and block nothing.
+**Approval ratified Simulator Ruling SR-1** (Elf `+2`) as this project's adjudication of a conflict **the sources do not resolve**. The historical record is unchanged by approval and must stay that way:
+
+```text
+RC:                        +1 twice (p.25 stat block, p.130 Step 6)
+                           +2 twice (p.25 Class Details, p.129 calculation)
+Inspected BECMI evidence:  contains BOTH +2 and +1 treatments
+                           (Expert Rulebook +2, Dungeon Masters Companion +2,
+                            Master Players' Book +1)
+Historical question:       NOT objectively resolved
+Project behaviour:         +2   ← Simulator Ruling, human authority
+```
+
+**Provenance remains `Simulator Ruling`.** Approval does **not** convert it to Rules Cyclopedia Explicit, and **does not make the corrected BECMI research normative authority** — that research is contextual evidence explaining how RC became inconsistent, and it supports neither value. **No claim of hierarchical BECMI completeness is made** (`DEC-0011`).
+
+W2 and W3 remain open and block nothing.

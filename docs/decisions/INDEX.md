@@ -14,7 +14,7 @@ Durable architectural and process decisions for the Retro D&D Simulator project.
 | [DEC-0008](DEC-0008-rules-cyclopedia-v1-rules-profile.md) | Rules Cyclopedia V1 Rules Profile — Selected Core/Optional Systems | Approved | 2026-08-16 |
 | [DEC-0009](DEC-0009-evidence-first-rule-research-protocol.md) | Evidence-First Rule Research Protocol | Approved | 2026-08-16 |
 | [DEC-0010](DEC-0010-primary-source-completeness-audit.md) | Primary-Source Completeness Audit Required for Rule Research | Approved | 2026-08-29 |
-| [DEC-0011](DEC-0011-alternate-source-lineage-completeness.md) | Alternate-Source Lineage Completeness Required for Gap Research | PROPOSED — AWAITING HUMAN APPROVAL | 2026-08-29 |
+| [DEC-0011](DEC-0011-alternate-source-lineage-completeness.md) | Alternate-Source Lineage Completeness Required for Gap Research | Approved | 2026-09-04 |
 
 ## Adding a Decision Record
 

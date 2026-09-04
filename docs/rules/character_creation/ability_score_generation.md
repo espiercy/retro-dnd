@@ -10,9 +10,11 @@ Ability Score Generation
 
 ## Status
 
-`AWAITING_APPROVAL`
+`APPROVED`
 
-> Stage-B draft, 2026-08-29. Stage-A evidence (`docs/rules/evidence/CHAR-001-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29. **Not approved. Not implementable.** Only a human project owner may set `APPROVED` (`SOURCE_HIERARCHY.md` §9). The Pre-Code Development Gate (`ARCHITECTURE.md` §16) is independent of this card's status and is not affected by it.
+> **Approved by the human project owner, 2026-09-04.** Stage-A evidence (`docs/rules/evidence/CHAR-001-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29; Stage B was drafted 2026-08-29 and reviewed to approval 2026-09-04.
+>
+> **Approval of this card does not authorize implementation.** `CLUSTER-002` implementation is **NOT AUTHORIZED** and requires separate explicit human authorization; the Pre-Code Development Gate (`ARCHITECTURE.md` §16) and the Rules Baseline Migration Gate (§15.2) are independent of this card's status and are not cleared by it.
 >
 > **Human rulings recorded 2026-08-29 — all open questions are `RESOLVED`.** An earlier draft classified them all as *"non-blocking"*, which was wrong: U3 left standard executable behaviour unspecified for a **required V1 class**. The human project owner ruled on U1, U2, U3 and U4/V1, and subsequently added **SR-5** to close a Mystic integration edge case that the SR-3 ordering exposed — a character could qualify as a Mystic on Wisdom 13 and then trade Wisdom away during the same creation procedure.
 >
@@ -515,8 +517,17 @@ All die results are supplied by a scripted RNG (`TESTING_STRATEGY.md`; `src/rng`
 
 ## Approval
 
-- Approved by: `<pending>`
-- Date: `<pending>`
-- Notes: `<pending>`
+- Approved by: **Human project owner**
+- Date: **2026-09-04**
+- Notes: Approval ratifies the §1–§5 mechanical contract **and Simulator Rulings SR-2, SR-3, SR-4 and SR-5** — four project adjudications of questions RC leaves open, each stated separately and none bundled. **Implementation is not authorized by this approval.**
 
-**Mechanically complete — `READY FOR HUMAN RULE-CARD REVIEW`.** U1–U4 resolved, and the Mystic Wisdom edge case closed by SR-5. **Approving this card ratifies Simulator Rulings SR-2, SR-3, SR-4 and SR-5** — four project adjudications of questions RC leaves open, each stated separately and none bundled.
+**Ratified Simulator Rulings — all four remain `Simulator Ruling` provenance, and none is reclassified as Rules Cyclopedia Explicit, Necessary Mechanical Consequence, or an Alternate-Source Compatible Completion:**
+
+| Ruling | Ratified content |
+|---|---|
+| **SR-2** | A Mystic **may raise Dexterity** through the ordinary 2-for-1 trade (§4). No Mystic-specific exchange rate or exception. |
+| **SR-3** | The Chapter 13 score switch is **included in V1**, runs **before** eligibility, and **may establish a reachable class minimum** (§0, §6.2, §6.3). |
+| **SR-4** | A discard **may be offered** when **no ability score is above 9** *or* **at least two ability scores are below 6**; **the player may keep the character anyway** (§6.1). |
+| **SR-5** | The post-selection 2-for-1 trade **may not reduce an ability below a creation minimum required by the selected class** (§4, rule R10). |
+
+**Each ruling records the reading it rejected**, and those rejected readings remain in the card as RC's own printed text — approval selects this project's behaviour, not a finding that RC is unambiguous.

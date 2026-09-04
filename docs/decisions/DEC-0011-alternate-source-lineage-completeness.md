@@ -7,14 +7,25 @@ DEC-0011
 Alternate-Source Lineage Completeness Required for Gap Research
 
 ## Status
-PROPOSED — AWAITING HUMAN APPROVAL
+Approved
 
 ## Date
-2026-08-29
+2026-09-04
 
-> **Lifecycle note.** This record is **not approved and is not active authority.** Until a human project owner approves it, `DEC-0009` and `DEC-0010` (both `Approved`) remain the operative research process, and the `RULE_CARD_RESEARCH_PROTOCOL.md` §15.1 amendment this record proposes is drafted-but-not-in-force. The status term follows the convention established during `DEC-0010`'s drafting.
+> **Lifecycle history.** Drafted 2026-08-29; **approved by the human project owner 2026-09-04.** The `Date` field carries the approval date, per this repository's decision-record convention (`DEC-0001`–`DEC-0010`). The drafting history is retained because how this record reached approval is itself an instance of what it governs:
 >
-> **An implementation agent may not approve a project-wide process decision** (`DEVELOPMENT_WORKFLOW.md` §9, `AGENTS.md` §12). This record was drafted on explicit human direction; the direction to draft it is not an approval of it.
+> - Drafted `PROPOSED — AWAITING HUMAN APPROVAL`, because **an implementation agent may not approve a project-wide process decision** (`DEVELOPMENT_WORKFLOW.md` §9, `AGENTS.md` §12) — a direction to draft is not an approval.
+> - Human review found the draft's **own** enumeration structurally unsafe (*"five volumes"*), producing the hierarchical corpus rule in item 1 — see "The second-level form of the same defect".
+> - Human review then found a **false retroactive completeness claim** in the draft's Context and required it corrected: the remediation dispositioned the top-level sets, **not** every constituent core rulebook, and no retroactive audit was performed.
+> - Approved: **2026-09-04**.
+>
+> **This record is now active authority, and the `RULE_CARD_RESEARCH_PROTOCOL.md` §15.1 amendment it makes is IN FORCE.** `DEC-0009` and `DEC-0010` remain `Approved` and are not superseded; this record extends `DEC-0010`'s completeness discipline to the alternate-source layer.
+
+## Approval
+
+- Approved by: **Human project owner**
+- Date: **2026-09-04**
+- Notes: Approved with the hierarchical corpus rule (item 1) and the corrected historical account of the remediation's scope. **Alternate-source authority is unchanged — RC remains primary** (`DEC-0007`).
 
 ## Context
 
@@ -215,7 +226,7 @@ The hierarchical requirement adds roughly a doubling of the enumeration for a bo
 
 ## Consequences
 
-- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` gains **§15.1 (Multi-Unit Lineage Corpus Completeness)** and a cross-reference from §10.1.2. **These amendments take effect only on human approval of this record**, and are marked in the protocol as proposed and not in force, following the convention used during `DEC-0010`'s drafting.
+- `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` gains **§15.1 (Multi-Unit Lineage Corpus Completeness)** and a cross-reference from §10.1.2. **These amendments are IN FORCE as of this record's approval, 2026-09-04.**
 - `DEC-0010` is **not rewritten and not superseded.** It remains `Approved` and in force. The division of responsibility is:
 
   ```text

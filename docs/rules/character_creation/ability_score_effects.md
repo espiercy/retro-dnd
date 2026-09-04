@@ -10,9 +10,11 @@ General Ability Score Mechanical Effects
 
 ## Status
 
-`AWAITING_APPROVAL`
+`APPROVED`
 
-> Stage-B draft, 2026-08-29. Stage-A evidence (`docs/rules/evidence/CHAR-007-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29. **Not approved. Not implementable.**
+> **Approved by the human project owner, 2026-09-04.** Stage-A evidence (`docs/rules/evidence/CHAR-007-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29.
+>
+> **Approval of this card does not authorize implementation.** `CLUSTER-002` implementation is **NOT AUTHORIZED** and requires separate explicit human authorization.
 >
 > **Stage-B correction and human-ruling impact (2026-08-29): NONE.** Neither the research correction nor human rulings SR-1 through SR-5 touches this card:
 >
@@ -310,11 +312,11 @@ Armor Class as a system (`COMBAT-002`); attack and damage resolution (`COMBAT-00
 
 ## Approval
 
-- Approved by: `<pending>`
-- Date: `<pending>`
-- Notes: `<pending>`
+- Approved by: **Human project owner**
+- Date: **2026-09-04**
+- Notes: Ratifies the §1–§5 mechanical contract and its responsibility boundaries. **This card owns NO Simulator Ruling and NO Human-Approved Variant.** Implementation is not authorized by this approval.
 
-**Mechanically complete and ready for human review.**
+**Ratified:** the shared ability-adjustment table (§1), the Intelligence and Languages table (§3.1), the Charisma Adjustment table (§3.2), the per-ability effect assignments (§2), and the value-versus-procedure ownership boundaries (§4).
 
 **Approving this card ratifies the `CHAR-007` mechanical contract in §1–§5 and its responsibility boundaries** — the three tables, the per-ability effect assignment, and the value-versus-procedure partition.
 

@@ -6,6 +6,18 @@
 
 ---
 
+## 0. CLUSTER-002 Stage B — COMPLETE and APPROVED, 2026-09-04
+
+```text
+CLUSTER-002 Stage B:      COMPLETE
+Human Rule Card Review:   PASSED — 2026-09-04
+Approved Stage-B package: CHAR-001, CHAR-002, CHAR-003, CHAR-007 — all APPROVED
+Governance:               DEC-0011 Approved; protocol §15.1 IN FORCE
+Implementation:           NOT AUTHORIZED
+```
+
+**The research-remediation history below is retained in full as governance provenance and must not be erased** — specifically: the original Elf primary-source completeness failure (the unopened RC p. 26 Elf Experience Table), the incorrect *"BECMI is unanimous at +2"* claim, the omission of the Master Set, the `DEC-0011` hierarchical-corpus correction, and the five human Simulator Rulings. The approvals do not tidy any of it away.
+
 ## 0a. Human rulings recorded 2026-08-29 — Stage B complete, cards ready for review
 
 The human project owner reviewed the corrected remediation and issued four binding rulings. **All executable ambiguity in this cluster is now either resolved transparently or explicitly deferred.**
@@ -228,17 +240,22 @@ Ordered by consequence.
 Not performed, and not authorized: Rule Card approval; implementation planning; production implementation; implementation tests; any `src/` or `tests/` change; any merge to `main`; broad alternate-source survey; adoption of any P1–P5 proposal; assignment of any new Rule ID; expansion of `CLUSTER-002`.
 
 ```text
-CLUSTER-002 Stage B:   COMPLETE — human rulings SR-1..SR-5 recorded 2026-08-29
-Rule Card status:      AWAITING_APPROVAL (all four)
-    CHAR-001           ready for review — ratifies SR-2, SR-3, SR-4, SR-5
-    CHAR-002           ready for review
-    CHAR-003           ready for review — ratifies SR-1
-    CHAR-007           ready for review
-Governance:            DEC-0011  PROPOSED — AWAITING HUMAN APPROVAL
-                       protocol §15.1  DRAFTED, NOT IN FORCE
+CLUSTER-002 Stage B:   COMPLETE
+Human Rule Card Review: PASSED — 2026-09-04
+Rule Card status:      APPROVED (all four, human project owner, 2026-09-04)
+    CHAR-001           APPROVED — ratified SR-2, SR-3, SR-4, SR-5
+    CHAR-002           APPROVED — owns no Simulator Ruling
+    CHAR-003           APPROVED — ratified SR-1 (Elf +2)
+    CHAR-007           APPROVED — owns no Simulator Ruling
+Governance:            DEC-0011  Approved 2026-09-04
+                       protocol §15.1  IN FORCE
 Deferred:              P1 (Druid transition owner), P3 (Ability Check Rule ID)
-Implementation:        NOT AUTHORIZED
-Next gate:             HUMAN DEC-0011 AND RULE-CARD REVIEW
+                       — both DEFER FOR HUMAN GOVERNANCE, no Rule ID assigned
+Open, non-blocking:    CHAR-003 W2 (floor vs fixed gains — moot),
+                       W3 (Ch.10 Step 6 — not wired to V1)
+Implementation:        NOT AUTHORIZED — requires separate explicit
+                       human authorization
+Next gate:             SEPARATE IMPLEMENTATION AUTHORIZATION
 ```
 
 ## 10. Postmortem and 11. Proposed guardrail

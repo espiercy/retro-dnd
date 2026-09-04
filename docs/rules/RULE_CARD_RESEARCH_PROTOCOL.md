@@ -482,7 +482,7 @@ FOR ITS OWN EVIDENCE PACKAGE.
 
 Must be performed by a **different reviewer context that did not conduct the evidence collection being certified**: another model/reviewer, a human reviewer, or a genuinely separate research session that does not rely on the original agent's unstated assumptions, if the project later defines that as sufficiently independent.
 
-> **Proposed extension to alternate sources (`DEC-0011`, not in force).** §15.1.6 would apply **this same reviewer role** to a materially consequential alternate-source lineage conclusion. It creates no new or parallel reviewer role and does not alter §10.1.1.
+> **Extended to alternate sources by `DEC-0011` (`Approved` 2026-09-04, in force).** §15.1.6 applies **this same reviewer role** to a materially consequential alternate-source lineage conclusion. It creates no new or parallel reviewer role and does not alter §10.1.1.
 
 **Permitted output of an original researcher:** `PREPARED FOR INDEPENDENT COMPLETENESS REVIEW`.
 **Prohibited output of an original researcher:** `SOURCE COMPLETENESS PASSED`, `SOURCE COMPLETENESS CERTIFIED`, `HUMAN EVIDENCE GATE CLEARED`.
@@ -707,7 +707,7 @@ Only then may it be classified **Alternate-Source Compatible Completion**.
 
 ## 15.1 Multi-Unit Lineage Corpus Completeness
 
-> **PROPOSED — NOT IN FORCE.** Proposed by `docs/decisions/DEC-0011-alternate-source-lineage-completeness.md`, which is `PROPOSED — AWAITING HUMAN APPROVAL`. **This section takes effect only on approval of that record**; until then §15 as written above, together with `DEC-0009` and `DEC-0010`, remains the operative process. Marked per the convention used while `DEC-0010` was in draft.
+> **IN FORCE.** Adopted by `docs/decisions/DEC-0011-alternate-source-lineage-completeness.md`, `Approved` 2026-09-04. This section is active project governance and applies alongside §15, `DEC-0009` and `DEC-0010`, none of which it supersedes.
 
 ### 15.1.0 The recorded defect this section exists to prohibit
 
@@ -869,4 +869,4 @@ Adopted `docs/decisions/DEC-0009-evidence-first-rule-research-protocol.md`, `APP
 
 **`DEC-0010` is `Approved` and those sections are in force.** `DEC-0009` is not superseded and its protections are unchanged; `DEC-0010` strengthens Stage A only.
 
-**Amendment proposed 2026-08-29 by `docs/decisions/DEC-0011-alternate-source-lineage-completeness.md`** — **§15.1** (multi-unit lineage corpus completeness: **hierarchical** corpus inventory down to core source units, level-range and subject exclusions, duplicate presentations, conflict-precedence scope, lineage-level negative findings, and independent alternate-source completeness review), plus the cross-reference note in §10.1.2. **`DEC-0011` is `PROPOSED — AWAITING HUMAN APPROVAL`; §15.1 is drafted but NOT IN FORCE.** It extends `DEC-0010`'s completeness discipline from the primary source to the alternate-source layer; it supersedes neither `DEC-0009` nor `DEC-0010`, and grants alternate sources no additional authority. This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full — expected to produce a committed `docs/rules/evidence/EXP-001-evidence.md` Stage-A artifact, not a rewritten Rule Card, as its first deliverable.
+**Amendment adopted by `docs/decisions/DEC-0011-alternate-source-lineage-completeness.md`, `Approved` 2026-09-04 (drafted 2026-08-29)** — **§15.1** (multi-unit lineage corpus completeness: **hierarchical** corpus inventory down to core source units, level-range and subject exclusions, duplicate presentations, conflict-precedence scope, lineage-level negative findings, and independent alternate-source completeness review), plus the cross-reference note in §10.1.2. **`DEC-0011` is `Approved` and §15.1 is IN FORCE.** It extends `DEC-0010`'s completeness discipline from the primary source to the alternate-source layer; it supersedes neither `DEC-0009` nor `DEC-0010`, and grants alternate sources no additional authority — RC remains primary (`DEC-0007`). This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full — expected to produce a committed `docs/rules/evidence/EXP-001-evidence.md` Stage-A artifact, not a rewritten Rule Card, as its first deliverable.

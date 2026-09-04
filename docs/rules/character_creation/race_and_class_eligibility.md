@@ -10,9 +10,11 @@ Race & Class Eligibility
 
 ## Status
 
-`AWAITING_APPROVAL`
+`APPROVED`
 
-> Stage-B draft, 2026-08-29. Stage-A evidence (`docs/rules/evidence/CHAR-002-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29. **Not approved. Not implementable.**
+> **Approved by the human project owner, 2026-09-04.** Stage-A evidence (`docs/rules/evidence/CHAR-002-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29.
+>
+> **Approval of this card does not authorize implementation.** `CLUSTER-002` implementation is **NOT AUTHORIZED** and requires separate explicit human authorization.
 >
 > **Stage-B correction impact (2026-08-29): NONE substantive.** The research failure and its correction concern the Elf's fixed hit-point gain (`CHAR-003`) and `CHAR-001`'s Mystic trade question. **Neither touches this card** — eligibility is decided entirely by raw-score thresholds, no hit-point value enters it, and the Elf and Druid **maximum levels** (10 and 36) are settled human adjudications the correction did not disturb.
 >
@@ -324,13 +326,24 @@ Scores are given in RC's order: **Str, Int, Wis, Dex, Con, Cha**.
 
 ## Approval
 
-- Approved by: `<pending>`
-- Date: `<pending>`
-- Notes: `<pending>`
+- Approved by: **Human project owner**
+- Date: **2026-09-04**
+- Notes: Ratifies the §1–§5 mechanical contract only. **This card owns no Simulator Ruling.** Implementation is not authorized by this approval.
+
+**Ratified contract:**
+
+| Class | Creation-time requirement |
+|---|---|
+| Cleric, Fighter, Magic-User, Thief | **None** — always available at creation |
+| Dwarf | Constitution ≥ 9 |
+| Elf | Intelligence ≥ 9 |
+| Halfling | Dexterity ≥ 9 **and** Constitution ≥ 9 |
+| Mystic | Wisdom ≥ 13 **and** Dexterity ≥ 13 |
+| Druid | **Not available as a starting class** |
 
 **Approving this card ratifies the `CHAR-002` mechanical contract in §1–§5** (which includes §4.1).
 
-**V1 is already resolved** by Simulator Ruling **SR-3**, recorded on `CHAR-001`. This card **consumes the consequences of SR-3 and SR-5**; it does not own them and does not independently re-ratify them — approving `CHAR-001` is what ratifies those rulings.
+**V1 is already resolved** by Simulator Ruling **SR-3**, recorded on `CHAR-001`. This card **consumes the consequences of SR-3 and SR-5**; it does not own them and does not independently re-ratify them — **approving `CHAR-001` (also 2026-09-04) is what ratified those rulings.** Approving this card **adds no ruling ownership.**
 
 **Approval does not adopt the deferred Druid-transition ownership proposal in §B** (`P1 — DEFER FOR HUMAN GOVERNANCE`).
 
