@@ -148,7 +148,7 @@ Recorded as trade rule **R10** in §4. It adds one constraint to an existing pro
 
 ---
 
-**Provenance for all three: `Simulator Ruling`** (`GAME_CONSTITUTION.md` §5 / `SOURCE_HIERARCHY.md` §10), granted by the human project owner. **None is a claim that RC objectively resolves the question**, and none is a Human-Approved Variant — each selects among readings RC's own text admits.
+**Provenance for all four: `Simulator Ruling`** (`GAME_CONSTITUTION.md` §5 / `SOURCE_HIERARCHY.md` §10), granted by the human project owner. **None is a claim that RC objectively resolves the question**, and none is a Human-Approved Variant — each selects among readings RC's own text admits.
 
 ## Human-Approved Variant
 
@@ -421,6 +421,7 @@ All die results are supplied by a scripted RNG (`TESTING_STRATEGY.md`; `src/rng`
 | M3 | Mystic, Dex 16, Str 12, Wis 15 | Lower **Dex** by 2 | **Rejected** (R4) — SR-2 permits raising Dexterity, never lowering it |
 | M4 | Mystic, Wis 15, Dex 13 | Lower Wis by 2, raise **Wis**… | **Rejected** (R1) — Wisdom is a Mystic *requirement*, not a prime requisite |
 | M5 | Mystic | Any trade | Exchange rate is **2:1**, identical to every other class — **no Mystic-specific rate exists** |
+
 ### Class eligibility invariant (SR-5, rule R10)
 
 > These supersede the earlier M6/M7 cases, which recorded the **unguarded** behaviour — a Mystic trading Wisdom below the 13 that qualified it. SR-5 makes that illegal.
@@ -488,7 +489,7 @@ All die results are supplied by a scripted RNG (`TESTING_STRATEGY.md`; `src/rng`
 | **§0 / §6.2 / §6.4 switch inclusion and ordering (SR-3)** | **Simulator Ruling** — human-granted 2026-08-29. RC states both provisions but never composes them. The *inclusion* of the switch is additionally a **project scope decision**; the switch procedure itself is **Rules Cyclopedia Explicit** |
 | **§4 rule R10 — class eligibility invariant (SR-5)** | **Simulator Ruling** — human-granted 2026-08-29. RC's exchange restrictions protect Constitution, Charisma and Dexterity but **not** every gating ability, and RC never states that a class's creation minimums must survive the trade. **Not RC Explicit** — RC's p. 7 elf example lowers Wisdom, but Wisdom is not an Elf creation requirement, so it settles nothing here |
 
-**No Alternate-Source Compatible Completion and no Human-Approved Variant is claimed by this card.** No alternate-source research was performed for it, and none of SR-2/3/4 departs from an explicit RC rule — each selects among readings RC's own text admits.
+**No Alternate-Source Compatible Completion and no Human-Approved Variant is claimed by this card.** No alternate-source research was performed for it, and none of SR-2/3/4/5 departs from an explicit RC rule — each selects among readings RC's own text admits.
 
 ---
 
@@ -510,11 +511,7 @@ All die results are supplied by a scripted RNG (`TESTING_STRATEGY.md`; `src/rng`
 - **U1** — RC's narrower "all scores under 9" wording is retained in the record as an introductory summary, not deleted.
 - **U3** — RC rule 3's thief/halfling enumeration is retained and characterized as an editorial carryover, not treated as erroneous text.
 
-**Non-questions, recorded so they are not re-raised:** whether RC offers a non-random generation method (it does, but only above 1st level — §5); whether Chapter 13 contains further generation qualifications (section list enumerated from the TOC, pp. 143/145/147/148 inspected — it does not); whether an individual score may be rerolled (no such provision in any inspected governing object — the §6.1 whole-character discard is the only recreate path).
-
-**Non-questions, recorded so they are not re-raised:** whether RC offers a non-random generation method (it does, but only above 1st level — §5); whether Chapter 13 contains further generation qualifications (section list enumerated from the TOC, pp. 143/145/147/148 inspected — it does not); whether an individual score may be rerolled (no such provision in any inspected governing object).
-
-**Non-questions, recorded so they are not re-raised:** whether RC offers a non-random generation method (it does, but only above 1st level — §5); whether Chapter 13 contains further generation qualifications (the section list was enumerated from the TOC and pp. 143/145/147/148 inspected — it does not); whether an individual score may be rerolled (no such provision exists in any inspected governing object).
+**Non-questions, recorded so they are not re-raised:** whether RC offers a non-random generation method (it does, but only above 1st level — §5); whether Chapter 13 contains further generation qualifications (the section list was enumerated from the TOC and pp. 143/145/147/148 inspected — it does not); whether an individual score may be rerolled (no such provision exists in any inspected governing object — the §6.1 whole-character discard is the only recreate path).
 
 ## Approval
 
