@@ -203,16 +203,22 @@ The p. 7 "Other Requirements" column is **not exhaustive** for the Druid. The co
 
 ### C. Mystic — creation eligibility is complete here; everything else is downstream
 
-Wisdom 13 and Dexterity 13 are the whole of Mystic *creation* eligibility, confirmed by reading the complete entry. The rest of that entry is **not** absorbed into this card:
+Wisdom 13 and Dexterity 13 are the whole of Mystic *creation* eligibility, confirmed by reading the complete entry. The rest of that entry is **not** absorbed into this card.
 
-| Mystic material (RC p. 29) | Owner |
-|---|---|
-| Strength — not Dexterity — determines the XP bonus, because Dexterity 13 is a precondition of being a mystic at all | **`ADV-001`** |
-| Never wears armor of any type; never uses protective magical devices | **`CHAR-009`** / `TREAS-004` |
-| Receives XP from treasure only if donated to the needy; must tithe 10% to the cloister | **`ADV-001`** |
-| Forswearing the oath → expelled, no new levels, −1 level per year away from the cloister | **`ADV-002`** |
-| 75% of mystics are Lawful — a **tendency, not a requirement** | **`CHAR-008`** |
-| 1d6/level to 9th, +2/level from 10th, Constitution ceases, maximum level 16 | **`CHAR-003`** |
+> **These ownership pointers are ADOPTED, not proposed** (`P2 — ADOPT NOW`, 2026-08-29). Notes were applied to the existing `ADV-001`, `ADV-002`, `CHAR-008` and `CHAR-009` rows in `INVENTORY.md`. **No new Rule ID was created.**
+>
+> **Adoption records where these mechanics belong. It does not make them part of `CHAR-002`, and it does not specify them.** Each remains unresearched and unspecified until its owning card is written. The pointers exist so the material is not lost between now and then — that is their whole function.
+
+| Mystic material (RC p. 29) | Adopted owner | Status |
+|---|---|---|
+| Strength — not Dexterity — determines the XP bonus, because Dexterity 13 is a precondition of being a mystic at all | **`ADV-001`** | Pointer adopted; mechanic **unspecified** |
+| Never wears armor of any type; never uses protective magical devices | **`CHAR-009`** / `TREAS-004` | Pointer adopted; mechanic **unspecified** |
+| Receives XP from treasure only if donated to the needy; must tithe 10% to the cloister | **`ADV-001`** | Pointer adopted; mechanic **unspecified** |
+| Forswearing the oath → expelled, no new levels, −1 level per year away from the cloister | **`ADV-002`** | Pointer adopted; mechanic **unspecified** |
+| 75% of mystics are Lawful — a **tendency, not a requirement** | **`CHAR-008`** | Pointer adopted; mechanic **unspecified**. Must **not** be implemented as an alignment gate |
+| 1d6/level to 9th, +2/level from 10th, Constitution ceases, maximum level 16 | **`CHAR-003`** | Already specified on that card |
+
+**`CHAR-002`'s scope is unchanged by any of this.** It owns creation-time class eligibility, its thresholds, availability at creation, and the eligibility result later procedures consume — and nothing else.
 
 ---
 
@@ -271,12 +277,6 @@ Scores are given in RC's order: **Str, Int, Wis, Dex, Con, Cha**.
 | E20 | Dwarf candidate: Str 18, Con 8. Apply every legal `CHAR-001` trade first, then evaluate | Dwarf **still not eligible** — Constitution cannot be exchanged; **no trade ever changes eligibility** |
 | E21 | Eligibility evaluated on adjusted (post-trade) scores | **Contract violation** — the evaluation consumes eligibility scores, never adjusted ones |
 | E22 | Fighter chosen, then trade raises Str 12→13 | Eligibility result unchanged; the trade is `CHAR-001`'s and post-dates this card |
-| E29 | Mystic qualified on Wis 13 / Dex 13, then `CHAR-001` trade lowers Wis to 12 | **Contract violation (SR-5 / R10)** — this card's result is an invariant the trade must preserve. Enforcement lives in `CHAR-001` (V1–V12); this case exists so the requirement is visible from the card that owns the minimum |
-| E30 | Any selected class, after any legal trade | Every creation minimum of that class **still satisfied** |
-| E25 | Elf candidate: as-rolled Int 8, Str 16; **switch authorized** → Int 16 | **Elf eligible.** The switch runs before this card and **can** establish a minimum (SR-3) |
-| E26 | Same candidate, **switch not authorized** | **Elf not eligible** — eligibility scores equal as-rolled scores |
-| E27 | Dwarf candidate: Con 8, Str 18; **switch authorized** | **Still not eligible** — the switch reaches Strength, never Constitution |
-| E28 | Mystic candidate: Wis 12, Dex 11, Cha 17; **switch authorized** | **Still not eligible** — the switch reaches Dexterity, never Wisdom |
 
 ### Guard
 
@@ -284,6 +284,22 @@ Scores are given in RC's order: **Str, Int, Wis, Dex, Con, Cha**.
 |---|---|---|
 | E23 | Ch. 13 switch applied **after** a class is chosen | **Rejected** — the switch runs before this card (SR-3) |
 | E24 | Druid transition requirements queried | Out of scope: directs to `CHAR-013`/`ADV-002`; **not** answered by this card |
+
+### Chapter 13 switch (SR-3)
+
+| # | Case | Expected |
+|---|---|---|
+| E25 | Elf candidate: as-rolled Int 8, Str 16; **switch authorized** → Int 16 | **Elf eligible.** The switch runs before this card and **can** establish a minimum (SR-3) |
+| E26 | Same candidate, **switch not authorized** | **Elf not eligible** — eligibility scores equal as-rolled scores |
+| E27 | Dwarf candidate: Con 8, Str 18; **switch authorized** | **Still not eligible** — the switch reaches Strength, never Constitution |
+| E28 | Mystic candidate: Wis 12, Dex 11, Cha 17; **switch authorized** | **Still not eligible** — the switch reaches Dexterity, never Wisdom |
+
+### Class eligibility invariant (SR-5)
+
+| # | Case | Expected |
+|---|---|---|
+| E29 | Mystic qualified on Wis 13 / Dex 13, then `CHAR-001` trade lowers Wis to 12 | **Contract violation (SR-5 / R10)** — this card's result is an invariant the trade must preserve. Enforcement lives in `CHAR-001` (V1–V12); this case exists so the requirement is visible from the card that owns the minimum |
+| E30 | Any selected class, after any legal trade | Every creation minimum of that class **still satisfied** |
 
 ## Provenance Classification
 
@@ -299,8 +315,10 @@ Scores are given in RC's order: **Str, Int, Wis, Dex, Con, Cha**.
 ## Open Questions
 
 1. **V1 — `RESOLVED`** by human ruling SR-3 (2026-08-29, recorded on `CHAR-001`). The Chapter 13 switch is **included in V1**, runs **before** eligibility, and **may** be authorized to satisfy a class minimum — bounded by §5 to three gates. **No eligibility threshold changed**; this card gained a precisely specified input, not a changed rule.
-2. **Druid transition ownership** (§B) — a proposed `CHAR-013` assignment with `CHAR-008`/`ADV-002` dependencies. **Proposed, not adopted.** Assigning it is a scope decision for the human project owner, not an agent action.
-3. **Mystic downstream ownership** (§C) — five items proposed against `ADV-001`, `ADV-002`, `CHAR-008`, `CHAR-009`. Recommendations only.
+2. **Druid transition ownership** (§B) — a proposed `CHAR-013` assignment with `CHAR-008`/`ADV-002` dependencies. **`P1 — DEFER FOR HUMAN GOVERNANCE`: proposed, NOT adopted.** Assigning it would materially redefine what `CHAR-013` owns, which is a scope decision for the human project owner, not an agent action. **This is the only genuinely open item in this list.**
+3. **Mystic downstream ownership** (§C) — **`P2 — ADOPTED` 2026-08-29**, as pointer notes on the existing `ADV-001`, `ADV-002`, `CHAR-008` and `CHAR-009` rows in `INVENTORY.md`. **Not an open question.** Listed here only to record the distinction that matters: **an adopted pointer says where a mechanic belongs; it does not specify the mechanic and does not expand `CHAR-002`.** Each remains unresearched until its owning card is written.
+
+**Do not conflate items 2 and 3.** P1 is deferred because it would move a responsibility; P2 was adopted because it only annotates existing entries. No new Rule ID was created by either.
 
 **Explicitly closed, recorded so they are not re-raised:** whether "Other Requirements" is exhaustive (**no** for Druid, **yes** for Mystic — both entries read as complete units); whether eligibility depends on `CHAR-007`-supplied adjustment values (**no** — every requirement is a raw-score threshold, so no `CHAR-002 → CHAR-007` dependency exists); whether any class has an ability *maximum* (none located).
 
@@ -310,4 +328,10 @@ Scores are given in RC's order: **Str, Int, Wis, Dex, Con, Cha**.
 - Date: `<pending>`
 - Notes: `<pending>`
 
-**Approving this card ratifies §1–§5. It does not adopt the §B/§C ownership proposals and does not resolve V1.**
+**Approving this card ratifies the `CHAR-002` mechanical contract in §1–§5** (which includes §4.1).
+
+**V1 is already resolved** by Simulator Ruling **SR-3**, recorded on `CHAR-001`. This card **consumes the consequences of SR-3 and SR-5**; it does not own them and does not independently re-ratify them — approving `CHAR-001` is what ratifies those rulings.
+
+**Approval does not adopt the deferred Druid-transition ownership proposal in §B** (`P1 — DEFER FOR HUMAN GOVERNANCE`).
+
+**§C's Mystic pointers are already adopted** in `INVENTORY.md` (`P2`) and are **not** part of this card's scope — they record where downstream Mystic mechanics belong, nothing more.
