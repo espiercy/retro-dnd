@@ -14,14 +14,15 @@ General Ability Score Mechanical Effects
 
 > Stage-B draft, 2026-08-29. Stage-A evidence (`docs/rules/evidence/CHAR-007-evidence.md`) passed independent primary-source completeness review and human evidence review on 2026-08-29. **Not approved. Not implementable.**
 >
-> **Stage-B correction and human-ruling impact (2026-08-29): NONE.** Neither the research correction nor human rulings SR-1 through SR-4 touches this card:
+> **Stage-B correction and human-ruling impact (2026-08-29): NONE.** Neither the research correction nor human rulings SR-1 through SR-5 touches this card:
 >
 > - **SR-1** (Elf `+2`) governs a *fixed* gain to which **Constitution expressly does not apply**; the p. 9 adjustment value this card owns was never in dispute.
 > - **SR-2** (Mystic may raise Dexterity) is a `CHAR-001` trade rule. This card supplies **no** trade rule and **no** prime-requisite logic.
 > - **SR-3** (Chapter 13 switch) relocates *which scores* reach eligibility; this card maps a score to an adjustment and is indifferent to how the score arose.
 > - **SR-4** (discard criterion) operates on raw scores before any adjustment is read.
+> - **SR-5** (class eligibility invariant) is a `CHAR-001` prime-requisite-trade constraint. It reads class-minimum **raw scores** from `CHAR-002` and does not alter any adjustment value or consuming procedure owned by `CHAR-007`.
 >
-> No mechanical content changed. **Candidate for approval.**
+> **NONE of the human rulings changes `CHAR-007` mechanics.** No mechanical content changed. **Candidate for approval.**
 
 ## Rules Domain
 
@@ -45,7 +46,11 @@ General Ability Score Mechanical Effects
 | p. 147 | Ch. 13, "Open Doors" Ability / Doors | Boundary: the Open Doors *procedure* |
 | p. 266 | Ch. 19, "Ability Scores and Saving Throws" | Boundary: the optional extended save mapping |
 
-**Verification standard.** Pages 9, 10, 102, 147, 148 and 266 were read as page images.
+**Verification standard.** **Pages 9, 10, 102, 147 and 266 were read as page images** — every object this card specifies, plus the two pages that closed its open questions and the Chapter 19 boundary text.
+
+**p. 143 (Chapter 13 "Ability Checks") was NOT visually verified, deliberately.** It was **read in full in context as text** and recorded as `EXCLUDED WITH REASON` from visual verification: short prose with **no structured object, no table and no columns**, so it fails every `RULE_CARD_RESEARCH_PROTOCOL.md` §9.2 trigger; risk assessed **low** (`CLUSTER-002-completeness-audit.md` §5). It is cited above only as a **boundary marker** (§4.4) — this card specifies nothing from it.
+
+*(Reconciled 2026-08-29 against the committed evidence record. An earlier draft listed p. 148; that page was visually inspected for **`CHAR-001`'s** residual Chapter 13 question, not for this responsibility, and has been removed from this card's list.)*
 
 > **Citation correction carried in.** Stage A cited the Abilities and Adjustments Table at p. 9. **It is on p. 10**; p. 9 carries the Bonuses and Penalties table and the Strength write-up. The table's *content* was confirmed correct in every row — only the page reference was wrong, and RC's own cross-reference at p. 130 Step 3 ("the Bonuses and Penalties for Ability Scores table in Chapter 1 (page 9)") independently confirms the split.
 
@@ -193,7 +198,7 @@ RC p. 143's general ability check — roll 1d20 against the **raw ability score*
 2. **Different audience and purpose.** This card's effects are player-facing, enumerated, closed, and recorded at creation. The check is DM-facing and explicitly open-ended — a catch-all for actions RC does not otherwise cover.
 3. **Different location and grouping.** RC places the check with DM adjudication procedures (aging, alignment changes, doors, listening, thief abilities), and never cross-references the two.
 
-**No new Rule ID is assigned by this card.** Creating one is a scope/governance decision for the human project owner (see Inventory Recommendations). The check's existing relationship to `CHAR-012` (General Skills shares the resolution mechanic) should inform that decision.
+**The Chapter 13 generic Ability Check is confirmed outside `CHAR-007`'s scope. Assigning it a new Rule ID remains deferred for human governance under Stage-B proposal `P3` — `DEFER FOR HUMAN GOVERNANCE`** (`docs/rules/clusters/CLUSTER-002-stage-b-synthesis.md`, "Inventory / Dependency Findings"). **No Rule ID is assigned by this card**, and this card does not resolve P3. The check's existing relationship to `CHAR-012` (General Skills shares the resolution mechanic) should inform that decision when it is made.
 
 ### 5. Out of scope
 
@@ -221,7 +226,7 @@ Armor Class as a system (`COMBAT-002`); attack and damage resolution (`COMBAT-00
 | A12 | 17 | +2 |
 | A13 | 18 | +3 |
 | A14 | Same score, queried for each of the six abilities | **Identical** adjustment — one shared table |
-| A15 | Score 19 or 1 | **Unspecified** — must not extrapolate |
+| A15 | Score **1** or **19** supplied to this card's adjustment lookup | **CONTRACT VIOLATION / REJECTED INPUT** — outside the declared 2–18 domain; **no adjustment value may be extrapolated**. This validates the card's declared input domain; it is **not** a ruling about what the game does to such a score |
 
 ### Intelligence and Languages
 
@@ -301,10 +306,18 @@ Armor Class as a system (`COMBAT-002`); attack and damage resolution (`COMBAT-00
 | Any ability effect on initiative | **Closed** — p. 102 inspected; optional individual initiative only; `COMBAT-006`; declined for V1 (§4.2) |
 | `CHAR-007` / `COMBAT-004` Wisdom overlap | **Closed** — value and fact here, procedure and Ch. 19 extension to `COMBAT-004` (§4.3) |
 
-**Carried forward as a governance decision, not a rules question:** whether the Chapter 13 ability check receives its own Rule ID. §4.4 establishes it is not `CHAR-007`'s; **assigning an ID is for the human project owner** (see the Stage-B report's Inventory Recommendations).
+**Carried forward as a governance decision, not a rules question:** whether the Chapter 13 generic Ability Check receives its own Rule ID. §4.4 establishes it is **not** `CHAR-007`'s. Assigning an ID is **deferred for human governance** as Stage-B proposal **`P3` — `DEFER FOR HUMAN GOVERNANCE`** (`docs/rules/clusters/CLUSTER-002-stage-b-synthesis.md`, "Inventory / Dependency Findings"). **This card neither resolves P3 nor invents an ID.**
 
 ## Approval
 
 - Approved by: `<pending>`
 - Date: `<pending>`
 - Notes: `<pending>`
+
+**Mechanically complete and ready for human review.**
+
+**Approving this card ratifies the `CHAR-007` mechanical contract in §1–§5 and its responsibility boundaries** — the three tables, the per-ability effect assignment, and the value-versus-procedure partition.
+
+**It ratifies no Simulator Ruling, adopts no Human-Approved Variant, and does not resolve or assign a Rule ID for the deferred Chapter 13 Ability Check responsibility (`P3`).**
+
+**It approves only `CHAR-007`'s values and boundaries.** It does **not** adopt, specify, or approve any downstream procedure owned by `COMBAT-002`, `COMBAT-003`, `COMBAT-004`, `COMBAT-006`, `CHAR-003`, `CHAR-006`, `CHAR-008`, `CHAR-012`, `ENC-003` or `EXP-005` — each of those remains unresearched and unapproved on its own card.
