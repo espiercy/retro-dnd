@@ -35,13 +35,15 @@ Do not conflate these distinct gates (`ARCHITECTURE.md` §15.1/§15.2,
 | Alternate-source governance | **`DEC-0011` `Approved` 2026-09-04**; `RULE_CARD_RESEARCH_PROTOCOL.md` §15.1 **IN FORCE** |
 | **Pre-Code contract blocker — ability-score ceiling** | **RESOLVED — 2026-09-05.** The approved `CHAR-001` §4 trade admitted a target score of **19**, which approved `CHAR-007` `A15` rejects as outside its declared 2–18 domain. Closed by a human-approved synthesis correction adding **`R11` (prime-requisite ceiling)** and cases **`C1`–`C5`** to `CHAR-001`. **`Necessary Mechanical Consequence`, not a Simulator Ruling** — SR-2…SR-5 unchanged, no SR-6, R10 untouched. Root cause was **Stage-B synthesis/composition**, *not* source completeness; `DEC-0010` and `DEC-0011` were **not** reopened |
 | **Approved deterministic contract cases** | **189** — `CHAR-001` **69** (was 64; +C1–C5), `CHAR-002` **30**, `CHAR-003` **42**, `CHAR-007` **48**. Placing a case in a future integration test module is **placement, not an additional contract case** |
-| **Implementation-plan artifact (`ARCHITECTURE.md` §15.2 step 4)** | **OUTSTANDING.** `docs/technical/CLUSTER-002_IMPLEMENTATION_PLAN.md` does not exist and must be drafted and **human-approved** before step 4 may pass, following `CLUSTER-001` precedent. **Step 4 is NOT marked passed** |
+| **Implementation-plan artifact (`ARCHITECTURE.md` §15.2 step 4)** | **DRAFTED 2026-09-05 — `AWAITING HUMAN APPROVAL`.** [`docs/technical/CLUSTER-002_IMPLEMENTATION_PLAN.md`](../../technical/CLUSTER-002_IMPLEMENTATION_PLAN.md) now exists as a draft and must be **human-approved** before step 4 may pass, following `CLUSTER-001` precedent. **Step 4 is NOT marked passed, and the draft does not authorize implementation** |
 | Implementation-readiness approval | **Not granted** |
 | **Implementation authorization** | **NOT GRANTED — `CLUSTER-002` implementation is NOT AUTHORIZED.** Rule Card approval is **not** implicit implementation permission; the next phase requires separate explicit human authorization (`ARCHITECTURE.md` §15.2, §16) |
 
 ### Requirements carried into `CLUSTER-002_IMPLEMENTATION_PLAN.md` (recorded 2026-09-05)
 
 **These are planning requirements, not authorization.** They are recorded here because the ceiling blocker demonstrated that per-card review does not catch defects that live *between* cards.
+
+> **Carried into the draft plan (2026-09-05).** All three are addressed by [`CLUSTER-002_IMPLEMENTATION_PLAN.md`](../../technical/CLUSTER-002_IMPLEMENTATION_PLAN.md) — requirement 1 at its §10 (Rule-Card Composition Check), requirement 2 at its §12 (the 189-case ownership ledger), requirement 3 at its §7.8/§11 (a separate `high_level_ability_score_generation` module and test module). **The plan is a draft awaiting human approval; recording this does not approve it.**
 
 **1. Rule-Card composition check — mandatory for every dependency between approved cards.** For each dependency the plan must explicitly:
 
