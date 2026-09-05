@@ -33,8 +33,36 @@ Do not conflate these distinct gates (`ARCHITECTURE.md` §15.1/§15.2,
 | **Human Rule Card Review** | **PASSED — 2026-09-04.** All four contracts reviewed in full, exact text, and corrected across four review rounds before approval |
 | Rule Card approval (`CHAR-001`, `CHAR-002`, `CHAR-003`, `CHAR-007`) | **GRANTED — 2026-09-04. All four `APPROVED`** by the human project owner. `CHAR-003`'s approval ratified **SR-1**; `CHAR-001`'s ratified **SR-2, SR-3, SR-4 and SR-5**. `CHAR-002` and `CHAR-007` own **no** Simulator Ruling |
 | Alternate-source governance | **`DEC-0011` `Approved` 2026-09-04**; `RULE_CARD_RESEARCH_PROTOCOL.md` §15.1 **IN FORCE** |
+| **Pre-Code contract blocker — ability-score ceiling** | **RESOLVED — 2026-09-05.** The approved `CHAR-001` §4 trade admitted a target score of **19**, which approved `CHAR-007` `A15` rejects as outside its declared 2–18 domain. Closed by a human-approved synthesis correction adding **`R11` (prime-requisite ceiling)** and cases **`C1`–`C5`** to `CHAR-001`. **`Necessary Mechanical Consequence`, not a Simulator Ruling** — SR-2…SR-5 unchanged, no SR-6, R10 untouched. Root cause was **Stage-B synthesis/composition**, *not* source completeness; `DEC-0010` and `DEC-0011` were **not** reopened |
+| **Approved deterministic contract cases** | **189** — `CHAR-001` **69** (was 64; +C1–C5), `CHAR-002` **30**, `CHAR-003` **42**, `CHAR-007` **48**. Placing a case in a future integration test module is **placement, not an additional contract case** |
+| **Implementation-plan artifact (`ARCHITECTURE.md` §15.2 step 4)** | **OUTSTANDING.** `docs/technical/CLUSTER-002_IMPLEMENTATION_PLAN.md` does not exist and must be drafted and **human-approved** before step 4 may pass, following `CLUSTER-001` precedent. **Step 4 is NOT marked passed** |
 | Implementation-readiness approval | **Not granted** |
 | **Implementation authorization** | **NOT GRANTED — `CLUSTER-002` implementation is NOT AUTHORIZED.** Rule Card approval is **not** implicit implementation permission; the next phase requires separate explicit human authorization (`ARCHITECTURE.md` §15.2, §16) |
+
+### Requirements carried into `CLUSTER-002_IMPLEMENTATION_PLAN.md` (recorded 2026-09-05)
+
+**These are planning requirements, not authorization.** They are recorded here because the ceiling blocker demonstrated that per-card review does not catch defects that live *between* cards.
+
+**1. Rule-Card composition check — mandatory for every dependency between approved cards.** For each dependency the plan must explicitly:
+
+```text
+1. enumerate the upstream card's produced value/result domain;
+2. compare it with the downstream card's accepted input domain;
+3. identify shared invariants and boundary conditions;
+4. reconcile contradictory or unreachable deterministic cases.
+```
+
+At minimum the plan must perform this check for:
+
+| Dependency | What must be reconciled |
+|---|---|
+| **`CHAR-001` output domain vs `CHAR-007` accepted score domain** | The exact defect this requirement exists for. `CHAR-001` produces 3–18 (R11); `CHAR-007` accepts 2–18 and rejects 1/19 (`A15`) |
+| **`CHAR-001` / `CHAR-002` class-minimum interaction** | R10 (SR-5) consumes `CHAR-002`'s raw-score minimums; eligibility is established before the trade and must hold after it |
+| **`CHAR-003` Constitution-adjustment dependency on `CHAR-007`** | `CHAR-003` must obtain the Constitution adjustment from `CHAR-007`, never recompute it (`H36`) |
+
+**2. Test-module placement — exactly one canonical owner per approved case.** All **189** approved cases must map 1:1. Cases whose *enforcement* crosses card boundaries — for example `E23`, `E29`, `E30`, `H36` (`CHAR-003`), `S1`, `W7`, `O1`–`O4`, `A15` — may be **placed** in an integration module; **placement never increases the contract-case count.** Any additional integration tests written purely for branch coverage are implementation tests and are counted separately.
+
+**3. `CHAR-001` H1–H6 need their own module.** `CHAR-001` uses `H1`–`H6` for Chapter 10 above-1st-level generation while `CHAR-003` uses `H1`–`H42` for hit points — a live prefix collision. The plan should give the Chapter 10 cases a separate future module, e.g. `test_high_level_ability_score_generation.py`, so the two `H` runs are never confused.
 
 ### Human Evidence Review clearance history (2026-08-23 → 2026-08-29)
 
