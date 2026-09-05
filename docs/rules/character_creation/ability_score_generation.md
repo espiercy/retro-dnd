@@ -341,7 +341,7 @@ Method Two is **non-random**. Its existence is recorded because a Stage-A negati
 
 **V1 default:** the standard §1 procedure. §5 is specified so it is not lost, and is **not** wired to any V1 flow by this card.
 
-**Implementation scope (human direction, 2026-09-05).** §5 **is** within `CLUSTER-002` implementation scope. It is to be implemented as **pure rules functions** and to remain **unwired** from the ordinary 1st-level V1 creation flow. *"Not V1-wired" does not mean "not implemented"*: **H1–H5 behaviour is implemented, and H6's unreachability is preserved** as the guard that §1 remains the only 1st-level generation path. **No character-creation engine, builder, or orchestration object is authorized** by this direction.
+**Implementation scope (human direction, 2026-09-05).** §5 **is** within `CLUSTER-002` implementation scope. It is to be implemented as **pure rules functions** and to remain **unwired** from the ordinary 1st-level V1 creation flow. *"Not V1-wired" does not mean "not implemented"*: **H1–H5 behaviour must be implemented, and H6's unreachability must be preserved** as the guard that §1 remains the only 1st-level generation path. *(Stated as a prospective requirement: no `CLUSTER-002` implementation exists yet.)* **No character-creation engine, builder, or orchestration object is authorized** by this direction.
 
 Note that **H4** — rejecting an allocation of 19 *"the 3–18 range still applies"* — has been in this card since its first Stage-B draft. It is the same standing limitation that §4 **R11** now applies to the trade; before R11, this card answered the same question two different ways in two different sections.
 
