@@ -43,10 +43,22 @@ substituting for) the six per-slice records.
 | **C** | `ISSUE-010` | `CHAR-003` hit points — one level-aware operation. Human-review correction `ee0aa7a` added `bool`/non-`int` level rejection |
 | **D** | `ISSUE-011` | `CHAR-001` §1 generation, §6.1 discard, §6.2 switch, §4 trade under R1–R11 |
 | **E** | `ISSUE-012` | `CHAR-001` §5 Chapter 10 methods — implemented, pure, unwired |
-| **F** | `ISSUE-013` | Cross-card composition, calling-contract evidence, producer/consumer regression. **No production code** |
+| **F** | `ISSUE-013` | Cross-card composition, calling-contract evidence, producer/consumer regression. **No production code**. Final-review correction `O2` (below) followed |
 
 Plan **revision 4** (`45e3e76`) reclassified four `CHAR-001` cases before
 Slice D, as a separate documentation commit.
+
+**Final-review correction, 2026-09-12 — `CHAR-001` `O2` deterministic
+fixture.** Slice F found during final integration that O2's approved
+fixture (*"switch establishes Int 9 … then trade raises Int further"*) was
+**internally impossible**: the Chapter 13 switch moves the **highest**
+score, so Intelligence landing on exactly 9 requires 9 to be the maximum,
+while a subsequent trade requires a donor of at least 11 (R6). Slice F
+recorded the contradiction rather than reinterpreting an approved case; the
+human project owner then authorized a realizable replacement fixture
+(Str 16 / Int 8 → switch → Int 16 → Elf eligible → trade Wis 13 → 11,
+Int 16 → 17). **No mechanic changed, no case ID changed, and no total
+changed** — see `ISSUE-013` §5.2 and the Rule Card's Amendment history.
 
 ## 5. Rule Cards Implemented
 

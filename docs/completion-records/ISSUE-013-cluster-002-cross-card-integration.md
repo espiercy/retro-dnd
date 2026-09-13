@@ -69,17 +69,58 @@ No Rule Card case, mechanic, test count or implementation changed.
 | Case | Composition | Result |
 |---|---|---|
 | **E29** | A Mystic qualified on Wis 13 / Dex 13 (`CHAR-002` says `ELIGIBLE`), then `CHAR-001`'s trade lowers Wisdom | **`ClassMinimumViolationError` (R10)**. `CHAR-002`'s result is an invariant the trade must preserve; the enforcement lives in `CHAR-001`, and this case makes the requirement visible from the card that owns the minimum |
-| **E30** | **Exhaustive**: for each of the eight selectable classes, every donor × target pair (8 × 36 = **288 attempts**), every trade `CHAR-001` permits is re-checked by `CHAR-002` | Every permitted trade leaves the class still `ELIGIBLE`. The Druid is excluded because `CHAR-002` makes it unselectable at creation, so *"any selected class"* cannot include it |
+| **E30** | Exhaustive **across the eight selectable classes and all 36 donor/target ability pairings exercised by this integration matrix** — 8 × 36 = **288 attempts** — re-checking with `CHAR-002` every trade `CHAR-001` permits | Every permitted trade leaves the class still `ELIGIBLE`. The Druid is excluded because `CHAR-002` makes it unselectable at creation, so *"any selected class"* cannot include it. **This matrix does not exhaust all possible 3–18 score states, and no such claim is made** — see §5.1 |
 | **O1** | Constitution 8; Fighter chosen; trade raises Str 12 → 13; Dwarf eligibility re-tested | Still `NOT_ELIGIBLE_ABILITY_REQUIREMENT`. **The trade establishes nothing** — contrast W1, where the *switch* can |
-| **O2** | Int 8 (Elf ineligible) → authorized switch establishes the Intelligence minimum → Elf `ELIGIBLE` → trade raises Intelligence further | Legal. The switch established eligibility; the trade then operated as an ordinary post-eligibility adjustment, and eligibility still holds |
+| **O2** | Elf candidate Str 16 / Int 8 / Wis 13 / Dex 12 / Con 12 / Cha 12 → authorized switch moves **Str 16 into Intelligence** (Str 8, Int 16) → Elf `ELIGIBLE` → class chosen → trade lowers **Wis 13 → 11** and raises **Int 16 → 17** | Legal. The switch **established** eligibility; the trade then operated, only after eligibility and class choice, as an ordinary prime-requisite adjustment. **Fixture corrected 2026-09-12 — see §5.2** |
 | **O4** | Generation yields a discard-qualifying array → discarded → generation restarts → the **replacement** proceeds to eligibility and trade | The discarded array reaches no later step. Only the replacement is carried forward |
 
-**O2, recorded precisely.** The card writes *"switch establishes Int 9"*.
-The switch must move the **highest** score, so a construction in which
-Intelligence lands on exactly 9 would require the maximum to be 9 — leaving
-no donor at 11 or above for the subsequent trade. *"Int 9"* therefore
-denotes the Elf's **Intelligence-9 minimum**, which the switch establishes.
-This is stated in the test rather than silently resolved.
+### 5.1 What E30's matrix does and does not establish
+
+The matrix is exhaustive **across the eight selectable classes and all 36
+donor/target ability pairings it exercises** — 288 attempts from eight
+starting arrays. **It does not exhaust all possible 3–18 `AbilityScores`
+states**, and this record makes no such claim.
+
+The approved E30 proposition — *"any selected class, after any legal trade:
+every creation minimum of that selected class remains satisfied"* — rests
+on **R10's generic implementation**, which reads
+`creation_minimums(chosen_class)` for whatever class it is given and
+contains no class-name literal at all (asserted by `V7`). The matrix,
+`E29` and `V7` are its supporting evidence, not a proof by enumeration of
+the state space.
+
+### 5.2 O2's fixture was impossible as approved, and is corrected
+
+**Slice F found, during final integration, that O2's approved fixture could
+not be realized** — and, not being authorized to reinterpret an approved
+deterministic case, recorded the contradiction rather than resolving it.
+The human project owner subsequently authorized the correction (2026-09-12).
+
+The withdrawn fixture read *"switch establishes Int 9, class chosen, then
+trade raises Int further."* It is internally impossible under this card's
+own mechanics:
+
+```text
+the Chapter 13 switch moves the HIGHEST score rolled
+    -> establishing Intelligence at exactly 9 requires 9 to be the maximum
+
+a 2-for-1 trade requires a donor of at least 11
+    (R6: donor - 2 must remain >= 9)
+
+if such a donor existed, 9 was not the maximum
+```
+
+The replacement fixture (§5's O2 row) demonstrates the **same proposition**
+— an authorized switch **can establish** eligibility, and a post-eligibility
+trade **then operates normally** — with realizable values. The exact-value
+claim that the switch can land a score on exactly 9 is **removed**, because
+O2 never existed to prove it.
+
+**No mechanic changed.** SR-3, the switch mechanics, the Elf's
+Intelligence-9 creation minimum, trade ordering, R1–R11, `W1` and
+`CHAR-002` `E25` are untouched; `O2` keeps its case ID; `CHAR-001` remains
+69 cases and `CLUSTER-002` 189. This is recorded on the Rule Card's
+Amendment history as a **test-fixture correction, not a rules change**.
 
 **No rule logic is duplicated in any test.** Each composes the real public
 APIs; each would fail if `CHAR-001` permitted a trade violating a selected

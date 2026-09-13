@@ -111,8 +111,12 @@ def test_e29_the_trade_may_not_lower_a_mystic_below_its_wisdom_minimum() -> None
 
 
 def test_e30_every_creation_minimum_survives_every_legal_trade() -> None:
-    # Exhaustive over every selectable class and every donor/target pair:
-    # whatever CHAR-001 permits, CHAR-002 still finds eligible afterwards.
+    # Exhaustive across the eight selectable classes and all 36
+    # donor/target ability pairings exercised by this matrix -- NOT across
+    # all possible 3-18 score states. Whatever CHAR-001 permits from these
+    # starting arrays, CHAR-002 still finds eligible afterwards. The
+    # approved proposition rests on R10's generic implementation; this
+    # matrix, E29 and V7 are its supporting evidence.
     attempted = 0
     permitted = 0
     for cls, scores in _SELECTABLE.items():
@@ -157,27 +161,31 @@ def test_o1_the_trade_cannot_establish_eligibility_for_any_class() -> None:
 
 
 def test_o2_a_switch_establishes_eligibility_then_the_trade_adjusts() -> None:
-    # As-rolled, Intelligence 8 leaves the Elf out. ("Int 9" in the card
-    # denotes the Elf's Intelligence-9 minimum: the switch must move the
-    # *highest* score, so it establishes the minimum rather than landing
-    # exactly on it.)
-    as_rolled = _scores(strength=12, intelligence=8, wisdom=15)
+    # Fixture corrected 2026-09-12: the prior "switch establishes Int 9"
+    # setup was impossible, because the switch moves the HIGHEST score
+    # while a later trade needs a donor of at least 11.
+    as_rolled = _scores(
+        strength=16, intelligence=8, wisdom=13, dexterity=12,
+        constitution=12, charisma=12,
+    )
     assert (
         eligibility(as_rolled, CharacterClass.ELF)
         is Eligibility.NOT_ELIGIBLE_ABILITY_REQUIREMENT
     )
-    # The authorized switch establishes the minimum ...
+    # (1) The authorized switch moves Str 16 into Intelligence.
     switched = apply_highest_score_switch(
-        as_rolled, CharacterClass.ELF, Ability.WISDOM, Ability.INTELLIGENCE
+        as_rolled, CharacterClass.ELF, Ability.STRENGTH, Ability.INTELLIGENCE
     )
-    assert switched.intelligence == 15
+    assert (switched.strength, switched.intelligence) == (8, 16)
+    # (2) The Elf is now eligible, because Intelligence >= 9 -- the switch
+    # ESTABLISHED the creation minimum. (3) The Elf class is chosen.
     assert eligibility(switched, CharacterClass.ELF) is Eligibility.ELIGIBLE
-    # ... the class is chosen, and the trade then operates as an ordinary
-    # post-eligibility adjustment, raising Intelligence further.
+    # (4) Only then does the trade run, as an ordinary post-eligibility
+    # prime-requisite adjustment: Wis 13 -> 11, Int 16 -> 17.
     adjusted = apply_trade(
-        switched, CharacterClass.ELF, Ability.STRENGTH, Ability.INTELLIGENCE
+        switched, CharacterClass.ELF, Ability.WISDOM, Ability.INTELLIGENCE
     )
-    assert (adjusted.intelligence, adjusted.strength) == (16, 10)
+    assert (adjusted.wisdom, adjusted.intelligence) == (11, 17)
     assert eligibility(adjusted, CharacterClass.ELF) is Eligibility.ELIGIBLE
 
 
