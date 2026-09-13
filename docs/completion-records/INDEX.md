@@ -11,3 +11,4 @@ Durable per-issue implementation records for the Retro D&D Simulator project (`D
 | [ISSUE-005](ISSUE-005-exp-001-dungeon-wandering-monster-check.md) | EXP-001 Dungeon Wandering-Monster Check | Complete |
 | [ISSUE-006](ISSUE-006-cluster-001-cross-card-integration.md) | CLUSTER-001 Cross-Card Integration | Complete |
 | [ISSUE-007](ISSUE-007-cluster-001-dungeon-exploration-time.md) | CLUSTER-001 Dungeon Exploration Time | Complete |
+| [ISSUE-008](ISSUE-008-cluster-002-shared-primitives-and-char-007.md) | CLUSTER-002 Slice A — Shared Primitives and CHAR-007 | Complete |
