@@ -7,11 +7,11 @@ the approved error surface.
 
 This module defines only the errors whose approved rejection paths are
 already executable. Slice A added the base and the ability-score domain
-error; Slice C adds the two CHAR-003 hit-point errors. The plan identifies
-five further subclasses for Slices D-E (illegal trade, class-minimum
-violation, prime-requisite ceiling, illegal switch, point allocation);
-those are deliberately **not** pre-stubbed. Each later slice extends this
-module when its own approved rejection paths become executable.
+error; Slice C added the two CHAR-003 hit-point errors; Slice D adds the
+four CHAR-001 generation errors. The plan's remaining subclass —
+``PointAllocationError``, for Slice E's Chapter 10 point allocation — is
+deliberately **not** pre-stubbed. Each later slice extends this module when
+its own approved rejection paths become executable.
 """
 
 from __future__ import annotations
@@ -82,4 +82,72 @@ class HitDieNotApplicableError(CharacterCreationError):
     Distinct from :class:`HitPointLevelError`, and the distinction is not
     cosmetic: Druid level 1 is *inside* the Druid's 1-36 level range, so
     reporting a level-range violation for it would assert something false.
+    """
+
+
+class IllegalTradeError(CharacterCreationError):
+    """A CHAR-001 2-for-1 prime-requisite trade violates an ordinary rule.
+
+    Covers the trade rules whose violations no approved case needs to
+    distinguish **by type**: R1 (the target must be a prime requisite of
+    the chosen class), R3 (Constitution and Charisma may not be
+    exchanged), R4 (Dexterity may not be lowered), R5 (only the target is
+    raised) and R6/R7 (the donor's floor of 9).
+
+    **Every message names the violated rule**, so a test discriminates
+    with ``pytest.raises(IllegalTradeError, match="R3")`` — the idiom
+    src/rules/exploration already uses — without one exception type per
+    case.
+
+    R10 and R11 deliberately do **not** live here: see
+    :class:`ClassMinimumViolationError` and
+    :class:`PrimeRequisiteCeilingError`.
+    """
+
+
+class ClassMinimumViolationError(CharacterCreationError):
+    """A trade would leave the selected class's creation minimum unmet.
+
+    Rule **R10**, from Simulator Ruling **SR-5**. Kept distinct from
+    :class:`IllegalTradeError` because approved case V2 turns on exactly
+    that distinction: *"R6's floor of 9 would have permitted it; R10 is
+    what forbids it."* A shared type would let a wrong-rule rejection pass
+    that test.
+
+    R10 **preserves** eligibility already established by CHAR-002; it
+    never lets a trade *establish* it (CHAR-001 §4, CHAR-002 §4.1).
+    """
+
+
+class PrimeRequisiteCeilingError(CharacterCreationError):
+    """A trade would raise its target ability above 18.
+
+    Rule **R11**, a Necessary Mechanical Consequence of RC's standing
+    range limitation for ability scores (RC p. 6; p. 130 "the range
+    limitation of 3 to 18 for ability scores still applies"). **Not
+    RC-explicit at p. 7**, which states no target bound, and **not a
+    Simulator Ruling** — see CHAR-001 §4.
+
+    Kept distinct because approved case C2 turns on it: *"R1, R6 and R7
+    all permit this trade; R11 is the only rule that forbids it."* It is
+    also why the rule must be evaluated **before** any result
+    ``AbilityScores`` is constructed — the value object's own 3-18 guard
+    is defence in depth and must never be what C2 or C4 observes.
+    """
+
+
+class IllegalSwitchError(CharacterCreationError):
+    """An authorized Chapter 13 highest-score switch is not performable.
+
+    Rule-card §6.2 and §6.2.1. Three causes, distinguished by message:
+    the named source does not hold the maximum score; the named
+    destination is not a prime requisite of the requested class; or
+    source and destination are the same ability, which is not the
+    "swap of two scores" §6.2 specifies.
+
+    Separate from the trade errors: a different operation, a different
+    moment in the sequence, and different causes. Nothing here decides
+    **whether** a switch is authorized — that is the DM's or the
+    simulation policy's, and this error is only reached once a caller has
+    decided to perform one.
     """

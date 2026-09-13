@@ -14,3 +14,4 @@ Durable per-issue implementation records for the Retro D&D Simulator project (`D
 | [ISSUE-008](ISSUE-008-cluster-002-shared-primitives-and-char-007.md) | CLUSTER-002 Slice A — Shared Primitives and CHAR-007 | Complete |
 | [ISSUE-009](ISSUE-009-char-002-race-and-class-eligibility.md) | CHAR-002 Race & Class Eligibility (CLUSTER-002 Slice B) | Complete |
 | [ISSUE-010](ISSUE-010-char-003-hit-points-and-hit-dice.md) | CHAR-003 Hit Points & Hit Dice (CLUSTER-002 Slice C) | Complete |
+| [ISSUE-011](ISSUE-011-char-001-ability-score-generation.md) | CHAR-001 Ability Score Generation §1/§4/§6 (CLUSTER-002 Slice D) | Complete |
