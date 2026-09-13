@@ -10,6 +10,20 @@ DRAFT — AWAITING HUMAN APPROVAL
 
 **`ARCHITECTURE.md` §15.2 step 4 remains outstanding until the human project owner approves this plan.**
 
+> **Revision 2 — 2026-09-12, human-review corrections.** The architecture of revision 1 was accepted in principle; seven implementation-shape defects were corrected. **No approved mechanic was changed, no rules question reopened, and no new research, Rule Card, Simulator Ruling or decision record was created.**
+>
+> | # | Defect in revision 1 | Correction |
+> |---|---|---|
+> | 1 | `CHAR-003`'s API received **no level**, so `_NAME_LEVEL` / `_MAXIMUM_LEVEL` could not bind anything | One level-aware `hit_point_gain` that decides rolled/fixed/reject itself (§7.6) |
+> | 2 | `hit_die(cls)` could not honestly answer for the **Druid** | Lookup removed; no `_HIT_DIE[DRUID]` entry; the operation rejects (§7.6.1) |
+> | 3 | `point_allocation_total(rng)` could not express the **zero-RNG** equal-allotment path | Split into `roll_point_allocation_total` + total-agnostic `allocate_points` (§7.8.1) |
+> | 4 | **S1** was to be proved by `# type: ignore` plus "mypy enforces it" — circular | Positive `inspect.signature` / module-AST assertions for S1, H36, H38, H6 (§9.2) |
+> | 5 | Calling-contract cases risked becoming **ceremonial tests** | Documented conformance record with three named artifacts and no pytest function (§12.3) |
+> | 6 | Slice review mixed **"merged"** with a single final merge | One coherent workflow: accepted per slice, one `--no-ff` merge at the end (§15) |
+> | 7 | Error surface was fixed at **"base + five"** as a goal | Re-derived from the actual rejection paths: base + eight, with merges and splits each justified (§9.1) |
+>
+> The 189-case ledger is re-reconciled across four verification kinds (§12.1–§12.2). **Totals are unchanged: 69 / 30 / 42 / 48 = 189.**
+
 This document is a technical implementation plan. It is **not** a Rule Card, **not** a new rules authority, and **not** itself an authorization to implement. It translates the four `APPROVED` Rule Cards that make up `CLUSTER-002`'s boundary into a precise, human-reviewable plan another agent can execute **without making rules decisions**, per `ARCHITECTURE.md` §15.1/§15.2 and `docs/decisions/DEC-0005-v1-rules-inventory-and-clustered-implementation.md`.
 
 **No production code is written by this document or the task that drafted it.** `src/` and `tests/` are untouched. This plan adds no placeholder classes and no test skeletons — it specifies what those must contain.
@@ -306,7 +320,7 @@ Module names mirror the Rule Card filenames, matching the `src/rules/exploration
 | **Owned responsibility** | The cluster's error hierarchy |
 | **Rule Card(s) served** | Shared |
 | **Imports** | None |
-| **Public API** | `CharacterCreationError` base + five subclasses (§9) |
+| **Public API** | `CharacterCreationError` base + eight subclasses (§9.1) |
 | **Non-goals** | No error carries rules text, remediation advice, or a suggested alternative action |
 
 **Justification for a separate module:** five error types are raised from three different modules and asserted from four test modules. This mirrors `src/rng/errors.py`'s `DiceError` hierarchy exactly. If review prefers fewer files, the alternative is defining each error in its raising module — mechanically identical, but it would force `ability_score_generation.py` to import from `ability_score_effects.py` purely for an exception type.
@@ -363,18 +377,43 @@ Eligibility:
 
 | | |
 |---|---|
-| **Owned responsibility** | Hit-point generation: Hit Die by class, rolled gains, the per-roll floor, fixed gains above Name level |
+| **Owned responsibility** | Hit-point generation: the per-level gain, the rolled/fixed transition, the per-roll floor, and the class maximum that bounds it |
 | **Rule Card** | `CHAR-003` (§1–§5) |
 | **Imports** | `ability`, `character_class`, `ability_score_effects`, `errors`, `rng` (`RNG` Protocol) |
-| **Public API** | `roll_first_level_hit_points(rng, cls, constitution) -> int`; `roll_level_gain(rng, cls, constitution) -> int`; `fixed_gain(cls) -> int`; `hit_die(cls) -> int` |
+| **Public API** | **`hit_point_gain(rng: RNG, cls: CharacterClass, level: int, constitution: int) -> int`** — one authoritative, level-aware operation |
+| **Private helpers** | `_rolled_gain(rng, cls, constitution)`, `_fixed_gain_for(cls)` |
 | **Private constants** | `_HIT_DIE`, `_NAME_LEVEL`, `_MAXIMUM_LEVEL`, `_FIXED_GAIN` — **card-local projection, see §5.2** |
 | **Non-goals** | Damage, death, 0-hp consequences, healing, saving throws, level advancement, Attack Ranks, XP, the Chapter 19 variant |
 
-**The `CHAR-003 → CHAR-007` dependency is made structurally real.** The public API accepts a **Constitution score**, not a caller-supplied adjustment, and calls `ability_score_effects.adjustment()` internally:
+**One level-aware operation, because the boundaries must bind behaviour rather than document a caller obligation.** An API of `roll_first_level_hit_points` / `roll_level_gain` / `fixed_gain` receives **no level**, so `_NAME_LEVEL` and `_MAXIMUM_LEVEL` could not constrain anything — the caller would have to reconstruct the rolled-versus-fixed transition and the maximum-level cut-off itself, which is exactly the rules logic `CHAR-003` owns. `hit_point_gain` takes the level and decides:
 
 ```text
-hp = max(1, rng.roll_die(_HIT_DIE[cls]) + ability_score_effects.adjustment(constitution))
+level = the level being gained / entered
+
+level < 1                                        -> reject   HitPointLevelError
+level > _MAXIMUM_LEVEL[cls]                      -> reject   HitPointLevelError   (H14, H20, H24)
+cls is DRUID and level <= _NAME_LEVEL[DRUID]     -> reject   HitDieNotApplicableError (H39)
+1 <= level <= _NAME_LEVEL[cls]                   -> ROLLED gain
+_NAME_LEVEL[cls] < level <= _MAXIMUM_LEVEL[cls]  -> FIXED gain
 ```
+
+**Rolled-HD levels** (`_rolled_gain`):
+
+```text
+max(1, rng.roll_die(_HIT_DIE[cls]) + ability_score_effects.adjustment(constitution))
+```
+
+— one die, the `CHAR-007` Constitution adjustment, and the **per-roll** minimum of 1 (`CHAR-003` §2, §3; H1–H11).
+
+**Post-Name fixed-gain levels** (`_fixed_gain_for`): **no RNG, no Constitution adjustment**, the approved fixed value (`CHAR-003` §4, §5; H16–H22). The `constitution` argument is accepted but deliberately unused on this branch — H16/H17 assert that a `+3` and a `−3` produce the identical fixed gain, which is testable only if the value can be supplied and demonstrably ignored.
+
+**Above the class maximum: rejected.** This is what makes `_MAXIMUM_LEVEL` load-bearing. H14 (Halfling past 8), H20 (Dwarf past 12) and H24 (Elf past 10) are all this rejection.
+
+**Per-level, by design.** `hit_point_gain` returns **one level's gain**. Range cases (H12, H18, H19, H21, H23, H28–H35) are tested by the caller looping over the level range and summing — iteration is a caller concern; the rolled/fixed/reject *decision* is not. **No range or total helper is added**, and no class maximum is exposed.
+
+**This is not an advancement engine.** The operation answers *"what hit points does this class gain on entering this level?"* and nothing else. It exposes no level progression, no XP, no Attack Ranks, and no cap query. **`ADV-002` remains the future authoritative owner of general advancement limits** (§5.2), and the private constants remain a projection it must later replace or reconcile.
+
+**The `CHAR-003 → CHAR-007` dependency is made structurally real.** The public API accepts a **Constitution score**, not a caller-supplied adjustment, and calls `ability_score_effects.adjustment()` internally.
 
 This is the stronger of the two options the drafting direction offered, and it is adopted deliberately:
 
@@ -386,9 +425,26 @@ This is the stronger of the two options the drafting direction offered, and it i
 
 `H36` therefore becomes a **static/API-shape conformance test**: it asserts that no adjustment-injection parameter exists on any `CHAR-003` entry point, so the card cannot produce an authoritative value without `CHAR-007`. `CHAR-003` §3's requirement that *"`con_adjustment` is re-read at each application"* is satisfied naturally, because the Constitution score is supplied per call.
 
-**`fixed_gain` takes no Constitution parameter at all** — `CHAR-003` §5 states Constitution never applies to fixed gains, and the absence of the parameter is how that is enforced (`A40`, `H-series` fixed-gain cases).
+**`_fixed_gain_for` takes no Constitution parameter at all** — `CHAR-003` §5 states Constitution never applies to fixed gains, and the private helper's signature is how that is enforced internally (H16, H17).
 
 **SR-1's Elf `+2`** is one entry in `_FIXED_GAIN`, with §4.1's reversal surface referenced in a comment so any future change is visible.
+
+#### 7.6.1 Druid — no fabricated Hit Die, and no public `hit_die` lookup
+
+`CHAR-003` §1 gives the Druid's Hit Die as *"does not apply — enters at 9th as a cleric"*. **There is no integer a `hit_die(CharacterClass.DRUID)` lookup could honestly return**, so that lookup is **removed from the public API entirely** and `_HIT_DIE` simply has **no `DRUID` entry**. No `d6`, no `0`, no `None`, no sentinel, and no silent treatment of Druid as Cleric.
+
+No approved case requires a standalone die-size lookup: the dice-consumption cases (H12, H13, H15, H26) are asserted through `hit_point_gain` with an exact-length `ScriptedRNG` queue, not by reading a die size. If a later card genuinely needs the lookup, it can be added then, with that card's Druid semantics stated.
+
+**The authoritative operation rejects the request instead:**
+
+| Request | Result | Approved case |
+|---|---|---|
+| `hit_point_gain(rng, DRUID, level=1, con)` | **`HitDieNotApplicableError`** — Druid has no Hit Die | **H39** |
+| `hit_point_gain(rng, DRUID, level=2…9, con)` | **`HitDieNotApplicableError`** — same cause | *necessary consequence, see below* |
+| `hit_point_gain(rng, DRUID, level=10…36, con)` | **`+1`**, fixed, no RNG, no Constitution | **H40** |
+| `hit_point_gain(rng, DRUID, level=37, con)` | **`HitPointLevelError`** — beyond maximum | maximum-level rule |
+
+**The levels 2–9 rejection is a necessary consequence of the card, flagged rather than assumed.** H39 is the only approved case and names level 1. But `CHAR-003` §1 states Druid's Hit Die *"does not apply"* without qualification, so **no Druid rolled level has a defined die** — rejection is the only behaviour the card defines for any of them, and inventing one would be the silent rules decision `AGENTS.md` §3 prohibits. This reads the card; it does not extend it. **No new rule, no Rule ID, and no Simulator Ruling is created**, and **P1 is not reopened** — the cleric→druid transition remains entirely out of scope. A character who will become a druid rolls levels 1–9 **as a Cleric**, which is what H40 says and what the caller requests.
 
 ### 7.7 `ability_score_generation.py` — `CHAR-001` §1, §4, §6
 
@@ -414,12 +470,33 @@ This is the stronger of the two options the drafting direction offered, and it i
 | **Owned responsibility** | The two Chapter 10 above-1st-level generation methods |
 | **Rule Card** | `CHAR-001` §5 (H1–H6) |
 | **Imports** | `ability`, `errors`, `rng` (`RNG` Protocol) |
-| **Public API** | `roll_and_keep_six(rng) -> tuple[int, ...]`; `assign_scores(kept, assignment) -> AbilityScores`; `point_allocation_total(rng) -> int`; `allocate_points(total, allocation) -> AbilityScores` |
+| **Public API** | `roll_and_keep_six(rng: RNG) -> tuple[int, ...]`; `assign_scores(kept, assignment) -> AbilityScores`; **`roll_point_allocation_total(rng: RNG) -> int`**; **`allocate_points(total: int, allocation) -> AbilityScores`** |
 | **Non-goals** | **Must not be imported by `ability_score_generation.py`**, and must not be reachable from any 1st-level flow |
 
 **A separate module is the mechanism that preserves H6.** `ability_score_generation.py` does not import this module, so *"neither Chapter 10 method is reachable — §1 is the only generation path"* is an import-graph fact a test can assert, not a convention. This also resolves the `H` prefix collision at the module level (§11).
 
-`allocate_points` enforces the 3–18 range per ability (**H4**) and `point_allocation_total`'s equal-allotment form enforces the 60–90 bound (**H5**). Both are the same standing range limitation that `R11` applies to the trade.
+#### 7.8.1 The two Second-Method paths, split so neither carries a useless RNG
+
+`CHAR-001` §5 gives the DM **two** ways to obtain the point total: roll `60 + 5d6`, **or** hand out an equal allotment of at least 60 and at most 90. Only the first consumes randomness. A single `point_allocation_total(rng)` with a required `RNG` parameter cannot express the second, and **no optional RNG, mode enum, boolean flag, or fake RNG parameter is introduced to paper over that.** The split is the fix:
+
+```text
+roll_point_allocation_total(rng) -> int        the 60 + 5d6 method ONLY; consumes 5d6   (H3)
+
+allocate_points(total, allocation) -> AbilityScores
+        accepts a total from EITHER source, and does not know which produced it
+```
+
+`allocate_points` is **total-agnostic by construction** — it receives an `int` and validates it against the approved bound. The equal-allotment path therefore needs no function of its own: the DM's chosen total is passed in directly.
+
+**`allocate_points` owns all three validations**, and they are the only place any of them lives:
+
+| Validation | Rule | Approved case |
+|---|---|---|
+| `60 ≤ total ≤ 90` | RC bounds the allotment at 60–90 | **H5** (59 and 91 rejected). Also bounds the rolled form, whose range 65–90 lies inside it |
+| `sum(allocation) == total` | the player distributes *the total* | implied by §5; an explicit validation, recorded here because no approved case names it |
+| each ability in **3–18** | the standing range limitation | **H4** (19 rejected) |
+
+The per-ability 3–18 check is the same standing limitation that `R11` applies to the trade; it is enforced explicitly in `allocate_points` **before** the `AbilityScores` constructor is reached, for the same reason §6.4 requires it of `apply_trade` — the rules check must be what H4 observes, never the constructor's guard.
 
 ### 7.9 Dependency graph
 
@@ -463,13 +540,16 @@ Uses `src/rng` **exactly as it exists today**. Nothing about it is redesigned, a
 |---|---|---|---|
 | `generate_ability_scores` | `rng.roll("3d6")` × 6, in `Ability` order | **18 d6 draws, 6 sequence numbers** | G1–G5 (G5 pins the count and order) |
 | `roll_and_keep_six` (Ch. 10 First Method) | `rng.roll("3d6")` × 8 | **24 d6 draws** | H1, H2 (H2 pins 24, not 18) |
-| `point_allocation_total` (Ch. 10 Second Method, `60 + 5d6` form) | `rng.roll("5d6")` × 1 | **5 d6 draws** | H3 |
-| `point_allocation_total` (equal-allotment form) | — | **zero** | H5 |
-| `roll_first_level_hit_points` | `rng.roll_die(hit_die)` × 1 | **1 draw** | H-series |
-| `roll_level_gain` | `rng.roll_die(hit_die)` × 1 | **1 draw** | H-series |
-| `fixed_gain` | — | **zero** | H-series fixed cases (H12 pins zero dice at levels 10–12) |
+| `roll_point_allocation_total` (Ch. 10 Second Method, **`60 + 5d6` form only**) | `rng.roll("5d6")` × 1 | **5 d6 draws** | H3 |
+| `hit_point_gain`, **rolled-HD branch** (`1 ≤ level ≤ _NAME_LEVEL[cls]`) | `rng.roll_die(_HIT_DIE[cls])` × 1 | **1 draw** | H1–H11, H26 |
+| `hit_point_gain`, **fixed-gain branch** (`level > _NAME_LEVEL[cls]`) | — | **zero — the `RNG` is supplied but never touched** | **H12** (levels 10–12 consume no dice), H15, H16–H22 |
+| `hit_point_gain`, **rejection branches** (level < 1, beyond maximum, Druid rolled level) | — | **zero — raised before any draw** | H14, H20, H24, H39 |
 | Everything in `CHAR-002` and `CHAR-007` | — | **zero, and no `RNG` parameter exists** | E-series, A-series |
-| `discard_may_be_offered`, `apply_trade`, `apply_highest_score_switch`, `assign_scores`, `allocate_points` | — | **zero, and no `RNG` parameter exists** | D, T, V, C, W, M series |
+| `discard_may_be_offered`, `apply_trade`, `apply_highest_score_switch`, `assign_scores`, **`allocate_points`** | — | **zero, and no `RNG` parameter exists** | D, T, V, C, W, M series; **H4, H5** |
+
+**`hit_point_gain` accepts an `RNG` on every call but consumes none on its fixed and rejection branches.** That is the existing repository pattern, not a new one: `WanderingMonsterCadence.advance()` takes an `RNG` and draws nothing on its not-due, skipped and encounter-derived branches. The zero-draw branches are audited exactly as `CLUSTER-001` audited them — a `ScriptedRNG` with an empty or exactly-sized queue fails loudly if a draw occurs.
+
+**`allocate_points` takes no `RNG` at all**, which is what makes the equal-allotment path expressible without an optional, faked, or flagged RNG parameter (§7.8.1).
 
 `_BaseRNG.roll` assigns **one sequence number per multi-die expression** (`RNG_CONTRACT.md` §6), which is why six separate `roll("3d6")` calls satisfy G5's *"18 d6 draws consumed, in ability order"*.
 
@@ -484,20 +564,36 @@ Follows the two existing repository conventions. **No new convention is invented
 1. **Value-object validation → `ValueError` in `__post_init__`** (`turn_credit.py`), with `bool` explicitly excluded from `int` checks.
 2. **Domain errors → a base `Exception` subclass with specific subclasses**, raised eagerly and *"never silently coerced, clamped, or defaulted"* (`src/rng/errors.py`).
 
-### 9.1 The error surface — smallest defensible set
+### 9.1 The error surface — derived from the rejection paths, not from a target count
 
-**One base and five subclasses.** Deliberately **not** one class per deterministic case: **every raise carries the violated rule ID (`R1`, `R3`, `R6`, `R10`, `R11`, …) in its message**, so tests discriminate by rule via `pytest.raises(..., match="R3")` — the repository's existing idiom (`pytest.raises(ValueError, match="positive int")`) — without a class explosion.
+**The hierarchy is not sized in advance.** It is derived by enumerating every runtime rejection path the approved cases require, then merging any two whose meanings genuinely align. The level-aware `CHAR-003` operation (§7.6) adds two paths the earlier draft did not have, so the surface is **one base and eight subclasses**:
 
 ```text
-CharacterCreationError                     (base)
-    AbilityScoreDomainError                a score outside a declared domain
-    IllegalTradeError                      R1, R3, R4, R5, R6, R7 — rule ID in message
-    ClassMinimumViolationError             R10 (SR-5)
-    PrimeRequisiteCeilingError             R11
-    IllegalSwitchError                     source/destination/degenerate — reason in message
+CharacterCreationError(Exception)             base -- mirrors DiceError(Exception)
+
+    AbilityScoreDomainError        an ability score outside a declared domain
+    PointAllocationError           a point TOTAL or allocation sum violation
+    IllegalTradeError              R1, R3, R4, R5, R6, R7 -- rule ID in message
+    ClassMinimumViolationError     R10 (SR-5)
+    PrimeRequisiteCeilingError     R11
+    IllegalSwitchError             source / destination / degenerate -- reason in message
+    HitPointLevelError             level < 1, or beyond the class maximum
+    HitDieNotApplicableError       the class has no Hit Die for a rolled level (Druid)
 ```
 
-**Why `R10` and `R11` get their own types rather than sharing `IllegalTradeError`.** Approved cases turn on distinguishing them from the ordinary constraints. `V2`'s expectation is explicit: *"R6's floor of 9 would have permitted it; R10 is what forbids it."* `C2`'s is explicit: *"R1, R6 and R7 all permit this trade; R11 is the only rule that forbids it."* A shared type would let a wrong-rule rejection pass those tests.
+**Where merging was applied.** `IllegalTradeError` deliberately covers **six** rules (R1, R3, R4, R5, R6, R7) in one type, because no approved case needs to distinguish them from one another by type — **every raise carries the violated rule ID in its message**, so tests discriminate via `pytest.raises(IllegalTradeError, match="R3")`, the repository's existing idiom (`pytest.raises(ValueError, match="positive int")`). `IllegalSwitchError` merges its three causes for the same reason.
+
+**Where merging was rejected, each against a specific approved case:**
+
+| Type | Why it cannot merge |
+|---|---|
+| `ClassMinimumViolationError` | **V2** states *"R6's floor of 9 would have permitted it; R10 is what forbids it."* Folding R10 into `IllegalTradeError` would let a wrong-rule rejection pass V2 |
+| `PrimeRequisiteCeilingError` | **C2** states *"R1, R6 and R7 all permit this trade; R11 is the only rule that forbids it."* Same reasoning |
+| `PointAllocationError` | **H5** rejects a *total* of 59 or 91. A total is not an ability score, so folding it into `AbilityScoreDomainError` would be semantically wrong — and **H4** (an ability of 19) must stay an ability-score violation |
+| `HitDieNotApplicableError` | **H39**'s stated reason is *"no Druid Hit Die"* — a **class** property. Druid level 1 is *inside* Druid's 1–36 level range, so raising `HitPointLevelError` for it would assert something false |
+| `HitPointLevelError` | **H14, H20, H24** reject a level beyond the class maximum, where the class *does* have a Hit Die. The opposite of the above |
+
+**Type versus domain validation.** Structural violations on the value object — a non-`int`, or a `bool` masquerading as one — raise plain `ValueError` in `__post_init__`, following `turn_credit.py`. **Domain** violations (a score outside 3–18) raise `AbilityScoreDomainError`, because this package has a domain hierarchy that `turn_credit.py` predates. Both conventions are preserved, applied to the thing each is actually for.
 
 ### 9.2 Classification of every invalid case
 
@@ -505,29 +601,41 @@ CharacterCreationError                     (base)
 
 | Error | Cases |
 |---|---|
-| `AbilityScoreDomainError` | **A15** (1 or 19 into the `CHAR-007` lookup); **H4** (allocation of 19); **H5** (allotment 59 or 91) |
+| `AbilityScoreDomainError` | **A15** (1 or 19 into the `CHAR-007` lookup); **H4** (an allocated ability of 19) |
+| `PointAllocationError` | **H5** (total 59 or 91); an allocation whose sum ≠ the total |
 | `IllegalTradeError` | **T2, T3, T14** (R6/R7 floor); **T4, T5** (R3 Con/Cha donor); **T6, M3** (R4 Dex donor); **T7, M4** (R1 target not a prime requisite) |
 | `ClassMinimumViolationError` | **V2, V3, V5, V6** (second trade), **V7** (R10 / SR-5) |
 | `PrimeRequisiteCeilingError` | **C2, C4** (R11) |
 | `IllegalSwitchError` | source is not a maximum; destination is not a prime requisite of `target_class`; `source == destination` (§5.3) |
+| `HitPointLevelError` | **H14** (Halfling past 8), **H20** (Dwarf past 12), **H24** (Elf past 10); level < 1 |
+| `HitDieNotApplicableError` | **H39** (Druid at a rolled level — §7.6.1) |
 
-**Statically impossible through API shape** — no runtime branch exists, and mypy strict enforces it:
+**Statically verified through API shape.** These are **not** proved by writing an intentionally invalid call: suppressing the diagnostic with `# type: ignore` and then citing mypy as the proof is circular, and the earlier draft's S1 approach did exactly that. **That approach is withdrawn.** Each is verified by a positive, executable assertion about the API's actual shape:
 
-| Case | Mechanism |
+| Case | How it is verified |
 |---|---|
-| **S1** — trade with no selected class | `apply_trade(..., chosen_class: CharacterClass, ...)` is **non-optional**. There is no call that omits it |
-| **H36** — `CHAR-003` invoked without a `CHAR-007` adjustment | No adjustment-injection parameter exists on any `CHAR-003` entry point (§7.6) |
-| **H6** — neither Chapter 10 method reachable from 1st-level generation | `ability_score_generation.py` does not import `high_level_ability_score_generation.py` (§7.8) — an import-graph fact |
+| **S1** — trade with no selected class | `inspect.signature(apply_trade)` — assert a `chosen_class` parameter **exists** and its `default is inspect.Parameter.empty`. A required parameter cannot be omitted, so the invalid call is unconstructible. mypy strict continues to protect **valid** callers; it is not cited as the proof here |
+| **H36** — `CHAR-003` invoked without a `CHAR-007` adjustment | `inspect.signature(hit_point_gain)` — assert the parameter set is exactly `(rng, cls, level, constitution)`. The assertion is about what is **absent**: no adjustment-injection parameter exists, so the card cannot produce a value without calling `CHAR-007` itself (§7.6) |
+| **H38** — any attempt to reroll a hit-point die | Assert the module's public surface exposes **no reroll entry point** — `hit_point_gain` is the only public callable, and its signature carries no reroll parameter. There is nothing to call, which is the rule |
+| **H6** — neither Chapter 10 method reachable from 1st-level generation | Parse `ability_score_generation.py`'s module **AST** and assert no `Import`/`ImportFrom` node references `high_level_ability_score_generation`. This is a structural import-graph assertion, not source-text matching, and it does not depend on `sys.modules` state that other tests pollute |
 
-**Calling-contract / composition violations** — the pure function *cannot* observe them:
+**Documented calling-contract conformance** — the approved architecture makes these conditions **unobservable inside the pure functions**, and that decision is preserved. **No `phase`, `creation_state`, `completed` flag, or selected-class state object is introduced to make them testable**, and **no ceremonial pytest function that asserts nothing meaningful is written for them**:
 
-| Case | Why |
+| Case | Why unobservable | What verifies it |
+|---|---|---|
+| **S2** — trade after creation completes (R9) | "Completed" is not observable from six integers and a class | The §0 calling contract in `ability_score_generation.py`'s module docstring, plus the **positive**-order composition tests (O1, O2, O4) that demonstrate the canonical order working, plus a checklist item in the Slice F completion record |
+| **W7** — switch attempted after a class is chosen | The switch receives scores and a destination; it has **no phase state and cannot know when it was called** | Same three artifacts |
+| **E23** — the same violation, seen from `CHAR-002` | Identical reasoning | Same three artifacts |
+| **O3** — trade before eligibility is evaluated | Ordering, not operation | Same three artifacts |
+
+**Cross-card composition** — executable, and the reason Slice F exists:
+
+| Case | What it composes |
 |---|---|
-| **S2** — trade after creation completes (R9) | "Completed" is not observable from six integers and a class |
-| **W7 / E23** — switch attempted after a class is chosen | The switch receives scores and a destination; it has **no phase state and cannot know when it was called** |
-| **O3** — trade before eligibility is evaluated | Ordering, not operation |
-| **O1, O2, O4** — sequence composition | Assertions about composing real components in the §0 order |
-| **E29, E30** — the eligibility invariant across cards | Enforcement lives in `CHAR-001` (V-series); `CHAR-002` E29 says so itself |
+| **O1** | Fighter chosen → trade raises Str → re-test Dwarf eligibility → not eligible. The trade **cannot establish** eligibility |
+| **O2** | Switch establishes Elf Int 9 → class chosen → trade raises Int further. Legal |
+| **O4** | Discard offered → generation restarts; no switch, eligibility or trade occurs for the discarded character |
+| **E29, E30** | The `CHAR-002` minimum survives every legal `CHAR-001` trade. Enforcement lives in `CHAR-001` (V-series); these assert the invariant from `CHAR-002`'s side |
 
 ```text
 PROHIBITED: adding a `phase`, `creation_state`, or `session` argument to any
@@ -582,10 +690,10 @@ NO mediating object, engine, or coordinator is required or permitted.
 | Step | Finding |
 |---|---|
 | **1. Upstream produced** | `CHAR-007` `adjustment(constitution)` produces an integer in **−3 … +3** |
-| **2. Downstream accepted** | `CHAR-003` §2/§3 consume it inside `max(1, roll + con_adjustment)` |
-| **3. Shared invariants** | The adjustment is **read per application** (`CHAR-003` §3); the 1-hp floor applies **per roll**, never to a total (§5); Constitution **never** applies to fixed gains (§4, §5) |
-| **4. No unconsumable result** | **Proven.** Every value the table can return is consumable; the `max(1, …)` floor absorbs the −3 case (H-series) |
-| **5. Enforcement ownership** | **Structural.** `CHAR-003` accepts a Constitution *score* and calls `CHAR-007` internally (§7.6). **The adjustment is never recomputed independently and cannot be injected** — H36 has no injection point to test against |
+| **2. Downstream accepted** | `hit_point_gain`'s **rolled-HD branch only** consumes it, inside `max(1, roll + adjustment(constitution))` (`CHAR-003` §2, §3). The **fixed-gain branch consumes nothing from `CHAR-007`** (§4, §5), and the **rejection branches never call it at all** |
+| **3. Shared invariants** | The adjustment is **read per application** — satisfied because the Constitution score is passed per call (`CHAR-003` §3); the 1-hp floor applies **per roll**, never to a total (§5); Constitution **never** applies to fixed gains (§4, §5) |
+| **4. No unconsumable result** | **Proven.** Every value the table can return (−3 … +3) is consumable on the rolled branch; the `max(1, …)` floor absorbs the −3 case (H3–H6, H9–H11, H27). On the fixed branch the value is **deliberately unconsumed**, which H16 (+3 → still +2/level) and H17 (−3 → still +3/level) assert directly |
+| **5. Enforcement ownership** | **Structural, and now level-aware.** `hit_point_gain` accepts a Constitution *score* and calls `CHAR-007` internally (§7.6); **the adjustment cannot be injected, because no parameter exists for it** — which is what H36 asserts. `CHAR-003` alone also decides **which branch runs**, so the `CHAR-007` call is made or skipped by `CHAR-003`'s own rules logic, never by a caller's choice |
 
 ### 10.4 Composition checks that found nothing
 
@@ -597,7 +705,9 @@ NO mediating object, engine, or coordinator is required or permitted.
 
 ## 11. Test Module Layout
 
-Follows existing repository conventions exactly. **No fixtures, no framework, no `conftest.py`** — none exists in this repository and none is required. Plain pytest functions with `-> None` annotations, `# --- section ---` comment banners, `pytest.raises(..., match=...)`, `dataclasses.FrozenInstanceError` for immutability, `# type: ignore[arg-type]` for deliberate type violations, and `ScriptedRNG([...])` constructed inline.
+Follows existing repository conventions exactly. **No fixtures, no framework, no `conftest.py`** — none exists in this repository and none is required. Plain pytest functions with `-> None` annotations, `# --- section ---` comment banners, `pytest.raises(..., match=...)`, `dataclasses.FrozenInstanceError` for immutability, and `ScriptedRNG([...])` constructed inline.
+
+**One narrow use of `# type: ignore` remains legitimate, and it is not the withdrawn S1 approach.** Following `test_turn_credit.py`, a test that deliberately passes a *wrong-typed* value to prove a **runtime** guard fires — a `bool` where an `int` is required, say — annotates that call `# type: ignore[arg-type]` and then asserts the raised error. The suppression is there so the file type-checks; **the assertion is what proves the behaviour.** That is the opposite of writing an invalid call, suppressing the resulting diagnostic, and then citing mypy as the proof — which §9.2 withdraws. **No static/API-shape conformance case uses `# type: ignore` at all.**
 
 ```text
 tests/
@@ -620,50 +730,92 @@ tests/
 
 **Every approved case ID appears exactly once. No omissions. No duplicates. Integration placement does not create a second contract case.**
 
-| Test module | Owned case IDs | Count |
+| Canonical owner | Owned case IDs | Count |
 |---|---|---|
 | `test_ability.py` | *(none — primitive validation is an implementation test, counted separately)* | **0** |
 | `test_ability_score_effects.py` | A1–A48 | **48** |
 | `test_race_and_class_eligibility.py` | E1–E22, E24–E28 | **27** |
-| `test_hit_points_and_hit_dice.py` | H1–H35, H37–H42 *(`CHAR-003`)* | **41** |
-| `test_ability_score_generation.py` | G1–G5, T1–T14, S3, M1–M5, V1–V12, W1–W6, D1–D8, **C1–C5** | **56** |
+| `test_hit_points_and_hit_dice.py` | H1–H42 *(`CHAR-003`, all of them)* | **42** |
+| `test_ability_score_generation.py` | G1–G5, T1–T14, S1, S3, M1–M5, V1–V12, W1–W6, D1–D8, **C1–C5** | **57** |
 | `test_high_level_ability_score_generation.py` | H1–H6 *(`CHAR-001` §5)* | **6** |
-| `test_cluster_002_integration.py` | E23, E29, E30, H36 *(`CHAR-003`)*, S1, S2, W7, O1, O2, O3, O4 | **11** |
+| `test_cluster_002_integration.py` | E29, E30, O1, O2, O4 | **5** |
+| **Calling-contract conformance record** — `test_cluster_002_integration.py`'s module contract docstring + the Slice F completion-record checklist | E23, S2, W7, O3 | **4** |
 | | **TOTAL** | **189** |
+
+**Static/API-shape cases live in the module that owns the API being asserted**, not in the integration module: `S1` with `apply_trade`, `H36` and `H38` with `hit_point_gain`, `H6` with the Chapter 10 module. Each is an executable pytest function; it simply asserts a signature or an import graph rather than a computed value.
 
 ### 12.1 Reconciliation against the approved cards
 
 ```text
 CHAR-001   G5 + T14 + S3 + H6 + M5 + V12 + W7 + O4 + D8 + C5   =  69
-              56 unit + 6 high-level + 7 integration (S1,S2,W7,O1-O4)  =  69   OK
+              57 unit  (incl. S1)
+            +  6 high-level  (H1-H6, incl. H6)
+            +  3 integration (O1, O2, O4)
+            +  3 calling-contract (S2, W7, O3)                 =  69   OK
 
 CHAR-002   E1-E30                                              =  30
-              27 unit + 3 integration (E23,E29,E30)            =  30   OK
+              27 unit
+            +  2 integration (E29, E30)
+            +  1 calling-contract (E23)                        =  30   OK
 
 CHAR-003   H1-H42                                              =  42
-              41 unit + 1 integration (H36)                    =  42   OK
+              42 unit  (incl. static H36 and H38)              =  42   OK
 
 CHAR-007   A1-A48                                              =  48
-              48 unit + 0 integration                          =  48   OK
+              48 unit                                          =  48   OK
                                                                   ----
                                                                    189
 ```
 
-### 12.2 Test-kind classification for the non-obvious cases
+### 12.2 Reconciliation by verification kind
+
+**No case appears in more than one category.**
+
+```text
+EXECUTABLE PYTEST CASE (unit)                                      176
+    A1-A48                                                  48
+    E1-E22, E24-E28                                         27
+    H1-H35, H37, H39-H42   (CHAR-003, minus H36 and H38)     40
+    CHAR-001 unit, minus S1                                  56
+    H1-H5                  (CHAR-001 §5, minus H6)            5
+
+CROSS-CARD COMPOSITION TEST (runtime)                                5
+    E29, E30, O1, O2, O4
+
+STATIC / API-SHAPE CONFORMANCE (runtime assertion on the API)        4
+    S1   inspect.signature(apply_trade)      -- chosen_class required
+    H36  inspect.signature(hit_point_gain)   -- no adjustment parameter
+    H38  module public surface               -- no reroll entry point
+    H6   module AST import graph             -- no Chapter 10 import
+
+DOCUMENTED CALLING-CONTRACT CONFORMANCE (no pytest function)         4
+    S2, W7, E23, O3
+                                                                   ---
+                                                                   189
+```
+
+### 12.3 Why four cases have no pytest function, and what stands in for one
+
+`S2`, `W7`, `E23` and `O3` assert that an operation is invalid **when invoked out of order**. The approved architecture makes that unobservable: a pure function over six integers and a class cannot know when it was called. **That architectural decision is preserved deliberately** — the alternative is a `phase`, `creation_state` or `completed` flag, which is the speculative orchestration §4.1 forbids, arriving through the parameter list.
+
+**Canonical ownership does not require a runtime negative branch**, and a pytest function that merely asserts a docstring exists would assert nothing meaningful. Each of the four is instead verified by three existing artifacts, all of which have independent value:
+
+1. **The §0 calling contract in `ability_score_generation.py`'s module docstring** — the normative statement of the required order, written where an implementer reads it.
+2. **The positive-order composition tests** (`O1`, `O2`, `O4`) — executable proof that the canonical order produces the approved results. A violation of the contract is a *deviation from a demonstrated working order*, not an untested claim.
+3. **A checklist item in the Slice F completion record** (`ISSUE-013`) confirming, for each of the four, that the contract is documented and that **no production code path permits the invalid order** — `DEVELOPMENT_WORKFLOW.md` §5 already requires a completion record; this adds four checklist lines to one that must exist anyway.
+
+**No new mechanism, file, or ceremony is created for this.**
+
+### 12.4 Placement notes for the remaining non-obvious cases
 
 | Case | Kind | Note |
 |---|---|---|
-| **A15** | **Executable unit test** | Placed in `test_ability_score_effects.py`, **not** in integration. It is a scalar domain check on `adjustment()` that needs no other card to execute. The *cross-card* claim — that `CHAR-001` can never emit 19 — is a **separate non-contract integration test** (§10.1), counted separately. Recorded because the drafting direction listed A15 as a permitted integration candidate; this placement is the narrower, more accurate one |
-| **S1** | **Static / API-shape conformance** | `chosen_class` is non-optional; the test asserts the call does not type-check, using `# type: ignore[call-arg]` and mypy strict as the enforcement |
-| **S2** | **Calling-contract conformance** | R9's time-boxing is a caller obligation; asserted as a documented sequence in integration, not as a branch inside `apply_trade` |
-| **W7, E23** | **Calling-contract conformance** | The switch has no phase state (§9.2) |
-| **O1–O4** | **Cross-card integration** | Composition of real components in the §0 order |
-| **E29, E30** | **Cross-card integration** | Enforcement lives in `CHAR-001` V-series; these assert the invariant holds from `CHAR-002`'s side |
-| **H36** (`CHAR-003`) | **Static / API-shape conformance** | Asserts no adjustment-injection parameter exists (§7.6) |
-| **H6** (`CHAR-001`) | **Static / import-graph conformance** | Asserts `ability_score_generation` does not import `high_level_ability_score_generation` |
-| **C2, C4** | **Executable unit test, with an ordering assertion** | Must assert `PrimeRequisiteCeilingError`, **never** a constructor `ValueError` (§6.4) |
-
-**No orchestration state is added anywhere to turn an ordering requirement into a runtime branch.**
+| **A15** | Executable unit | Stays in `test_ability_score_effects.py` — a scalar domain check needing no other card. The cross-card claim that `CHAR-001` can never emit 19 is a **separate non-contract** integration test (§10.1), counted separately |
+| **C2, C4** | Executable unit, with an ordering assertion | Must assert `PrimeRequisiteCeilingError`, **never** a constructor `ValueError` (§6.4) |
+| **H4** | Executable unit | Must assert `AbilityScoreDomainError` from `allocate_points`' own check, **not** the `AbilityScores` constructor (§7.8.1) |
+| **H14, H20, H24** | Executable unit | `HitPointLevelError` from `hit_point_gain` — the assertions that make `_MAXIMUM_LEVEL` load-bearing |
+| **H39** | Executable unit | `HitDieNotApplicableError` — no fabricated Druid die exists to return (§7.6.1) |
+| **H41, H42** | Executable unit | Assert the **core-rules** constants: Dwarf fixed gain is **3** (not the Chapter 19 variant's 2), Elf is **2** (SR-1). A real assertion on `_FIXED_GAIN`, not a prohibition with nothing behind it |
 
 ---
 
@@ -719,7 +871,7 @@ Derived from the dependency graph in §7.9. Each slice is independently reviewab
 | **Non-goals** | Every consuming procedure; the Open Doors / save / initiative / Ability-Check material stays in the docstring exclusion list |
 | **Verification** | `verify.py` — 100% branch on all four new `src/rules/` files |
 | **Commit boundary** | One commit; completion record required (§16) |
-| **Human review** | Reviewed and merged before Slice B begins |
+| **Human review** | **Reviewed and accepted** before Slice B begins. The implementation branch is **not** merged to `main` at this point — see §15 |
 
 **Why first:** zero dependencies, needed by every other slice, entirely deterministic (no RNG), and small enough that the 100%-branch gate on a brand-new domain package is trivially provable. It also front-loads the `AbilityScores` domain decision (§6.4) — the cheapest possible point to correct it if review disagrees.
 
@@ -741,11 +893,13 @@ Derived from the dependency graph in §7.9. Each slice is independently reviewab
 |---|---|
 | **Production files** | `hit_points_and_hit_dice.py` |
 | **Test files** | `test_hit_points_and_hit_dice.py` |
-| **Cases covered** | **H1–H35, H37–H42** (41). H36 deferred to Slice F |
+| **Cases covered** | **H1–H42** — all 42, including the static/API-shape cases **H36** and **H38** |
 | **Dependencies** | Slice A (`CHAR-007` adjustment — the load-bearing dependency); `src/rng` |
-| **Non-goals** | Damage, death, healing, saves, advancement, Attack Ranks, Chapter 19 |
-| **Verification** | `verify.py` — 100% branch; `ScriptedRNG` exact-length queues audit every draw count |
+| **Non-goals** | Damage, death, healing, saves, advancement, Attack Ranks, Chapter 19. **No range or total helper, no public `hit_die` lookup, no exposed class maximum** |
+| **Verification** | `verify.py` — 100% branch. `ScriptedRNG` exact-length queues audit every draw count, **including the zero-draw fixed and rejection branches**. H36/H38 assert signatures via `inspect.signature` |
 | **Commit boundary** | One commit; completion record required |
+
+**The level-aware API is what this slice is really delivering.** `hit_point_gain(rng, cls, level, constitution)` decides rolled-versus-fixed, enforces the class maximum, and rejects the Druid rolled levels (§7.6, §7.6.1). Nothing is left for the caller to reconstruct, and **`_NAME_LEVEL` / `_MAXIMUM_LEVEL` bind behaviour rather than documenting a caller obligation.** Range cases (H12, H18, H19, H21, H23, H28–H35) are tested by looping the operation over a level range.
 
 ### Slice D — `CHAR-001` generation, discard, switch, trade
 
@@ -767,11 +921,13 @@ Derived from the dependency graph in §7.9. Each slice is independently reviewab
 |---|---|
 | **Production files** | `high_level_ability_score_generation.py` |
 | **Test files** | `test_high_level_ability_score_generation.py` |
-| **Cases covered** | **H1–H6** (6) |
+| **Cases covered** | **H1–H6** (6) — H1–H5 executable, **H6** a static import-graph assertion |
 | **Dependencies** | Slice A; `src/rng` |
-| **Non-goals** | **Must not be imported by `ability_score_generation.py`**; must not be reachable from any 1st-level flow |
-| **Verification** | `verify.py` — 100% branch; H6 asserted as an import-graph fact |
+| **Non-goals** | **Must not be imported by `ability_score_generation.py`**; must not be reachable from any 1st-level flow. **No optional RNG, mode enum, boolean flag, or fake RNG parameter** anywhere in this module |
+| **Verification** | `verify.py` — 100% branch. **H2** audits 24 draws via an exact-length `ScriptedRNG`; **H3** audits the 5d6 total; **H4/H5** assert `AbilityScoreDomainError` / `PointAllocationError` from `allocate_points`' own checks; **H6** parses the module AST (§9.2) |
 | **Commit boundary** | One commit; completion record required |
+
+**The two Second-Method paths are split** (§7.8.1): `roll_point_allocation_total(rng)` covers the `60 + 5d6` form only, and `allocate_points(total, allocation)` takes an `int` from either source without knowing which produced it — which is how the equal-allotment form is expressed with **zero RNG and no flag**. `allocate_points` owns all three validations: total in 60–90, allocation sum equal to the total, and each ability in 3–18.
 
 **Kept separate from Slice D deliberately.** Combining them would put the module whose entire purpose is *to be unreachable from ordinary generation* in the same commit as ordinary generation, which is precisely the review a separate commit makes easy.
 
@@ -781,11 +937,12 @@ Derived from the dependency graph in §7.9. Each slice is independently reviewab
 |---|---|
 | **Production files** | **None** |
 | **Test files** | `test_cluster_002_integration.py` |
-| **Cases covered** | **E23, E29, E30, H36, S1, S2, W7, O1–O4** (11), plus the non-contract composition tests from §10.1 |
+| **Cases covered** | **Executable composition:** E29, E30, O1, O2, O4 (5). **Calling-contract conformance record:** E23, S2, W7, O3 (4) — documented, not pytest functions (§12.3). Plus the **non-contract** composition test from §10.1 |
 | **Dependencies** | Slices A–E |
-| **Non-goals** | **No production orchestration module** — following `CLUSTER-001`'s resolved precedent, cross-card sequencing is demonstrated by tests composing the real modules, not by a production wrapper |
-| **Verification** | `verify.py` — full `Overall: PASS` for the completed cluster |
+| **Non-goals** | **No production orchestration module** — following `CLUSTER-001`'s resolved precedent, cross-card sequencing is demonstrated by tests composing the real modules, not by a production wrapper. **No ceremonial test** that asserts only that a docstring exists |
+| **Verification** | `verify.py` — full `Overall: PASS` for the completed cluster. The Slice F completion record carries the **four calling-contract checklist items** (§12.3) |
 | **Commit boundary** | One commit; **cluster completion record** required, supplementing the per-slice records |
+| **Final review** | After this slice the **completed implementation branch receives a final review**, then **one `--no-ff` merge to `main`** (§15) |
 
 ```text
 Slice A ──→ Slice B ──┐
@@ -806,11 +963,28 @@ Implementation branch:   cluster-002-implementation
 
 **Not created by this task.**
 
-- Each slice is **one commit** on that branch, reviewed independently.
-- Every slice that changes behaviour under `src/` requires its **own completion record** before it is considered complete (`DEVELOPMENT_WORKFLOW.md` §3–§5). `CLUSTER-001`'s plan §14 records this explicitly as a correction learned there; `CLUSTER-002` adopts it from the start. Next available IDs are `ISSUE-008` onward.
-- `uv run python scripts/verify.py` must report `Overall: PASS` **before** each commit.
-- Final integration reaches `main` by **`--no-ff` merge** of `cluster-002-implementation`, matching `a7fc9e8` and `da3257d`.
-- **Meaningful implementation history is not squashed away.** The per-slice commits are the review record.
+**One coherent workflow — intermediate slices are *accepted*, not *merged*:**
+
+```text
+Slice A committed on cluster-002-implementation
+        -> reviewed and ACCEPTED        (branch NOT merged to main)
+Slice B committed on the same branch
+        -> reviewed and ACCEPTED
+Slice C ... Slice E, likewise
+Slice F committed on the same branch
+        -> reviewed and ACCEPTED
+        -> completed implementation branch receives FINAL REVIEW
+        -> ONE --no-ff merge to main
+```
+
+- Each slice is **one commit** on `cluster-002-implementation`, reviewed independently and **accepted** before the next slice begins. **The branch remains unmerged until the cluster is complete.**
+- **"Accepted" is deliberately not "merged."** The earlier draft mixed the two — saying Slice A was "reviewed and merged before Slice B begins" while also describing a single final `--no-ff` merge. Only one of those can be true; this is the one.
+- Every slice that changes behaviour under `src/` requires its **own completion record** before it is considered complete (`DEVELOPMENT_WORKFLOW.md` §3–§5). `CLUSTER-001`'s plan §14 records this as a correction learned mid-flight; `CLUSTER-002` adopts it from the start. Next available IDs are `ISSUE-008` onward.
+- `uv run python scripts/verify.py` must report `Overall: PASS` **before** each commit. **No slice may land red**, on the branch or on `main`.
+- Final integration reaches `main` by **one `--no-ff` merge**, matching `a7fc9e8`, `da3257d` and `094f909`.
+- **Meaningful implementation history is not squashed away.** The six per-slice commits are the review record and survive the merge.
+
+**Basis for this choice, recorded honestly.** `DEVELOPMENT_WORKFLOW.md` defines completion-record and verification requirements but **no branch or merge policy**, so nothing in the repository workflow mandates either shape. `CLUSTER-001`'s actual practice was *per-step merge* (its plan §14: *"each independently human-reviewed and merged"*). This plan adopts the single-final-merge shape instead, at human direction, and **does not change the repository workflow** — it records which of two permitted shapes `CLUSTER-002` uses.
 
 **Proposed completion records:**
 
@@ -856,11 +1030,17 @@ The one composition defect that previously existed between them — `CHAR-001` �
 | Choice | Resolution | Basis |
 |---|---|---|
 | `AbilityScores` domain | **Approach A** (§6.4) | Each declared domain lives on the artifact whose card declares it |
+| **`CHAR-003` operation shape** | **One level-aware `hit_point_gain`** (§7.6) | `_NAME_LEVEL` / `_MAXIMUM_LEVEL` must bind behaviour, not document a caller obligation |
 | `CHAR-003` dependency shape | **Constitution score in, adjustment derived internally** (§7.6) | Makes H36 structural rather than conventional |
-| Error surface size | **Base + 5, rule ID in the message** (§9.1) | Repository idiom; avoids a class per case while keeping R10/R11 distinguishable |
+| **Druid Hit Die** | **No public `hit_die` lookup; no `_HIT_DIE[DRUID]` entry; the operation rejects** (§7.6.1) | No integer could honestly be returned; no approved case needs a standalone lookup |
+| **Chapter 10 Second Method** | **Split: `roll_point_allocation_total` + total-agnostic `allocate_points`** (§7.8.1) | Expresses the equal-allotment path with zero RNG and no optional/flag/fake parameter |
+| Error surface size | **Base + 8, derived from the rejection paths** (§9.1) | Not a target count — merged where meanings align, split only where an approved case depends on the distinction |
+| **Static-conformance method** | **`inspect.signature` and module AST, never `# type: ignore` + "mypy proved it"** (§9.2) | Suppressing the diagnostic cannot be the proof |
+| **Calling-contract verification** | **Documented conformance record, no ceremonial test** (§12.3) | Preserves the architecture that makes the condition unobservable |
 | Chapter 10 module separation | **Own module** (§7.8) | Makes H6 an import-graph fact and resolves the `H` collision |
 | Slice D kept whole | **Yes**, with a named alternative seam (§14) | R1–R11 review better together |
-| Test-case placement | **§12 ledger** | 1:1 ownership, reconciled to 189 |
+| **Branch shape** | **Slices accepted on the branch; one final `--no-ff` merge** (§15) | `DEVELOPMENT_WORKFLOW.md` mandates neither shape; recorded rather than assumed |
+| Test-case placement | **§12 ledger** | 1:1 ownership, reconciled to 189 across four verification kinds |
 
 ### 18.2 Genuine risks, with safeguards
 
@@ -871,6 +1051,8 @@ The one composition defect that previously existed between them — `CHAR-001` �
 | **`CHAR-003`'s private level constants leak into a general API** | §5.2's constraints: module-private names, not re-exported, with a mandatory ownership note naming `ADV-002` |
 | **The value/procedure split erodes in `CHAR-007`** | §7.4: the module imports no consumer, and returns only numbers and small frozen values. Enforced by the import graph, not by review discipline |
 | **A future reader treats R11 as RC-explicit** | `CHAR-001`'s provenance table classifies it as a Necessary Mechanical Consequence and preserves the rejected reading; this plan does not restate it as anything stronger |
+| **A conformance test is written that proves nothing** — a suppressed type error, or an assertion that a docstring exists | §9.2 names the exact positive assertion for each of S1/H36/H38/H6 (`inspect.signature`, module surface, module AST). §12.3 states that S2/W7/E23/O3 get **no** pytest function, and names the three artifacts that verify them instead |
+| **The Druid levels 2–9 rejection is read as a new rule** | §7.6.1 marks it explicitly as a necessary consequence of `CHAR-003` §1's *"does not apply"*, flags that H39 names only level 1, and records that no Rule ID, Simulator Ruling or P1 reopening is involved. **A reviewer who disagrees should say so at approval** — it is the one inference in this plan that goes beyond a literal approved case |
 
 ### 18.3 Decisions requiring the human project owner
 
@@ -881,6 +1063,8 @@ Approve or reject this implementation plan.
 ```
 
 No rules question, no unresolved ambiguity, and no architecture decision remains open. Every other choice above is an ordinary design decision resolved from existing repository conventions and recorded so it can be reviewed rather than rediscovered.
+
+**One inference is flagged for explicit attention at approval**, because it is the only place this plan reasons past a literal approved case: **§7.6.1's rejection of Druid rolled levels 2–9.** H39 names level 1; `CHAR-003` §1 says the Druid Hit Die *"does not apply"* without qualification. Rejection is the only behaviour the card defines for any Druid rolled level, and fabricating a die would be a silent rules decision — but a reviewer who reads it differently should say so now rather than after Slice C. **It is not offered as a rules change, and it does not reopen P1.**
 
 ---
 
