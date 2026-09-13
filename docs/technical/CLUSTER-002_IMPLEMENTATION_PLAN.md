@@ -29,6 +29,10 @@ APPROVED
 > **Revision 3 — 2026-09-12, final human-review correction.** One classification defect. **`CHAR-003` `H38` is reclassified from static/API-shape conformance to documented calling-contract conformance** (§9.2, §12.2–§12.3, Slice C). Revision 2 reasoned that the absence of a `reroll` parameter made rerolling statically impossible; it does not. `hit_point_gain` is stateless, so a caller can simply invoke it **twice for the same level**, and the function cannot tell a legitimate first invocation from an attempted reroll of an already-established level without retaining character or advancement state — which §4.1 forbids and this correction does **not** introduce. H38 stays owned by **`CHAR-003` / Slice C**, not Slice F.
 >
 > **Nothing else changed.** No mechanic, Rule Card, API, slice, error type, or test count. **Totals remain 69 / 30 / 42 / 48 = 189**, with no case added, removed, duplicated or renumbered. Verification-kind accounting moves one case: static/API-shape **4 → 3**, calling-contract **4 → 5**.
+>
+> **Revision 4 — 2026-09-12, human-review ledger correction (Slice D).** Four `CHAR-001` cases — **`T11`, `W2`, `W6` and `D7`** — are reclassified from executable to **documented calling-contract conformance** (§12.2.1). Each states a fact about **caller discretion the stateless operations cannot observe**: that the trade may simply not be invoked (T11); that the switch's *authorization* is the DM's or policy's, not the operation's (W2); that *at most one* switch is a caller obligation, though W6's swap semantics remain executable (W6); and that the player may retain a character the discard predicate says may be offered (D7). **No runtime state, flag or parameter is added to make any of them observable.**
+>
+> **Nothing else changed.** No mechanic, Rule Card, case owner, API, slice or case count. **Totals remain 69 / 30 / 42 / 48 = 189.** Verification-kind accounting moves four cases: executable unit **176 → 172**, calling-contract **5 → 9**.
 
 This document is a technical implementation plan. It is **not** a Rule Card, **not** a new rules authority, and **not** itself an authorization to implement. It translates the four `APPROVED` Rule Cards that make up `CLUSTER-002`'s boundary into a precise, human-reviewable plan another agent can execute **without making rules decisions**, per `ARCHITECTURE.md` §15.1/§15.2 and `docs/decisions/DEC-0005-v1-rules-inventory-and-clustered-implementation.md`.
 
@@ -745,9 +749,10 @@ tests/
 | `test_ability_score_effects.py` | A1–A48 | **48** |
 | `test_race_and_class_eligibility.py` | E1–E22, E24–E28 | **27** |
 | `test_hit_points_and_hit_dice.py` | H1–H37, H39–H42 *(`CHAR-003`, all but H38)* | **41** |
-| `test_ability_score_generation.py` | G1–G5, T1–T14, S1, S3, M1–M5, V1–V12, W1–W6, D1–D8, **C1–C5** | **57** |
+| `test_ability_score_generation.py` | G1–G5, T1–T10, T12–T14, S1, S3, M1–M5, V1–V12, W1, W3–W5, D1–D6, D8, **C1–C5** | **53** |
 | `test_high_level_ability_score_generation.py` | H1–H6 *(`CHAR-001` §5)* | **6** |
 | `test_cluster_002_integration.py` | E29, E30, O1, O2, O4 | **5** |
+| **Calling-contract conformance record — `CHAR-001` / Slice D** (`ISSUE-011`) | **T11, W2, W6, D7** | **4** |
 | **Calling-contract conformance record — `CHAR-003` / Slice C** (`ISSUE-010`) | **H38** | **1** |
 | **Calling-contract conformance record — cross-card / Slice F** (`ISSUE-013`) | E23, S2, W7, O3 | **4** |
 | | **TOTAL** | **189** |
@@ -760,10 +765,11 @@ tests/
 
 ```text
 CHAR-001   G5 + T14 + S3 + H6 + M5 + V12 + W7 + O4 + D8 + C5   =  69
-              57 unit  (incl. S1)
-            +  6 high-level  (H1-H6, incl. H6)
+              53 unit  (52 runtime + static S1)
+            +  4 calling-contract (T11, W2, W6, D7; Slice D record)
+            +  6 high-level  (H1-H6, incl. static H6)
             +  3 integration (O1, O2, O4)
-            +  3 calling-contract (S2, W7, O3)                 =  69   OK
+            +  3 calling-contract (S2, W7, O3; Slice F record)  =  69   OK
 
 CHAR-002   E1-E30                                              =  30
               27 unit
@@ -785,11 +791,11 @@ CHAR-007   A1-A48                                              =  48
 **No case appears in more than one category.**
 
 ```text
-EXECUTABLE PYTEST CASE (unit)                                      176
+EXECUTABLE PYTEST CASE (unit)                                      172
     A1-A48                                                  48
     E1-E22, E24-E28                                         27
     H1-H35, H37, H39-H42   (CHAR-003, minus H36 and H38)     40
-    CHAR-001 unit, minus S1                                  56
+    CHAR-001 unit, minus S1                                  52
     H1-H5                  (CHAR-001 §5, minus H6)            5
 
 CROSS-CARD COMPOSITION TEST (runtime)                                5
@@ -800,14 +806,46 @@ STATIC / API-SHAPE CONFORMANCE (runtime assertion on the API)        3
     H36  inspect.signature(hit_point_gain)   -- no adjustment parameter
     H6   module AST import graph             -- no Chapter 10 import
 
-DOCUMENTED CALLING-CONTRACT CONFORMANCE (no pytest function)         5
+DOCUMENTED CALLING-CONTRACT CONFORMANCE (no pytest function)         9
     S2, W7, E23, O3     cross-card ordering      -- Slice F record
     H38                 CHAR-003 roll-once       -- Slice C record
+    T11                 trade is optional        -- Slice D record
+    W2                  switch authorization     -- Slice D record
+    W6                  at most one switch       -- Slice D record
+    D7                  player may retain        -- Slice D record
                                                                    ---
                                                                    189
 ```
 
-### 12.3 Why four cases have no pytest function, and what stands in for one
+### 12.2.1 The four `CHAR-001` reclassifications (revision 4)
+
+Each of these four approved cases states a fact about **caller discretion or
+sequencing that a stateless pure operation cannot observe** — the same test
+§12.3.1 applied to `H38`. Ownership, numbering and rules are unchanged;
+only the verification kind moved.
+
+| Case | Approved meaning | Why the operation cannot observe it |
+|---|---|---|
+| **T11** | Perform no trades → adjusted scores equal as-rolled scores (R8) | `apply_trade` cannot enforce a caller's decision **not to invoke it**. R8's optionality is a caller contract |
+| **W2** | Switch not authorized → no switch occurs | `apply_highest_score_switch` performs an **already-authorized** switch. The decision not to authorize belongs to the DM / simulation-policy caller. **No `authorized: bool` parameter is added** to make it observable |
+| **W6** | At most one switch, and it is a swap of two scores | The **swap** clause has executable evidence. The **at-most-one** clause is not observable — a caller could invoke the function twice — so the case's canonical kind is calling contract. **No `already_switched`, switch count, creation state or session state is added** |
+| **D7** | A qualifying array; the player elects to keep → creation continues | `discard_may_be_offered` answers only whether an offer *may* be made. The player's retention decision is a caller contract. **No `discard_choice` or `player_choice` parameter is added** to the predicate |
+
+**No fake pytest function is written for any of them** merely to make a
+policy statement look executable. Their evidence is the module contract plus
+the Slice D completion-record checklist (`ISSUE-011`), exactly as `H38`'s is
+carried by `ISSUE-010`.
+
+**Supporting executable assertions do not create additional cases** — W6's
+swap semantics are covered by the W-series switch tests, and that coverage
+is evidence for W6, not a new approved case.
+
+### 12.3 Why the cross-card ordering cases have no pytest function
+
+*(Revision 4 added four more calling-contract cases — `CHAR-001`'s T11, W2,
+W6 and D7 — under §12.2.1, and `H38` under §12.3.1. The reasoning below is
+the original cross-card ordering group; the same principle governs all
+nine.)*
 
 `S2`, `W7`, `E23` and `O3` assert that an operation is invalid **when invoked out of order**. The approved architecture makes that unobservable: a pure function over six integers and a class cannot know when it was called. **That architectural decision is preserved deliberately** — the alternative is a `phase`, `creation_state` or `completed` flag, which is the speculative orchestration §4.1 forbids, arriving through the parameter list.
 
@@ -945,7 +983,7 @@ Derived from the dependency graph in §7.9. Each slice is independently reviewab
 |---|---|
 | **Production files** | `ability_score_generation.py` |
 | **Test files** | `test_ability_score_generation.py` |
-| **Cases covered** | **G1–G5, T1–T14, S3, M1–M5, V1–V12, W1–W6, D1–D8, C1–C5** (56) |
+| **Cases covered** | **57** `CHAR-001` cases: **52 runtime** (G1–G5, T1–T10, T12–T14, S3, M1–M5, V1–V12, W1, W3–W5, D1–D6, D8, C1–C5), **1 static/API-shape** (S1), **4 documented calling-contract** (T11, W2, W6, D7 — §12.2.1; no pytest function) |
 | **Dependencies** | Slices A and B; `src/rng` |
 | **Non-goals** | Chapter 10 methods (Slice E); **no orchestration object of any kind** |
 | **Verification** | `verify.py` — 100% branch; C2/C4 must assert `PrimeRequisiteCeilingError`, not a constructor error |
