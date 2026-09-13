@@ -1,6 +1,23 @@
 # Primary-Source Completeness Audit: CLUSTER-003 Stage A (CHAR-004, CHAR-005, EXP-003)
 
-> **Status: `RESEARCHER SELF-REVIEW COMPLETE / AWAITING INDEPENDENT COMPLETENESS REVIEW`.**
+> **⚠ SUPERSEDED IN PART BY THE INDEPENDENT REVIEW AND BY REMEDIATION PASS 1 (2026-09-13).**
+>
+> The independent completeness review this artifact was prepared for **has now been performed, and it did not pass**:
+>
+> ```text
+> CLUSTER-003 STAGE-A INDEPENDENT COMPLETENESS REVIEW
+> RESULT:                      REMEDIATION REQUIRED
+> PRIMARY-SOURCE COMPLETENESS: FAIL -- unfinished structural inspection
+> BOUNDARY INTEGRITY:          REOPEN REQUIRED
+> ALTERNATE-SOURCE RESEARCH:   NOT AUTHORIZED
+> RULE CARDS / PRE-CODE / IMPLEMENTATION: NOT AUTHORIZED
+> ```
+>
+> **The reviewer was right on both counts, and §10's own framing was wrong on one.** This artifact's §10 item 1 characterised the Mystic `MV` dependency as *"not a `CLUSTER-003` boundary-reopen condition — `CHAR-009` is not one of the three deferred cards."* The approved boundary rule is not limited to the deferred trio: it fires on a mechanically indispensable dependency on **any** unlanded Rule Card outside the cluster. **The boundary is reopened and provisional.**
+>
+> The remediation record — including the per-class inspection table, the two governing objects this audit's §7 failed to surface, and the boundary-reopen evidence package — is **`docs/rules/evidence/CLUSTER-003-remediation-pass-1.md`**. §13 below records what the reconciliation table in §8 looks like after remediation. **The body of this artifact is preserved unaltered as audit history**, including the incorrect §10 framing, because what the process actually concluded is evidence.
+>
+> **Status: ~~`RESEARCHER SELF-REVIEW COMPLETE / AWAITING INDEPENDENT COMPLETENESS REVIEW`~~ → `REMEDIATION COMPLETE / RESEARCHER SELF-REVIEW COMPLETE / AWAITING SECOND INDEPENDENT COMPLETENESS / BOUNDARY REVIEW`.**
 >
 > This artifact records the **adversarial self-review** permitted to the original researcher by `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md` §10.1.1. It is **not** the independent completeness review required by §10.1.2 / `DEC-0010` item 14, which "may NOT be performed by the original researcher." Nothing in this document certifies `CLUSTER-003` Stage-A completeness, and the researcher does not claim it.
 >
@@ -274,4 +291,71 @@ CLUSTER-003 Stage A
 CLUSTER-003 STAGE-A RESEARCH:
 RESEARCHER SELF-REVIEW COMPLETE
 AWAITING INDEPENDENT COMPLETENESS REVIEW
+```
+
+---
+
+## 13. Post-Remediation Reconciliation (added 2026-09-13)
+
+> Recorded after the independent review returned `REMEDIATION REQUIRED` and remediation pass 1 was performed. Full detail: `docs/rules/evidence/CLUSTER-003-remediation-pass-1.md`.
+
+### 13.1 What the independent reviewer found incomplete
+
+1. **Unfinished structural inspection** — rows 1–6 of §8's reconciliation table were declared open and were genuinely load-bearing, not cosmetic.
+2. **Boundary integrity** — the Mystic `MV` dependency did trigger the reopen condition, and §10 item 1 said it did not.
+
+### 13.2 §8 reconciliation table after remediation
+
+| §8 row | Then | Now |
+|---|---|---|
+| 1 — Ch. 2 class entries, weapon/armour permissions | Open | **CLOSED.** All nine entries read as complete entries; all nine boxed blocks visually verified. Five classes carry class-entry-only restrictions; the Druid carries a **+50% pricing rule**. Remediation §2, §4 |
+| 2 — the other eight class tables, any `MV`-style column | Open | **CLOSED.** All nine experience tables opened as page images. Only the Mystic has a movement column. Corroborated by RC's own "Understanding the Tables" column enumeration. Remediation §2 |
+| 3 — Ch. 19 body | Open | **CLOSED on complete inspection.** Two printed pages, both visually verified; five sections; **no encumbrance or movement variant.** The TOC's three sub-headings were indeed incomplete. Remediation §5.1 |
+| 4 — Ch. 17 pp. 259–262 | Open | **CLOSED**, and pp. 256–257 added after the index flagged them. **Material finding:** the dungeon map scale is DM-variable. Remediation §5.2 |
+| 5 — General Index | Open | **CLOSED, and it was not empty.** It surfaced **RC Ch. 8 p. 103 "Movement"** — a governing object this audit's §7 missed entirely — and the decisive `Weapon restrictions 14, 17, 19, 21, 23, 25, 26, 28, 29` entry. Remediation §5.3, §5.5 |
+| 6 — Ch. 10 high-level creation | Open | **CLOSED, and it was not empty.** A different money rule (1% of XP), equipment by grant, an alternate cash method, two magic-item methods, a price table, and the only RC owned-vs-carried distinction. Remediation §5.4 |
+| 7 — Nets Table not visually verified | Non-blocking | **Unchanged, still non-blocking** |
+| 8, 9 — mount/vehicle tables; `CHAR-004` scope | Human decision | **Unchanged** |
+| 10 — p. 150 condition multipliers ownership | Human decision | **Unchanged** |
+| 11 — `EXP-003` "Mapping" in the title | Human decision | **Widened** — "Special Terrain" joins it. `CARD TITLE / RESPONSIBILITY BOUNDARY REVIEW REQUIRED` |
+| 12 — Mystic `MV` × encumbrance | Retained ambiguity | **Retained, and now defensible** under §10.2.2 case 3. Sub-item closed: "above 16th level" is moot (`Maximum Level: 16`, visually verified) |
+| 13 — racial-armour reduction | `RC DOES NOT SPECIFY` | **WITHDRAWN AS A GAP.** The complete sentence is *"The DM **can** impose penalties"* — RC delegates by design. This audit quoted the parenthetical without its governing sentence |
+| 14 — rough/broken-terrain modifier | Possible gap | **Retained, now narrower.** RC Ch. 14 p. 153's Charge prohibition is a real indoor terrain constraint, but on an **action**, not a rate |
+| 15–17 — Suit Armor, Starvation, belt pouch | Retained | **All three survive re-testing unchanged** |
+| 18–21 — deliberate exclusions | Out of scope | **Unchanged** |
+
+### 13.3 What §7's adversarial self-review got right, and what it missed
+
+§7 answered *"Were all relevant tables located?"* by pointing at the Tables Index sweep, and *"Were all relevant stat blocks checked?"* with an honest **"No — and this is the largest declared hole."** That self-assessment was accurate: the class-entry hole was the single largest, and closing it produced Finding 2's sharpening and the per-class evidence in remediation §4.
+
+What §7 **missed** is that its table-centred framing could not catch a governing object that is **prose under a plain heading inside another chapter's procedure**. RC Ch. 8 p. 103 is titled simply "Movement", carries no table, and is not reachable from the Tables Index. Only the **General Index** — audit class H, which §7 recorded as "only partially discharged" and then did not treat as blocking — leads to it.
+
+**Lesson recorded for future clusters:** audit class H is not a formality to be discharged last. For a mechanic that appears in several chapters under a common word, the General Index is the instrument that finds the presentations a topic-driven search will not.
+
+### 13.4 New findings that did not exist before remediation
+
+| Kind | Finding |
+|---|---|
+| **New governing object** | RC Ch. 8 p. 103 "Movement" — normal speed is *never* used in combat; movement-budget rules; and a **factor-of-3 inconsistency** with Ch. 6 on running speed |
+| **New governing object** | RC Ch. 14 p. 153 "Charge" — *"A monster cannot charge in certain types of terrain: broken, heavy forest, jungle, mountain, swamp"*, with *"20 yards (**20 feet indoors**)"* |
+| **New contradiction** | Magic-user dagger: Ch. 4 note `w` vs. Ch. 2 *"Dagger only"* |
+| **New contradiction** | Running speed: Ch. 6 vs. Ch. 8 p. 103 |
+| **New tension** | Mystic *"or own personal possessions"* — flavour framing the entry's own rules do not implement |
+| **New tension** | Standing up: "one round of movement" vs. "an action" |
+| **Reclassified** | Dungeon map scale — a DM-variable default, not a constant |
+| **Reclassified** | Racial-armour movement reduction — DM discretion by design, **not** a gap |
+| **Citation corrected** | "Mapping and Calling" is on **p. 5**, not in Chapter 1 |
+| **Citation corrected** | The Dwarf Experience Table prints on **p. 24**; the Tables Index says p. 23 |
+
+### 13.5 Status
+
+```text
+CLUSTER-003 STAGE-A REMEDIATION:
+
+REMEDIATION COMPLETE
+RESEARCHER SELF-REVIEW COMPLETE
+AWAITING SECOND INDEPENDENT COMPLETENESS / BOUNDARY REVIEW
+
+STAGE B:                    NOT STARTED / NOT AUTHORIZED
+ALTERNATE-SOURCE RESEARCH:  NOT STARTED / NOT AUTHORIZED
 ```

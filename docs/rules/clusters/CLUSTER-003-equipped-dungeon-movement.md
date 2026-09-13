@@ -11,12 +11,36 @@ Equipped Dungeon Movement
 ## 3. Status
 
 ```text
-STAGE A (EVIDENCE)     RESEARCHER SELF-REVIEW COMPLETE
-                       AWAITING INDEPENDENT COMPLETENESS REVIEW
+STAGE A (EVIDENCE)     REMEDIATION COMPLETE
+                       RESEARCHER SELF-REVIEW COMPLETE
+                       AWAITING SECOND INDEPENDENT COMPLETENESS /
+                       BOUNDARY REVIEW
+CLUSTER BOUNDARY       PROVISIONAL -- REOPENED 2026-09-13
 STAGE B (SYNTHESIS)    NOT BEGUN, NOT ELIGIBLE
-RULE CARDS             NONE DRAFTED
+RULE CARDS             NONE DRAFTED, NOT AUTHORIZED
+PRE-CODE GATE          NOT AUTHORIZED
 IMPLEMENTATION         NOT AUTHORIZED
+ALTERNATE-SOURCE WORK  NOT AUTHORIZED
 ```
+
+### 3.0 Independent completeness review — result, and the boundary reopen
+
+The first independent completeness review was performed against the Stage-A package committed at `e26a1e0` and **did not pass**:
+
+```text
+RESULT:                      REMEDIATION REQUIRED
+PRIMARY-SOURCE COMPLETENESS: FAIL -- unfinished structural inspection
+BOUNDARY INTEGRITY:          REOPEN REQUIRED -- CHAR-005 has a newly
+                             established unlanded class-specific movement
+                             dependency presently associated with CHAR-009
+EXP-010 / CHAR-006 / CHAR-008:  remain deferred
+```
+
+**A governance reading in the first researcher report is corrected here.** That report concluded the Mystic `MV` finding was not a boundary-reopen condition because `CHAR-009` is not one of the three deferred cards (§5.1). **That was wrong.** The approved boundary rule fires whenever Stage-A work establishes a **mechanically indispensable dependency on any unlanded Rule Card not currently in `CLUSTER-003`** — and the original assignment named *"`CHAR-005` genuinely requiring an unlanded class/race movement rule"* as its worked example.
+
+**The boundary recorded in §4 is therefore provisional and awaits human governance.** `CHAR-009` was **not** added; see §7.6 for the evidence package and the five options the human decision may take.
+
+**Remediation pass 1** (2026-09-13) closed the declared structural inspection. Record: `docs/rules/evidence/CLUSTER-003-remediation-pass-1.md`. It closed six open rows, found **two governing objects the first pass missed**, produced **two new contradictions**, **withdrew one gap**, and corrected two citations — while adding, removing, and renaming **nothing** in the cluster.
 
 **This record is a boundary and evidence-state record, not an authorization.** It creates no Rule Card, approves nothing, and expands no boundary. The cluster boundary recorded in §4 was set by the human project owner in the task that commissioned this research; this document records it, it does not decide it.
 
@@ -26,7 +50,9 @@ IMPLEMENTATION         NOT AUTHORIZED
 |---|---|---|
 | Stage-A evidence collection | `DEC-0009`, `DEC-0010` | **Done** — three packets under `docs/rules/evidence/` |
 | Adversarial self-review | protocol §10.1.1 | **Done** — `docs/rules/evidence/CLUSTER-003-completeness-audit.md` |
-| **Independent completeness review** | protocol §10.1.2, `DEC-0010` item 14 | **NOT PERFORMED.** May not be performed by the original researcher. |
+| **Independent completeness review (round 1)** | protocol §10.1.2, `DEC-0010` item 14 | **PERFORMED — `REMEDIATION REQUIRED`.** See §3.0. |
+| **Stage-A remediation pass 1** | this cluster record §3.0 | **Done** — `docs/rules/evidence/CLUSTER-003-remediation-pass-1.md` |
+| **Second independent completeness / boundary review** | protocol §10.1.2 | **NOT PERFORMED.** May not be performed by the original researcher. |
 | Human evidence review | protocol §11 | **Not reached** |
 | Stage B synthesis | protocol §3 | **Not begun, not eligible** |
 | Rule Card approval | `SOURCE_HIERARCHY.md` §9 | Not reached |
@@ -189,16 +215,43 @@ Stated as coverage over the objects inspected, not as proof RC contains nothing.
 
 Whether the card's title should change is a governance decision and is **not** made here.
 
+### 7.5a Post-remediation corrections to §7.1–§7.4 (2026-09-13)
+
+| § | Status after remediation pass 1 |
+|---|---|
+| **7.1** `CHAR-005` dependency | **CONFIRMED and escalated.** The Mystic is now established as the **only** class with a movement exception, on structural evidence: all nine experience tables and all nine boxed blocks opened as page images, all nine Class Details read in full, and RC's own "Understanding the Tables" (p. 13) enumerates the experience-table column set with no movement column. The reading that this was *not* a reopen condition is **withdrawn** — see §3.0. |
+| **7.2** `CHAR-004` ownership | **SHARPENED, and the answer is now NO.** `CHAR-004` cannot determine legal starting equipment from Ch. 1 + Ch. 4 + Ch. 13 alone. **Armour permissions are genuinely duplicated; weapon permissions are not.** Thief, Dwarf and Halfling weapon restrictions and the Druid **+50% pricing rule** exist only in Chapter 2. RC's General Index routes `Weapon restrictions` to **nine class pages and not to Chapter 4**. |
+| **7.3** `EXP-010` | **CONFIRMED, additionally supported.** The General Index contains no `Marching`, `Formation`, or `Carrying capacity` entry. `EXP-010` remains deferred and un-researched. |
+| **7.4** `EXP-003` sub-responsibilities | **Mapping unchanged and stronger** — two further presentations located (RC p. 5, Ch. 17 p. 262), neither with a mechanic. **Special Terrain qualified** — RC Ch. 14 p. 153 prohibits a monster from charging in *"broken, heavy forest, jungle, mountain, swamp"* terrain, with *"20 yards (**20 feet indoors**)"*. That is a real indoor terrain constraint, but on an **action**, owned by `COMBAT-*`/`MON-*`, not a rate or turn-cost rule. The gap stands, narrower. **Also: the 10′ map square is a DM-variable default** (Ch. 17 p. 260), not a constant. |
+
 ### 7.5 Four internal source defects, all visually verified, none resolved
 
 | Defect | Disposition |
 |---|---|
-| Belt pouch: printed `2*` enc + `Capacity 50 cn`, footnote worked example says `55 cn` (`2 + 50 = 52`) | `RETAINED AS GENUINE SOURCE AMBIGUITY` |
-| Suit Armor: `Enc 750 cn` → `90' (30')` by the p. 88 table; item description says "movement rate is `30' (10')`" | `RETAINED AS GENUINE SOURCE AMBIGUITY` |
-| Starvation Table movement column non-monotonic: `No Penalty / ×3/4 / ×1/2 / ×3/4` | `RETAINED AS GENUINE SOURCE AMBIGUITY` |
-| "Clothes, plain" carries `***` (the quiver footnote) instead of `**` | Recorded as a typographic defect |
+| Belt pouch: printed `2*` enc + `Capacity 50 cn`, footnote worked example says `55 cn` (`2 + 50 = 52`) | `RETAINED AS GENUINE SOURCE AMBIGUITY` — **survives re-testing**; `55 cn` occurs once in the whole source |
+| Suit Armor: `Enc 750 cn` → `90' (30')` by the p. 88 table; item description says "movement rate is `30' (10')`" | `RETAINED AS GENUINE SOURCE AMBIGUITY` — **survives re-testing**; no override language exists in either direction |
+| Starvation Table movement column non-monotonic: `No Penalty / ×3/4 / ×1/2 / ×3/4` | `RETAINED AS GENUINE SOURCE AMBIGUITY` — **survives re-testing** |
+| "Clothes, plain" carries `***` (the quiver footnote) instead of `**` | Recorded as a typographic defect — **survives re-testing** |
+| **NEW (remediation)** — magic-user dagger: Ch. 4 note `w` marks both dagger rows *"at the DM's discretion"*, while Ch. 2 p. 19 makes the dagger the magic-user's one **unconditional** weapon | `RETAINED AS GENUINE SOURCE AMBIGUITY` |
+| **NEW (remediation)** — running speed: Ch. 6 p. 88 *"equal to their normal speed in feet per round… or three times their encounter speed"* vs. Ch. 8 p. 103 *"(**3 × normal movement**)"* | `RETAINED AS GENUINE SOURCE AMBIGUITY` — a factor-of-3 discrepancy, both sides visually verified |
+| **WITHDRAWN (remediation)** — racial-armour movement reduction, previously `RC DOES NOT SPECIFY` | **NOT A GAP.** The complete sentence is *"**The DM can impose penalties** on a character who wears the armor of a different race"*; the movement reduction is an example of an optional penalty. RC delegates by design. |
 
 Per protocol §10.2.2 case 3, a fully mapped genuine conflict does not block source completeness. **None is resolved, and no side is silently preferred.**
+
+### 7.6 Boundary-reopen evidence package
+
+> Prepared for human governance by remediation pass 1. **No boundary is chosen here.** Full detail: `docs/rules/evidence/CLUSTER-003-remediation-pass-1.md` §9.
+
+| Question | Answer |
+|---|---|
+| **A.** Indispensable unlanded dependency? | **YES — two, different in kind** |
+| **B.** Which cards? | `CHAR-005` (movement) and `CHAR-004` (equipment legality). `EXP-003` exhibits none |
+| **C.** Exact mechanic crossing the boundary | `CHAR-005`: a `(class, level) → base movement rate` datum, non-default for **one** class (Mystic `MV`, 120′→320′), plus an **unsupplied** composition rule for `MV` × encumbrance. `CHAR-004`: a per-class **weapon-permission predicate** (Thief, Dwarf, Halfling) plus the Druid **+50% pricing** rule. Armour permissions are duplicated in Chapter 4 and are **not** a dependency |
+| **D.** Is the whole external Rule Card required? | **No.** `CHAR-009`'s scope — class and racial abilities across the roster — is far larger than either slice, and nothing else in it is reachable from these two cards |
+| **E.** Could a narrower ownership correction solve it? | **Consistent with the evidence, in at least three shapes** — see remediation §9E. Counter-consideration recorded: RC's own boxed material names *"increased movement"* as a Mystic **special ability**, and RC's own index routes `Weapon restrictions` to class pages |
+| **F.** Would the current three-card cluster produce incorrect behaviour if implemented unchanged? | **YES, demonstrably, for four of nine required V1 classes.** A 10th-level mystic would be given 120′ where RC says **210′**; a thief could buy a **two-handed sword**; a dwarf a **longbow**; a halfling a **Medium weapon** and non-halfling armour. One wrong number, three permitted-illegal purchases |
+
+**The eventual human decision may be A (add an existing whole Rule Card), B (change ownership of a narrow mechanic), C (identify a different existing owner), D (revise a Rule Card boundary), or E (revise the cluster boundary). That decision is not made here.**
 
 ## 8. Unresolved Evidence-Stage Questions
 
@@ -271,7 +324,13 @@ No Rule Card exists for any of the three cards. `AGENTS.md` §2 forbids implemen
 | Research performed | 2026-09-13 |
 
 ```text
-CLUSTER-003 STAGE-A RESEARCH:
+CLUSTER-003 STAGE-A REMEDIATION:
+
+REMEDIATION COMPLETE
 RESEARCHER SELF-REVIEW COMPLETE
-AWAITING INDEPENDENT COMPLETENESS REVIEW
+AWAITING SECOND INDEPENDENT COMPLETENESS / BOUNDARY REVIEW
+
+CLUSTER BOUNDARY:           PROVISIONAL -- REOPENED, AWAITING HUMAN GOVERNANCE
+STAGE B:                    NOT STARTED / NOT AUTHORIZED
+ALTERNATE-SOURCE RESEARCH:  NOT STARTED / NOT AUTHORIZED
 ```
