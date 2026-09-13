@@ -3,19 +3,28 @@
 ## 1. Lifecycle Status
 
 ```text
-implementation work:        COMPLETE ON IMPLEMENTATION BRANCH
-human final branch review:  PENDING
-merge to main:              PENDING
+implementation work:         COMPLETE
+human final branch review:   PASS
+merge to main:               COMPLETE
+implementation verification: PASS
 ```
 
-**`CLUSTER-002` is not landed, not merged, and not production complete.**
-The completed work sits on `cluster-002-implementation`; `main` is
-unchanged at the approval commit. This record summarizes the branch for
-that final review — it does not authorize the merge.
+```text
+final branch review   PASS, 2026-09-12, at
+                      c4e5fc8e54caa08be7f9c57a21bfe3218029277e
+merge date            2026-09-13
+merge commit          8d26eb07e3ccb0c59f1d9e9cc8ffcb1b43f40bf2
+post-merge verify.py  PASS  (tests, coverage, Ruff, mypy strict)
+```
 
-`ARCHITECTURE.md` §15.2's readiness remains **`PASS`**. That is the
-*authorization* gate cleared on 2026-09-12, not a completion flag, and
-nothing here changes it.
+**`CLUSTER-002` is landed and `VERIFIED`.** The single `--no-ff` merge
+preserved all nine implementation-branch commits; `main` carries the
+complete history.
+
+`ARCHITECTURE.md` §15.1 and §15.2 remain **readiness** gates. §15.2 step 4
+records that implementation readiness was re-approved on 2026-09-12; that
+is the authorization, **not** the completion event. Completion is recorded
+separately, in §15.2's `CLUSTER-002` verification paragraph and here.
 
 ## 2. Objective
 
@@ -222,26 +231,39 @@ prevented it.
 ## 13. Branch State
 
 ```text
-branch:        cluster-002-implementation
-HEAD:          Slice F commit
-main:          38a25da  (unchanged; the approval / gate commit)
-working tree:  clean
-merged:        NO
-pushed:        NO
-tagged:        NO
+implementation branch:  cluster-002-implementation @ c4e5fc8  (retained)
+merge commit:           8d26eb07e3ccb0c59f1d9e9cc8ffcb1b43f40bf2
+main before:            38a25da  (the approval / gate commit)
+merged:                 YES  -- single --no-ff, 2026-09-13
+tagged:                 NO   -- none authorized
 ```
 
-Seven commits, unsquashed, in order: Slice A, Slice B, Slice C, Slice C
+**Nine commits, unsquashed, in order:** Slice A, Slice B, Slice C, Slice C
 human-review correction, Slice-D ledger correction, Slice D, Slice E,
-Slice F.
+Slice F, and the final O2 deterministic-fixture correction. The
+`--no-ff` merge preserved every one of them.
 
-## 14. Remaining Step
+**The three mid-flight corrections are part of the audit trail and are
+deliberately not tidied away:**
 
-**Final human review of the complete `cluster-002-implementation`
-branch**, then a single `--no-ff` merge to `main`, per the approved plan
-§15. On landing, `ARCHITECTURE.md` §15.2 should record `CLUSTER-002`
-implementation as verified, following the `CLUSTER-001` precedent.
+| Correction | What it was |
+|---|---|
+| **Slice C level validation** (`ee0aa7a`) | Human review found `bool` accepted as a hit-point level. `ISSUE-010`'s justification had wrongly claimed mypy prevents it — `bool` is an `int` subtype. Fixed at the entry boundary |
+| **Slice-D ledger correction** (`45e3e76`) | Plan revision 4 reclassified `T11`, `W2`, `W6`, `D7` from executable to documented calling-contract. No mechanic or count changed |
+| **`O2` fixture** (`c4e5fc8`) | Slice F found the approved fixture internally impossible and recorded it rather than reinterpreting an approved case; the human project owner then authorized a realizable replacement. **A test-fixture correction, not a rules change** |
+
+## 14. Landing
+
+**Complete.** Human final branch review `PASS` (2026-09-12), single
+`--no-ff` merge to `main` (2026-09-13, `8d26eb0`), post-merge canonical
+verification `PASS`, and `ARCHITECTURE.md` §15.2 synchronized to record
+`CLUSTER-002` implementation as **`VERIFIED`**, following the
+`CLUSTER-001` precedent.
+
+**This landing authorizes nothing further.** It selects no next cluster and
+resolves no deferred item; `P1`, `P3`, `CHAR-003` W2 and W3 stand exactly
+as recorded in §10.
 
 ```text
-STOP — FINAL CLUSTER REVIEW REQUIRED
+CLUSTER-002 — VERIFIED / LANDED
 ```

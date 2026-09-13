@@ -489,7 +489,14 @@ historical-rules implementation
 
 **`CLUSTER-002` HISTORICAL-RULES IMPLEMENTATION: `AUTHORIZED` — 2026-09-12.** This authorization applies only to the human-approved four-card `CLUSTER-002` boundary and its approved implementation plan. It does not authorize another Rule Card or another cluster, and the same governance distinction recorded for `CLUSTER-001` above applies unchanged: clearing these four steps for one cluster states nothing about any other.
 
-**`CLUSTER-002` IMPLEMENTATION / INTEGRATION: `IMPLEMENTATION COMPLETE ON BRANCH — FINAL REVIEW AND MERGE PENDING`.** The approved plan's Slices A–F are all implemented on `cluster-002-implementation`, each independently reviewed and accepted, with a completion record per slice (`DEVELOPMENT_WORKFLOW.md` §3–§5) and a cluster record at `docs/completion-records/ISSUE-014-cluster-002-character-foundation.md`. **The branch is not merged and `main` is unchanged.** A final human review of the complete branch precedes the single `--no-ff` merge. **Nothing in this update records the cluster as `VERIFIED`** — that status follows landing, per the `CLUSTER-001` precedent above.
+**`CLUSTER-002` IMPLEMENTATION / INTEGRATION: `VERIFIED` — merged 2026-09-13.** The approved plan's Slices A–F are complete and verified. All four Rule Cards are implemented, all **189** approved deterministic contract cases are canonically reconciled with exactly one owner each, and the required completion records (`docs/completion-records/ISSUE-008` through `ISSUE-013`, summarized in `ISSUE-014`) are in place.
+
+- **Human final branch review:** `PASS`, 2026-09-12, at `c4e5fc8e54caa08be7f9c57a21bfe3218029277e`.
+- **Merged to `main`:** 2026-09-13, by a single `--no-ff` merge.
+- **Merge commit:** `8d26eb07e3ccb0c59f1d9e9cc8ffcb1b43f40bf2`.
+- **Canonical verification:** `PASS` — `uv run python scripts/verify.py` (tests, coverage, Ruff, mypy strict), run on `main` immediately after the merge.
+
+This does not authorize or select another cluster; subsequent historical-rules work must independently satisfy the cluster workflow and governance gates above, exactly as before. §15.1 and §15.2 remain **readiness** gates — §15.2 step 4 records that implementation readiness was re-approved on 2026-09-12, which is not itself the completion event; this paragraph is. The general Pre-Code Development Gate (§16) and the per-cluster Rules Baseline Migration Gate requirement are unaffected and remain active project-wide.
 
 ## 16. Pre-Code Development Gate
 

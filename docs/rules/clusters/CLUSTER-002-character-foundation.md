@@ -38,7 +38,10 @@ Do not conflate these distinct gates (`ARCHITECTURE.md` §15.1/§15.2,
 | **Implementation-plan artifact (`ARCHITECTURE.md` §15.2 step 4)** | **`APPROVED` — 2026-09-12** (revision 3). [`docs/technical/CLUSTER-002_IMPLEMENTATION_PLAN.md`](../../technical/CLUSTER-002_IMPLEMENTATION_PLAN.md). **§15.2 step 4: `PASS`**, synchronized in `ARCHITECTURE.md` §15.2 the same day |
 | Implementation-readiness approval | **GRANTED — 2026-09-12**, human project owner |
 | **Implementation authorization** | **`AUTHORIZED` — 2026-09-12.** Bounded to the four-card boundary and the approved plan's Slices A–F |
-| **Implementation progress** | **`IMPLEMENTATION COMPLETE ON BRANCH — AWAITING FINAL HUMAN REVIEW`.** All six slices are implemented on `cluster-002-implementation`, each independently reviewed and accepted, with completion records `ISSUE-008`…`ISSUE-013` and the cluster record `ISSUE-014`. All **189** approved deterministic cases have a canonical owner. **The branch is not merged; `main` is unchanged. The cluster is not `VERIFIED`** — that follows the final review and the single `--no-ff` merge |
+| **Implementation** | **`VERIFIED` — merged 2026-09-13.** All six slices complete, each independently reviewed and accepted; completion records `ISSUE-008`…`ISSUE-013`, cluster record `ISSUE-014`. **Human final review: `PASS`** (2026-09-12, at `c4e5fc8e54caa08be7f9c57a21bfe3218029277e`). **Merge commit:** `8d26eb07e3ccb0c59f1d9e9cc8ffcb1b43f40bf2`. **`verify.py`: `PASS`** post-merge on `main` |
+| **Rule Cards** | `CHAR-001` **APPROVED / IMPLEMENTED** · `CHAR-002` **APPROVED / IMPLEMENTED** · `CHAR-003` **APPROVED / IMPLEMENTED** · `CHAR-007` **APPROVED / IMPLEMENTED** |
+| **Approved deterministic contract cases** | **189 / 189 canonically reconciled** — each with exactly one owner; 172 executable unit, 5 cross-card runtime composition, 3 static/API-shape, 9 documented calling-contract |
+| **Deferred items — unchanged by landing** | **`P1`** Druid transition ownership — `DEFER FOR HUMAN GOVERNANCE` · **`P3`** Chapter 13 Ability Check Rule ID — `DEFER FOR HUMAN GOVERNANCE` · **`CHAR-003` W2** — `MOOT` · **`CHAR-003` W3** — `NOT V1-WIRED`. **No Rule ID was invented and no deferred item became completed work** |
 
 ### Requirements carried into `CLUSTER-002_IMPLEMENTATION_PLAN.md` (recorded 2026-09-05)
 

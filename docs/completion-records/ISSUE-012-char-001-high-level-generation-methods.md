@@ -1,5 +1,14 @@
 # ISSUE-012: CHAR-001 §5 Chapter 10 High-Level Generation (CLUSTER-002 Slice E)
 
+> **Point-in-time Slice-E record.** Its lifecycle statements describe the
+> state **at the completion of Slice E** and are deliberately not rewritten.
+> Where it says `CHAR-001` approved-contract verification is *pending Slice
+> F*, that was true then; Slice F has since completed it. For the current
+> state see [`ISSUE-013`](ISSUE-013-cluster-002-cross-card-integration.md)
+> and the canonical cluster record
+> [`ISSUE-014`](ISSUE-014-cluster-002-character-foundation.md), which
+> supersede this record on cluster-level status.
+
 ## 1. Issue/Task Identifier and Objective
 
 ISSUE-012 (completion-record ledger). Implement **Slice E** of
