@@ -17,12 +17,16 @@ DRAFT — AWAITING HUMAN APPROVAL
 > | 1 | `CHAR-003`'s API received **no level**, so `_NAME_LEVEL` / `_MAXIMUM_LEVEL` could not bind anything | One level-aware `hit_point_gain` that decides rolled/fixed/reject itself (§7.6) |
 > | 2 | `hit_die(cls)` could not honestly answer for the **Druid** | Lookup removed; no `_HIT_DIE[DRUID]` entry; the operation rejects (§7.6.1) |
 > | 3 | `point_allocation_total(rng)` could not express the **zero-RNG** equal-allotment path | Split into `roll_point_allocation_total` + total-agnostic `allocate_points` (§7.8.1) |
-> | 4 | **S1** was to be proved by `# type: ignore` plus "mypy enforces it" — circular | Positive `inspect.signature` / module-AST assertions for S1, H36, H38, H6 (§9.2) |
+> | 4 | **S1** was to be proved by `# type: ignore` plus "mypy enforces it" — circular | Positive `inspect.signature` / module-AST assertions for S1, H36, H38, H6 (§9.2). *(H38 was reclassified again in revision 3 — see below.)* |
 > | 5 | Calling-contract cases risked becoming **ceremonial tests** | Documented conformance record with three named artifacts and no pytest function (§12.3) |
 > | 6 | Slice review mixed **"merged"** with a single final merge | One coherent workflow: accepted per slice, one `--no-ff` merge at the end (§15) |
 > | 7 | Error surface was fixed at **"base + five"** as a goal | Re-derived from the actual rejection paths: base + eight, with merges and splits each justified (§9.1) |
 >
 > The 189-case ledger is re-reconciled across four verification kinds (§12.1–§12.2). **Totals are unchanged: 69 / 30 / 42 / 48 = 189.**
+>
+> **Revision 3 — 2026-09-12, final human-review correction.** One classification defect. **`CHAR-003` `H38` is reclassified from static/API-shape conformance to documented calling-contract conformance** (§9.2, §12.2–§12.3, Slice C). Revision 2 reasoned that the absence of a `reroll` parameter made rerolling statically impossible; it does not. `hit_point_gain` is stateless, so a caller can simply invoke it **twice for the same level**, and the function cannot tell a legitimate first invocation from an attempted reroll of an already-established level without retaining character or advancement state — which §4.1 forbids and this correction does **not** introduce. H38 stays owned by **`CHAR-003` / Slice C**, not Slice F.
+>
+> **Nothing else changed.** No mechanic, Rule Card, API, slice, error type, or test count. **Totals remain 69 / 30 / 42 / 48 = 189**, with no case added, removed, duplicated or renumbered. Verification-kind accounting moves one case: static/API-shape **4 → 3**, calling-contract **4 → 5**.
 
 This document is a technical implementation plan. It is **not** a Rule Card, **not** a new rules authority, and **not** itself an authorization to implement. It translates the four `APPROVED` Rule Cards that make up `CLUSTER-002`'s boundary into a precise, human-reviewable plan another agent can execute **without making rules decisions**, per `ARCHITECTURE.md` §15.1/§15.2 and `docs/decisions/DEC-0005-v1-rules-inventory-and-clustered-implementation.md`.
 
@@ -411,6 +415,8 @@ max(1, rng.roll_die(_HIT_DIE[cls]) + ability_score_effects.adjustment(constituti
 
 **Per-level, by design.** `hit_point_gain` returns **one level's gain**. Range cases (H12, H18, H19, H21, H23, H28–H35) are tested by the caller looping over the level range and summing — iteration is a caller concern; the rolled/fixed/reject *decision* is not. **No range or total helper is added**, and no class maximum is exposed.
 
+**Roll once — a calling contract the operation cannot enforce.** The module contract must state that **a level's Hit Die is rolled once and no reroll or retry is permitted** (`CHAR-003` §3), and that invoking the operation again for an already-resolved level is a **caller-contract violation it cannot observe**, because it is stateless by design. This is `H38`; see §12.3.1. **No state is added to make it observable.**
+
 **This is not an advancement engine.** The operation answers *"what hit points does this class gain on entering this level?"* and nothing else. It exposes no level progression, no XP, no Attack Ranks, and no cap query. **`ADV-002` remains the future authoritative owner of general advancement limits** (§5.2), and the private constants remain a projection it must later replace or reconcile.
 
 **The `CHAR-003 → CHAR-007` dependency is made structurally real.** The public API accepts a **Constitution score**, not a caller-supplied adjustment, and calls `ability_score_effects.adjustment()` internally.
@@ -616,7 +622,7 @@ CharacterCreationError(Exception)             base -- mirrors DiceError(Exceptio
 |---|---|
 | **S1** — trade with no selected class | `inspect.signature(apply_trade)` — assert a `chosen_class` parameter **exists** and its `default is inspect.Parameter.empty`. A required parameter cannot be omitted, so the invalid call is unconstructible. mypy strict continues to protect **valid** callers; it is not cited as the proof here |
 | **H36** — `CHAR-003` invoked without a `CHAR-007` adjustment | `inspect.signature(hit_point_gain)` — assert the parameter set is exactly `(rng, cls, level, constitution)`. The assertion is about what is **absent**: no adjustment-injection parameter exists, so the card cannot produce a value without calling `CHAR-007` itself (§7.6) |
-| **H38** — any attempt to reroll a hit-point die | Assert the module's public surface exposes **no reroll entry point** — `hit_point_gain` is the only public callable, and its signature carries no reroll parameter. There is nothing to call, which is the rule |
+*(**H38** appeared in this table in revision 2 and has been removed — see the calling-contract table below and §12.3.1.)*
 | **H6** — neither Chapter 10 method reachable from 1st-level generation | Parse `ability_score_generation.py`'s module **AST** and assert no `Import`/`ImportFrom` node references `high_level_ability_score_generation`. This is a structural import-graph assertion, not source-text matching, and it does not depend on `sys.modules` state that other tests pollute |
 
 **Documented calling-contract conformance** — the approved architecture makes these conditions **unobservable inside the pure functions**, and that decision is preserved. **No `phase`, `creation_state`, `completed` flag, or selected-class state object is introduced to make them testable**, and **no ceremonial pytest function that asserts nothing meaningful is written for them**:
@@ -627,6 +633,7 @@ CharacterCreationError(Exception)             base -- mirrors DiceError(Exceptio
 | **W7** — switch attempted after a class is chosen | The switch receives scores and a destination; it has **no phase state and cannot know when it was called** | Same three artifacts |
 | **E23** — the same violation, seen from `CHAR-002` | Identical reasoning | Same three artifacts |
 | **O3** — trade before eligibility is evaluated | Ordering, not operation | Same three artifacts |
+| **H38** — any attempt to reroll a hit-point die | `hit_point_gain` is **stateless**. A caller can invoke it twice for the same level, and the function cannot distinguish a legitimate first invocation from a reroll of an already-established level **without retaining character or advancement state** — which §4.1 forbids. The absence of a `reroll` parameter does **not** make rerolling statically impossible | `CHAR-003`'s own artifacts, owned by **Slice C** — see §12.3.1 |
 
 **Cross-card composition** — executable, and the reason Slice F exists:
 
@@ -735,14 +742,17 @@ tests/
 | `test_ability.py` | *(none — primitive validation is an implementation test, counted separately)* | **0** |
 | `test_ability_score_effects.py` | A1–A48 | **48** |
 | `test_race_and_class_eligibility.py` | E1–E22, E24–E28 | **27** |
-| `test_hit_points_and_hit_dice.py` | H1–H42 *(`CHAR-003`, all of them)* | **42** |
+| `test_hit_points_and_hit_dice.py` | H1–H37, H39–H42 *(`CHAR-003`, all but H38)* | **41** |
 | `test_ability_score_generation.py` | G1–G5, T1–T14, S1, S3, M1–M5, V1–V12, W1–W6, D1–D8, **C1–C5** | **57** |
 | `test_high_level_ability_score_generation.py` | H1–H6 *(`CHAR-001` §5)* | **6** |
 | `test_cluster_002_integration.py` | E29, E30, O1, O2, O4 | **5** |
-| **Calling-contract conformance record** — `test_cluster_002_integration.py`'s module contract docstring + the Slice F completion-record checklist | E23, S2, W7, O3 | **4** |
+| **Calling-contract conformance record — `CHAR-003` / Slice C** (`ISSUE-010`) | **H38** | **1** |
+| **Calling-contract conformance record — cross-card / Slice F** (`ISSUE-013`) | E23, S2, W7, O3 | **4** |
 | | **TOTAL** | **189** |
 
-**Static/API-shape cases live in the module that owns the API being asserted**, not in the integration module: `S1` with `apply_trade`, `H36` and `H38` with `hit_point_gain`, `H6` with the Chapter 10 module. Each is an executable pytest function; it simply asserts a signature or an import graph rather than a computed value.
+**Static/API-shape cases live in the module that owns the API being asserted**, not in the integration module: `S1` with `apply_trade`, `H36` with `hit_point_gain`, `H6` with the Chapter 10 module. Each is an executable pytest function; it simply asserts a signature or an import graph rather than a computed value.
+
+**Calling-contract cases likewise stay with the card that owns them.** `H38` is a `CHAR-003` contract and does **not** become a cross-card concern merely because it is not expressible as a runtime negative branch — its canonical owner is the **Slice C** conformance record, not Slice F's.
 
 ### 12.1 Reconciliation against the approved cards
 
@@ -759,7 +769,8 @@ CHAR-002   E1-E30                                              =  30
             +  1 calling-contract (E23)                        =  30   OK
 
 CHAR-003   H1-H42                                              =  42
-              42 unit  (incl. static H36 and H38)              =  42   OK
+              41 unit  (40 runtime + static H36)
+            +  1 calling-contract (H38, Slice C record)         =  42   OK
 
 CHAR-007   A1-A48                                              =  48
               48 unit                                          =  48   OK
@@ -782,14 +793,14 @@ EXECUTABLE PYTEST CASE (unit)                                      176
 CROSS-CARD COMPOSITION TEST (runtime)                                5
     E29, E30, O1, O2, O4
 
-STATIC / API-SHAPE CONFORMANCE (runtime assertion on the API)        4
+STATIC / API-SHAPE CONFORMANCE (runtime assertion on the API)        3
     S1   inspect.signature(apply_trade)      -- chosen_class required
     H36  inspect.signature(hit_point_gain)   -- no adjustment parameter
-    H38  module public surface               -- no reroll entry point
     H6   module AST import graph             -- no Chapter 10 import
 
-DOCUMENTED CALLING-CONTRACT CONFORMANCE (no pytest function)         4
-    S2, W7, E23, O3
+DOCUMENTED CALLING-CONTRACT CONFORMANCE (no pytest function)         5
+    S2, W7, E23, O3     cross-card ordering      -- Slice F record
+    H38                 CHAR-003 roll-once       -- Slice C record
                                                                    ---
                                                                    189
 ```
@@ -805,6 +816,31 @@ DOCUMENTED CALLING-CONTRACT CONFORMANCE (no pytest function)         4
 3. **A checklist item in the Slice F completion record** (`ISSUE-013`) confirming, for each of the four, that the contract is documented and that **no production code path permits the invalid order** — `DEVELOPMENT_WORKFLOW.md` §5 already requires a completion record; this adds four checklist lines to one that must exist anyway.
 
 **No new mechanism, file, or ceremony is created for this.**
+
+### 12.3.1 `H38` — the roll-once contract, owned by `CHAR-003` / Slice C
+
+**Why the revision-2 classification was wrong.** Revision 2 called H38 static/API-shape conformance on the ground that `hit_point_gain` exposes no `reroll` parameter and no reroll helper. That is true and insufficient. The operation is **stateless**, so a caller can simply write:
+
+```text
+hit_point_gain(rng, cls, level, constitution)      # first invocation
+hit_point_gain(rng, cls, level, constitution)      # same level again
+```
+
+and the function **cannot distinguish a legitimate first invocation from an attempted reroll of an already-established level.** Making that distinction observable would require retaining character or advancement state — a level history, an `already_rolled` flag, a `Character` aggregate, `GameState`, or an `ADV-002` implementation. **§4.1 forbids every one of those, and none is introduced.** The absence of a `reroll` parameter therefore does not make rerolling statically impossible, and H38 is a **calling contract**, not an API-shape fact.
+
+**Canonical owner: the Slice C conformance record.** H38 is a `CHAR-003` contract; it does not migrate to Slice F merely because it is non-executable as a negative runtime branch. **Slice C still covers the entire `CHAR-003` contract.**
+
+**Verification evidence — three artifacts, none ceremonial:**
+
+1. **The `hit_points_and_hit_dice.py` module contract** states explicitly that **a level's Hit Die is rolled once, and no reroll or retry is permitted** (`CHAR-003` §3: *"No reroll is permitted"*), and that repeated invocation for an already-resolved level is a caller-contract violation the operation cannot observe.
+2. **Executable `CHAR-003` tests** proving each legitimate rolled-level invocation consumes **exactly one die** and contains **no internal retry or reroll behaviour** — audited by `ScriptedRNG` with exactly-sized queues, which fails loudly on an extra draw. These are the H1–H11, H12, H13, H15 and H26 assertions already required; H38 adds no test of its own.
+3. **The Slice C completion record (`ISSUE-010`)**, explicitly confirming:
+   - **no reroll helper exists**;
+   - **no automatic retry exists**;
+   - **no production code in Slice C invokes the HP-gain operation repeatedly to replace an established roll**;
+   - **repeated invocation for the same already-resolved level is outside the pure operation's observable state and is prohibited by the calling contract.**
+
+**No pytest function is written for H38**, and specifically **no test that merely checks the word `reroll` is absent or that a docstring exists** — such a test asserts nothing about behaviour.
 
 ### 12.4 Placement notes for the remaining non-obvious cases
 
@@ -893,11 +929,11 @@ Derived from the dependency graph in §7.9. Each slice is independently reviewab
 |---|---|
 | **Production files** | `hit_points_and_hit_dice.py` |
 | **Test files** | `test_hit_points_and_hit_dice.py` |
-| **Cases covered** | **H1–H42** — all 42, including the static/API-shape cases **H36** and **H38** |
+| **Cases covered** | **H1–H42** — the entire `CHAR-003` contract: **40** executable, **H36** static/API-shape, **H38** a documented calling-contract record owned by this slice (§12.3.1) |
 | **Dependencies** | Slice A (`CHAR-007` adjustment — the load-bearing dependency); `src/rng` |
 | **Non-goals** | Damage, death, healing, saves, advancement, Attack Ranks, Chapter 19. **No range or total helper, no public `hit_die` lookup, no exposed class maximum** |
-| **Verification** | `verify.py` — 100% branch. `ScriptedRNG` exact-length queues audit every draw count, **including the zero-draw fixed and rejection branches**. H36/H38 assert signatures via `inspect.signature` |
-| **Commit boundary** | One commit; completion record required |
+| **Verification** | `verify.py` — 100% branch. `ScriptedRNG` exact-length queues audit every draw count, **including the zero-draw fixed and rejection branches**. **H36** asserts the signature via `inspect.signature`. **H38** is carried by the module contract plus four checklist items in this slice's completion record (§12.3.1) |
+| **Commit boundary** | One commit; completion record (`ISSUE-010`) required, **including the four H38 roll-once checklist items** |
 
 **The level-aware API is what this slice is really delivering.** `hit_point_gain(rng, cls, level, constitution)` decides rolled-versus-fixed, enforces the class maximum, and rejects the Druid rolled levels (§7.6, §7.6.1). Nothing is left for the caller to reconstruct, and **`_NAME_LEVEL` / `_MAXIMUM_LEVEL` bind behaviour rather than documenting a caller obligation.** Range cases (H12, H18, H19, H21, H23, H28–H35) are tested by looping the operation over a level range.
 
@@ -1037,6 +1073,7 @@ The one composition defect that previously existed between them — `CHAR-001` �
 | Error surface size | **Base + 8, derived from the rejection paths** (§9.1) | Not a target count — merged where meanings align, split only where an approved case depends on the distinction |
 | **Static-conformance method** | **`inspect.signature` and module AST, never `# type: ignore` + "mypy proved it"** (§9.2) | Suppressing the diagnostic cannot be the proof |
 | **Calling-contract verification** | **Documented conformance record, no ceremonial test** (§12.3) | Preserves the architecture that makes the condition unobservable |
+| **`H38` classification** | **Calling contract, owned by Slice C** (§12.3.1) | `hit_point_gain` is stateless, so a repeat call for the same level is indistinguishable from a first call; an absent `reroll` parameter proves nothing |
 | Chapter 10 module separation | **Own module** (§7.8) | Makes H6 an import-graph fact and resolves the `H` collision |
 | Slice D kept whole | **Yes**, with a named alternative seam (§14) | R1–R11 review better together |
 | **Branch shape** | **Slices accepted on the branch; one final `--no-ff` merge** (§15) | `DEVELOPMENT_WORKFLOW.md` mandates neither shape; recorded rather than assumed |
@@ -1051,7 +1088,8 @@ The one composition defect that previously existed between them — `CHAR-001` �
 | **`CHAR-003`'s private level constants leak into a general API** | §5.2's constraints: module-private names, not re-exported, with a mandatory ownership note naming `ADV-002` |
 | **The value/procedure split erodes in `CHAR-007`** | §7.4: the module imports no consumer, and returns only numbers and small frozen values. Enforced by the import graph, not by review discipline |
 | **A future reader treats R11 as RC-explicit** | `CHAR-001`'s provenance table classifies it as a Necessary Mechanical Consequence and preserves the rejected reading; this plan does not restate it as anything stronger |
-| **A conformance test is written that proves nothing** — a suppressed type error, or an assertion that a docstring exists | §9.2 names the exact positive assertion for each of S1/H36/H38/H6 (`inspect.signature`, module surface, module AST). §12.3 states that S2/W7/E23/O3 get **no** pytest function, and names the three artifacts that verify them instead |
+| **A conformance test is written that proves nothing** — a suppressed type error, or an assertion that a docstring exists | §9.2 names the exact positive assertion for each of S1/H36/H6 (`inspect.signature`, module AST). §12.3 states that S2/W7/E23/O3 get **no** pytest function and names the three artifacts that verify them; §12.3.1 does the same for H38 and explicitly rules out a test that checks the word `reroll` is absent |
+| **A calling contract is mistaken for an API-shape fact** — the revision-2 H38 defect | §12.3.1 records the test: *can the stateless operation distinguish the violation from a legitimate call?* If not, it is a calling contract, whatever the signature looks like. Applied to H38, the answer is no |
 | **The Druid levels 2–9 rejection is read as a new rule** | §7.6.1 marks it explicitly as a necessary consequence of `CHAR-003` §1's *"does not apply"*, flags that H39 names only level 1, and records that no Rule ID, Simulator Ruling or P1 reopening is involved. **A reviewer who disagrees should say so at approval** — it is the one inference in this plan that goes beyond a literal approved case |
 
 ### 18.3 Decisions requiring the human project owner
