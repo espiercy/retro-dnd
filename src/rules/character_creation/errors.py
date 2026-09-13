@@ -5,13 +5,12 @@ specific subclasses, raised eagerly and never silently coerced, clamped, or
 defaulted. See docs/technical/CLUSTER-002_IMPLEMENTATION_PLAN.md §9.1 for
 the approved error surface.
 
-This module defines only the errors whose approved rejection paths are
-already executable. Slice A added the base and the ability-score domain
-error; Slice C added the two CHAR-003 hit-point errors; Slice D adds the
-four CHAR-001 generation errors. The plan's remaining subclass —
-``PointAllocationError``, for Slice E's Chapter 10 point allocation — is
-deliberately **not** pre-stubbed. Each later slice extends this module when
-its own approved rejection paths become executable.
+This module was populated slice by slice, as each approved rejection path
+became executable: Slice A added the base and the ability-score domain
+error, Slice C the two CHAR-003 hit-point errors, Slice D the four CHAR-001
+trade and switch errors, and Slice E the Chapter 10 point-allocation error.
+**The hierarchy is now complete for CLUSTER-002** — Slice F adds no
+production code and therefore no error type.
 """
 
 from __future__ import annotations
@@ -150,4 +149,27 @@ class IllegalSwitchError(CharacterCreationError):
     **whether** a switch is authorized — that is the DM's or the
     simulation policy's, and this error is only reached once a caller has
     decided to perform one.
+    """
+
+
+class PointAllocationError(CharacterCreationError):
+    """A Chapter 10 point-allocation total or allocation shape is invalid.
+
+    CHAR-001 §5's Second Method. Four causes, distinguished by message:
+
+    - the **total** is not an ``int``, or is a ``bool``. ``bool`` is a
+      subtype of ``int``, so static typing alone permits ``True`` and it
+      would otherwise read as 1;
+    - the total lies outside RC's ``60..90`` allotment bound (approved
+      case H5);
+    - the **allocation** does not name exactly the six abilities, one
+      score each;
+    - the allocated scores do not sum to the total. No approved case
+      names this; it is implementation-contract validation, because the
+      operation cannot faithfully allocate a total it is not given.
+
+    **This error is never used for an individual ability score outside
+    3-18.** That is the standing range limitation and raises
+    :class:`AbilityScoreDomainError` — the rejected value there is a
+    score, not a total (approved case H4).
     """
