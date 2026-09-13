@@ -16,3 +16,5 @@ Durable per-issue implementation records for the Retro D&D Simulator project (`D
 | [ISSUE-010](ISSUE-010-char-003-hit-points-and-hit-dice.md) | CHAR-003 Hit Points & Hit Dice (CLUSTER-002 Slice C) | Complete |
 | [ISSUE-011](ISSUE-011-char-001-ability-score-generation.md) | CHAR-001 Ability Score Generation §1/§4/§6 (CLUSTER-002 Slice D) | Complete |
 | [ISSUE-012](ISSUE-012-char-001-high-level-generation-methods.md) | CHAR-001 §5 Chapter 10 High-Level Generation (CLUSTER-002 Slice E) | Complete |
+| [ISSUE-013](ISSUE-013-cluster-002-cross-card-integration.md) | CLUSTER-002 Cross-Card Integration (Slice F) | Complete |
+| [ISSUE-014](ISSUE-014-cluster-002-character-foundation.md) | CLUSTER-002 Character Foundation — Cluster Completion | Implementation complete on branch — final review pending |

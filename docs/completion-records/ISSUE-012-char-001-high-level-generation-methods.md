@@ -11,8 +11,16 @@ and **deliberately unwired** from ordinary 1st-level creation.
 Slices A–D were human-reviewed and **ACCEPTED** before this slice began.
 None was redesigned.
 
-**With this slice, `CHAR-001` is implemented in full** against the approved
-Rule Card contract — §1, §4, §5, §6.1 and §6.2 all now exist in code.
+With this slice, **`CHAR-001` production implementation is COMPLETE** —
+§1, §4, §5, §6.1 and §6.2 all now exist in code, and no `CHAR-001` source
+file remains to be written.
+
+**`CHAR-001` full approved-contract verification is PENDING SLICE F.**
+Six approved `CHAR-001` cases still have their canonical ownership there:
+**`S2`, `W7`, `O1`, `O2`, `O3`, `O4`**. Production completeness and
+contract verification are not the same claim, and this record does not
+conflate them.
+
 **`CLUSTER-002` is NOT complete**: Slice F remains.
 
 ## 2. Approved Inputs/Specifications
@@ -262,6 +270,9 @@ Protocol only — `SeededRNG`/`ScriptedRNG` asserted absent), `ability` and
 `assign_scores` and `allocate_points` consume **zero**, proved with an
 empty `ScriptedRNG`.
 
-`CHAR-001` is now implemented in full against its approved contract.
+**`CHAR-001` production implementation is complete**; its **full
+approved-contract verification remains pending Slice F**, which owns
+`S2`, `W7`, `O1`, `O2`, `O3` and `O4`.
+
 **`CLUSTER-002` implementation remains IN PROGRESS** — Slice F is
 outstanding, and no cluster is marked complete by this record.
