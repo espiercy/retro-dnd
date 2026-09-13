@@ -188,6 +188,12 @@ def hit_point_gain(
     ``level`` is the level being gained or entered, and this operation
     decides which rule governs it:
 
+    ``level`` not an ``int``, or a ``bool``
+        :class:`HitPointLevelError`. Structural validation at the entry
+        boundary, before any numeric comparison: ``bool`` is a subtype of
+        ``int``, so static typing alone would let ``True`` through and be
+        read as level 1. Never coerced.
+
     ``level < 1``, or above the class maximum
         :class:`HitPointLevelError`. Nothing accrues past the maximum
         (approved cases H14, H20, H24).
@@ -219,6 +225,14 @@ def hit_point_gain(
     One invocation is one level. See the module docstring's roll-once
     calling contract (approved case H38).
     """
+    if not isinstance(level, int) or isinstance(level, bool):
+        # bool is a subtype of int, so static typing alone permits
+        # hit_point_gain(rng, cls, True, con) and True == 1 would silently
+        # read as level 1. Excluded explicitly, following the convention
+        # src/rng/rng.py and src/rules/exploration/turn_credit.py set.
+        raise HitPointLevelError(
+            f"level must be an int and must not be a bool, got {level!r}"
+        )
     if level < 1 or level > _MAXIMUM_LEVEL[cls]:
         raise HitPointLevelError(
             f"{cls.name} has no level {level}; levels run 1 to "

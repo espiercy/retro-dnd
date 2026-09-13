@@ -414,6 +414,26 @@ def test_level_below_1_is_rejected() -> None:
             hit_point_gain(ScriptedRNG([]), CharacterClass.FIGHTER, level, _CON_ZERO)
 
 
+def test_bool_is_rejected_as_a_level() -> None:
+    # bool is a subtype of int, so static typing alone permits these and
+    # True would otherwise be read as level 1. No type: ignore is needed
+    # here, which is exactly why the runtime guard exists.
+    for level in (True, False):
+        with pytest.raises(HitPointLevelError, match="must not be a bool"):
+            hit_point_gain(ScriptedRNG([6]), CharacterClass.FIGHTER, level, _CON_ZERO)
+
+
+def test_non_integer_level_is_rejected_and_never_coerced() -> None:
+    for level in (1.5, "1", None):
+        with pytest.raises(HitPointLevelError, match="must be an int"):
+            hit_point_gain(
+                ScriptedRNG([6]),
+                CharacterClass.FIGHTER,
+                level,  # type: ignore[arg-type]
+                _CON_ZERO,
+            )
+
+
 def test_druid_has_no_hit_die_at_any_rolled_level() -> None:
     # A necessary consequence of "does not apply", which the card states
     # without qualification. H39 names level 1; no Druid rolled level has a

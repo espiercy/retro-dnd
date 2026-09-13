@@ -56,11 +56,16 @@ hit_point_gain(rng: RNG, cls: CharacterClass, level: int, constitution: int) -> 
 which rule governs it — nothing is pushed onto a caller:
 
 ```text
-level < 1, or > class maximum        -> HitPointLevelError
+level not an int, or a bool          -> HitPointLevelError   (structural)
+level < 1, or > class maximum        -> HitPointLevelError   (domain)
 Druid at a rolled level              -> HitDieNotApplicableError
 1 <= level <= Name level             -> ROLLED
 Name level < level <= class maximum  -> FIXED
 ```
+
+The structural check runs **first**, before any numeric comparison — see
+§10.1 for why it is required and why `Constitution` is deliberately not
+validated alongside it.
 
 **Rolled branch:** `max(1, one_hit_die.total + adjustment(constitution))`.
 The Constitution adjustment is obtained by calling **`CHAR-007`'s
@@ -148,13 +153,20 @@ calling-contract        1   H38   -- no pytest function
 design. Verified by extraction. Every name is qualified `char003` because
 `CHAR-001` also has H-numbered cases, in a different module.
 
-**Implementation/coverage tests — 11, counted separately**, under an
-explicit banner: level below 1; Druid rejected at every rolled level; Druid
-past maximum as a *level* rejection rather than a hit-die one; `CHAR-007`
-domain rejection propagating unchanged; the fixed branch never consulting
-Constitution; every fixed-gain level consuming zero dice; the one-operation
-public surface; no advancement API; error hierarchy; and two AST-based
-import-boundary assertions.
+**Implementation/coverage tests — 13, counted separately**, under an
+explicit banner: level below 1; **`bool` rejected as a level**; **non-integer
+level rejected and never coerced**; Druid rejected at every rolled level;
+Druid past maximum as a *level* rejection rather than a hit-die one;
+`CHAR-007` domain rejection propagating unchanged; the fixed branch never
+consulting Constitution; every fixed-gain level consuming zero dice; the
+one-operation public surface; no advancement API; error hierarchy; and two
+AST-based import-boundary assertions.
+
+The two new tests were added by the 2026-09-12 human-review correction
+(§10.1). **No Rule Card case ID was assigned to either**, and the approved
+counts are unchanged: `CHAR-003` = 42, `CLUSTER-002` = 189. The `bool` test
+needs **no** `# type: ignore`, which is itself the evidence that static
+typing does not catch this case.
 
 ### H36 — static / API-shape evidence
 
@@ -200,7 +212,8 @@ exhaustion assertion. One rolled level consumes exactly one die.
 
 ## 8. Verification Results
 
-- **Tests:** 322 passed, 0 failed (270 after Slice B + 52 new).
+- **Tests:** 324 passed, 0 failed (270 after Slice B + 54 new — 52 at the
+  initial commit, plus 2 from the 2026-09-12 human-review correction).
 - **Coverage:** PASS — differentiated gate: `src/rules/` 12 files, 100%
   required per file, met; core aggregate 100.00% (≥95% required).
 - **Ruff:** clean (33 source files).
@@ -219,11 +232,13 @@ before any commit.
 
 | File | Statements | Branches | Missing | Partial |
 |---|---|---|---|---|
-| **`hit_points_and_hit_dice.py`** | **27/27** | **6/6** | 0 | 0 |
+| **`hit_points_and_hit_dice.py`** | **29/29** | **8/8** | 0 | 0 |
 | `errors.py` | 5/5 | — | 0 | 0 |
 
-Its six branches are the two arcs each of the level-range check, the
-rolled-versus-fixed check, and the Druid hit-die check.
+Its eight branches are the two arcs each of the **level structural check**,
+the level-range check, the rolled-versus-fixed check, and the Druid hit-die
+check. (At the initial Slice C commit this file was 27/27 and 6/6; the
+2026-09-12 correction added the structural check — §10.1.)
 
 Slice A and B files remain at 100%/100%: `ability.py` 44/44 + 8/8,
 `ability_score_effects.py` 66/66 + 6/6, `race_and_class_eligibility.py`
@@ -242,13 +257,67 @@ identifies for Slices D–E (`IllegalTradeError`,
 the module docstring was updated to say so. The existing hierarchy was not
 redesigned.
 
-**One conscious implementation choice, recorded rather than left implicit:**
-`hit_point_gain` does not add an `int`/`bool` type guard on `level` or
-`constitution`. No approved case requires one, mypy strict prevents the
-case in typed callers, and a `bool` Constitution resolves to 0 or 1 — both
-outside `CHAR-007`'s accepted domain — and is therefore rejected naturally
-by the existing path. Adding an unrequested third error surface would have
-been scope creep.
+### 10.1 Human-review correction, 2026-09-12 — level structural validation
+
+**A claim previously recorded in this section was wrong and is withdrawn.**
+It read: *"mypy strict prevents the case in typed callers."* **That is false
+for `bool`.** In Python, `bool` is a **subtype of `int`**, so static typing
+permits a boolean wherever an `int` is expected, and
+
+```python
+hit_point_gain(rng, CharacterClass.FIGHTER, True, 12)
+```
+
+type-checks cleanly, reaches the implementation, and — because `True == 1` —
+would have been read silently as **level 1**. That violates the repository's
+established convention of excluding `bool` from integer rule inputs
+(`src/rng/rng.py`, `src/rules/exploration/turn_credit.py`).
+
+**Corrected behaviour.** The public `CHAR-003` level boundary now validates
+structurally **before** any numeric comparison:
+
+```python
+if not isinstance(level, int) or isinstance(level, bool):
+    raise HitPointLevelError(...)
+```
+
+`True`, `False`, `1.5`, `"1"` and `None` are all rejected. **Nothing is
+coerced.** `HitPointLevelError` is reused rather than adding a class for
+structural validation — the invalid value is supplied for the `level`
+parameter either way, so one parameter keeps one error.
+
+The recorded reason for the choice is therefore replaced with the accurate
+one:
+
+> Python typing treats `bool` as an `int` subtype, so the public `CHAR-003`
+> level boundary explicitly rejects `bool` at runtime, following the
+> repository's established integer-validation convention.
+
+**No approved expectation changed.** The `level < 1` and
+`level > class maximum` rejections are unchanged, every H-series case is
+unchanged, and the approved counts remain **`CHAR-003` = 42** and
+**`CLUSTER-002` = 189**. This is input-contract hardening, not a Rule Card
+change.
+
+**Constitution remains deliberately unvalidated at the entry boundary, and
+that is not the same oversight.** It is not validated *there* because the
+two branches consume it differently:
+
+- **rolled branch** — `CHAR-007`'s `adjustment()` consumes it, and
+  `CHAR-007` owns the accepted scalar domain. Its rejection propagates
+  naturally, unchanged.
+- **fixed branch** — Constitution is **not mechanically consumed at all**
+  (card §4, §5). A fixed gain must therefore continue to consume zero RNG,
+  make zero `CHAR-007` calls, and ignore Constitution entirely. Adding an
+  unconditional check at the top would make fixed gains depend on
+  validating a value the rules do not use, which would be a rules change,
+  not hardening.
+
+Unlike the `level` case, a `bool` Constitution is **already** rejected
+correctly on the branch that uses it: `True`/`False` resolve to 1/0, both
+outside `CHAR-007`'s 2–18 domain, so `adjustment()` raises. The `level`
+parameter had no such downstream guard, which is precisely why it needed
+one.
 
 ## 11. Known Limitations/Unresolved Issues
 

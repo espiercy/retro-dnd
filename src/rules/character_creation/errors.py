@@ -46,12 +46,22 @@ class AbilityScoreDomainError(CharacterCreationError):
 
 
 class HitPointLevelError(CharacterCreationError):
-    """A hit-point gain was requested for a level the class cannot reach.
+    """A hit-point gain was requested for a level that is not a valid level.
 
-    Either below 1, or above the class maximum CHAR-003 §1 records. RC
-    stops the standard progression at that maximum, and no hit points
-    accrue past it from any source this card owns (approved cases H14,
-    H20, H24).
+    Covers both the structural and the domain case, because the invalid
+    value is supplied for the same parameter either way:
+
+    - **structural** — ``level`` is not an ``int``, or is a ``bool``.
+      ``bool`` is a subtype of ``int``, so static typing alone permits it
+      and ``True`` would otherwise read as level 1; it is excluded
+      explicitly, following src/rng/rng.py and turn_credit.py;
+    - **domain** — below 1, or above the class maximum CHAR-003 §1
+      records. RC stops the standard progression at that maximum, and no
+      hit points accrue past it from any source this card owns (approved
+      cases H14, H20, H24).
+
+    No separate error class exists for the structural case: one parameter,
+    one error.
 
     The request is rejected rather than clamped or answered with zero:
     silently returning 0 would make an out-of-range level indistinguishable
