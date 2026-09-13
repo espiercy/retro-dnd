@@ -5,12 +5,13 @@ specific subclasses, raised eagerly and never silently coerced, clamped, or
 defaulted. See docs/technical/CLUSTER-002_IMPLEMENTATION_PLAN.md §9.1 for
 the approved error surface.
 
-This module currently defines only the errors Slice A's approved rejection
-paths actually require. The plan identifies further subclasses for Slices
-B-E (illegal trade, class-minimum violation, prime-requisite ceiling,
-illegal switch, hit-point level, hit die not applicable); those are
-deliberately **not** pre-stubbed here. Each later slice extends this module
-when its own approved rejection paths become executable.
+This module defines only the errors whose approved rejection paths are
+already executable. Slice A added the base and the ability-score domain
+error; Slice C adds the two CHAR-003 hit-point errors. The plan identifies
+five further subclasses for Slices D-E (illegal trade, class-minimum
+violation, prime-requisite ceiling, illegal switch, point allocation);
+those are deliberately **not** pre-stubbed. Each later slice extends this
+module when its own approved rejection paths become executable.
 """
 
 from __future__ import annotations
@@ -41,4 +42,34 @@ class AbilityScoreDomainError(CharacterCreationError):
     The raised message always names which lookup and which domain was
     violated. RC specifies nothing outside these ranges and no value may
     be extrapolated (CHAR-007 §1; approved case A15).
+    """
+
+
+class HitPointLevelError(CharacterCreationError):
+    """A hit-point gain was requested for a level the class cannot reach.
+
+    Either below 1, or above the class maximum CHAR-003 §1 records. RC
+    stops the standard progression at that maximum, and no hit points
+    accrue past it from any source this card owns (approved cases H14,
+    H20, H24).
+
+    The request is rejected rather than clamped or answered with zero:
+    silently returning 0 would make an out-of-range level indistinguishable
+    from a legitimate zero-gain level, and CHAR-003 has none.
+    """
+
+
+class HitDieNotApplicableError(CharacterCreationError):
+    """A rolled hit-point gain was requested for a class with no Hit Die.
+
+    CHAR-003 §1 records the Druid's Hit Die as "does not apply — enters at
+    9th as a cleric", without qualification, so **no** Druid rolled level
+    has a defined die (approved case H39). A character who will become a
+    druid rolls levels 1 through Name level **as a cleric**; that is what
+    approved case H40 describes, and the caller requests those levels with
+    ``CharacterClass.CLERIC``.
+
+    Distinct from :class:`HitPointLevelError`, and the distinction is not
+    cosmetic: Druid level 1 is *inside* the Druid's 1-36 level range, so
+    reporting a level-range violation for it would assert something false.
     """
