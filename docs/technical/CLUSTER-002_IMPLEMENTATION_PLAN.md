@@ -3,12 +3,14 @@
 ## 1. Status / Purpose
 
 ```text
-DRAFT — AWAITING HUMAN APPROVAL
+APPROVED
 ```
 
-**This plan does not authorize implementation.**
+**Human Implementation-Plan Review: APPROVED — 2026-09-12** (revision 3). See §21.
 
-**`ARCHITECTURE.md` §15.2 step 4 remains outstanding until the human project owner approves this plan.**
+**This plan is the authoritative implementation plan for `CLUSTER-002`.** Its approval is the human authorization step (4) that `ARCHITECTURE.md` §15.2 requires — distinct from, and in addition to, the four Rule Cards' own individual approvals. `ARCHITECTURE.md` §15.2 was synchronized the same day; see its "Status update (2026-09-12)".
+
+**Approval authorizes implementation of the slices defined in §14, in order, each independently reviewed and accepted.** It does not authorize any work outside §3's four-card boundary, and it does not weaken §4's non-goals or §16's deferred items.
 
 > **Revision 2 — 2026-09-12, human-review corrections.** The architecture of revision 1 was accepted in principle; seven implementation-shape defects were corrected. **No approved mechanic was changed, no rules question reopened, and no new research, Rule Card, Simulator Ruling or decision record was created.**
 >
@@ -1120,15 +1122,17 @@ ARCHITECTURE.md §15.2 Rules Baseline Migration Gate:
     step 1 — V1 rules inventory approved                   PASS  (2026-08-16)
     step 2 — cluster boundary approved                     PASS  (2026-08-23)
     step 3 — all required Rule Cards approved              PASS  (2026-09-04)
-    step 4 — implementation readiness (re-)approved        AWAITING HUMAN APPROVAL OF THIS PLAN
+    step 4 — implementation readiness (re-)approved        PASS  (2026-09-12, this plan)
 
 ARCHITECTURE.md §16 project-wide Pre-Code Development Gate: CLEARED (2026-08-15)
     -- necessary but not sufficient for this cluster
 
-CLUSTER-002 IMPLEMENTATION:                                NOT AUTHORIZED
+CLUSTER-002 IMPLEMENTATION:                                AUTHORIZED / IN PROGRESS
 ```
 
-**Step 4 is not marked PASS by this document, and must not be marked PASS by the agent that drafted it.** Only the human project owner's approval of this plan satisfies it — and, per the `CLUSTER-001` precedent, `ARCHITECTURE.md` §15.2's status text must then be synchronized in the same task that records the approval.
+**Step 4 passed on the human project owner's approval of this plan, 2026-09-12**, and `ARCHITECTURE.md` §15.2's status text was synchronized in the same task — see its "Status update (2026-09-12)". Per the `CLUSTER-001` precedent, that synchronization is what makes the authorization effective; this document alone does not confer it.
+
+**Authorization is bounded.** It applies only to §3's four-card boundary and the slices in §14. It does not authorize `EXP-004`, another Rule Card, or another cluster, and it does not weaken `ARCHITECTURE.md` §16, which remains active project-wide.
 
 ---
 
@@ -1140,18 +1144,20 @@ CLUSTER-002 IMPLEMENTATION:                                NOT AUTHORIZED
 - No production code, test skeleton, or placeholder class has been created by the task that drafted this plan.
 
 ```text
-STOP — HUMAN PLAN APPROVAL REQUIRED
+IMPLEMENTATION PLAN APPROVED — 2026-09-12
 ```
 
-**This plan does not authorize implementation.** `CLUSTER-002` implementation begins only after the human project owner approves this document and `ARCHITECTURE.md` §15.2 is synchronized to record `CLUSTER-002` implementation readiness as re-approved.
+`CLUSTER-002` implementation is **authorized**, bounded by §3 and sequenced by §14. Each slice is committed on `cluster-002-implementation`, **reviewed and accepted** before the next begins, with the branch merged to `main` once — after Slice F (§15).
 
 ## 21. Human Implementation-Plan Review
 
 ```text
-Status:       AWAITING HUMAN APPROVAL
-Reviewed by:  —
-Date:         —
-Outcome:      —
+Status:      APPROVED
+Reviewed by: Human project owner
+Date:        2026-09-12
+Outcome:     APPROVED FOR IMPLEMENTATION
 ```
 
-*(To be completed by the human project owner. This block must not be filled in by an agent.)*
+**Revision 3 is approved as written.** The human reviewer specifically accepts: the **189-case contract ledger**; **`AbilityScores` Approach A**; the **level-aware `CHAR-003` API**; **Druid HP handling**; **`CHAR-003` `H38` as calling-contract conformance**; **`CHAR-001` Chapter 10 module separation**; **`R11` enforcement ordering**; the **`CHAR-003` → `CHAR-007` structural dependency**; the **`CHAR-001` → `CHAR-002` dependency**; the **Rule-Card composition checks**; the **error hierarchy**; **Slices A–F**; and the **single-final-merge branch workflow**.
+
+**No technical content of revision 3 was altered by this approval.** §2–§20 are unchanged in substance; only §1's status line and this block record the approval.

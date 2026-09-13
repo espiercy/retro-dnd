@@ -480,6 +480,17 @@ historical-rules implementation
 
 **`CLUSTER-001` IMPLEMENTATION / INTEGRATION: `VERIFIED` — 2026-08-18.** The authorized `EXP-001` + `EXP-002` `CLUSTER-001` implementation is complete and verified. Steps 1–4 of the approved implementation plan and their required completion records (`docs/completion-records/ISSUE-003` through `ISSUE-006`, summarized in `ISSUE-007`) are complete, and the cross-card integration gate passes using the real production components. This does not authorize or select another cluster; subsequent historical-rules work must independently satisfy the existing cluster workflow and governance gates above, exactly as before. The general Pre-Code Development Gate (§16) and the per-cluster Rules Baseline Migration Gate requirement are unaffected and remain active project-wide.
 
+**Status update (2026-09-12) — `CLUSTER-002` steps (2)–(4) now satisfied.**
+
+- **Step 1 — Rules Cyclopedia V1 inventory:** `COMPLETE / APPROVED` (unchanged from 2026-08-16, above).
+- **Step 2 — `CLUSTER-002` boundary:** `COMPLETE / APPROVED`, human-approved 2026-08-23. Boundary: `CHAR-001` (Ability Score Generation) + `CHAR-002` (Race & Class Eligibility) + `CHAR-003` (Hit Points & Hit Dice) + `CHAR-007` (General Ability Score Mechanical Effects) — see `docs/rules/clusters/CLUSTER-002-character-foundation.md`.
+- **Step 3 — required Rule Cards:** `COMPLETE`. All four `APPROVED`, human-approved 2026-09-04; `CHAR-001` additionally **amended 2026-09-05** (trade rule `R11`, the prime-requisite ceiling, and cases `C1`–`C5`), remaining `APPROVED` throughout.
+- **Step 4 — implementation readiness:** `RE-APPROVED`, human-approved 2026-09-12. Authoritative implementation plan: `docs/technical/CLUSTER-002_IMPLEMENTATION_PLAN.md` (Human Implementation-Plan Review: `APPROVED`, 2026-09-12, revision 3).
+
+**`CLUSTER-002` HISTORICAL-RULES IMPLEMENTATION: `AUTHORIZED` — 2026-09-12.** This authorization applies only to the human-approved four-card `CLUSTER-002` boundary and its approved implementation plan. It does not authorize another Rule Card or another cluster, and the same governance distinction recorded for `CLUSTER-001` above applies unchanged: clearing these four steps for one cluster states nothing about any other.
+
+**`CLUSTER-002` IMPLEMENTATION / INTEGRATION: `IN PROGRESS` — not complete.** The approved plan's Slices A–F are implemented in order on `cluster-002-implementation`, each independently reviewed and accepted, with a completion record per slice (`DEVELOPMENT_WORKFLOW.md` §3–§5) and a single `--no-ff` merge to `main` after the final slice. **Nothing in this update records the cluster as implemented or verified.**
+
 ## 16. Pre-Code Development Gate
 
 Production code must not begin — including Issue 1 (§15) — until a human has reviewed and approved each of the following foundational items:
@@ -501,7 +512,7 @@ As of 2026-08-15, all eight items above have been reviewed and approved by the p
 
 Clearing this gate is a statement about the foundational documents, not an authorization to begin implementation. Production-code work on Issue 1 (§15) still requires a separate, explicit human authorization to begin — clearing the gate removes the *precondition* for that authorization; it does not substitute for it. A small number of implementation-phase details remain intentionally open even after clearing (e.g., `docs/technical/TOOLCHAIN_AND_CI.md` §12) — these do not block the gate and are expected to be resolved during Issue 1 itself, not before it starts.
 
-This project-level gate remaining `CLEARED` is necessary but not sufficient for any individual cluster's implementation — each cluster additionally requires its own separate authorization under §15.2's Rules Baseline Migration Gate. `CLUSTER-001` has received that separate authorization (§15.2, "Status update (2026-08-18)"); no other cluster or Rule Card has, and this gate's clearance does not extend implementation authorization to any of them.
+This project-level gate remaining `CLEARED` is necessary but not sufficient for any individual cluster's implementation — each cluster additionally requires its own separate authorization under §15.2's Rules Baseline Migration Gate. `CLUSTER-001` (§15.2, "Status update (2026-08-18)") and `CLUSTER-002` (§15.2, "Status update (2026-09-12)") have each received that separate authorization; no other cluster or Rule Card has, and this gate's clearance does not extend implementation authorization to any of them.
 
 ## 17. First Agent Assignment (Completed)
 
