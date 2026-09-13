@@ -11,3 +11,10 @@ Durable per-issue implementation records for the Retro D&D Simulator project (`D
 | [ISSUE-005](ISSUE-005-exp-001-dungeon-wandering-monster-check.md) | EXP-001 Dungeon Wandering-Monster Check | Complete |
 | [ISSUE-006](ISSUE-006-cluster-001-cross-card-integration.md) | CLUSTER-001 Cross-Card Integration | Complete |
 | [ISSUE-007](ISSUE-007-cluster-001-dungeon-exploration-time.md) | CLUSTER-001 Dungeon Exploration Time | Complete |
+| [ISSUE-008](ISSUE-008-cluster-002-shared-primitives-and-char-007.md) | CLUSTER-002 Slice A — Shared Primitives and CHAR-007 | Complete |
+| [ISSUE-009](ISSUE-009-char-002-race-and-class-eligibility.md) | CHAR-002 Race & Class Eligibility (CLUSTER-002 Slice B) | Complete |
+| [ISSUE-010](ISSUE-010-char-003-hit-points-and-hit-dice.md) | CHAR-003 Hit Points & Hit Dice (CLUSTER-002 Slice C) | Complete |
+| [ISSUE-011](ISSUE-011-char-001-ability-score-generation.md) | CHAR-001 Ability Score Generation §1/§4/§6 (CLUSTER-002 Slice D) | Complete |
+| [ISSUE-012](ISSUE-012-char-001-high-level-generation-methods.md) | CHAR-001 §5 Chapter 10 High-Level Generation (CLUSTER-002 Slice E) | Complete |
+| [ISSUE-013](ISSUE-013-cluster-002-cross-card-integration.md) | CLUSTER-002 Cross-Card Integration (Slice F) | Complete |
+| [ISSUE-014](ISSUE-014-cluster-002-character-foundation.md) | CLUSTER-002 Character Foundation — Cluster Completion | Implementation complete on branch — final review pending |

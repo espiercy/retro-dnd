@@ -489,7 +489,7 @@ historical-rules implementation
 
 **`CLUSTER-002` HISTORICAL-RULES IMPLEMENTATION: `AUTHORIZED` — 2026-09-12.** This authorization applies only to the human-approved four-card `CLUSTER-002` boundary and its approved implementation plan. It does not authorize another Rule Card or another cluster, and the same governance distinction recorded for `CLUSTER-001` above applies unchanged: clearing these four steps for one cluster states nothing about any other.
 
-**`CLUSTER-002` IMPLEMENTATION / INTEGRATION: `IN PROGRESS` — not complete.** The approved plan's Slices A–F are implemented in order on `cluster-002-implementation`, each independently reviewed and accepted, with a completion record per slice (`DEVELOPMENT_WORKFLOW.md` §3–§5) and a single `--no-ff` merge to `main` after the final slice. **Nothing in this update records the cluster as implemented or verified.**
+**`CLUSTER-002` IMPLEMENTATION / INTEGRATION: `IMPLEMENTATION COMPLETE ON BRANCH — FINAL REVIEW AND MERGE PENDING`.** The approved plan's Slices A–F are all implemented on `cluster-002-implementation`, each independently reviewed and accepted, with a completion record per slice (`DEVELOPMENT_WORKFLOW.md` §3–§5) and a cluster record at `docs/completion-records/ISSUE-014-cluster-002-character-foundation.md`. **The branch is not merged and `main` is unchanged.** A final human review of the complete branch precedes the single `--no-ff` merge. **Nothing in this update records the cluster as `VERIFIED`** — that status follows landing, per the `CLUSTER-001` precedent above.
 
 ## 16. Pre-Code Development Gate
 

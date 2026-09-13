@@ -532,7 +532,7 @@ All die results are supplied by a scripted RNG (`TESTING_STRATEGY.md`; `src/rng`
 | # | Case | Expected |
 |---|---|---|
 | O1 | Fighter chosen; trade raises Str 12 → 13; re-test eligibility for Dwarf | **Rejected** — the trade **cannot establish** eligibility for any class (§3). Contrast W1, where the *switch* can. **Retained and unchanged by SR-5** — R10 forbids the trade *destroying* eligibility; it does not let the trade *create* it |
-| O2 | Elf: switch establishes Int 9, class chosen, then trade raises Int further | Legal — the switch established eligibility, the trade then operates as ordinary post-eligibility adjustment |
+| O2 | **Elf candidate: Str 16, Int 8, Wis 13, Dex 12, Con 12, Cha 12.** (1) Authorized switch moves **Str 16 into Intelligence** → Str 8, Int 16. (2) Elf is **ELIGIBLE** (Int ≥ 9). (3) Elf is chosen. (4) Ordinary atomic trade lowers **Wis 13 → 11** and raises **Int 16 → 17** | **LEGAL.** The switch **established** Elf creation eligibility; the trade then operates, only after eligibility and class choice, as an ordinary prime-requisite adjustment. *(Fixture corrected 2026-09-12 — see the Amendment history)* |
 | O3 | Trade attempted before eligibility is evaluated | **Rejected** — §0 step 6 follows step 5 |
 | O4 | Full sequence run for a character discarded at §6.1 | Restarts at §1; no switch, eligibility, or trade occurs for the discarded character |
 
@@ -599,6 +599,7 @@ All die results are supplied by a scripted RNG (`TESTING_STRATEGY.md`; `src/rng`
 
 | Date | Change | Approved by | Effect on status |
 |---|---|---|---|
+| **2026-09-12** | **Deterministic-fixture correction to `O2`.** The prior fixture — *"switch establishes Int 9, class chosen, then trade raises Int further"* — was **impossible under this card's own approved mechanics**: the Chapter 13 switch moves the **highest** rolled score, so establishing Intelligence at exactly 9 requires 9 to be the maximum, while a subsequent 2-for-1 trade needs a donor of **at least 11** (R6: donor − 2 ≥ 9). Both cannot hold. Replaced with a realizable fixture that demonstrates the same proposition. **No mechanic changed** — SR-3, the switch mechanics, the Elf's Intelligence-9 minimum, trade ordering, R1–R11, W1 and `CHAR-002` E25 are all untouched; `O2` keeps its case ID; `CHAR-001` remains **69** cases and `CLUSTER-002` **189**. Found during Slice F final integration, which flagged the contradiction rather than reinterpreting an approved case | Human project owner | **Remains `APPROVED`** — a test-fixture correction, not a rules change |
 | **2026-09-05** | **Synthesis correction: trade rule `R11` (prime-requisite ceiling) and deterministic cases `C1`–`C5` added; §1 and the RC-Explicit list restate RC's standing 3–18 range limitation in RC's own words; §5 recorded as in implementation scope but unwired; §6.2.1 records the switch's parameterization, tie handling and degenerate-source handling.** Closes the Pre-Code contract blocker in which approved §4 admitted a target score of 19 that approved `CHAR-007` `A15` rejects | Human project owner | **Remains `APPROVED`** — amendment to an approved card, **not** a return to `AWAITING_APPROVAL` |
 
 **What the 2026-09-05 amendment did *not* do**, recorded so it cannot later be misread:
