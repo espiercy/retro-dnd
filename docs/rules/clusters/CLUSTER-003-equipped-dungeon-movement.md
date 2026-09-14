@@ -11,17 +11,51 @@ Equipped Dungeon Movement
 ## 3. Status
 
 ```text
-STAGE A (EVIDENCE)     REMEDIATION COMPLETE
-                       RESEARCHER SELF-REVIEW COMPLETE
-                       AWAITING SECOND INDEPENDENT COMPLETENESS /
-                       BOUNDARY REVIEW
-CLUSTER BOUNDARY       PROVISIONAL -- REOPENED 2026-09-13
-STAGE B (SYNTHESIS)    NOT BEGUN, NOT ELIGIBLE
+STAGE A (EVIDENCE)     RESEARCHER CLOSURE COMPLETE
+                       ALL IDENTIFIED PRIMARY-SOURCE INSPECTION ITEMS
+                       COMPLETE
+                       AWAITING FINAL INDEPENDENT DEC-0010 COMPLETENESS
+                       CERTIFICATION
+CLUSTER BOUNDARY       RE-APPROVED BY HUMAN DECISION, 2026-09-14
+OWNERSHIP GOVERNANCE   APPLIED, 2026-09-14 (five decisions -- SS3.1)
+STAGE B (SYNTHESIS)    NOT BEGUN, NOT AUTHORIZED
 RULE CARDS             NONE DRAFTED, NOT AUTHORIZED
 PRE-CODE GATE          NOT AUTHORIZED
 IMPLEMENTATION         NOT AUTHORIZED
-ALTERNATE-SOURCE WORK  NOT AUTHORIZED
+ALTERNATE-SOURCE WORK  NOT AUTHORIZED -- DEC-0011 NOT ACTIVATED
 ```
+
+### 3.0a Second independent completeness / boundary review — result
+
+```text
+CLUSTER-003 STAGE-A REMEDIATION:   PASS
+PRIMARY-SOURCE COMPLETENESS:       CONDITIONAL PASS
+REMAINING COMPLETENESS ITEM:       visual verification of the Nets Table
+BOUNDARY GOVERNANCE:               RESOLVED BY HUMAN DECISION
+STAGE B / ALTERNATE-SOURCE:        NOT AUTHORIZED
+```
+
+**The one conditional item is now closed.** The **Nets Table (RC p. 65, leaf n64)** was visually verified on 2026-09-14 — three columns (`Victim's Size | Equivalent* | Net Size**`), seven rows, two footnotes — and it **agrees with the existing `CHAR-004` evidence exactly**. It introduces no new mechanic, no contradiction, and no dependency. See `docs/rules/evidence/CHAR-004-evidence.md` §6 and §11 row 1.
+
+### 3.1 Human boundary and ownership decisions — applied 2026-09-14
+
+The boundary-reopen condition raised on 2026-09-13 has been **resolved by human decision**:
+
+```text
+No additional whole Rule Card is required for CLUSTER-003.
+```
+
+Five governance decisions were issued and are applied throughout this cluster's artifacts and `docs/rules/INVENTORY.md`. **These are governance decisions, not research conclusions**, and this document records rather than derives them.
+
+| # | Decision | Effect |
+|---|---|---|
+| **1** | **`CHAR-004` canonically owns equipment-facing class restrictions** — the class-specific mechanics required to determine authoritative **mundane** equipment legality: weapon-permission predicates; armour/shield legality where relevant to equipment selection; class-specific equipment prohibitions; equipment-specific class pricing adjustments; other class-dependent mundane equipment rules | Established instances: Thief, Dwarf and Halfling weapon restrictions; Halfling armour fit; the Druid **+50%** wooden-weapon pricing adjustment; Magic-User weapon legality; Mystic mundane-equipment restrictions. **No dependency on the whole of `CHAR-009` is created.** `CHAR-009` may describe these as class features but **must not** become a second canonical implementation owner. Magic-item-specific restrictions stay with `TREAS-004` |
+| **2** | **`CHAR-005` canonically owns the authoritative character movement-rate mechanic** — ordinary base movement; class/level-specific base movement exceptions; the **Mystic level-dependent `MV`**; encumbrance effects on movement; the authoritative derivation of this card's movement scales | **The whole of `CHAR-009` is not an incoming dependency.** The **`MV` × encumbrance composition remains an unresolved RC ambiguity and is not invented** |
+| **3** | **`EXP-003` is narrowed and renamed to `EXP-003 — Dungeon Movement`** | The previous title *"Dungeon Movement, Mapping & Special Terrain"* is **no longer approved**. Mapping stays documented as an activity **already encompassed by ordinary exploration movement**, with **no** separate mechanic, time cost, roll or failure state. **"Special Terrain" is no longer an `EXP-003` responsibility** |
+| **4** | **Chapter 10 high-level equipment material is `researched / preserved / NOT V1-WIRED`** | Different cash handling, equipment grants, the owned-versus-carried distinction and the magic-item acquisition procedure are all **preserved as findings** and **not** made executable by `CLUSTER-003`. Terminology follows the existing `NOT V1-WIRED` precedent (`CHAR-003 W3`) |
+| **5** | **Condition effects split by responsibility** | For blindness, stunning and starvation, the procedure that **causes or establishes** the condition remains owned elsewhere; the **stated numerical effect on the authoritative movement rate** belongs to `CHAR-005`. `CHAR-005` is **not** responsible for how or why the condition was acquired |
+
+**Source location versus canonical ownership.** Decisions 1 and 2 move *ownership*, not *evidence*. The class-specific text physically resides in **RC Chapter 2**, and every citation to it is preserved in this cluster's evidence packets. A future reader must be able to see both that RC prints the Thief weapon restriction on p. 21 and that `CHAR-004` is the card that implements it.
 
 ### 3.0 Independent completeness review — result, and the boundary reopen
 
@@ -52,7 +86,10 @@ EXP-010 / CHAR-006 / CHAR-008:  remain deferred
 | Adversarial self-review | protocol §10.1.1 | **Done** — `docs/rules/evidence/CLUSTER-003-completeness-audit.md` |
 | **Independent completeness review (round 1)** | protocol §10.1.2, `DEC-0010` item 14 | **PERFORMED — `REMEDIATION REQUIRED`.** See §3.0. |
 | **Stage-A remediation pass 1** | this cluster record §3.0 | **Done** — `docs/rules/evidence/CLUSTER-003-remediation-pass-1.md` |
-| **Second independent completeness / boundary review** | protocol §10.1.2 | **NOT PERFORMED.** May not be performed by the original researcher. |
+| **Second independent completeness / boundary review** | protocol §10.1.2 | **PERFORMED — `PASS` on remediation, `CONDITIONAL PASS` on completeness.** See §3.0a |
+| **Human boundary / ownership governance** | human project owner | **ISSUED AND APPLIED 2026-09-14** — five decisions, §3.1 |
+| **Stage-A researcher closure (Nets Table)** | protocol §9.2 | **Done 2026-09-14** — the one conditional item is closed |
+| **Final independent `DEC-0010` completeness certification** | protocol §10.1.2, `DEC-0010` item 14 | **NOT PERFORMED.** May not be performed by the original researcher. |
 | Human evidence review | protocol §11 | **Not reached** |
 | Stage B synthesis | protocol §3 | **Not begun, not eligible** |
 | Rule Card approval | `SOURCE_HIERARCHY.md` §9 | Not reached |
@@ -62,12 +99,20 @@ Each of the three Stage-A packets carries the protocol §11.19 recommendation `M
 
 ## 4. Approved Boundary
 
+**Re-approved by the human project owner, 2026-09-14.**
+
 ```text
 CLUSTER-003 -- Equipped Dungeon Movement
 
-    CHAR-004   Starting Equipment & Expedition Preparation
+    CHAR-004   Equipment
+               (registered INVENTORY.md title: "Starting Equipment &
+                Expedition Preparation" -- unchanged; the boundary
+                refers to the entry as "Equipment")
     CHAR-005   Encumbrance & Movement Rate
-    EXP-003    Dungeon Movement, Mapping & Special Terrain
+    EXP-003    Dungeon Movement
+               (RENAMED 2026-09-14; the previous title
+                "Dungeon Movement, Mapping & Special Terrain"
+                is NO LONGER APPROVED)
 ```
 
 ### Why these three, and why in this order
@@ -105,9 +150,14 @@ landed EXP-002 dungeon-time machinery (CLUSTER-001)
 |---|---|---|
 | `CHAR-006` | Retainers & Hirelings | **Deferred.** Not researched, not absorbed. |
 | `CHAR-008` | Alignment | **Deferred.** Not researched, not absorbed. |
-| `EXP-010` | Party Formation & Marching Order | **Deferred.** Tested only as a possible incoming dependency; see §7. |
+| **`CHAR-009`** | **Class Special Abilities & Racial Abilities/Limitations — as a whole** | **Deferred, and confirmed out by the 2026-09-14 human decision.** Not added. Two mechanics whose RC source text sits in its chapter are canonically owned elsewhere by Decisions 1 and 2 — see §3.1. |
+| `EXP-010` | Party Formation & Marching Order | **Deferred.** Tested only as a possible incoming dependency; `DISPROVED` — see §7.3. |
 
-A boundary-reopen condition exists for these three: **if primary-source evidence proves one of them is an indispensable incoming dependency, that is a stop for human governance review, not an expansion.** Stage A did not trigger it — see §7.
+A boundary-reopen condition exists for these: **if primary-source evidence proves one of them is an indispensable incoming dependency, that is a stop for human governance review, not an expansion.** Stage A **did** trigger it on 2026-09-13 for a class-specific movement rule associated with `CHAR-009`; the human decision of 2026-09-14 **resolved** it without adding a card:
+
+```text
+No additional whole Rule Card is required for CLUSTER-003.
+```
 
 ### 5.2 Deferred governance items — not absorbed
 
@@ -151,16 +201,44 @@ CHAR-005   depends on CHAR-004
 EXP-003    depends on CHAR-005, EXP-002           (EXP-002 landed)
 ```
 
+### 6.3 Final dependency graph after governance (2026-09-14)
+
+```text
+landed character identity / class / level
+  (CHAR-001, CHAR-002, CHAR-003, CHAR-007 -- all VERIFIED)
+                |
+                v
+        CHAR-004  Equipment
+            owns: money, catalogs, cost, encumbrance values,
+                  unlisted-item procedure,
+                  AND per-class mundane equipment legality  [Decision 1]
+                |
+                v
+        CHAR-005  Encumbrance & Movement Rate
+            owns: standard character movement,
+                  Mystic MV exception                        [Decision 2]
+                  applicable movement modifiers,
+                  condition movement effects                 [Decision 5]
+                |
+                v
+        EXP-003   Dungeon Movement                           [Decision 3]
+                |
+                v
+        EXP-002   Dungeon Time  [LANDED / VERIFIED]
+```
+
+**No whole-card dependency `CHAR-004 → CHAR-009` or `CHAR-005 → CHAR-009` exists for `CLUSTER-003`.** Both were recorded as candidates on 2026-09-13 and both are **withdrawn** by Decisions 1 and 2. What remains is a **source-location** relationship, not a card dependency: the governing RC text for several of these mechanics is printed in Chapter 2, and that provenance is preserved in the evidence packets.
+
 ### 6.2 What Stage A found
 
-| Edge | Status after Stage A |
+| Edge | Status after Stage A (2026-09-13), with the 2026-09-14 governance outcome |
 |---|---|
 | `CHAR-004` → landed `CHAR-001`–`CHAR-003` | **Confirmed.** Chapter 1 places "Roll for Money" and "Buy Equipment" as steps 5 and 6, after abilities, class and hit points. |
 | `CHAR-005` → `CHAR-004` | **Confirmed, and stated by RC itself** (Ch. 4 p. 63 → Ch. 6 p. 88). |
 | `EXP-003` → `CHAR-005` | **Confirmed** (Ch. 7 p. 91 "normal speed"). |
 | `EXP-003` → landed `EXP-002` | **Confirmed** (the 10-minute turn; Measurements of Game Time Table). |
-| **`CHAR-005` → an unlanded class-abilities responsibility** | **NEW — not in `INVENTORY.md`.** The **visually verified** Mystic Special Abilities Table (RC p. 31) gives a class- and level-dependent `MV` of 120′ → 320′, contradicting RC p. 88's "**any character** will have a movement rate of `120' (40')`". See §7.1. |
-| **`CHAR-004` → an unlanded class-abilities responsibility** | **CONTESTED.** RC states class weapon/armour permissions in Chapter 4 itself *and* routes the buying step to the Chapter 2 class description (Ch. 1 p. 8). `CHAR-002`'s approved boundary assigns permissions to `CHAR-009`/`TREAS-004`. See §7.2. |
+| **`CHAR-005` → an unlanded class-abilities responsibility** | **RAISED 2026-09-13, WITHDRAWN 2026-09-14.** The **visually verified** Mystic Special Abilities Table (RC p. 31) gives a class- and level-dependent `MV` of 120′ → 320′, contradicting RC p. 88's "**any character** will have a movement rate of `120' (40')`" (§7.1). **Human Decision 2 assigns the authoritative movement-rate mechanic, including the Mystic `MV`, to `CHAR-005` itself.** No card dependency results |
+| **`CHAR-004` → an unlanded class-abilities responsibility** | **CONTESTED 2026-09-13, WITHDRAWN 2026-09-14.** RC states class weapon/armour permissions in Chapter 4 itself *and* routes the buying step to the Chapter 2 class description (Ch. 1 p. 8) (§7.2). **Human Decision 1 assigns mundane equipment legality to `CHAR-004` itself**, and `CHAR-002`'s downstream ownership pointer has been corrected accordingly. No card dependency results |
 | `EXP-003` → `EXP-010` | **DISPROVED.** See §7.3. |
 
 ## 7. Boundary Findings — Raised for Human Governance, Not Resolved
@@ -251,7 +329,9 @@ Per protocol §10.2.2 case 3, a fully mapped genuine conflict does not block sou
 | **E.** Could a narrower ownership correction solve it? | **Consistent with the evidence, in at least three shapes** — see remediation §9E. Counter-consideration recorded: RC's own boxed material names *"increased movement"* as a Mystic **special ability**, and RC's own index routes `Weapon restrictions` to class pages |
 | **F.** Would the current three-card cluster produce incorrect behaviour if implemented unchanged? | **YES, demonstrably, for four of nine required V1 classes.** A 10th-level mystic would be given 120′ where RC says **210′**; a thief could buy a **two-handed sword**; a dwarf a **longbow**; a halfling a **Medium weapon** and non-halfling armour. One wrong number, three permitted-illegal purchases |
 
-**The eventual human decision may be A (add an existing whole Rule Card), B (change ownership of a narrow mechanic), C (identify a different existing owner), D (revise a Rule Card boundary), or E (revise the cluster boundary). That decision is not made here.**
+~~**The eventual human decision may be A (add an existing whole Rule Card), B (change ownership of a narrow mechanic), C (identify a different existing owner), D (revise a Rule Card boundary), or E (revise the cluster boundary). That decision is not made here.**~~
+
+> **RESOLVED 2026-09-14 — the human project owner selected option B for both dependencies: change ownership of the narrow mechanic.** Mundane equipment legality → `CHAR-004` (Decision 1); the authoritative movement-rate mechanic including Mystic `MV` → `CHAR-005` (Decision 2). **Option A was not taken: no additional whole Rule Card is required for `CLUSTER-003`.** The answers to A–F above are preserved unaltered as the evidence the decision rested on — in particular answer **F**, which remains the record of what would have gone wrong had the cluster been implemented on the pre-decision boundary.
 
 ## 8. Unresolved Evidence-Stage Questions
 
@@ -274,6 +354,22 @@ The complete, non-silent inventory is the reconciliation table at `docs/rules/ev
 10. The two dependency questions in §7.1 and §7.2.
 
 **Genuine source ambiguities (do not block completeness):** the four defects in §7.5, plus `RC DOES NOT SPECIFY` for the racial-armour movement reduction and for the rough-terrain modifier presupposed by Mystic Acrobatics.
+
+### 8.1 Disposition of §8 after remediation and governance (2026-09-14)
+
+| §8 item | Disposition |
+|---|---|
+| 1–6 — unfinished source inspection | **ALL CLOSED** by remediation pass 1 (2026-09-13). Items 1, 2, 3, 4, 6 closed by direct inspection; item 5, the General Index, closed and **it found two governing objects the earlier passes missed** |
+| **Nets Table** *(the one item the second independent review left conditional)* | **CLOSED 2026-09-14 by visual verification.** Agrees with existing evidence; no new mechanic, contradiction or dependency — §3.0a |
+| 7 — `CHAR-004` scope: mounts, vehicles, ships, siege | **STILL OPEN — human governance.** Not decided by the 2026-09-14 decisions, which addressed class-restriction ownership, not chapter scope. Water transport and siege remain recorded as *located and deliberately uninspected* |
+| 8 — condition movement multipliers | **DECIDED 2026-09-14 (Decision 5)** — split by responsibility; §3.1 |
+| 9 — `EXP-003` title | **DECIDED 2026-09-14 (Decision 3)** — renamed to `EXP-003 — Dungeon Movement`; §3.1 |
+| 10 — the two dependency questions | **DECIDED 2026-09-14 (Decisions 1 and 2)** — option B, narrow ownership correction; §7.6 |
+| Genuine source ambiguities | **ALL PRESERVED, NONE RESOLVED.** The racial-armour item was reclassified during remediation as **DM discretion by design, not a gap**; the remainder stand, with two contradictions added by remediation. §7.5 |
+
+**One item from §8 therefore remains open, and it is a human scope question, not an inspection task:** item 7. It does **not** block `CLUSTER-003` Stage-A primary-source closure, because the water-transport and siege objects are recorded as deliberate exclusions with stated reasons rather than as unexamined gaps.
+
+**`DEC-0011` is not activated.** No alternate-source research has been performed or authorized. A future human authorization will identify which exact gaps and contradictions proceed into that research.
 
 ## 9. Relationship to `CLUSTER-001` and `CLUSTER-002`
 
@@ -324,13 +420,14 @@ No Rule Card exists for any of the three cards. `AGENTS.md` §2 forbids implemen
 | Research performed | 2026-09-13 |
 
 ```text
-CLUSTER-003 STAGE-A REMEDIATION:
+CLUSTER-003 STAGE-A PRIMARY-SOURCE RESEARCH:
 
-REMEDIATION COMPLETE
-RESEARCHER SELF-REVIEW COMPLETE
-AWAITING SECOND INDEPENDENT COMPLETENESS / BOUNDARY REVIEW
+RESEARCHER CLOSURE COMPLETE
+ALL IDENTIFIED PRIMARY-SOURCE INSPECTION ITEMS COMPLETE
+HUMAN BOUNDARY / OWNERSHIP GOVERNANCE APPLIED
 
-CLUSTER BOUNDARY:           PROVISIONAL -- REOPENED, AWAITING HUMAN GOVERNANCE
+AWAITING FINAL INDEPENDENT DEC-0010 COMPLETENESS CERTIFICATION
+
 STAGE B:                    NOT STARTED / NOT AUTHORIZED
 ALTERNATE-SOURCE RESEARCH:  NOT STARTED / NOT AUTHORIZED
 ```

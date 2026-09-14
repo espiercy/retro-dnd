@@ -1,5 +1,13 @@
 # Stage-A Evidence: CHAR-004 — Starting Equipment & Expedition Preparation
 
+> **✅ STAGE-A RESEARCHER CLOSURE (2026-09-14). The last outstanding inspection item is closed and human ownership governance is applied.**
+>
+> - **Nets Table (RC p. 65, leaf n64) — VISUALLY VERIFIED.** This was the single item the second independent review left as a `CONDITIONAL PASS`. Three columns, seven rows, two footnotes; **agrees with this packet's OCR record exactly**; no new mechanic, contradiction or dependency. **§11 row 1 is closed** and every identified primary-source inspection item for this packet is now complete.
+> - **GOVERNANCE DECISION 1 APPLIED — `CHAR-004` canonically owns equipment-facing class restrictions.** The human project owner has assigned this card the class-specific mechanics required to determine authoritative **mundane** equipment legality: weapon-permission predicates, armour/shield legality where relevant to equipment selection, class-specific equipment prohibitions, equipment-specific class pricing adjustments, and other class-dependent mundane equipment rules. **§9 Challenge 1 and §7's first bullet are superseded on ownership** — they routed these to `CHAR-009`, and that pointer is corrected. **The whole of `CHAR-009` is NOT an incoming dependency**; `CHAR-009` may describe these as class features but must not become a second canonical implementation owner. **Magic-item-specific restrictions remain with `TREAS-004`.**
+> - **GOVERNANCE DECISION 4 APPLIED — the Chapter 10 high-level pathway is `researched / preserved / NOT V1-WIRED`.** The findings in the remediation record §5.4 stand as evidence; the pathway is **not** made executable by `CLUSTER-003` and `CHAR-004` was **not** expanded to absorb it.
+> - **Source location versus ownership is preserved.** Every citation showing that RC prints these restrictions in Chapter 2 (Thief p. 21, Dwarf p. 23, Halfling p. 26, Druid p. 28, Magic-User p. 19) remains intact. Ownership moved; evidence did not.
+> - **No mechanic, case, table reading, or open RC question in this packet is changed by the governance decisions.** All §10 defects survive.
+>
 > **⚠ REMEDIATION PASS 1 APPLIED (2026-09-13). Three findings below are superseded; two are new.** The independent completeness review returned **`REMEDIATION REQUIRED / FAIL — unfinished structural inspection`** against this packet as committed at `e26a1e0`. The remediation record is `docs/rules/evidence/CLUSTER-003-remediation-pass-1.md`; **read it alongside this packet.** The original text below is preserved unaltered as audit history.
 >
 > **What the independent reviewer found incomplete here:** §11 items 3 (Chapter 2 class entries), 4 (Chapter 10 high-level creation) and 6 (General Index) were unfinished source inspection, and §9 Challenge 1 was left `QUALIFIED` when the underlying question was answerable.
@@ -123,6 +131,8 @@ Chapter 4 then supplies the catalogs, and Chapter 13 p. 147 supplies the escape 
 | Armor Table | 67 | n66 | Confirmed |
 | Barding Encumbrance Table | 68 | n67 | Confirmed; three-column two-band structure |
 | Adventuring Gear Table (both halves) | 69 | n68 | Confirmed; **two printed defects found, §10** |
+| **Nets Table + both footnotes** *(added 2026-09-14, Stage-A closure)* | **65** | **n64** | Confirmed; 3 columns × 7 rows; agrees with OCR exactly; no new mechanic |
+| Net weapon description — *"halflings and small nonhumans… cannot use nets larger than 6′ × 6′"* *(added 2026-09-14)* | 65 | n64 | Confirmed; a **class/race mundane equipment restriction stated in Chapter 4**, now owned by `CHAR-004` under Decision 1 |
 
 **Potentially relevant objects deliberately excluded, with reasons:**
 
@@ -139,7 +149,7 @@ Chapter 4 then supplies the catalogs, and Chapter 13 p. 147 supplies the escape 
 
 ## 7. Questions Belonging to Other Rule Cards' Own Scope
 
-- Per-class and per-race weapon/armour **permission** rules as a system → `CHAR-009` (`CHAR-002`'s approved boundary already routes "weapon/armour permissions" there) and, for magical gear, `TREAS-004`. **This is contested — see §9 Challenge 1.**
+- ~~Per-class and per-race weapon/armour **permission** rules as a system → `CHAR-009`~~ → **SUPERSEDED 2026-09-14 by human governance Decision 1: mundane weapon/armour/shield permissions, class equipment prohibitions and equipment-specific class pricing are owned by `CHAR-004` — this card.** Magic-item use restrictions (e.g. the Mystic protective-device prohibition) remain with **`TREAS-004`**. `CHAR-002`'s downstream pointer has been corrected in `docs/rules/character_creation/race_and_class_eligibility.md` §A and in `CHAR-002-evidence.md` §6 — **an ownership-reference correction only; no `CHAR-002` mechanic changed.**
 - Thieves' tools as a prerequisite for Open Locks → `CHAR-010`.
 - Weapon Mastery levels gating whether a weapon may be thrown (note `r`) → `CHAR-011`.
 - Weapon damage, ranges, two-handed initiative loss, set-vs-charge, net entanglement, blackjack knockout → `COMBAT-002`, `COMBAT-003`, `COMBAT-006`, `COMBAT-007`.
@@ -175,7 +185,7 @@ Chapter 4 then supplies the catalogs, and Chapter 13 p. 147 supplies the escape 
 
 - **Chapter 4 itself** carries operative permissions — note `c` (clerics; druids only in a form with no metal or stone parts), note `w` (magic-users at the DM's discretion), notes `2H`/`HH` (halflings and small races cannot / can), and the armour prose naming fighters, clerics, dwarves, elves, halflings, thieves, druids, magic-users and mystics.
 - **Chapter 1 p. 8** nonetheless instructs: *"Before you go shopping, be sure you have read the full description of your character class, later in this chapter,"* and gives a class-specific worked consequence (a magic-user "cannot wear any armor at all and can only use a few types of weapons").
-- The landed `CHAR-002` boundary already assigns "weapon/armor permissions" to `CHAR-009`/`TREAS-004`, and `CHAR-009`'s `INVENTORY.md` row already carries the Mystic armour prohibition (P2, recorded 2026-08-29).
+- The landed `CHAR-002` boundary already assigns "weapon/armor permissions" to `CHAR-009`/`TREAS-004`, and `CHAR-009`'s `INVENTORY.md` row already carries the Mystic armour prohibition (P2, recorded 2026-08-29). *(**State of the repository as at 2026-09-13**, which is what made this a live ownership conflict. **Superseded 2026-09-14:** `CHAR-002`'s pointer now routes mundane weapon/armour/shield permissions to `CHAR-004`, and `CHAR-009`'s row carries an explicit non-ownership boundary. Retained because the conflict this bullet documents is the evidence the human decision rested on.)*
 
 **Disposition: QUALIFIED — the assumption does not survive unqualified.**
 
@@ -250,7 +260,7 @@ The Adventuring Gear Table prints `20***` for Clothes, plain, while Clothes midd
 
 | # | Open statement | Source region implicated | Inspection completed? | Result | Owner | Still blocks completeness? |
 |---|---|---|---|---|---|---|
-| 1 | Nets Table not visually verified | RC p. 65 | No | Size→net-size mapping read from OCR only; the *cost/encumbrance rule* (1 sp, 1 cn per sq ft) is stated in **visually verified** note `n` and does not depend on the table | `CHAR-004` / `COMBAT-003` | **No** — the mechanically significant quantity is verified by another verified object |
+| 1 | Nets Table not visually verified | RC p. 65 | ~~No~~ → **YES, 2026-09-14 (Stage-A closure)** | **CLOSED.** Visually verified at leaf n64: three columns (`Victim's Size \| Equivalent* \| Net Size**`), seven rows, two footnotes — **exactly as previously recorded from OCR.** Footnote `**` *"Or equivalent in square feet"* is the linkage to Weapons Table note `n` (1 sp and 1 cn **per square foot**), and RC's own worked example (medium 6′×6′ = 36 sq ft → 36 sp, 36 cn) is consistent with the Medium row. Footnote `*` calibrates the categories to PC races. **No new mechanic, no contradiction, no new dependency** | `CHAR-004` / `COMBAT-003` | **No** — closed |
 | 2 | Riding Animal Costs and Land Transportation Gear Tables not visually verified | RC p. 70 | No | Deliberate: mount/vehicle scope is itself unsettled (item 5). Recorded as located and uninspected | pending item 5 | **Yes, if mounts are ruled in scope** |
 | 3 | Ch. 2 class entries not read as complete entries for weapon/armour permissions | RC pp. 13–31 | ~~No~~ → **YES, remediation pass 1** | ~~Deliberately stopped at the cluster boundary~~ → **CLOSED.** All nine entries read as complete entries (box + Class Details) and all nine boxed blocks visually verified. Five classes carry class-entry-only restrictions; one carries a pricing rule. Remediation §2, §4 | `CHAR-009` (proposed) / **human governance** | **No longer blocks on inspection.** Now a pure ownership decision — see remediation §9 |
 | 4 | Ch. 10 high-level character creation not re-inspected for a wealth/equipment provision | RC pp. 129–131 | ~~No~~ → **YES, remediation pass 1** | ~~Not re-opened here~~ → **CLOSED, and it was not empty.** Steps 5, 7 and 8 supply a different money rule (1% of XP), equipment by grant, an alternate cash method, two magic-item methods, a price table, and the only RC owned-vs-carried distinction. Remediation §5.4 | `CHAR-001` §5 / `CHAR-004` / **human governance** | **No longer blocks on inspection.** Now an ownership/V1-scope decision |

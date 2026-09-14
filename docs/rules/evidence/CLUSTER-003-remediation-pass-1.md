@@ -1,6 +1,29 @@
 # CLUSTER-003 Stage-A Remediation Pass 1 (CHAR-004, CHAR-005, EXP-003)
 
-> **Status: `REMEDIATION COMPLETE / RESEARCHER SELF-REVIEW COMPLETE / AWAITING SECOND INDEPENDENT COMPLETENESS / BOUNDARY REVIEW`.**
+> **✅ ACCEPTED. The second independent completeness / boundary review returned `PASS` on this remediation, with a `CONDITIONAL PASS` on primary-source completeness whose one condition — visual verification of the Nets Table — was closed on 2026-09-14.**
+>
+> **The boundary question this document prepared has been decided.** The human project owner selected **option B of the governance menu — "change ownership of a narrow mechanic" — for both dependencies**, which is the possibility this document's **§9E** set out. Option A, adding an existing whole Rule Card, was **not** taken:
+>
+> ```text
+> No additional whole Rule Card is required for CLUSTER-003.
+>
+> Decision 1  CHAR-004 owns mundane equipment legality
+> Decision 2  CHAR-005 owns the authoritative movement-rate mechanic,
+>             including the Mystic level-dependent MV
+> Decision 3  EXP-003 is renamed and narrowed to "Dungeon Movement"
+> Decision 4  Chapter 10 high-level equipment material is
+>             researched / preserved / NOT V1-WIRED
+> Decision 5  condition effects split -- causation elsewhere,
+>             movement-rate effect to CHAR-005
+> ```
+>
+> **This document's §3.5 and §4.3 posed the ownership questions; §9 assembled the evidence. Both are preserved exactly as written** — including §9F, the record of what would have gone wrong had the cluster been implemented on the pre-decision boundary. The decisions themselves are recorded at `docs/rules/clusters/CLUSTER-003-equipped-dungeon-movement.md` §3.1, and closure at `docs/rules/evidence/CLUSTER-003-completeness-audit.md` §14.
+>
+> **§5.3's General Index finding is now a cross-cluster process precedent, `P-001` in `docs/rules/RESEARCH_PROCESS_PRECEDENTS.md`.**
+>
+> **Nothing in §6's preserved defects and gaps was resolved by the governance decisions.** Ownership moved; the source's contradictions and silences did not.
+>
+> **Status: ~~`REMEDIATION COMPLETE / RESEARCHER SELF-REVIEW COMPLETE / AWAITING SECOND INDEPENDENT COMPLETENESS / BOUNDARY REVIEW`~~ → `ACCEPTED; STAGE-A RESEARCHER CLOSURE COMPLETE 2026-09-14; AWAITING FINAL INDEPENDENT DEC-0010 COMPLETENESS CERTIFICATION`.**
 >
 > This artifact records the narrow Stage-A remediation pass performed after the independent completeness review returned **`REMEDIATION REQUIRED`** against the Stage-A package committed at `e26a1e0`. It does **not** supersede the three evidence packets or the completeness audit — it closes the structural inspection those documents declared unfinished, and records what changed as a result.
 >
@@ -235,6 +258,8 @@ The picture is **asymmetric, and that asymmetry is the finding**:
 - **One pricing rule (Druid, +50%) sits in a class entry**, which is `CHAR-004` subject matter by any reading.
 
 **Governance question enabled, not answered:** is `CHAR-009` an incoming dependency of `CHAR-004`, or is the correct correction to move the narrow weapon/armour-permission predicate into `CHAR-004` (leaving `CHAR-009` the rest of the class-abilities contract)? Both are consistent with the evidence. Rules were **not** moved between cards.
+
+> **ANSWERED 2026-09-14 by human governance Decision 1 — the second reading.** `CHAR-004` canonically owns mundane equipment legality; `CHAR-009` retains the rest of the class-abilities contract and may describe these restrictions as class features **without** becoming a second canonical implementation owner. **`CHAR-009` is not an incoming dependency of `CHAR-004`.** Magic-item-specific restrictions remain with `TREAS-004`.
 
 ## 5. Newly Completed Structural Inspection (remediation items 4–7)
 
@@ -549,14 +574,14 @@ The Mystic error is a **wrong number**; the others are **permitted-illegal purch
 | **RC ambiguity** (minor) | **NEW** — standing up: "one round of movement" vs. "an action" (§6.11) |
 | **Possible RC gap** | The rough/broken-terrain rate modifier presupposed by Mystic Acrobatics (§6.6) — qualified but not closed |
 | **Possible RC gap** | Rounding for non-integral Mystic encounter speeds (§3.2) |
-| **Ownership/governance question** | Who owns the per-class base movement rate (§3.5) |
-| **Ownership/governance question** | Who owns per-class weapon-permission predicates and the Druid pricing rule (§4.3) |
-| **Ownership/governance question** | Whether Ch. 10 Steps 5/7/8 belong to `CHAR-004`, to a separate responsibility, or outside V1 (§5.4) — sharpened by `CHAR-001` §5 already being landed |
-| **Ownership/governance question** | Whether the Ch. 13 p. 150 condition movement multipliers belong to `CHAR-005` or to a status-condition entry that does not exist (carried forward) |
-| **Ownership/governance question** | Whether `CHAR-004` extends to mounts, vehicles, ships and siege equipment (carried forward) |
-| **Ownership/governance question** | `EXP-003` title (§7) — `CARD TITLE / RESPONSIBILITY BOUNDARY REVIEW REQUIRED` |
-| **Boundary-reopen issue** | `CHAR-005` → unlanded class movement rule (§9) |
-| **Boundary-reopen issue** | `CHAR-004` → unlanded class weapon-permission rule (§9) |
+| ~~**Ownership/governance question**~~ **DECIDED 2026-09-14 (Decision 2)** | Who owns the per-class base movement rate (§3.5) → **`CHAR-005`** |
+| ~~**Ownership/governance question**~~ **DECIDED 2026-09-14 (Decision 1)** | Who owns per-class weapon-permission predicates and the Druid pricing rule (§4.3) → **`CHAR-004`** |
+| ~~**Ownership/governance question**~~ **DECIDED 2026-09-14 (Decision 4)** | Ch. 10 Steps 5/7/8 (§5.4) → **`researched / preserved / NOT V1-WIRED`**; not made executable by `CLUSTER-003`, and `CHAR-004` not expanded |
+| ~~**Ownership/governance question**~~ **DECIDED 2026-09-14 (Decision 5)** | Ch. 13 p. 150 condition movement multipliers → **split**: causation keeps its owner, the movement-rate effect belongs to `CHAR-005` |
+| **Ownership/governance question — STILL OPEN** | Whether `CHAR-004` extends to mounts, vehicles, ships and siege equipment (carried forward). **Not addressed by the 2026-09-14 decisions**, which concerned class-restriction ownership rather than chapter scope. Non-blocking: those objects are recorded as located and deliberately uninspected, with reasons |
+| ~~**Ownership/governance question**~~ **DECIDED 2026-09-14 (Decision 3)** | `EXP-003` title (§7) → renamed and narrowed to **`EXP-003 — Dungeon Movement`** |
+| ~~**Boundary-reopen issue**~~ **RESOLVED 2026-09-14** | `CHAR-005` → unlanded class movement rule (§9). Narrow ownership correction; **no card added** |
+| ~~**Boundary-reopen issue**~~ **RESOLVED 2026-09-14** | `CHAR-004` → unlanded class weapon-permission rule (§9). Narrow ownership correction; **no card added** |
 | **Future alternate-source question** | None authorized. `DEC-0011` is not activated, and no gap statement has been approved for escalation. The two "possible RC gap" rows above are the only candidates, and they may not be escalated on this researcher's initiative. |
 
 **Closed by this pass:** the Mystic "above 16th level" question (moot — maximum level is 16); the racial-armour reduction reclassified from *possible gap* to **DM discretion by design, not a gap** (§6.7); `Mapping and Calling`'s citation corrected from Chapter 1 to **p. 5**; the Dwarf Experience Table's printed location corrected from the Tables Index's p. 23 to **p. 24**.
@@ -571,7 +596,7 @@ The Mystic error is a **wrong number**; the others are **permitted-illegal purch
 | `CHAR-005` §11.1 — other eight class entries not checked for a movement statement | **CLOSED** — §2. Result: all silent; Mystic confirmed unique |
 | `CHAR-005` §11.3 — Ch. 19 body not read in full | **CLOSED** — §5.1. Result: no encumbrance or movement variant |
 | `EXP-003` §11.3 — Ch. 17 pp. 259–262 not inspected | **CLOSED** — §5.2. Result: map scale is DM-variable |
-| `CHAR-004` §11.1 — Nets Table not visually verified | **STILL OPEN**, unchanged and still non-blocking: the mechanically significant rule lives in visually verified note `n` |
+| `CHAR-004` §11.1 — Nets Table not visually verified | ~~**STILL OPEN**~~ → **CLOSED 2026-09-14.** Visually verified at RC p. 65 (leaf n64); agrees with the OCR record exactly; no new mechanic, contradiction or dependency. See `CLUSTER-003-completeness-audit.md` §14.2 |
 | `CHAR-004` §11.2 / §11.5 — mount and vehicle tables; `CHAR-004` scope | **STILL OPEN** — a human scope decision, unchanged |
 | `CHAR-005` §11.5 — ownership of the p. 150 condition multipliers | **STILL OPEN** — a human ownership decision, unchanged |
 | `EXP-003` §11.2 — whether "Mapping" survives in the title | **STILL OPEN** — now joined by "Special Terrain"; §7 |
@@ -587,3 +612,15 @@ AWAITING SECOND INDEPENDENT COMPLETENESS / BOUNDARY REVIEW
 ```
 
 `STAGE-A PASS`, `STAGE-A COMPLETENESS PASS`, or any equivalent is **not** claimed and must not be inferred from the closure of items in §11. Six structural items closed; four remain open, three of which are human decisions rather than reading tasks.
+
+> **Superseded 2026-09-14.** The second independent review returned `PASS` on this remediation; the one conditional item (the Nets Table) is closed; and three of the four remaining items were decided by human governance. The current researcher status is:
+>
+> ```text
+> RESEARCHER CLOSURE COMPLETE
+> ALL IDENTIFIED PRIMARY-SOURCE INSPECTION ITEMS COMPLETE
+> HUMAN BOUNDARY / OWNERSHIP GOVERNANCE APPLIED
+>
+> AWAITING FINAL INDEPENDENT DEC-0010 COMPLETENESS CERTIFICATION
+> ```
+>
+> The researcher constraint is unchanged: `STAGE-A COMPLETENESS PASS` remains the independent reviewer's certification to make, not mine.

@@ -31,7 +31,7 @@
 
 ## 1. Audit Scope and Method
 
-**Cards audited:** `CHAR-004` (Starting Equipment & Expedition Preparation), `CHAR-005` (Encumbrance & Movement Rate), `EXP-003` (Dungeon Movement, Mapping & Special Terrain).
+**Cards audited:** `CHAR-004` (Starting Equipment & Expedition Preparation), `CHAR-005` (Encumbrance & Movement Rate), `EXP-003` (**Dungeon Movement** — audited under its then-current title *"Dungeon Movement, Mapping & Special Terrain"*, **renamed 2026-09-14** by human governance decision; §14.3).
 
 **Method — `DEC-0010` structure-first order, per protocol §9.1.1.** The pass began from the source's own structure, not from any prior packet (there are none for these three cards) and not from keyword search:
 
@@ -332,6 +332,16 @@ What §7 **missed** is that its table-centred framing could not catch a governin
 
 **Lesson recorded for future clusters:** audit class H is not a formality to be discharged last. For a mechanic that appears in several chapters under a common word, the General Index is the instrument that finds the presentations a topic-driven search will not.
 
+> **Elevated to a cross-cluster process precedent, 2026-09-14.** This lesson is now recorded as **`P-001`** in `docs/rules/RESEARCH_PROCESS_PRECEDENTS.md`:
+>
+> ```text
+> When a primary source provides a General Index, General Index inspection
+> is a REQUIRED source-structure completeness instrument for DEC-0010
+> research, alongside the TOC and the Tables Index.
+> ```
+>
+> That register is a **precedent record, not governance** — it does not amend `DEC-0010` or `RULE_CARD_RESEARCH_PROTOCOL.md`, neither of which was modified. Elevating `P-001` into either is a human decision and is flagged there as outstanding.
+
 ### 13.4 New findings that did not exist before remediation
 
 | Kind | Finding |
@@ -347,7 +357,7 @@ What §7 **missed** is that its table-centred framing could not catch a governin
 | **Citation corrected** | "Mapping and Calling" is on **p. 5**, not in Chapter 1 |
 | **Citation corrected** | The Dwarf Experience Table prints on **p. 24**; the Tables Index says p. 23 |
 
-### 13.5 Status
+### 13.5 Status (as at 2026-09-13; superseded by §14)
 
 ```text
 CLUSTER-003 STAGE-A REMEDIATION:
@@ -359,3 +369,79 @@ AWAITING SECOND INDEPENDENT COMPLETENESS / BOUNDARY REVIEW
 STAGE B:                    NOT STARTED / NOT AUTHORIZED
 ALTERNATE-SOURCE RESEARCH:  NOT STARTED / NOT AUTHORIZED
 ```
+
+---
+
+## 14. Stage-A Closure (added 2026-09-14)
+
+### 14.1 Second independent completeness / boundary review — result
+
+```text
+CLUSTER-003 STAGE-A REMEDIATION:   PASS
+PRIMARY-SOURCE COMPLETENESS:       CONDITIONAL PASS
+REMAINING COMPLETENESS ITEM:       visual verification of the Nets Table
+BOUNDARY GOVERNANCE:               RESOLVED BY HUMAN DECISION
+STAGE B / ALTERNATE-SOURCE:        NOT AUTHORIZED
+```
+
+The remediation recorded in §13 was **accepted substantively**. §10's incorrect boundary framing, which §13's banner withdrew, is confirmed withdrawn.
+
+### 14.2 The one conditional item — closed
+
+**Nets Table, RC p. 65, leaf n64 — visually verified 2026-09-14.**
+
+```text
+Nets Table
+Victim's Size   Equivalent*    Net Size**
+Very small      Up to 1'       2'X2'
+Small           1+'-3'         4'X4'
+Medium          3+'-6'         6'X6'
+Large           6+'-10'        9'X9'
+Very large      10+'-15'       12'x12'
+Huge            15+'-20'       16'x16'
+Mammoth         20+'-30'       25'X25'
+
+ * A small net is right for a target the size of a halfling; a medium net
+   is right for human, dwarf, and elf targets.
+** Or equivalent in square feet.
+```
+
+Three columns, seven rows, two footnotes — **identical to the OCR record in `CHAR-004-evidence.md` §4.** Footnote `**` is the linkage to the **visually verified** Weapons Table note `n` (1 sp and 1 cn **per square foot**); RC's own worked example — a medium 6′×6′ net = 36 sq ft → 36 sp, 36 cn — is consistent with the Medium row, and every other row derives cleanly under the same rule. Footnote `*` calibrates the size categories to PC races.
+
+```text
+new mechanic?      NO
+new contradiction? NO
+new dependency?    NO
+new ownership issue? NO
+```
+
+The verification did surface one detail worth recording rather than discarding: the net weapon description on the same page states that *"halflings and small nonhumans (such as goblins) **cannot use nets larger than 6′ × 6′**"* — a class/race mundane equipment restriction printed in **Chapter 4** rather than Chapter 2. It is an additional instance of an already-recorded category, it contradicts nothing, and under the 2026-09-14 governance Decision 1 it is already owned by `CHAR-004`. **It is not new substantive evidence and does not reopen any structural inspection.**
+
+**Every identified primary-source inspection item for `CLUSTER-003` is now complete.**
+
+### 14.3 Human boundary and ownership governance — applied
+
+Five decisions were issued and applied; the canonical record is `docs/rules/clusters/CLUSTER-003-equipped-dungeon-movement.md` §3.1. In summary: `CHAR-004` owns mundane equipment legality; `CHAR-005` owns the authoritative movement-rate mechanic including Mystic `MV`; `EXP-003` is renamed and narrowed to **Dungeon Movement**; the Chapter 10 high-level pathway is **`researched / preserved / NOT V1-WIRED`**; and condition effects are split so that causation stays with its owner while the movement-rate effect belongs to `CHAR-005`.
+
+**No additional whole Rule Card was required.** `CHAR-009`, `CHAR-006`, `CHAR-008` and `EXP-010` remain outside the cluster.
+
+### 14.4 What did NOT change
+
+**No source contradiction or ambiguity was resolved during closure.** The governance decisions settled *which card owns which mechanic*; they did not settle *what the rule is* anywhere the source is unclear. Every preserved question in §13.4 and §8 stands, and `DEC-0011` remains un-activated.
+
+### 14.5 Status
+
+```text
+CLUSTER-003 STAGE-A PRIMARY-SOURCE RESEARCH:
+
+RESEARCHER CLOSURE COMPLETE
+ALL IDENTIFIED PRIMARY-SOURCE INSPECTION ITEMS COMPLETE
+HUMAN BOUNDARY / OWNERSHIP GOVERNANCE APPLIED
+
+AWAITING FINAL INDEPENDENT DEC-0010 COMPLETENESS CERTIFICATION
+
+STAGE B:                    NOT STARTED / NOT AUTHORIZED
+ALTERNATE-SOURCE RESEARCH:  NOT STARTED / NOT AUTHORIZED
+```
+
+**`STAGE-A COMPLETENESS PASS` is not written and must not be inferred.** `DEC-0010` reserves that certification to an independent reviewer who did not conduct the research.
