@@ -1,5 +1,20 @@
 # Stage-A Evidence: CHAR-004 — Starting Equipment & Expedition Preparation
 
+> **✅ STAGE B COMPLETE, 2026-09-24. This packet's two blocking defects are adjudicated and the Rule Card is drafted.**
+>
+> | §10 defect | Determination |
+> |---|---|
+> | **Defect 1 — belt pouch `2 + 50 = 52` vs. the printed `55 cn`** | **`SR-6`** — a fully loaded belt pouch weighs **`52 cn`**. Empty `2 cn` and capacity `50 cn` are preserved independently; the printed worked total is **erroneous** |
+> | **Defect 8 — Magic-User dagger** (recorded in the remediation record) | **`SR-7`** — the dagger is **unconditional**; the expanded list stays optional; Ch. 4's note `w`, **as to the dagger**, is a compilation defect |
+> | Defect 2 — "Clothes, plain" carries the quiver footnote | **Read as a typographic defect**; the `**` rule applies. **Not** elevated to a ruling — no mechanic turns on it. See the Rule Card's Open Questions 1 |
+> | Defect 4 — free-kit stated twice, differently | **Closed.** The Rule Card adopts Ch. 4 p. 62's enumerated kit, which is strictly the more specific |
+>
+> **Rule Card drafted:** `docs/rules/character_creation/starting_equipment_and_expedition_preparation.md` — `AWAITING_APPROVAL`.
+>
+> **The RC's internal inconsistencies are NOT resolved by these rulings.** The printed page still disagrees with itself; only the simulator's behaviour is settled. **This packet's body is preserved as researched and is not rewritten to anticipate the outcomes.**
+>
+> ---
+>
 > **✅ STAGE-A RESEARCHER CLOSURE (2026-09-14). The last outstanding inspection item is closed and human ownership governance is applied.**
 >
 > - **Nets Table (RC p. 65, leaf n64) — VISUALLY VERIFIED.** This was the single item the second independent review left as a `CONDITIONAL PASS`. Three columns, seven rows, two footnotes; **agrees with this packet's OCR record exactly**; no new mechanic, contradiction or dependency. **§11 row 1 is closed** and every identified primary-source inspection item for this packet is now complete.

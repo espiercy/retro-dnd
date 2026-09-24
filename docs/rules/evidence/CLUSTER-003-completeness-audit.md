@@ -1,5 +1,11 @@
 # Primary-Source Completeness Audit: CLUSTER-003 Stage A (CHAR-004, CHAR-005, EXP-003)
 
+> **✅ STAGE B COMPLETE, 2026-09-24 — this audit's remaining open items are dispositioned.** `DEC-0010` completeness passed; `DEC-0011` BECMI research and its remediation are complete; the human project owner adjudicated all seven blocking source defects and ambiguities (**`SR-6`–`SR-10`**, plus two non-rulings); three Rule Cards are drafted and `AWAITING_APPROVAL`. The `STAGE B: NOT STARTED / NOT AUTHORIZED` lines in §11 and §14.5 below are **point-in-time records that were true when written** and are superseded by this banner. Full record: `docs/rules/clusters/CLUSTER-003-stage-b-synthesis.md`.
+>
+> **The source conflicts this audit catalogued are NOT resolved by those rulings** — the printed pages still disagree with themselves. Only the simulator's behaviour is settled. That distinction is preserved in every Stage-B artifact.
+>
+> ---
+>
 > **⚠ SUPERSEDED IN PART BY THE INDEPENDENT REVIEW AND BY REMEDIATION PASS 1 (2026-09-13).**
 >
 > The independent completeness review this artifact was prepared for **has now been performed, and it did not pass**:

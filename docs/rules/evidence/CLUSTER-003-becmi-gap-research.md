@@ -1,5 +1,29 @@
 # CLUSTER-003 — DEC-0011 Alternate-Source (BECMI) Gap Research
 
+> **✅ HUMAN ADJUDICATION RECEIVED, 2026-09-24. All seven questions are determined; none awaits review any longer.**
+>
+> **This document's body is preserved exactly as researched and is NOT rewritten to anticipate the rulings.** What follows is an additive status record. The research reached its conclusions without knowing the outcomes, and that sequence is the artifact's value.
+>
+> | Q | Research result | Human determination |
+> |---|---|---|
+> | Q1 belt pouch | `E` BECMI silent | **`SR-6`** — filled = `52 cn`; the printed `55` is erroneous |
+> | Q2 magic-user dagger | `B` supports one RC reading | **`SR-7`** — dagger unconditional; Ch. 4 note `w` defective as to the dagger |
+> | Q3 Suit Armor | `B` supports one RC reading | **`SR-8`** — **discard** the `30' (10')` rate; Suit Armor is `750 cn` and nothing else |
+> | Q4 running speed | `A` BECMI resolves | **Adopted as an RC-explicit interpretation. NOT a ruling** |
+> | Q5 Mystic `MV` × enc | `E` BECMI silent | **`SR-9`** — enhanced `MV` gated on the unencumbered band |
+> | Q6 Mystic rounding | `D` BECMI internally conflicted | **`encounter = MV ÷ 3`, exact fractions retained. NOT a ruling.** BECMI's `320'(80')` **not imported**, as this research recommended |
+> | Q7 starvation | `E` BECMI silent | **`SR-10`** — `×3/4 → ×1/2 → ×1/4` |
+>
+> **Note on Q3.** The human ruling **declines to follow BECMI's own resolution**, which this document established was genuine and which the Master-set precedence rule selected. That is a deliberate simulator decision, not a rejection of the research — see `CLUSTER-003-stage-b-synthesis.md` §1.2.
+>
+> **§12's "still unresolved — human ruling candidate" rows are superseded by the table above** and are left in place as the record of what the research could and could not settle on its own.
+>
+> **`DEC-0011` item 9 status.** The independent alternate-source completeness review contemplated for Q2 and Q4 was subsumed by the human adjudication, which took both as interpretations rather than as imports. **No `Alternate-Source Compatible Completion` was adopted anywhere in this cluster.**
+>
+> Full record: `docs/rules/clusters/CLUSTER-003-stage-b-synthesis.md`.
+>
+> ---
+>
 > **⚠ REMEDIATION 1 APPLIED (2026-09-24). An independent completeness review found one blocking defect in this package, and it was correct.**
 >
 > **The defect.** §2.5 as first committed stated *"no global conflict-precedence statement was located in the nine core source units inspected."* **That was wrong.** An explicit conflict-precedence statement exists at **Master Players' Book p. 2**, and `DEC-0011` item 6 makes such statements **mandatory source objects**. This package could not pass independent review as written.
@@ -843,7 +867,24 @@ Q7  starvation            E   BECMI SILENT
 **One classification changed in remediation; six were re-tested against the precedence object and did not change (§10.1).** The researcher does **not** self-certify the lineage conclusions underlying Q2, Q3 or Q4 as exhaustive — `DEC-0011` item 9's independent alternate-source completeness review remains required before any of them may be adopted, and **the defect this remediation corrects is itself the argument for that gate.**
 
 ```text
+AS AT THE CLOSE OF THIS RESEARCH (2026-09-24, before adjudication):
+
 STAGE B:                    NOT STARTED / NOT AUTHORIZED
 FURTHER LINEAGE RESEARCH:   NOT STARTED / NOT AUTHORIZED
 SIMULATOR RULINGS:          NONE DRAFTED, NONE PROPOSED
 ```
+
+> **Superseded the same day by human adjudication.** Current state:
+>
+> ```text
+> HUMAN ADJUDICATION:         COMPLETE -- seven determinations
+> SIMULATOR RULINGS:          SR-6, SR-7, SR-8, SR-9, SR-10 ISSUED
+>                             by the human project owner
+>                             (Q4 and Q6 produced NO ruling)
+> STAGE B:                    COMPLETE -- three Rule Cards drafted,
+>                             AWAITING_APPROVAL
+> FURTHER LINEAGE RESEARCH:   NOT STARTED / NOT AUTHORIZED
+> IMPLEMENTATION:             NOT AUTHORIZED
+> ```
+>
+> **This researcher drafted no Simulator Ruling.** The five above were issued by the human project owner and are recorded, not authored, by the Stage-B artifacts.

@@ -1,5 +1,16 @@
 # Stage-A Evidence: EXP-003 — Dungeon Movement
 
+> **✅ STAGE B COMPLETE, 2026-09-24. Rule Card drafted: `docs/rules/exploration/dungeon_movement.md` — `AWAITING_APPROVAL`.**
+>
+> **This packet required no human adjudication and produced no Simulator Ruling.** None of the seven adjudicated questions belonged to it. Its two scope findings had already been settled by the 2026-09-14 governance decision and are carried into the card unchanged:
+>
+> - **Mapping** owns no separate time procedure, roll, failure mechanic or movement penalty. Ordinary dungeon movement already encompasses it — RC Ch. 6 p. 88 states the rate *"includes many assumed actions—**mapping**, peeking around corners, resting"*. The card records the consequence as a hard constraint: **charging time for mapping would double-count**.
+> - **Special Terrain** is not this card's responsibility. The terrain rules RC states remain with wilderness movement, `ENC-005`, and `COMBAT-*`/`MON-*`. **No terrain mechanic is created from the Mystic Acrobatics wording** — it remains unowned, deliberately.
+>
+> **One dependency flows in from the adjudications:** `CHAR-005` may now yield a **fractional** movement rate for an active Mystic `MV` (e.g. `43⅓'`). `EXP-003` **consumes that rate and does not quantise it**; spatial snapping to map squares is a separate, unowned execution concern.
+>
+> ---
+>
 > *(Packet originally titled "EXP-003 — Dungeon Movement, Mapping & Special Terrain". That title is **no longer approved**; see the closure note immediately below. The body text below still uses the old title in places and is preserved unaltered as audit history.)*
 >
 > **✅ STAGE-A RESEARCHER CLOSURE (2026-09-14). The card is renamed and narrowed by human governance decision.**

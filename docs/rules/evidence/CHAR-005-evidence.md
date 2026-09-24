@@ -1,5 +1,22 @@
 # Stage-A Evidence: CHAR-005 — Encumbrance & Movement Rate
 
+> **✅ STAGE B COMPLETE, 2026-09-24. Every blocking conflict and gap in this packet is adjudicated and the Rule Card is drafted.**
+>
+> | §10 item | Determination |
+> |---|---|
+> | **Conflict 1 — Suit Armor `750 cn → 90' (30')` vs. its own `30' (10')`** | **`SR-8`** — **discard** the special rate. Suit Armor contributes `750 cn` to total encumbrance and movement is read normally, so **`750 cn` alone yields `90' (30')`**. **No generic equipment-override framework, and no proportional scaling, may be created from this** |
+> | **Conflict 2 — Starvation column `×3/4 → ×1/2 → ×3/4`** | **`SR-10`** — the final entry is a printed defect; use **`×3/4 → ×1/2 → ×1/4`** |
+> | **Gap 2 — Mystic `MV` × encumbrance** *(this packet's flagged most-likely Stage-B blocker)* | **`SR-9`** — enhanced `MV` applies **only** while total encumbrance would leave an ordinary character at `120'`; beyond that, read the standard table. **No proportional scaling; no immunity. It is no longer a blocker** |
+> | **Running-speed factor-of-3** (remediation Defect 10) | **Resolved as an RC-explicit interpretation, NOT a ruling** — Ch. 8's `3 ×` applies to the **per-round** rate, preserving the Ch. 6 table |
+> | **Mystic encounter rounding** | **`encounter = MV ÷ 3`, exact fractions retained** — RC-explicit ratio plus necessary mathematical consequence. **NOT a ruling.** No rounding in any direction |
+> | **Gap 1 — racial-armour reduction** | **Already withdrawn as a gap during remediation** — RC delegates it to DM discretion by design. The Rule Card quantifies nothing |
+>
+> **Rule Card drafted:** `docs/rules/character_creation/encumbrance_and_movement_rate.md` — `AWAITING_APPROVAL`, carrying **`SR-8`**, **`SR-9`**, **`SR-10`**.
+>
+> **The RC's internal inconsistencies are NOT resolved by these rulings** — only the simulator's behaviour is. Note especially that **`SR-8` declines to follow BECMI's own resolution of the Suit Armor conflict**, which was genuine and which BECMI's Master-set precedence rule had selected. **This packet's body is preserved as researched.**
+>
+> ---
+>
 > **✅ STAGE-A RESEARCHER CLOSURE (2026-09-14). Human ownership governance applied; the boundary-reopen this packet triggered is resolved without adding a card.**
 >
 > - **GOVERNANCE DECISION 2 APPLIED — `CHAR-005` canonically owns the authoritative character movement-rate mechanic.** That includes ordinary character base movement; **class/level-specific base movement exceptions, including the Mystic level-dependent `MV`** (RC p. 31, 120′ → 320′); encumbrance effects on movement; and the authoritative derivation of this card's movement scales. **The whole of `CHAR-009` is NOT an incoming dependency** — `CHAR-009` may state that increased movement is a Mystic class ability, but the authoritative rate mechanic is this card's. The `INVENTORY.md` dependency cell has been corrected: **`CHAR-004` is the sole incoming card dependency**, and the "candidate class-abilities responsibility" recorded on 2026-09-13 is **withdrawn**.

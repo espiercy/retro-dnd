@@ -11,11 +11,13 @@ Equipped Dungeon Movement
 ## 3. Status
 
 ```text
-STAGE A (EVIDENCE)     RESEARCHER CLOSURE COMPLETE
-                       ALL IDENTIFIED PRIMARY-SOURCE INSPECTION ITEMS
-                       COMPLETE
-                       AWAITING FINAL INDEPENDENT DEC-0010 COMPLETENESS
-                       CERTIFICATION
+STAGE A (EVIDENCE)     COMPLETE -- RC primary + DEC-0010 completeness PASS
+DEC-0011 (BECMI)       COMPLETE -- seven authorized questions,
+                       remediation 1 applied
+HUMAN ADJUDICATION     COMPLETE -- 2026-09-24, seven determinations
+                       (SR-6 .. SR-10, plus two non-rulings)
+STAGE B (SYNTHESIS)    COMPLETE -- three Rule Cards drafted 2026-09-24
+RULE CARDS             AWAITING_APPROVAL
 CLUSTER BOUNDARY       RE-APPROVED BY HUMAN DECISION, 2026-09-14
 OWNERSHIP GOVERNANCE   APPLIED, 2026-09-14 (five decisions -- SS3.1)
 STAGE B (SYNTHESIS)    NOT BEGUN, NOT AUTHORIZED
@@ -24,6 +26,38 @@ PRE-CODE GATE          NOT AUTHORIZED
 IMPLEMENTATION         NOT AUTHORIZED
 ALTERNATE-SOURCE WORK  NOT AUTHORIZED -- DEC-0011 NOT ACTIVATED
 ```
+
+### 3.0 Stage B — COMPLETE, 2026-09-24
+
+The human project owner issued **seven adjudications** on the Stage-A and `DEC-0011` findings, and Stage B was drafted against them. **Five are Simulator Rulings; two are not** — that distinction is preserved in every artifact.
+
+```text
+SR-6   Belt pouch filled encumbrance = 52 cn           CHAR-004
+SR-7   Magic-User dagger is unconditional              CHAR-004
+SR-8   Suit Armor has no special movement rate;
+       it is 750 cn and nothing else                   CHAR-005
+SR-9   Mystic enhanced MV is gated on remaining in
+       the unencumbered band                           CHAR-005
+SR-10  Starvation movement progression 3/4, 1/2, 1/4   CHAR-005
+
+Q4 running speed          RC Explicit interpretation + Necessary
+                          Mechanical Consequence -- NOT a ruling
+Q6 Mystic encounter       RC Explicit ratio + Necessary Mathematical
+   movement, exact         Consequence -- NOT a ruling
+   fractional retention
+```
+
+**Cards drafted, all `AWAITING_APPROVAL`:**
+
+| Card | File |
+|---|---|
+| `CHAR-004` Starting Equipment & Expedition Preparation | `docs/rules/character_creation/starting_equipment_and_expedition_preparation.md` |
+| `CHAR-005` Encumbrance & Movement Rate | `docs/rules/character_creation/encumbrance_and_movement_rate.md` |
+| `EXP-003` **Dungeon Movement** | `docs/rules/exploration/dungeon_movement.md` |
+
+**Full Stage-B record, including what each ruling rejected:** `docs/rules/clusters/CLUSTER-003-stage-b-synthesis.md`.
+
+**Implementation remains NOT AUTHORIZED. The Pre-Code Gate has not been begun.**
 
 ### 3.0a Second independent completeness / boundary review — result
 
@@ -420,14 +454,16 @@ No Rule Card exists for any of the three cards. `AGENTS.md` §2 forbids implemen
 | Research performed | 2026-09-13 |
 
 ```text
-CLUSTER-003 STAGE-A PRIMARY-SOURCE RESEARCH:
+CLUSTER-003:
 
-RESEARCHER CLOSURE COMPLETE
-ALL IDENTIFIED PRIMARY-SOURCE INSPECTION ITEMS COMPLETE
-HUMAN BOUNDARY / OWNERSHIP GOVERNANCE APPLIED
+STAGE A                     COMPLETE -- DEC-0010 completeness PASS
+DEC-0011 (BECMI)            COMPLETE -- remediation 1 applied
+HUMAN ADJUDICATION          COMPLETE -- 2026-09-24
+STAGE B                     COMPLETE -- three Rule Cards drafted
+RULE CARDS                  AWAITING_APPROVAL
 
-AWAITING FINAL INDEPENDENT DEC-0010 COMPLETENESS CERTIFICATION
-
-STAGE B:                    NOT STARTED / NOT AUTHORIZED
-ALTERNATE-SOURCE RESEARCH:  NOT STARTED / NOT AUTHORIZED
+HUMAN RULE CARD REVIEW:     PENDING
+IMPLEMENTATION:             NOT AUTHORIZED
+PRE-CODE GATE:              NOT BEGUN
+FURTHER LINEAGE RESEARCH:   NOT STARTED / NOT AUTHORIZED
 ```
