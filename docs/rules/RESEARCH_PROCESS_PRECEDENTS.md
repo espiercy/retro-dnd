@@ -11,6 +11,80 @@
 | # | Precedent | Established by | Status |
 |---|---|---|---|
 | **P-001** | **When a primary source provides a General Index, General Index inspection is a required source-structure completeness instrument for `DEC-0010` research, alongside the Table of Contents and the Tables Index.** | `CLUSTER-003` Stage-A remediation pass 1, 2026-09-13 | **Precedent recorded.** Not yet elevated into `DEC-0010` or the research protocol. |
+| **P-002** | **A `DEC-0011` mandatory source object — a conflict-precedence statement — must be sought by opening the front matter of every core source unit. A keyword sweep cannot establish that none exists.** | `CLUSTER-003` `DEC-0011` BECMI remediation 1, 2026-09-24 | **Precedent recorded.** Not yet elevated into `DEC-0011` or the research protocol. |
+
+---
+
+## P-002 — Precedence statements are found by reading front matter, not by searching for the concept
+
+### The statement
+
+```text
+DEC-0011 item 6 makes conflict-precedence statements MANDATORY source
+objects. They must be located by opening the introduction / front
+matter of EVERY core source unit. A keyword sweep for the CONCEPT
+cannot establish that no such statement exists, because such
+statements are routinely written in plain prose that uses none of
+the words a researcher would think to search for.
+```
+
+### What happened
+
+The `CLUSTER-003` BECMI gap-research pass discharged `DEC-0011` item 6 with a whole-corpus regular-expression sweep for:
+
+```text
+supersede | replaces the | instead of the (rules|version)
+         | take precedence | these rules replace | revised (rules|version)
+```
+
+It returned nothing relevant, and the package recorded *"no global conflict-precedence statement was located in the nine core source units inspected."*
+
+**An explicit precedence statement existed**, in the **Master Players' Book, p. 2**, under the section heading *"The Ultimate Game"*:
+
+> *"If you discover a contradiction between this set and previous sets, the rules given here should be used."*
+
+**It contains none of the six search terms**, and no plausible seventh. It says *"contradiction"*, *"previous sets"*, and *"should be used"* — ordinary words that carry the rule without ever naming it. This same object was one of the motivating facts behind `DEC-0011` itself, which makes the miss worse rather than more forgivable: the record that created the obligation quoted the object the pass then failed to find.
+
+The independent completeness review caught it and returned the package for remediation. The consequence was not cosmetic: the missed object **changed a classification**, from `D — BECMI IS INTERNALLY CONFLICTED` to `B — BECMI SUPPORTS ONE RC READING`, because the lineage turned out to resolve internally a conflict the package had reported as unresolved.
+
+### Why the failure mode is general
+
+A precedence rule is a **meta-rule**. Authors state it once, in prose, at the front of a book, in whatever words the sentence happens to want — and they have no reason to use the vocabulary a later researcher will search for. There is no table to find it in, no index entry guaranteed to name it, and no distinctive term it must contain.
+
+```text
+What a keyword sweep can find     rules that NAME themselves
+What front matter carries          rules that merely STATE themselves
+```
+
+The structural location, by contrast, is highly predictable: an introduction, a preface, a "how to use this book" box, or a title-page note.
+
+### What a future pass should do
+
+1. **Open the front matter of every core source unit** — introduction, preface, "how to use this book", title-page notes — and read it. This is cheap: it is one page per unit.
+2. **Classify what is found**, and do not collapse the categories. A **prerequisite** statement (*"you must have the Basic set to use this"*), an **additive** statement (*"these rules are designed to add to those in the Basic Set"*), and a **precedence** statement (*"the rules given here should be used"*) are three different things. Only the third allocates priority.
+3. **Record the scope** of any precedence statement explicitly, in its own terms, and record what it does **not** reach (`DEC-0011` items 6 and 10).
+4. **Use search only to corroborate**, never to establish the negative. If a sweep is performed, record the exact terms used, so a reviewer can see what the negative finding actually rests on.
+5. **Where no statement is found, scope the negative to the units whose front matter was read** — not to the lineage.
+
+### A second-order lesson, recorded because it caused the same error
+
+The pass's falsification step framed the suit-armor question as a binary: *is the entry an override, or is it merely an inconsistent value?* It correctly rejected the first, and then treated the second as established by elimination. **A third possibility existed in the source** — that the lineage resolves the conflict at **set level**, by a rule living nowhere near the entry. A falsification pass that offers itself only the readings it already has in mind can reject the wrong one and still reach a false conclusion.
+
+### Cost of learning it
+
+One independent-review rejection, one remediation pass, and one classification published wrongly for eight days.
+
+### Provenance
+
+- `docs/rules/evidence/CLUSTER-003-becmi-gap-research.md` §2.5 (withdrawn and replaced), §5 (re-evaluation), §10.1, §11 challenge 3
+
+### Elevation status
+
+```text
+PRECEDENT RECORDED -- NOT YET ELEVATED
+```
+
+Elevating `P-002` into `DEC-0011` item 6 or into `RULE_CARD_RESEARCH_PROTOCOL.md` would make it binding. **Neither was modified by this pass** — the assigning task directed a bounded remediation, not a governance change. **That elevation is a human decision.**
 
 ---
 

@@ -1,6 +1,35 @@
 # CLUSTER-003 — DEC-0011 Alternate-Source (BECMI) Gap Research
 
-> **Status: `BECMI ENUMERATION COMPLETE / SEVEN AUTHORIZED QUESTIONS RESEARCHED / RESEARCHER SELF-REVIEW COMPLETE / AWAITING HUMAN / INDEPENDENT EVIDENCE REVIEW`.**
+> **⚠ REMEDIATION 1 APPLIED (2026-09-24). An independent completeness review found one blocking defect in this package, and it was correct.**
+>
+> **The defect.** §2.5 as first committed stated *"no global conflict-precedence statement was located in the nine core source units inspected."* **That was wrong.** An explicit conflict-precedence statement exists at **Master Players' Book p. 2**, and `DEC-0011` item 6 makes such statements **mandatory source objects**. This package could not pass independent review as written.
+>
+> **How the defect was produced — recorded because it is the generalizable part.** The first pass searched for the *concept* using guessed renderings of it (`supersede`, `replaces the`, `take precedence`, `these rules replace`, …). **The statement uses none of those words.** A mandatory source object was therefore sought by keyword sweep rather than by opening the structural location where such statements live — the **introduction/front matter of each core source unit**. That is precisely the failure `DEC-0010` §9.1 and precedent `P-001` exist to prevent, committed inside a `DEC-0011` pass. It is recorded as precedent **`P-002`** in `docs/rules/RESEARCH_PROCESS_PRECEDENTS.md`.
+>
+> **What changed:**
+>
+> | Section | Change |
+> |---|---|
+> | **§2.5** | **Withdrawn and replaced.** The precedence statement is recorded, quoted, visually verified and **scope-bounded**. The introduction page of **every** core source unit was then read directly, and three further front-matter objects were classified |
+> | **§5 (Q3 Suit Armor)** | **Re-evaluated against all three governing objects** and **RECLASSIFIED `D` → `B`**. BECMI is **not** internally unresolved on this point: it carries conflicting surface statements **and** a lineage-internal precedence rule that resolves them in favour of the Master statement |
+> | §10, §11, §12, §13 | Updated for the above; the effect — and the **absence** of effect — on the other six questions is stated explicitly |
+>
+> **The authority boundary is preserved and is the load-bearing limit of this remediation:**
+>
+> ```text
+> BECMI-INTERNAL PRECEDENCE DOES NOT TRAVEL TO THE RULES CYCLOPEDIA.
+>
+> Master p. 2 governs "a contradiction between this set and previous
+> sets". The RC is not "this set" -- it is a later single-volume
+> compilation that merged all of them, and it carries no precedence
+> rule of its own. BECMI resolving its own conflict does NOT make the
+> RC answer a Compatible Completion and does NOT permit the Master
+> statement to override an explicit RC statement.
+> ```
+>
+> **Unchanged by this remediation:** Q1, Q2, Q4, Q5, Q6 and Q7 keep their classifications — see §10.1 for why the precedence object does not reach any of them. **No Simulator Ruling drafted. No B/X research. No Stage B. No production code or tests touched.**
+>
+> **Status: `BECMI ENUMERATION COMPLETE / SEVEN AUTHORIZED QUESTIONS RESEARCHED / REMEDIATION 1 COMPLETE / RESEARCHER SELF-REVIEW COMPLETE / AWAITING HUMAN / INDEPENDENT EVIDENCE REVIEW`.**
 >
 > **This is alternate-source evidence, not authority.** `SOURCE_HIERARCHY.md` §3 places BECMI below the Rules Cyclopedia. Nothing here replaces an RC rule, resolves an RC contradiction by fiat, or converts a finding into a Rule Card. **No Simulator Ruling is drafted or proposed.** Stage B is not begun; the Pre-Code Gate is not begun; no production code was written; no card was added to `CLUSTER-003`.
 >
@@ -88,11 +117,92 @@ Each scan was opened and its **internal book structure verified from the title p
 
 **BECMI provides no volume-spanning General Index comparable to the RC's**, so `P-001`'s instrument is only partly available. Where an index exists it was swept; where none exists, the TOC and the pull-out spread were used and that limitation is recorded here rather than left implicit.
 
-### 2.5 Conflict-precedence statements (`DEC-0011` item 6)
+### 2.5 Conflict-precedence statements (`DEC-0011` item 6) — **CORRECTED 2026-09-24**
 
-**No global conflict-precedence statement was located in the nine core source units inspected.** BECMI's own organisation is **additive**: later sets extend earlier ones and cross-reference them by book and page (e.g. U6 cites *"the Companion Set Players Book, page 18"*; U7 cites *"the revised D&D Basic Set"* and *"the revised D&D Expert Set"*), rather than declaring precedence over them.
+> **WITHDRAWN.** This section previously read: *"No global conflict-precedence statement was located in the nine core source units inspected. BECMI's own organisation is additive…"* **That finding is withdrawn in full.** It was produced by a keyword sweep, not by reading the front matter, and it is false.
 
-**Scope of this negative:** it is scoped to the nine core source units listed in §2.3 and to the TOC/index instruments in §2.4. It is **not** a claim about the BECMI lineage as a whole, and it is not restated as one.
+#### 2.5.1 The precedence object — located, quoted, visually verified
+
+```text
+SOURCE UNIT          Master Players' Book  (U6)
+STRUCTURAL UNIT      Master Set (1985)
+PAGE                 2
+SECTION HEADING      "Introduction"  ->  "The Ultimate Game"
+VISUAL VERIFICATION  YES -- read directly from the page image
+                     (leaf n4), in three overlapping crops covering
+                     the complete paragraph. OCR and the DEC-0011
+                     quotation were used only as locators.
+```
+
+**Exact wording, as printed:**
+
+> *"These books are written for the experienced D&D® player. Begin by reading the **Master Players' Book**, which expands on the known abilities of characters, before turning to the **Dungeon Master's Book**. These rules are written to maintain balanced play at high level. **If you discover a contradiction between this set and previous sets, the rules given here should be used.** Several optional rules are offered to add variety to your game, but it is your choice whether or not to use them."*
+
+**Scope, stated explicitly (`DEC-0011` items 6 and 10):**
+
+| Dimension | Scope |
+|---|---|
+| **Trigger** | *"a contradiction between **this set** and **previous sets**"* — it fires only on an actual contradiction, not on mere difference or addition |
+| **"This set"** | The **Master Set** — the Master Players' Book and the Master DM's Book |
+| **"Previous sets"** | Basic, Expert, Companion |
+| **Direction** | Master **wins** |
+| **Reach** | **Internal to the BECMI boxed-set lineage.** It says nothing about any later product |
+| **Does it govern the Rules Cyclopedia?** | **NO.** See §2.5.4 |
+| **Qualification by the next sentence?** | **No.** *"Several optional rules are offered…"* is a separate sentence about **optional** rules. The precedence instruction is not itself flagged optional, and material presented as optional elsewhere in the set is labelled as such (e.g. *"the **optional** weapon mastery system"*) |
+
+#### 2.5.2 Front matter of every other core source unit — read directly
+
+Having established that the concept is not reliably searchable, the **introduction / front matter page of every core source unit** was opened as a page image:
+
+| Unit | Location read | What it contains | Classification |
+|---|---|---|---|
+| **U1 Basic Players Manual** | Preface, p. 1–2 | No precedence statement — Basic is the first set; there are no "previous sets" | **N/A by position** |
+| **U2 Basic DM Rulebook** | Introduction | No precedence statement | **None located** |
+| **U3 Expert Rulebook** | Introduction, p. 2 | *"These rules have been carefully designed to **add to** those given in the D&D Basic Set, and can be used with those rules."* | **ADDITIVE, not precedence.** Expert declares itself supplementary to Basic; it does **not** claim to win a contradiction |
+| **U4 Players Companion Bk 1** | Introduction, p. 2 → "The Changing Game" | Boxed set-positioning text and campaign-tone material; no precedence statement | **None located** |
+| **U5 DM Companion Bk 2** | Introduction | No precedence statement | **None located** |
+| **U6 Master Players' Book** | **Introduction, p. 2 → "The Ultimate Game"** | **THE PRECEDENCE STATEMENT** | **EXPLICIT CONFLICT-PRECEDENCE** |
+| **U7 Master DM's Book** | Title page (leaf n38) and p. 2 | *"This book has been designed for use with the DUNGEONS & DRAGONS® Basic, Expert, and Companion Sets. It does not explain how to play the game. **You must have the Basic, Expert, and Companion rules before you can use this set.**"* (visually verified). p. 2 is "Procedures" — no introduction | **PREREQUISITE, not precedence.** It establishes dependency, not priority |
+| **U8 Immortals Players' Guide** | p. 2 "Transition" | Narrative transition material; no precedence statement | **None located** |
+| **U9 Immortals DM's Guide** | Introduction | No precedence statement | **None located** |
+
+#### 2.5.3 The corrected lineage picture
+
+BECMI is **not** uniformly additive, as the withdrawn finding claimed. It is **additive through Expert and Companion, and precedence-bearing at Master**:
+
+```text
+Basic      the foundation
+Expert     "designed to ADD TO those given in the D&D Basic Set"
+Companion  positions itself as the third set; no precedence claim located
+Master     "If you discover a contradiction between this set and
+            previous sets, THE RULES GIVEN HERE SHOULD BE USED."
+Immortals  no precedence claim located
+```
+
+The extensive cross-referencing recorded in the withdrawn text (U6 citing *"the Companion Set Players Book, page 18"*; U7 citing *"the revised D&D Basic Set"*) is **real and unchanged** — but it is evidence of **integration**, and it was wrong to read it as evidence that **no precedence rule exists**. Both are true at once.
+
+#### 2.5.4 The authority boundary — what this object does NOT do
+
+```text
+Master p. 2 resolves contradictions BETWEEN BECMI BOXED SETS.
+
+It does NOT govern the Rules Cyclopedia:
+
+  - its trigger names "this set and previous sets"; the RC is
+    neither -- it is a 1991 single-volume compilation that merged
+    all five sets into one book with continuous chapters;
+  - a statement about which of two BOXED SETS wins cannot allocate
+    priority between two CHAPTERS of a later volume that has no
+    boxed-set structure;
+  - SOURCE_HIERARCHY.md SS3 places BECMI BELOW the RC. An alternate
+    source cannot confer precedence authority over the primary
+    source, and DEC-0011 item 10 states that this record grants
+    alternate sources no additional authority.
+```
+
+**A precedence statement does not travel** (`DEC-0011` item 10). This is recorded here as the governing constraint on §5's re-evaluation.
+
+**Scope of the remaining negatives:** the "None located" rows above are scoped to the front matter and TOC/index instruments of the nine core source units named in §2.3. They are **not** claims about the BECMI lineage as a whole and are not restated as such.
 
 ## 3. Question 1 — Belt Pouch Encumbrance
 
@@ -296,19 +406,95 @@ RC did not introduce it. RC inherited it.
 | Time to don | **three full turns** | **two full turns** (+ one to remove) | changed |
 | Rising / mounting alone | 1 in 6 | 1 in 6 **per round** | RC adds the per-round qualifier |
 
-**Is it an override?** The falsification challenge was that the explicit movement line is *automatically* an override. **BECMI does not support that.** It supplies **no** override language — no *"regardless of encumbrance"*, no *"instead of"*, no cross-reference in either direction between the Master suit-armor entry and the Basic encumbrance table. The one adjacent sentence — *"the disadvantages of **encumbrance, slow movement**, and surprise can be minimized"* — names encumbrance and slow movement as **two separate disadvantages**, which is at least as consistent with a drafting oversight as with a deliberate override.
+### 5.1 Re-evaluation against all three governing objects (remediation 2026-09-24)
 
-**RESEARCH INFERENCE, offered as such and defeasible:** the `30 feet per turn` figure equals the movement of a character in the `1,201–1,600 cn` band. A plausible reading is that the Master author wrote a flavour-driven "slow" figure without checking it against the Basic table. **No BECMI text supports or refutes this**, and it is not adopted.
-
-**Does BECMI resolve the RC question?** **No** — but it changes the question's character decisively: this is not an RC compilation error to be repaired against the lineage. It is a **pre-existing lineage contradiction the RC faithfully carried forward**.
+> The first pass assessed Q3 against two objects and concluded *"no override language exists → BECMI is internally conflicted."* **The premise was incomplete**: a third governing object exists. Re-evaluated here against all three.
 
 ```text
-CLASSIFICATION: D -- BECMI IS INTERNALLY CONFLICTED
+A.  Basic Players Manual p. 61   SPEED VS. ENCUMBRANCE TABLE
+                                 401-800 cn -> 90 feet per turn
+                                 [visually verified]
+
+B.  Master Players' Book p. 14   Suit Armor: enc 750 cn;
+                                 "The wearer's movement rate is
+                                  30 feet per turn"
+                                 [visually verified]
+
+C.  Master Players' Book p.  2   "If you discover a contradiction
+                                  between this set and previous sets,
+                                  the rules given here should be used."
+                                 [visually verified -- SS2.5.1]
 ```
 
-**Compatibility test.** Adopting either side would **conflict with the other RC governing object**, exactly as it does in BECMI. No import is available; there is nothing upstream to import. **This is a human-adjudication candidate, not an `Alternate-Source Compatible Completion` candidate.**
+**1. Is the A-versus-B relationship actually a contradiction for purposes of C?**
 
-**Confidence.** High — both sides visually verified in both sources.
+**Yes.** C's trigger is *"a contradiction between this set and previous sets."* Object B is in the Master Set; object A is in a previous set; and applied to the same character — a suit-armor wearer whose total carried encumbrance is 750 cn — they return **different movement rates (90 vs. 30 feet per turn)**. That is a contradiction in the ordinary sense, between the Master Set and a previous set. **C's trigger condition is met on its own wording**, without needing to stretch it.
+
+*Checked and excluded:* B is **not** flagged optional. It sits under "New Armor & Weapons → Personal Armor & Weapons" and carries no optional marker, unlike the weapon-mastery system on the facing pages, which is expressly *"the **optional** weapon mastery system."* So C's following sentence about optional rules does not reach it.
+
+**2. Is B a specific exception/override, or merely another inconsistent value?**
+
+**As drafted, B is not an override — and it does not need to be.** These are two different resolution mechanisms and the distinction is preserved deliberately:
+
+| Mechanism | Present? | Evidence |
+|---|---|---|
+| **Specific-beats-general override** (B overrides A because B is the more specific rule) | **NO** | B contains no override language — no *"regardless of encumbrance"*, no *"instead of"*, no cross-reference in either direction. The adjacent sentence names *"encumbrance, **slow movement**, and surprise"* as **separate** disadvantages. **The first pass's reading of B in isolation stands and is not withdrawn** |
+| **Set-beats-set precedence** (B controls because it is in the Master Set and A is in a previous set) | **YES** | C, explicitly |
+
+**This distinction matters and is not cosmetic.** The earlier instruction not to assume specific-over-general unless the source supports an override relationship remains correct — **the source still does not support it.** What the source supports is **set-over-set**. The two mechanisms happen to select the same value here, but they are not interchangeable, and only the second is evidenced.
+
+**3. Does C resolve the BECMI-internal relationship in favour of B?**
+
+**Yes.** The trigger is met (1), B is not optional, and C's instruction is unconditional in its own terms: *"the rules given here should be used."* **Within BECMI, a character wearing suit armor moves 30 feet per turn**, and the `401–800 cn` band does not govern that case.
+
+**4. What does that establish about BECMI?**
+
+```text
+BECMI IS NOT INTERNALLY UNRESOLVED ON THIS POINT.
+
+It carries two conflicting SURFACE statements and an explicit
+lineage-internal PRECEDENCE RULE that resolves them.
+```
+
+**The first pass's classification `D` described the surface and ignored a mandatory source object. It is withdrawn.** BECMI's own answer is determinate.
+
+**5. What does it establish — and NOT establish — about RC's intent?**
+
+**It establishes:**
+
+- RC's *"The wearer's movement rate is `30' (10')`"* is **not an arbitrary RC-era error**. It reproduces the value that BECMI's own precedence rule had already selected as controlling. RC inherited **the winning side of a resolved lineage conflict**, not a random one of two.
+- The RC-primary finding that *"the contradiction is inherited, not introduced by RC"* is **confirmed and sharpened**: RC inherited both statements, but the upstream lineage had a rule for choosing between them and RC did not carry that rule forward.
+
+**It does NOT establish:**
+
+- **That RC intends the suit-armor line to override the RC encumbrance table.** C is scoped to *"this set and previous sets"* and **does not travel** (§2.5.4). The RC is a single volume with continuous chapters and **no located precedence rule between them**.
+- **That the RC answer is an `Alternate-Source Compatible Completion`.** Adopting B's value in RC would subordinate one explicit RC governing object to another **with no RC-internal authority to do so**. Importing C to supply that authority would be importing a precedence rule the source scoped to a structure the RC does not have — which `DEC-0011` item 10 forbids.
+- **Anything about why RC dropped C.** RC carries no equivalent of C anywhere located during RC-primary research. Whether that omission was deliberate, or an artefact of compiling five boxed sets into one volume where "which set wins" ceased to be a meaningful question, **is not determinable from the evidence** and is not guessed at here.
+
+### 5.2 Classification
+
+```text
+WITHDRAWN:   D -- BECMI IS INTERNALLY CONFLICTED
+CLASSIFIED:  B -- BECMI SUPPORTS ONE RC READING
+```
+
+**Why `B` and not `A`.** `A` would require the lineage to supply *"a clear mechanically compatible answer"* to the **RC** question. BECMI supplies a clear answer to the **BECMI** question. It cannot supply one to the RC question, because the instrument that produced its answer — C — is scoped not to reach the RC. `B`'s definition fits exactly: *evidence strongly favours one RC interpretation but does not explicitly resolve the **compilation** contradiction.* The compilation contradiction is precisely the one C cannot touch.
+
+**Why `B` and not `D`.** `D` asserts that the relevant BECMI sources disagree. After inspecting C, **they do not** — they disagree on the surface and the lineage resolves them. Retaining `D` would mean retaining a classification that a mandatory source object contradicts.
+
+### 5.3 Compatibility test
+
+| Test | Result |
+|---|---|
+| Preserves RC mechanics? | **Partly.** It preserves the RC suit-armor sentence and leaves the RC table intact for every other case, but it subordinates the table in this one case on authority RC does not supply |
+| Requires changing an explicit RC rule? | **No** — but it requires **choosing between two** explicit RC statements, which RC does not do |
+| Conflicts with another RC governing object? | **Yes, unavoidably** — that is the nature of the defect |
+| Introduces a mechanic RC deliberately removed? | **Unknown.** Whether RC's omission of a precedence rule was deliberate is not determinable |
+| Cleanly fills a genuine omission? | **No.** RC's omission is of a *meta-rule*, not of a mechanic |
+
+**Provenance consequence.** This is **still not** an `Alternate-Source Compatible Completion`: nothing mechanical is being imported. It **is now** a **well-evidenced human adjudication** rather than an even choice — the lineage points clearly at one side, and a human ruling that follows it would be following the source's own resolved answer rather than picking arbitrarily. **That ruling is not made here.**
+
+**Confidence.** High. All three objects visually verified; the trigger analysis turns on the plain wording of C; the authority boundary follows from C's own scope and from `SOURCE_HIERARCHY.md` §3.
 
 ## 6. Question 4 — Running Speed
 
@@ -542,6 +728,24 @@ CLASSIFICATION: E -- BECMI IS SILENT / DOES NOT RESOLVE
 
 ## 10. Cross-Question Findings
 
+### 10.1 Reach of the Master p. 2 precedence object (added 2026-09-24)
+
+> `DEC-0011` item 6 makes this a mandatory source object for **lineage research**, not only for the question that surfaced it. Each of the other six questions is therefore tested against it explicitly — **including the ones it does not reach**, so that no question is silently left unexamined and none is silently resolved by it.
+
+| Q | Does C's trigger — *"a contradiction between this set and previous sets"* — fire? | Effect |
+|---|---|---|
+| **Q1** Belt pouch | **No.** There is no contradiction between sets: the item is **absent from every set**. C resolves contradictions; it cannot supply a missing object | **None. `E` stands** |
+| **Q2** Magic-user dagger | **No — and this is worth stating precisely.** Master does not *contradict* Basic here; it **explicitly frames itself as an addition** (*"the DM may, if desired, **widen** the number of weapons permitted"*) and **reaffirms the Basic baseline in the same breath** (*"many campaigns function perfectly well with magic-users restricted to dagger only"*). There is nothing for C to resolve. **Had it fired, it would have selected the Master text — which itself names the dagger baseline**, so the reading is unaffected either way | **None. `B` stands, mildly reinforced** |
+| **Q3** Suit Armor | **Yes** | **`D` → `B`.** See §5 |
+| **Q4** Running speed | **No.** Basic and Expert **agree** once *"per round"* is read as printed; the Expert worked example confirms it arithmetically. There is no contradiction between sets — the defect is RC's truncation of Expert's phrasing. Note also that Expert's own front matter is **additive**, not precedence-bearing (§2.5.2), so even a reader who mistakenly saw a conflict here would find no lineage instrument to resolve it | **None. `A` stands** |
+| **Q5** Mystic `MV` × encumbrance | **No.** The Mystic exists **only** in the Master Set; there is no previous-set statement for it to contradict. C resolves conflicts between sets — it does not fill a **silence within one set** | **None. `E` stands** |
+| **Q6** Mystic encounter rounding | **No — and this is the case most likely to be misread, so it is stated at length.** The `320'(80')` defect is an inconsistency **internal to a single Master Set object** — its own stat block against its own per-HD table and against the lineage's 3:1 convention. C's trigger requires a contradiction *between this set and previous sets*; an object contradicting **itself** is outside its wording. **C cannot repair a Master Set object using the Master Set's own precedence over other sets** | **None. `D` stands** |
+| **Q7** Starvation | **No.** No starvation table exists in any set; there is nothing to contradict | **None. `E` stands** |
+
+**Net effect of the remediation: one classification changes (Q3). Six do not.** Each non-change is evidenced above rather than asserted.
+
+### 10.2 Shared governing objects
+
 Shared BECMI objects that bear on more than one question. **Recorded explicitly so that no question is silently resolved using evidence discovered under another.**
 
 | Shared object | Questions | How it is used in each |
@@ -565,13 +769,15 @@ Shared BECMI objects that bear on more than one question. **Recorded explicitly 
 |---|---|---|---|
 | **1** | *The RC belt-pouch 55 cn value is simply a typo* | The belt pouch has **no BECMI ancestor at all** — verified on the U3 p. 19 page image, where the alphabetical list runs `Pole → Rations` with no `Pouch` row, and absent from every other equipment list in the corpus. Nothing upstream prints 52, 55, or the item | **NOT ESTABLISHED.** "Typo" presumes a correct value was corrupted; no such value exists upstream. The discrepancy may equally be an authoring error in a new RC-era entry. **Not resolved** |
 | **2** | *The dagger should obviously be unconditional for Magic-Users* | U1: *"A magic-user can only use a dagger for a weapon"*; U6: the DM may *"widen"* the set to add blowgun, net, whip, staff, with *"restricted to dagger only"* named as the baseline; U3's note-code set contains a cleric note and **no magic-user note** | **SUPPORTED BY LINEAGE, not by intuition.** Two structural units make the dagger the unconditional baseline. RC Ch. 4's note `w` has no ancestor. Recorded as classification **B**, not as a resolution |
-| **3** | *Suit Armor's explicit movement line is automatically an override* | U6 supplies **no** override language; the adjacent sentence names *"encumbrance, slow movement, and surprise"* as **separate** disadvantages; no cross-reference exists in either direction between U6 p. 14 and U1 p. 61 | **REJECTED.** BECMI gives no basis for specific-over-general here. The contradiction is **pre-existing and unresolved in the lineage itself** |
+| **3** | *Suit Armor's explicit movement line is automatically an override* | **RE-TESTED 2026-09-24 against the precedence object.** U6 p. 14 still supplies **no** override language, and the adjacent sentence still names *"encumbrance, slow movement, and surprise"* as **separate** disadvantages — **specific-over-general remains unevidenced**. But **U6 p. 2** supplies **set-over-set** precedence, which selects the same value by a different mechanism | **PARTLY UPHELD, PARTLY WITHDRAWN.** *"Automatically an override"* remains **REJECTED** — nothing makes the entry an override *as drafted*. But the first pass's further conclusion that the conflict is *"pre-existing and **unresolved in the lineage itself**"* is **WITHDRAWN**: the lineage **does** resolve it, by precedence rather than by override. **The correct answer was neither of the two options the challenge offered** — which is itself the lesson |
 | **4** | *Running speed has one stable meaning throughout BECMI* | Five governing objects across three structural units. Basic: *"running away… time is still kept in rounds"* + the table's `Running Speed` column. Expert: *"3 times normal speed per round"* **with a worked example** (war horse `180'/turn` = `60'/round`, pursuit `180'/round`). Immortals: *"120 feet per round (the same rate as an unencumbered human)"* | **CONFIRMED — the mechanic is stable; only the wording varies.** And the wording variation is exactly what RC Ch. 8 inherited without its qualifier. This is the finding, not an obstacle to it |
 | **5** | *Mystic MV is obviously an unencumbered base speed* | BECMI calls it neither. It is a **monster `Move` statistic**; BECMI states no relationship to the encumbrance bands, gives no worked example, and imposes no cn limit. RC's *"as fast as any other unarmored characters"* gloss is **an RC-era addition with no BECMI ancestor** | **REJECTED as "obvious".** The one textual hint favouring that reading originates in RC, not in the lineage. **Not resolved** |
 | **6** | *Mystic encounter movement obviously rounds down* | BECMI prints **no** per-level encounter rates and **no** rounding rule anywhere in U1–U9. Its one printed pair, `320'(80')`, is not ⅓ of 320 in any rounding convention — floor, ceiling or nearest all give ~106 | **REJECTED.** No rounding convention is stated, and the single printed value is inconsistent with all of them. **Not resolved, and no convention chosen** |
 | **7** | *The starvation table's final 3/4 value is obviously meant to be 1/4* | BECMI has **no starvation table and no numbers** — only a four-category qualitative sentence. The nearest quantitative figure is *foraging at ½ normal*, a different mechanic | **NOT ESTABLISHED.** BECMI supports neither `1/4` nor `3/4`. The monotonicity intuition is RC-internal reasoning, and this pass supplies no lineage evidence for it. **Not resolved** |
 
-**Summary.** Of the seven common-sense propositions, **one was confirmed** (4), **four were rejected** (3, 5, 6, and 7-as-obvious), and **two were downgraded to "not established"** (1, 2-as-obvious — with 2 nonetheless well supported on lineage grounds). **No question was resolved by intuition standing in for evidence.**
+**Summary (revised 2026-09-24).** Of the seven common-sense propositions, **one was confirmed** (4), **three were rejected** (5, 6, and 7-as-obvious), **two were downgraded to "not established"** (1, 2-as-obvious — with 2 nonetheless well supported on lineage grounds), and **one was split** (3 — the override claim rejected, the "unresolved in the lineage" claim withdrawn). **No question was resolved by intuition standing in for evidence.**
+
+**A note on challenge 3 that belongs in the record.** The first pass framed challenge 3 as a binary — *override* or *merely inconsistent* — and, having correctly rejected the first, treated the second as established. **It was not.** A third possibility existed in the source and was not looked for: that the lineage resolves the conflict by a **set-level rule** rather than by anything in the entry itself. A falsification pass that offers itself only the two readings it already has in mind can reject the wrong one and still land on a false conclusion. That is what happened here, and it is the substance of precedent `P-002`.
 
 ## 12. Candidate Provenance Outcomes
 
@@ -581,7 +787,7 @@ Shared BECMI objects that bear on more than one question. **Recorded explicitly 
 |---|---|---|---|
 | **1** | Belt pouch `52` vs `55` | **Still unresolved — human ruling candidate.** No `Alternate-Source Compatible Completion` available | The object has no ancestor; there is nothing to complete from |
 | **2** | Magic-user dagger | **RC Explicit correction/interpretation** — reading RC Ch. 2 as governing and note `w` on the dagger rows as a tagging defect. **Not** a Compatible Completion: RC already states the rule | Lineage corroborates RC Ch. 2 across two structural units |
-| **3** | Suit Armor movement | **Still unresolved — human ruling candidate.** Explicitly **not** a Compatible Completion | The contradiction is inherited; both sides exist upstream and BECMI does not choose between them |
+| **3** | Suit Armor movement | **REVISED 2026-09-24. Still a human ruling candidate — but now a well-evidenced one rather than an even choice.** Still explicitly **not** a Compatible Completion: nothing mechanical is imported, and the lineage instrument that produced BECMI's answer is scoped not to reach the RC | The contradiction is inherited, and **BECMI does choose between the two sides** — Master p. 2 selects the Master statement. RC inherited the **winning** side of a resolved lineage conflict but did not inherit the rule that resolved it. A human ruling following the lineage would be following the source's own answer, not picking arbitrarily |
 | **4** | Running speed | **RC Explicit correction/interpretation**, reinforced by **Necessary Mechanical Consequence** | RC Ch. 6 already states the rule; BECMI's worked example makes the arithmetic non-optional. Ch. 8's phrasing is a lost qualifier |
 | **5** | Mystic `MV` × encumbrance | **Still unresolved — human ruling candidate.** **Not** a Compatible Completion | BECMI is silent; nothing exists to import |
 | **6** | Mystic encounter rounding | **Still unresolved — human ruling candidate.** **Not** a Compatible Completion | BECMI's only printed pair is internally inconsistent; importing it would breach an explicit RC rule |
@@ -599,7 +805,7 @@ Shared BECMI objects that bear on more than one question. **Recorded explicitly 
 |---|---|---|
 | **1** | **PROPOSE NEXT LINEAGE — B/X (Moldvay Basic / Cook Expert)** | Concrete and specific: B/X's Expert equipment list is the direct predecessor of BECMI's, and a `Pouch, belt` entry with capacity and encumbrance **may exist there and have been dropped from BECMI's list while surviving into RC's**. That is a testable hypothesis about a specific table, not a general browse. **If B/X also lacks it, the RC-origin inference in §3 becomes strong** |
 | **2** | **STOP — BECMI is sufficient evidence**, even though the final reading is a human call | Two structural units agree; the contested note code is RC-era and has no predecessor to find |
-| **3** | **STOP — BECMI is sufficient evidence** | Suit armor is a **Master-set innovation**; there is no earlier lineage in which it exists. Descending to B/X cannot help, because the item did not yet exist |
+| **3** | **STOP — BECMI is sufficient evidence** *(unchanged, and strengthened 2026-09-24)* | Suit armor is a **Master-set innovation**; there is no earlier lineage in which it exists, so descending to B/X cannot help. **The remediation strengthens this**: BECMI not only contains the item, it contains the instrument that resolves the conflict about it. There is nothing further upstream to find |
 | **4** | **STOP — BECMI is sufficient evidence** | Resolved at classification `A` with an internal arithmetic cross-check |
 | **5** | **PROPOSE NEXT LINEAGE — none useful; STOP at BECMI** | The Mystic is a **Master-set innovation** with no earlier-lineage ancestor. **Descending cannot resolve it.** This is a human-ruling question |
 | **6** | **STOP at BECMI** | Same reason as Q5 |
@@ -614,12 +820,27 @@ This pass was performed by the original researcher. Per `DEC-0011` item 9 and `R
 ```text
 BECMI ENUMERATION COMPLETE
 SEVEN AUTHORIZED QUESTIONS RESEARCHED
+REMEDIATION 1 COMPLETE
 RESEARCHER SELF-REVIEW COMPLETE
 
 AWAITING HUMAN / INDEPENDENT EVIDENCE REVIEW
 ```
 
 The words **unanimous**, **exhaustive**, **internally consistent** and **absent from the lineage** are **not** used as lineage-level claims anywhere above. Every negative finding names the core source units inspected (§2.3) and is scoped to them.
+
+**Final classification set after remediation:**
+
+```text
+Q1  belt pouch            E   BECMI SILENT
+Q2  magic-user dagger     B   BECMI SUPPORTS ONE RC READING
+Q3  Suit Armor movement   B   BECMI SUPPORTS ONE RC READING   [D -> B]
+Q4  running speed         A   BECMI RESOLVES RC DEFECT
+Q5  Mystic MV x enc       E   BECMI SILENT
+Q6  Mystic rounding       D   BECMI IS INTERNALLY CONFLICTED
+Q7  starvation            E   BECMI SILENT
+```
+
+**One classification changed in remediation; six were re-tested against the precedence object and did not change (§10.1).** The researcher does **not** self-certify the lineage conclusions underlying Q2, Q3 or Q4 as exhaustive — `DEC-0011` item 9's independent alternate-source completeness review remains required before any of them may be adopted, and **the defect this remediation corrects is itself the argument for that gate.**
 
 ```text
 STAGE B:                    NOT STARTED / NOT AUTHORIZED
