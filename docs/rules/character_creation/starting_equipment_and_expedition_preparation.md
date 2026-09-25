@@ -14,6 +14,8 @@ Starting Equipment & Expedition Preparation
 
 `APPROVED`
 
+> **Amended 2026-09-26 — human-approved corrections surfaced by Slice-B implementation.** Three items, none of them a Simulator Ruling: (1) §"Rules Cyclopedia Explicitly Establishes" item 9 gave the blowgun a normal load of **3 darts**; RC states **5** in two governing objects, so the card's figure was a **transcription defect** and is corrected. (2) New **§4.1** records the two **price-specification forms** RC prints besides a single fixed amount — the torch's quantity offers and "Clothes, extravagant"'s open-ended `50+ gp` — both **Rules Cyclopedia Explicit**. (3) New cases **E61–E66**. **The card remains `APPROVED`** — an amendment to an approved card, not a return to review. **`SR-6` and `SR-7` stand exactly as ratified and are not renumbered; there is no `SR-8` on this card.** See §4.1, the new cases, and the Amendment History.
+>
 > **Approved by the human project owner, 2026-09-24.** Stage-A evidence passed independent `DEC-0010` completeness review; `DEC-0011` BECMI gap research and its remediation are complete; the human adjudications of 2026-09-24 are recorded below and in `docs/rules/clusters/CLUSTER-003-stage-b-synthesis.md`.
 >
 > **Ratified as approved, without change to the submitted contract:** the §1–§8 mechanical specification, **`SR-6`** and **`SR-7`**, and the treatment of the "Clothes, plain" footnote marker as a **typographic defect rather than a Simulator Ruling** (Open Questions 1 — expressly approved; no executable mechanic depends on reinterpreting it).
@@ -67,7 +69,7 @@ Starting Equipment & Expedition Preparation
 6. **Container capacities:** Backpack `400 cn`, Sack small `200 cn`, Sack large `600 cn`, Belt pouch `50 cn`, Quiver (filled, total) `10 cn`.
 7. **Container encumbrance rule** (Adventuring Gear footnote `*`): the printed value is the **empty** encumbrance; when filled, encumbrance is the container **plus its contents**.
 8. **Worn-versus-packed clothing** (footnote `**`): the printed value is the encumbrance **if packed**; *"If the clothes are worn, disregard the encumbrance."*
-9. **Ammunition already included** (Weapons note `a`): a missile weapon's printed `Enc` includes its normal load — bow 20 arrows, crossbow 30 quarrels, sling 30 stones, blowgun 3 darts — with stated conversion rates for varying it.
+9. **Ammunition already included** (Weapons note `a`): a missile weapon's printed `Enc` includes its normal load — bow 20 arrows, crossbow 30 quarrels, sling 30 stones, **blowgun 5 darts** — with stated conversion rates for varying it. *(**Amended 2026-09-26.** This entry previously read "blowgun 3 darts", which was a transcription defect in this card, not an RC value. RC states 5 in two governing objects: Weapons Table note `a`, p. 63, and the Ammunition Table's Standard Load column, p. 63, both visually verified. The figure is also the arithmetically coherent one — at RC's rate of 5 darts per `cn`, 5 darts is exactly `1 cn` while 3 darts is not a whole `cn`.)*
 10. **Size-derived cost and encumbrance** for nets (`1 sp` and `1 cn` per square foot) and whips (`1 gp` and `10 cn` per foot).
 11. **Per-class equipment legality**, stated in the Ch. 2 class entries and, for some items, marked in Ch. 4's note codes.
 12. **The unlisted-item procedure** (Ch. 13 p. 147): the DM decides cost, encumbrance and other characteristics.
@@ -180,6 +182,58 @@ a belt-pouch
 1 pp = 5 gp = 10 ep = 50 sp = 500 cp
 1 cn = one-tenth of a pound
 ```
+
+### 4.1 Price-specification forms
+
+**Added 2026-09-26 by human-approved amendment.** A catalog price is not always a single exact amount. RC prints three forms, and the simulator must preserve the distinction rather than flatten every row into one amount.
+
+```text
+FIXED        one unit, one exact amount            e.g. Sword, Normal = 10 gp
+QUANTITY     stated quantities at stated prices    e.g. Torch
+OPEN-ENDED   a stated floor and no ceiling         e.g. Clothes, extravagant
+```
+
+Each is **Rules Cyclopedia Explicit**. None is a Simulator Ruling, and none authorises a market, bargaining, merchant or dynamic-pricing mechanic.
+
+#### 4.1.1 Torch — quantity pricing
+
+RC prints the torch three times:
+
+```text
+Weapons Table       p. 62    Torch                        1/6 gp   Enc 20
+Adventuring Gear    p. 69    Torch      One torch          2 sp    Enc  20
+Adventuring Gear    p. 69    Torches    Six torches        1 gp    Enc 120
+```
+
+**Approved reading.** The Weapons Table's `1/6 gp` is a **per-unit expression of the six-for-one-gold-piece rate**, not a third price. Purchasing uses the two explicit whole-coin offers:
+
+```text
+1 torch  = 2 sp   = 20 cp
+6 torches = 1 gp  = 100 cp
+```
+
+**A torch used as a weapon is the same physical torch.** It is one commodity, and acquires no separate fractional-copper purchasing mechanism by being swung at something.
+
+**Why this is not a Simulator Ruling.** A Simulator Ruling adjudicates between RC statements that cannot all be true at once (`SOURCE_HIERARCHY.md`; compare `SR-6`). Read as a per-six rate, `1/6 gp` and the gear table's two offers are **mutually consistent** — a single torch simply costs more than one-sixth of a bundle — so there is no conflict to adjudicate and nothing is being chosen over anything. The reading of the printed `1/6` notation is recorded in the same category as this card's *"Clothes, plain"* `***` marker: a **printed-notation reading**, which the human project owner expressly approved on 2026-09-24 as **not** elevated to a ruling. The two purchase offers themselves are plain **Rules Cyclopedia Explicit**.
+
+**The printed `1/6 gp` datum is preserved**, as source notation, and is not silently replaced.
+
+#### 4.1.2 Clothes, extravagant — open-ended pricing
+
+RC prints:
+
+```text
+Clothes, extravagant    See above    50+ gp    Enc 30**
+```
+
+```text
+minimum price = 50 gp
+exact price   = may exceed 50 gp; not fixed by RC
+```
+
+The exact price is resolved by the applicable **DM / simulation policy** when a concrete purchase requires one. **`50+ gp` does not mean exactly `50 gp`**, and a consumer needing a concrete amount must be given an explicitly resolved one rather than silently substituting the floor.
+
+**No default final price, random markup, percentage adjustment or upper bound is invented.** RC explicitly establishes an open-ended price with a floor, and that is what is recorded: **Rules Cyclopedia Explicit**.
 
 ### 5. Purchase procedure
 
@@ -415,6 +469,19 @@ STATUS:  researched / preserved / NOT V1-WIRED
 | E59 | Chapter 10 high-level money or equipment requested | **REFUSED — `NOT V1-WIRED`** |
 | E60 | Any caller asking this card for a **movement rate** | **ERROR — not this card's responsibility.** It returns `cn` only |
 
+### Price-specification forms and the blowgun load
+
+**Added 2026-09-26 by human-approved amendment (§4.1).** Numbered from `E61` so no existing case is renumbered.
+
+| # | Input | Expected |
+|---|---|---|
+| E61 | **One torch purchased** | **`2 sp` = `20 cp`** exactly. No fractional copper piece is produced or required |
+| E62 | **Six torches purchased** | **`1 gp` = `100 cp`** exactly, the printed bundle offer — **not** `6 × 1/6 gp` derived through a fraction |
+| E63 | **A torch used as a weapon** | The **same commodity** as the gear torch. Must not be a second, separately priced item |
+| E64 | **"Clothes, extravagant" asked for a concrete cost** | **ERROR — the price is not fixed.** Must not silently answer `50 gp` |
+| E65 | **"Clothes, extravagant" resolved by DM policy** | An explicitly supplied amount **≥ `50 gp`** is accepted; **below `50 gp` is refused** — RC states the floor |
+| E66 | **Blowgun with its normal load** | **`5` darts** (Weapons note `a`; Ammunition Table), and at RC's rate of 5 darts per `cn` that load is exactly `1 cn` |
+
 ---
 
 ## Provenance Classification
@@ -427,6 +494,10 @@ STATUS:  researched / preserved / NOT V1-WIRED
 | **§7 Magic-User dagger unconditional; Ch. 4 note `w` treated as defective as to the dagger** | **Simulator Ruling `SR-7`** |
 | BECMI container values and Magic-User two-tier structure | **Alternate-source evidence used only to interpret a defect.** Not imported; **no Compatible Completion claimed** |
 | "Clothes, plain" `***` marker read as `**` | **Typographic-defect reading**, not a ruling — see Open Questions 1 |
+| **§4.1.1 torch purchase offers (`1 torch = 2 sp`, `6 torches = 1 gp`)** | **Rules Cyclopedia Explicit** — both are printed on p. 69 |
+| **§4.1.1 the Weapons Table's `1/6 gp` read as the per-six rate** | **Printed-notation reading**, the same category as the "Clothes, plain" marker above, and expressly **not** a Simulator Ruling — the three printed values are mutually consistent under this reading, so there is no conflict to adjudicate |
+| **§4.1.2 "Clothes, extravagant" as an open-ended price with a `50 gp` floor** | **Rules Cyclopedia Explicit** — RC prints `50+ gp`, which establishes a minimum and no exact price. The exact price is a **DM / simulation-policy input**, quantified nowhere here |
+| **Blowgun normal load = 5 darts** | **Rules Cyclopedia Explicit** (Weapons note `a`; Ammunition Table). The card's previous "3 darts" was a **transcription defect in this card**, corrected 2026-09-26 — **not** a Simulator Ruling and **not** a change to RC |
 | Racial-armour penalty | **RC delegates to DM discretion by design.** Not a gap, not quantified here |
 | §B mounts/vehicles/ships/siege; §C Chapter 10 | **Intentionally deferred — out of V1 / `NOT V1-WIRED`** |
 | §A ownership statements | **Not rules** — repository responsibility boundaries settled by human decision 2026-09-14 |
@@ -443,6 +514,25 @@ STATUS:  researched / preserved / NOT V1-WIRED
 4. **No transport responsibility exists in the inventory.** Recorded so it is not mistaken for an omission in this card.
 
 **Explicitly closed, recorded so they are not re-raised:** whether the belt-pouch discrepancy is inherited (**no** — the item has no BECMI ancestor); whether RC's note `w` has a lineage ancestor (**no**); whether a general equipment list exists anywhere in BECMI beyond Basic and Expert (**no**, across nine core source units).
+
+**Closed 2026-09-26 by amendment:** the Weapons Table torch's `1/6 gp` (§4.1.1); the meaning of `50+ gp` (§4.1.2); the blowgun's normal load (transcription defect corrected).
+
+## Amendment History
+
+| Date | Change | Approved by | Effect on status |
+|---|---|---|---|
+| **2026-09-26** | **Three corrections surfaced by Slice-B implementation, none of them a ruling.** (1) *Transcription defect in this card* — item 9 of "Rules Cyclopedia Explicitly Establishes" gave the blowgun a normal load of **3 darts**; RC states **5** in two governing objects, both visually verified. (2) New **§4.1**, recording the two **price-specification forms** besides a fixed amount that RC prints — the torch's **quantity offers** (`1 = 2 sp`, `6 = 1 gp`, with the Weapons Table's `1/6 gp` read as the per-six rate and preserved as source notation) and **"Clothes, extravagant"**'s **open-ended** `50+ gp` (a `50 gp` floor, exact price a DM / simulation-policy input). Both **Rules Cyclopedia Explicit**. (3) New deterministic cases **E61–E66** | Human project owner | **Remains `APPROVED`** — amendment to an approved card, **not** a return to `AWAITING_APPROVAL` |
+
+**What the 2026-09-26 amendment did *not* do**, recorded so it cannot later be misread:
+
+- **No Simulator Ruling was made, granted, or renumbered.** `SR-6` and `SR-7` stand exactly as ratified on 2026-09-24, and **there is no `SR-8` on this card** — `SR-8` belongs to `CHAR-005`.
+- **No Human-Approved Variant was created**, and no alternate source was consulted. `DEC-0011` was not reopened.
+- **No catalog cost, encumbrance, capacity or conversion changed.** The belt pouch is still `52 cn` (`SR-6`), the quiver still `10 cn` filled, Suit Armor still `750 cn`, and the coin conversions are untouched.
+- **No class restriction changed**, and §7 is untouched in every row including the Magic-User dagger (`SR-7`) and the Druid surcharge.
+- **The currency representation was not weakened.** Exact, non-negative, integral copper pieces remains the representation of every actual monetary amount; `1/6 gp` is **price notation**, not an amount a character can hold or hand over.
+- **No existing deterministic case was renumbered or removed.** `E1`–`E60` are unchanged; the card now carries **66**.
+- **No new primary-source research was performed under `DEC-0010`**, and no new completeness certification is claimed. The three pages involved (pp. 62, 63, 69) were already recorded as visually verified, and were re-read against the page images to confirm each corrected value.
+- **No later slice was authorized.** `CLUSTER-003` Slice C and beyond remain unauthorized.
 
 ## Approval
 
