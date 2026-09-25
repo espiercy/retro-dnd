@@ -14,6 +14,8 @@ Encumbrance & Movement Rate
 
 > **Approved by the human project owner, 2026-09-24.** Stage-A evidence passed independent `DEC-0010` completeness review; `DEC-0011` BECMI gap research and its remediation are complete; the human adjudications of 2026-09-24 are recorded below and in `docs/rules/clusters/CLUSTER-003-stage-b-synthesis.md`.
 >
+> **Amended 2026-09-25 — human-approved contract/dependency correction.** §1's level input previously read *"from `CHAR-002` / `ADV-*`"*. **That dependency statement was incorrect**: `CHAR-002` supplies class but not level, and `ADV-*` is `Unresearched`. §1 and §6 now state level as an **explicit, validated caller input bounded by the applicable per-class maximum**, following the landed `CHAR-003` pattern. **The card remains `APPROVED`** — an amendment to an approved card, not a return to review. **No Simulator Ruling was made, granted or renumbered; `SR-8`, `SR-9` and `SR-10` stand exactly as ratified, and there is no `SR-11`.** No movement value, band, gate threshold or deterministic case changed. See §1, §6 and the Amendment History.
+>
 > **Ratified as approved, without change to the submitted contract:** the §1–§11 mechanical specification; **`SR-8`**, **`SR-9`** and **`SR-10`**; and the treatment of Q4 (running speed) and Q6 (exact fractional Mystic encounter movement) as **RC-explicit interpretation plus necessary consequence and NOT as Simulator Rulings**.
 >
 > **§6.1 Mystic running speed — EXPRESSLY APPROVED, 2026-09-24.** The derivation flagged at draft time is confirmed and is **not** an additional Simulator Ruling. See §6.1.
@@ -210,10 +212,30 @@ The `0%–24%` band remains **No Penalty**, as printed.
 
 ```text
 total carried encumbrance   integer cn      from CHAR-004
-character class and level   from CHAR-002 / ADV-*
+character class             CharacterClass  from CHAR-002
+character level             int             EXPLICIT CALLER INPUT -- see SS1.1
 active conditions           from their owning cards (SS7)
 setting                     indoors | outdoors
 ```
+
+#### 1.1 The level input — explicit, validated, per-class bounded
+
+**Amended 2026-09-25.** Level is **supplied by the caller**, not obtained from another card:
+
+```text
+level is an explicit caller-supplied input.
+
+It is VALIDATED at this card's entry boundary:
+    structurally  -- must be an int, and must not be a bool
+    by domain     -- must be >= 1 and <= the applicable per-class maximum
+
+The applicable per-class maximum bounds the accepted value.
+For the Mystic, whose MV table SS6 indexes, that maximum is 16.
+```
+
+**This card creates no dependency on `CHAR-002` for level, and no dependency on unresearched `ADV-*` rules to obtain it.** `CHAR-002` supplies **class**; it does not supply level. Maximum level remains **`ADV-002`'s authoritative property**, consumed here only to bound the accepted input — exactly as landed `CHAR-003` consumes it to bound hit-point accrual, and recorded the same way.
+
+**This is a contract/dependency correction, not a rules adjudication.** No movement value, band, threshold or case changed.
 
 ### 2. Total encumbrance
 
@@ -268,6 +290,8 @@ Free actions (e.g. drawing a weapon) do not subtract from the movement score; th
 if total encumbrance <= 400 cn   ->  Mystic MV applies (table below)
 else                             ->  use SS3 exactly, as an ordinary character
 ```
+
+**The level used to index the table is the validated caller input of §1.1**, rejected before lookup if it is not an `int`, is a `bool`, is below 1, or exceeds the class maximum (16 for the Mystic — case M40).
 
 **Values** (RC Ch. 2 p. 31, visually verified) — normal speed, feet per turn:
 
@@ -590,6 +614,21 @@ The Mystic `MV` values are printed in **RC Chapter 2**, inside the class entry. 
 **Explicitly closed, recorded so they are not re-raised:** the running-speed factor-of-3 (**resolved by Q4 as an interpretation**, not a ruling); the Suit Armor contradiction (**`SR-8`** — and note that BECMI *did* resolve it internally and the ruling still declines to follow it); Mystic `MV` × encumbrance (**`SR-9`** — previously the cluster's most likely Stage-B blocker, no longer a blocker); Mystic encounter rounding (**Q6** — no rounding rule is needed because none is applied); the starvation column (**`SR-10`**); the racial-armour penalty (**not a gap** — RC delegates by design).
 
 **In every case the RC's internal inconsistency is unresolved and remains so. Only the simulator's behaviour is settled.**
+
+## Amendment History
+
+| Date | Change | Approved by | Effect on status |
+|---|---|---|---|
+| **2026-09-25** | **Contract/dependency correction to the §1 level input.** The input previously read *"from `CHAR-002` / `ADV-*`"*, which was wrong in both halves: `CHAR-002` supplies class but not level, and `ADV-*` is `Unresearched`. New §1.1 states level as an **explicit caller input**, structurally and domain validated at the entry boundary, bounded by the applicable **per-class maximum** (Mystic 16) — the landed `CHAR-003` pattern. Raised as non-blocking caution 2 by the `CLUSTER-003` Pre-Code Gate | Human project owner | **Remains `APPROVED`** — amendment to an approved card, **not** a return to `AWAITING_APPROVAL` |
+
+**What the 2026-09-25 amendment did *not* do**, recorded so it cannot later be misread:
+
+- **No Simulator Ruling was made, granted, or renumbered.** `SR-8`, `SR-9` and `SR-10` stand exactly as ratified on 2026-09-24, and **there is no `SR-11`**.
+- **No movement value, encumbrance band, gate threshold, rate relationship or condition multiplier changed.** §3's table, §4's relationships, §6's `MV` values and `SR-9` threshold, §6.1's running derivation and §7's condition effects are all untouched.
+- **No deterministic case was added, removed or renumbered.** The card remains **76** cases; `M40` already tested the Mystic maximum-level rejection and is unchanged.
+- **No new dependency was created.** The correction **removes** two incorrect ones and adds none — maximum level remains `ADV-002`'s authoritative property, projected here only as a bound, exactly as landed `CHAR-003` does.
+- **No new primary-source research was performed**, and **no new completeness certification is claimed.** `DEC-0010` was not reopened; `DEC-0011` is unaffected.
+- **Implementation is still not authorized**, and `ARCHITECTURE.md` §15.2 step 4 remains outstanding.
 
 ## Approval
 

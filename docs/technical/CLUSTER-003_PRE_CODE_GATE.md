@@ -25,6 +25,8 @@ ARCHITECTURE.md SS15.2 migration gate
 
 BLOCKING DEFECTS:                     NONE
 NON-BLOCKING CAUTIONS:                THREE (SS6)
+                                      caution 2 RESOLVED 2026-09-25
+                                      by approved CHAR-005 amendment
 
 IMPLEMENTATION:                       NOT AUTHORIZED
 IMPLEMENTATION PLAN:                  NOT DRAFTED (SS1.2)
@@ -218,7 +220,12 @@ CHAR-005 SS6, as approved:
 
 **Option (a) discards nothing** — `SR-10` remains an approved, recorded ruling whose trigger is simply not yet reachable.
 
-### Caution 2 — the level input's stated provenance is imprecise
+### Caution 2 — the level input's stated provenance is imprecise — **RESOLVED 2026-09-25**
+
+> **Closed by human-approved amendment to `CHAR-005`, 2026-09-25.** New §1.1 states level as an **explicit caller input**, structurally and domain validated at the entry boundary and bounded by the applicable per-class maximum (Mystic 16), following the landed `CHAR-003` pattern. The two incorrect dependencies were **removed and none added**. The card remains `APPROVED`; no ruling, value, band, threshold or deterministic case changed. See `CHAR-005` Amendment History.
+>
+> The original finding is preserved below as written.
+
 
 `CHAR-005` §1 states the level input as *"from `CHAR-002` / `ADV-*`"*. **`CHAR-002` does not supply level**, and **`ADV-*` is `Unresearched`**.
 

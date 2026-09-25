@@ -21,6 +21,9 @@ RULE CARDS             ALL THREE APPROVED -- human project owner,
                        2026-09-24
 PRE-CODE GATE          PASS -- 2026-09-24
                        docs/technical/CLUSTER-003_PRE_CODE_GATE.md
+IMPLEMENTATION PLAN    DRAFT 2026-09-25 -- awaiting human approval
+CHAR-005               AMENDED 2026-09-25 -- level input correction;
+                       remains APPROVED
 SS15.2 STEP 4          NOT GIVEN -- implementation readiness
                        re-approval outstanding (human act)
 CLUSTER BOUNDARY       RE-APPROVED BY HUMAN DECISION, 2026-09-14
@@ -472,7 +475,9 @@ RULE CARDS                  AWAITING_APPROVAL
 HUMAN RULE CARD REVIEW:     PASSED -- 2026-09-24, all three APPROVED
 PRE-CODE GATE:              PASS -- 2026-09-24, no blocking defects
                             three non-blocking cautions recorded
+IMPLEMENTATION PLAN:        DRAFT -- 2026-09-25
+                            docs/technical/CLUSTER-003_IMPLEMENTATION_PLAN.md
+                            AWAITING HUMAN APPROVAL
 IMPLEMENTATION:             NOT AUTHORIZED -- SS15.2 step 4 outstanding
-READY FOR IMPL. PLANNING:   YES
 FURTHER LINEAGE RESEARCH:   NOT STARTED / NOT AUTHORIZED
 ```
