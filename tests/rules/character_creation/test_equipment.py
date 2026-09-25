@@ -27,6 +27,7 @@ from rules.character_creation.equipment import (
     AMMUNITION,
     ARMOR,
     FILLED_QUIVER_ENCUMBRANCE_CN,
+    IRON_SPIKE,
     STANDARD_LOAD_SHOTS,
     TORCH,
     WATERSKIN_FILLED_ENCUMBRANCE_CN,
@@ -634,7 +635,7 @@ def test_only_the_two_adjudicated_rows_carry_a_non_fixed_price() -> None:
         for name, row in catalog.items()
         if not isinstance(row.price, FixedPrice)
     }
-    assert non_fixed == {"Torch", "Clothes, extravagant"}
+    assert non_fixed == {"Torch", "Iron spike", "Clothes, extravagant"}
 
 
 @pytest.mark.parametrize(
@@ -705,6 +706,36 @@ def test_rcs_six_torch_bundle_row_is_the_six_count_offer_not_a_second_row() -> N
     assert 6 * TORCH.encumbrance_cn == 120
 
 
+def test_rcs_twelve_spike_bundle_row_is_the_twelve_count_offer() -> None:
+    # Found by the independent transcription review: RC prints "Iron spike /
+    # One spike / 1 sp / 5" and "Iron spikes / Twelve spikes / 1 gp / 60".
+    # Both printed prices are represented, and the bundle's 60 cn is exactly
+    # twelve of the single spike's 5 cn.
+    assert "Iron spikes" not in ADVENTURING_GEAR
+    assert IRON_SPIKE.price.cost_of(1) == Coin.of(1, SP)
+    assert IRON_SPIKE.price.cost_of(12) == Coin.of(1, GP)
+    assert 12 * IRON_SPIKE.encumbrance_cn == 60
+    assert ADVENTURING_GEAR["Iron spike"] is IRON_SPIKE
+
+
+def test_only_the_net_carries_note_n_and_the_whip_prints_its_own_rates() -> None:
+    # Found by the independent transcription review: the Whip row's Notes are
+    # s,w,M with no `n`. Note n names the net alone.
+    assert "n" not in {trait.value for trait in WeaponTrait}
+    assert "Whip" not in WEAPONS
+    made = whip(3)
+    assert made.price == FixedPrice(Coin.of(3, GP))
+    assert made.encumbrance_cn == 30
+
+
+def test_a_net_carries_no_size_because_rc_prints_a_disjunction() -> None:
+    # The net's Notes read "M or L" — a disjunction RC resolves through the
+    # Nets Table, which is not this slice's. Nothing is guessed from the
+    # dimensions.
+    assert net(6).size is None
+    assert net(9).size is None
+
+
 def test_clothing_is_exactly_the_rows_carrying_footnote_two_stars() -> None:
     clothing = {
         name
@@ -768,29 +799,29 @@ def test_an_ammunition_count_rc_does_not_state_is_refused_rather_than_rounded() 
         ammunition_encumbrance(AMMUNITION["Arrow"], 3)
 
 
-def test_standard_loads_are_exactly_the_weapons_rc_note_a_names() -> None:
-    # Note a names four families: bow, crossbow, sling, blowgun.
+def test_standard_loads_hold_only_the_weapons_rc_settles() -> None:
+    # Note a names four families; the sling is escalated, not registered.
     assert set(STANDARD_LOAD_SHOTS) == {
         "Bow, Short",
         "Bow, Long",
         "Crossbow, Lt",
         "Crossbow, Hvy",
-        "Sling",
         "Blowgun, up to 2'",
         "Blowgun, 2' +",
     }
 
 
-def test_the_sling_row_prints_no_note_a_marker_but_note_a_names_it() -> None:
-    # RC's Sling row prints c,m,w,S with no `a`, while note a's text says
-    # "sling: 30 stones". The note's text governs; no marker is invented for
-    # the row, and the standard-load table is what the derivation reads.
+def test_the_sling_is_refused_because_rc_contradicts_itself_about_its_load() -> None:
+    # Raised by the independent transcription review: note a's text lists
+    # "sling: 30 stones", the printed Sling row carries no `a` marker, and RC
+    # works the subtraction for no sling. Neither side is adopted here.
     assert WeaponTrait.AMMUNITION_INCLUDED not in WEAPONS["Sling"].traits
-    assert STANDARD_LOAD_SHOTS["Sling"] == 30
+    assert "Sling" not in STANDARD_LOAD_SHOTS
     stones = AMMUNITION["Stone or lead pellet"]
-    assert WEAPONS["Sling"].encumbrance_cn == 20
-    assert missile_weapon_encumbrance(WEAPONS["Sling"], stones, 30) == 20
-    assert missile_weapon_encumbrance(WEAPONS["Sling"], stones, 0) == 14
+    with pytest.raises(EncumbranceError, match="Escalated for human adjudication"):
+        missile_weapon_encumbrance(WEAPONS["Sling"], stones, 30)
+    # Buying stones separately is unaffected — that is E24's path.
+    assert ammunition_encumbrance(stones, 30) == 6
 
 
 def test_a_weapon_without_note_a_has_no_load_to_vary() -> None:

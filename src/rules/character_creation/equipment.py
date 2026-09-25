@@ -92,6 +92,7 @@ __all__ = [
     "AMMUNITION",
     "ARMOR",
     "FILLED_QUIVER_ENCUMBRANCE_CN",
+    "IRON_SPIKE",
     "NET_COST_PER_SQUARE_FOOT",
     "NET_ENCUMBRANCE_CN_PER_SQUARE_FOOT",
     "PLAIN_CLOTHES_SETS",
@@ -183,9 +184,9 @@ class WeaponTrait(Enum):
     :attr:`CLERIC_PERMITTED` and :attr:`MAGIC_USER_DISCRETIONARY` are the
     table's own note text, not a legality decision, which is card §7 and
     Slice C. The size codes ``S``/``M``/``L`` live on :class:`WeaponSize`
-    instead, and the code ``n`` has no member because it marks the two rows
-    this module builds by dimension (:func:`net`, :func:`whip`) rather than
-    catalogues.
+    instead, and the code ``n`` has no member because it marks exactly one
+    row — the net — which this module builds by dimension (:func:`net`)
+    rather than catalogues.
     """
 
     AMMUNITION_INCLUDED = "a"
@@ -474,8 +475,6 @@ _WEAPON_ROWS: Final[tuple[Item, ...]] = (
     _weapon("Hammer, War", _gp(5), 50, _M, _C, _R),
     _weapon("Mace", _gp(5), 30, _M, _C, _R),
     _weapon("Staff", _gp(5), 40, _M, _C, _R, _W, _2H),
-    # "Torch" is withheld: its printed cost of 1/6 gp is not a whole number
-    # of copper pieces. See the module docstring.
     _weapon("Dagger, Normal", _gp(3), 10, _S, _T, _W),
     _weapon("Dagger, Silver", _gp(30), 10, _S, _T, _W),
     _weapon("Halberd", _gp(7), 150, _L, _SP, _2H),
@@ -542,11 +541,14 @@ is no second torch commodity for the two to drift apart.
 WEAPONS: Final[Mapping[str, Item]] = MappingProxyType(
     {row.name: row for row in (*_WEAPON_ROWS, TORCH)}
 )
-"""The RC Weapons Table (p. 62), less the two rows RC defines by dimension.
+"""The RC Weapons Table (p. 62), less the two rows RC prices by dimension.
 
-Nets and whips carry the note code ``n`` — their cost and encumbrance are
-*"based on size"* — so they are built by :func:`net` and :func:`whip` rather
-than catalogued with a fixed cost.
+**Only the net carries note ``n``** — *"A net's cost and encumbrance are based
+on its size"* — and its Cost and Enc cells both print ``n`` in place of a
+number. The whip carries ``s,w,M`` and no ``n`` at all: RC prints its rates
+directly in its own cells, as ``1/ft`` and ``10/ft``. Both are nonetheless
+built by :func:`net` and :func:`whip` rather than catalogued, because neither
+has a single printed amount to catalogue.
 
 ``WEAPONS["Torch"]`` **is the same object as** ``ADVENTURING_GEAR["Torch"]``:
 see :data:`TORCH`.
@@ -642,6 +644,31 @@ def _gear(
     )
 
 
+IRON_SPIKE: Final[Item] = Item(
+    name="Iron spike",
+    category=ItemCategory.GEAR,
+    price=QuantityPrice(
+        offers=(
+            PurchaseOffer(1, _sp(1)),
+            PurchaseOffer(12, _gp(1)),
+        )
+    ),
+    encumbrance_cn=5,
+)
+"""The iron spike — one commodity, printed at two quantities (card §4.1).
+
+RC prints *"Iron spike / **One spike** / 1 sp / 5"* and *"Iron spikes /
+**Twelve spikes** / 1 gp / 60"* (p. 69). Structurally identical to the torch:
+one item, two printed offers, and the bundle's ``60 cn`` is exactly
+``12 x 5``.
+
+**Recorded by the independent transcription review of 2026-09-26**, which
+found the printed quantity *twelve* had survived only as an English plural.
+Unlike the torch, this row needed no adjudication — both offers are exact
+whole coin, and there is no fractional per-unit notation to interpret — so
+it is transcription, applying the price form card §4.1 already defines.
+"""
+
 _CONTAINER: Final = ItemCategory.CONTAINER
 _CLOTHING: Final = ItemCategory.CLOTHING
 _GEAR: Final = ItemCategory.GEAR
@@ -669,8 +696,7 @@ _ADVENTURING_GEAR_ROWS: Final[tuple[Item, ...]] = (
     _gear("Hat or cap", _GEAR, _sp(2), 3),
     _gear("Holy symbol", _GEAR, _gp(25), 1),
     _gear("Holy water", _GEAR, _gp(25), 1),
-    _gear("Iron spike", _GEAR, _sp(1), 5),
-    _gear("Iron spikes", _GEAR, _gp(1), 60),
+    IRON_SPIKE,
     _gear("Lantern", _GEAR, _gp(10), 30),
     _gear("Mirror", _GEAR, _gp(5), 5),
     _gear("Oil", _GEAR, _gp(2), 10),
@@ -695,7 +721,7 @@ _ADVENTURING_GEAR_ROWS: Final[tuple[Item, ...]] = (
 ADVENTURING_GEAR: Final[Mapping[str, Item]] = MappingProxyType(
     {row.name: row for row in _ADVENTURING_GEAR_ROWS}
 )
-"""The RC Adventuring Gear Table (p. 69), less the one withheld row.
+"""The RC Adventuring Gear Table (p. 69).
 
 ``CLOTHING`` is exactly the set of rows printing footnote ``**``. "Clothes,
 plain" prints ``***`` — the *quiver* footnote — where every other clothing row
@@ -708,10 +734,12 @@ The quiver is a ``CONTAINER`` but carries no ``capacity_cn``: RC prints none
 for it, and its filled encumbrance is the stated total at
 :data:`FILLED_QUIVER_ENCUMBRANCE_CN` rather than a derivation from contents.
 
-Two rows do not carry a single fixed amount (card §4.1): the torch, whose
-price is its printed quantity offers (:data:`TORCH`), and "Clothes,
-extravagant", whose ``50+ gp`` is a floor. RC's "Torches" row is the torch's
-6-count offer rather than a row of its own.
+Three rows do not carry a single fixed amount (card §4.1): the torch
+(:data:`TORCH`) and the iron spike (:data:`IRON_SPIKE`), each priced by its
+printed quantity offers, and "Clothes, extravagant", whose ``50+ gp`` is a
+floor. RC's "Torches" and "Iron spikes" rows are the 6- and 12-count offers
+of those two commodities rather than rows of their own, so the table's 38
+printed rows are 37 entries here.
 """
 
 _CATALOGS: Final[tuple[Mapping[str, Item], ...]] = (WEAPONS, ARMOR, ADVENTURING_GEAR)
@@ -825,7 +853,6 @@ STANDARD_LOAD_SHOTS: Final[Mapping[str, int]] = MappingProxyType(
         "Bow, Long": 20,
         "Crossbow, Lt": 30,
         "Crossbow, Hvy": 30,
-        "Sling": 30,
         "Blowgun, up to 2'": 5,
         "Blowgun, 2' +": 5,
     }
@@ -836,12 +863,17 @@ RC's Weapons Table note ``a`` (p. 63): *"bow: 20 arrows; crossbow: 30
 quarrels; sling: 30 stones; blowgun: 5 darts"*, and card §6.2 restates the
 rule.
 
-**Keyed by note ``a``'s text, not by the printed marker.** The note names four
-weapon families — bow, crossbow, sling, blowgun — but RC's Sling row prints
-``c,m,w,S`` and **no** ``a`` marker. The note's text is the rule; the row's
-missing marker is a printed-marker omission, and no marker is invented for the
-row to compensate. This is why :func:`missile_weapon_encumbrance` gates on
-this table rather than on :attr:`WeaponTrait.AMMUNITION_INCLUDED`.
+**The sling is absent, and its absence is a refusal to decide.** RC states
+both sides and neither can simply be transcribed: note ``a``'s text lists
+*"sling: 30 stones"*, while the printed Sling row's Notes are ``c,m,w,S`` with
+**no** ``a`` marker. RC works the subtraction itself only for the long bow
+(``30`` → ``20``) and the light crossbow (``50`` → ``40``), never for the
+sling, so nothing in the source settles whether the sling's printed ``20 cn``
+already includes 30 stones. **Whether it does is a rules question**, raised by
+the independent transcription review of 2026-09-26 and escalated rather than
+answered here; :func:`missile_weapon_encumbrance` refuses the sling and names
+the conflict. Buying sling stones separately is unaffected — that is
+:func:`ammunition_encumbrance`, and approved case E24 covers it.
 
 **The blowgun is 5 darts** (approved case E66). Slice B originally refused it,
 because the approved card's summary said 3 and RC's two governing objects said
@@ -959,9 +991,20 @@ def missile_weapon_encumbrance(weapon: Item, ammunition: Ammunition, shots: int)
     The blowgun's normal load is **5 darts**, which at RC's rate of 5 darts
     per ``cn`` is exactly ``1 cn``: a short blowgun is ``6 cn`` as printed and
     ``5 cn`` empty (approved case E66).
+
+    **The sling is refused**, because RC contradicts itself about whether it
+    has an included load at all — see :data:`STANDARD_LOAD_SHOTS`. That is an
+    open rules question, not a defect this module may settle.
     """
     if not isinstance(weapon, Item):
         raise ValueError(f"weapon must be an Item, got {weapon!r}")
+    if weapon.name == "Sling":
+        raise EncumbranceError(
+            "whether a sling's printed 20 cn already includes 30 stones is "
+            "unresolved: RC's note a names the sling, its printed row carries "
+            "no note a marker, and RC works the subtraction for no sling. "
+            "Escalated for human adjudication rather than decided here"
+        )
     standard_load = STANDARD_LOAD_SHOTS.get(weapon.name)
     if standard_load is None:
         raise EncumbranceError(
@@ -987,6 +1030,14 @@ def net(side_feet: int) -> Item:
     through 25'x25' — and its own footnote adds *"or equivalent in square
     feet"*. A non-square net is not modelled, and the Nets Table's mapping
     from victim size to net size is not this slice's.
+
+    **The result carries no** :class:`WeaponSize`. Alone among the weapon
+    rows, the net's printed size is a **disjunction** — its Notes read
+    ``s,t,w,M or L`` — because RC makes a net's size class follow its
+    dimensions through the Nets Table (p. 65), which maps a victim's size to
+    a net size. That mapping is not this slice's, and a disjunction is not a
+    size, so nothing is chosen here: ``size`` is left ``None`` rather than
+    guessed at from ``side_feet``.
     """
     if _require_int(side_feet, "side_feet") <= 0:
         raise ValueError(f"side_feet must be positive, got {side_feet!r}")
