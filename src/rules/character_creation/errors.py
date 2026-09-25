@@ -9,8 +9,13 @@ This module was populated slice by slice, as each approved rejection path
 became executable: Slice A added the base and the ability-score domain
 error, Slice C the two CHAR-003 hit-point errors, Slice D the four CHAR-001
 trade and switch errors, and Slice E the Chapter 10 point-allocation error.
-**The hierarchy is now complete for CLUSTER-002** — Slice F adds no
+**The hierarchy was complete for CLUSTER-002** — its Slice F added no
 production code and therefore no error type.
+
+CLUSTER-003 extends the same hierarchy rather than opening a parallel one
+(docs/technical/CLUSTER-003_IMPLEMENTATION_PLAN.md §6.5). Its Slice B adds
+:class:`EncumbranceError` and :class:`UnlistedItemError`; the remaining
+two types that plan names belong to later slices and are not added here.
 """
 
 from __future__ import annotations
@@ -172,4 +177,49 @@ class PointAllocationError(CharacterCreationError):
     3-18.** That is the standing range limitation and raises
     :class:`AbilityScoreDomainError` — the rejected value there is a
     score, not a total (approved case H4).
+    """
+
+
+class EncumbranceError(CharacterCreationError):
+    """A CHAR-004 encumbrance derivation cannot be performed as asked.
+
+    CLUSTER-003 Slice B. Four causes, distinguished by message:
+
+    - a **capacity violation** — goods exceeding a container's stated
+      capacity. RC prints the capacity as a property of the container, so
+      it is a hard limit and the request is refused rather than silently
+      overfilled (approved case E13);
+    - the **wrong derivation for the item** — the quiver is asked for the
+      footnote ``*`` container arithmetic, which RC's footnote ``***``
+      replaces for that one item (approved case E12);
+    - a quantity of ammunition whose encumbrance **RC does not state**.
+      RC gives whole-cn conversion rates ("2 arrows equal 1 cn"), and
+      states nothing about a quantity that lands between them. The
+      operation refuses rather than rounding, because a rounded answer
+      would be a value the source does not have (AGENTS.md §3);
+    - a derivation whose inputs the approved card and RC **disagree**
+      about, which this card cannot settle for itself.
+
+    Structural violations — a non-``int``, a ``bool``, a negative count —
+    raise the plain ``ValueError`` that value objects raise, following the
+    convention :class:`CharacterCreationError` records.
+    """
+
+
+class UnlistedItemError(CharacterCreationError):
+    """An item outside the Chapter 4 catalogs, or allowed without its data.
+
+    CHAR-004 §8, CLUSTER-003 Slice B. RC Ch. 13 p. 147 restricts beginning
+    characters to the Chapter 4 lists unless the DM allows otherwise, and
+    requires the DM to set an allowed item's **cost, encumbrance and other
+    characteristics**. Two causes, distinguished by message:
+
+    - the name is not in the catalogs and no DM allowance was supplied
+      (approved case E56). Mounts, vehicles, ships and siege equipment are
+      refused by this path: they are printed in RC Chapter 4 but are
+      outside V1 by human decision, so they are simply not catalogued
+      (approved case E58);
+    - an allowance was supplied **without** a cost or an encumbrance
+      (approved case E57). **No default is invented** — the card is
+      explicit that none may be.
     """
