@@ -16,6 +16,12 @@ CLUSTER-003 extends the same hierarchy rather than opening a parallel one
 (docs/technical/CLUSTER-003_IMPLEMENTATION_PLAN.md §6.5). Its Slice B adds
 :class:`EncumbranceError` and :class:`UnlistedItemError`; the remaining
 two types that plan names belong to later slices and are not added here.
+
+Slice B's remediation of 2026-09-26 adds a third, :class:`UnresolvedPriceError`.
+The plan's §6.5 did not foresee it because the plan predates CHAR-004 §4.1,
+the human-approved amendment that made price *specification* distinct from a
+price *amount*. It is recorded here as a deliberate departure from that list
+rather than an unnoticed one.
 """
 
 from __future__ import annotations
@@ -203,6 +209,32 @@ class EncumbranceError(CharacterCreationError):
     Structural violations — a non-``int``, a ``bool``, a negative count —
     raise the plain ``ValueError`` that value objects raise, following the
     convention :class:`CharacterCreationError` records.
+    """
+
+
+class UnresolvedPriceError(CharacterCreationError):
+    """A concrete amount was asked of a price that does not state one.
+
+    CHAR-004 §4.1 (human-approved amendment 2026-09-26), CLUSTER-003 Slice B.
+    RC does not always print one exact price per row, and the card requires
+    the difference to stay visible rather than being flattened. Two causes,
+    distinguished by message:
+
+    - an **open-ended** price — "Clothes, extravagant" at ``50+ gp``
+      establishes a 50 gp floor and no exact price, so a caller needing a
+      purchase total must be given an explicitly resolved amount. Answering
+      the minimum would silently invent RC's missing value (approved case
+      E64). The same error rejects a resolved amount **below** the printed
+      floor (case E65);
+    - a **quantity** price asked for a count RC prints no offer for. The
+      torch is sold at 1 for 2 sp and 6 for 1 gp; RC states no price for
+      four torches, and inventing one by proration would reintroduce
+      exactly the fractional copper the approved currency primitive
+      refuses (cases E61, E62).
+
+    Distinct from :class:`UnlistedItemError`, and the distinction is not
+    cosmetic: the item *is* catalogued and its price *is* recorded — what is
+    missing is a single amount for this request.
     """
 
 

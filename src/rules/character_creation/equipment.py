@@ -30,22 +30,31 @@ during implementation, and every value the card's own E-cases state is
 asserted by a test. The Armor rows are taken from card §6.1 itself, which
 enumerates them.
 
-TWO PRINTED ROWS ARE WITHHELD, NOT DECIDED
-------------------------------------------
-Two catalog cells cannot be represented exactly, and neither the approved card
-nor RC resolves them. They are **left out of the catalogs and reported**,
-rather than rounded, defaulted or adjudicated here:
+PRICE IS A SPECIFICATION, NOT ALWAYS ONE AMOUNT
+-----------------------------------------------
+Slice B originally withheld two printed rows whose cost could not be a single
+``Coin``. The human project owner adjudicated both on 2026-09-26, and card
+§4.1 now records the three forms RC prints (:class:`FixedPrice`,
+:class:`QuantityPrice`, :class:`OpenEndedPrice`). All three rows are
+catalogued, and the currency primitive is untouched: ``Coin`` still holds only
+exact, non-negative, integral copper pieces, because a price *specification*
+is not the same thing as an amount a character can hand over.
 
-- **Weapons Table "Torch", cost ``1/6`` gp** (RC p. 62, visually verified).
-  One sixth of a gold piece is 16⅔ cp, and RC names no unit below the copper
-  piece, so the shared currency primitive cannot hold it. The Adventuring Gear
-  Table separately prices a torch at ``2 sp`` and six torches at ``1 gp``;
-  those rows are catalogued because they are exact and unambiguous. **Which
-  price governs a torch bought as a weapon is not decided here.**
-- **Adventuring Gear "Clothes, extravagant", cost ``50+ gp``** (RC p. 69).
-  An open-ended price is not a single amount. **No minimum is assumed.**
+- **Torch** — RC prints ``1/6 gp`` in the Weapons Table and, in Adventuring
+  Gear, ``2 sp`` for one torch and ``1 gp`` for six. The ``1/6`` is the
+  per-unit expression of the six-for-one rate, not a third price; purchasing
+  uses the two whole-coin offers. It is **one commodity**: the same ``Item``
+  object appears in ``WEAPONS`` and ``ADVENTURING_GEAR``, so swinging a torch
+  cannot give it a second price. The printed ``1/6 gp`` is preserved as
+  :attr:`QuantityPrice.printed_unit_notation`, not replaced.
+- **Clothes, extravagant** — ``50+ gp`` states a floor and no exact price. A
+  caller needing a total must resolve it explicitly through
+  :func:`resolve_price`; asking for a concrete cost raises rather than
+  silently answering ``50 gp``.
 
-A third conflict is recorded at :data:`STANDARD_LOAD_SHOTS`.
+The blowgun's normal load, formerly refused because the approved card and RC
+disagreed, is ``5`` darts: the card's ``3`` was a transcription defect,
+corrected by the same amendment.
 
 This module does not, and must not, carry:
 
@@ -65,13 +74,17 @@ This module does not, and must not, carry:
 from __future__ import annotations
 
 from collections.abc import Iterable, Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from enum import Enum
 from types import MappingProxyType
 from typing import Final
 
 from rng import RNG
-from rules.character_creation.errors import EncumbranceError, UnlistedItemError
+from rules.character_creation.errors import (
+    EncumbranceError,
+    UnlistedItemError,
+    UnresolvedPriceError,
+)
 from rules.currency import Coin, Denomination
 
 __all__ = [
@@ -83,14 +96,20 @@ __all__ = [
     "NET_ENCUMBRANCE_CN_PER_SQUARE_FOOT",
     "PLAIN_CLOTHES_SETS",
     "STANDARD_LOAD_SHOTS",
+    "TORCH",
     "WATERSKIN_FILLED_ENCUMBRANCE_CN",
     "WEAPONS",
     "WHIP_COST_PER_FOOT",
     "WHIP_ENCUMBRANCE_CN_PER_FOOT",
     "Ammunition",
+    "FixedPrice",
     "Item",
     "ItemCategory",
     "KitEntry",
+    "OpenEndedPrice",
+    "Price",
+    "PurchaseOffer",
+    "QuantityPrice",
     "WeaponSize",
     "WeaponTrait",
     "ammunition_encumbrance",
@@ -100,6 +119,7 @@ __all__ = [
     "free_starting_kit",
     "missile_weapon_encumbrance",
     "net",
+    "resolve_price",
     "selection_cost",
     "starting_gold",
     "starting_kit_encumbrance",
@@ -181,8 +201,144 @@ class WeaponTrait(Enum):
 
 
 @dataclass(frozen=True, slots=True)
+class PurchaseOffer:
+    """One printed "this many, for this much" offer.
+
+    RC prints these only for the torch (one for ``2 sp``, six for ``1 gp``).
+    The type exists so the pair stays a pair, rather than becoming a unit
+    price that has to be divided.
+    """
+
+    count: int
+    price: Coin
+
+    def __post_init__(self) -> None:
+        if _require_int(self.count, "count") <= 0:
+            raise ValueError(f"count must be positive, got {self.count!r}")
+        if not isinstance(self.price, Coin):
+            raise ValueError(f"price must be a Coin, got {self.price!r}")
+
+
+@dataclass(frozen=True, slots=True)
+class FixedPrice:
+    """One unit, one exact amount — card §4.1's ``FIXED`` form.
+
+    What almost every catalog row prints, and the only form that existed
+    before the 2026-09-26 amendment.
+    """
+
+    unit: Coin
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.unit, Coin):
+            raise ValueError(f"unit must be a Coin, got {self.unit!r}")
+
+    def cost_of(self, count: int = 1) -> Coin:
+        """The exact cost of ``count`` units."""
+        if _require_int(count, "count") <= 0:
+            raise ValueError(f"count must be positive, got {count!r}")
+        return self.unit * count
+
+
+@dataclass(frozen=True, slots=True)
+class QuantityPrice:
+    """Stated quantities at stated prices — card §4.1's ``QUANTITY`` form.
+
+    RC prices the torch twice, at one and at six, and the Weapons Table
+    quotes the same relationship as a per-unit fraction. Only the printed
+    offers are honoured: a count RC prints no offer for is **refused**, not
+    prorated. Proration is what would reintroduce the fractional copper
+    piece the approved currency primitive exists to exclude — one sixth of
+    ``1 gp`` is ``16⅔ cp``, and RC names no unit below the copper piece.
+
+    ``printed_unit_notation`` preserves the source datum (``"1/6 gp"``) so
+    the amendment's requirement that it not be silently replaced is visible
+    in the data rather than only in prose.
+    """
+
+    offers: tuple[PurchaseOffer, ...]
+    printed_unit_notation: str | None = None
+
+    def __post_init__(self) -> None:
+        if not self.offers:
+            raise ValueError("offers must not be empty")
+        counts = [offer.count for offer in self.offers]
+        if len(set(counts)) != len(counts):
+            raise ValueError(f"offers must not repeat a count, got {counts!r}")
+
+    def cost_of(self, count: int) -> Coin:
+        """The printed price for exactly ``count`` units."""
+        if _require_int(count, "count") <= 0:
+            raise ValueError(f"count must be positive, got {count!r}")
+        for offer in self.offers:
+            if offer.count == count:
+                return offer.price
+        available = ", ".join(str(offer.count) for offer in self.offers)
+        raise UnresolvedPriceError(
+            f"RC prints no price for {count} of this item; the printed offers "
+            f"are for {available}, and this operation will not prorate one of "
+            f"them into a price the source does not state"
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class OpenEndedPrice:
+    """A stated floor and no ceiling — card §4.1's ``OPEN-ENDED`` form.
+
+    RC prints ``50+ gp`` for extravagant clothes: a minimum, and no exact
+    price. :meth:`cost_of` therefore **raises**, because answering the
+    minimum would silently supply the value RC withheld (approved case E64).
+    A caller resolves it explicitly, through :func:`resolve_price`, with an
+    amount its own DM or simulation policy chose.
+
+    No default, markup, percentage or upper bound is modelled. RC states a
+    floor; a floor is all that is here.
+    """
+
+    minimum: Coin
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.minimum, Coin):
+            raise ValueError(f"minimum must be a Coin, got {self.minimum!r}")
+
+    def cost_of(self, count: int = 1) -> Coin:
+        """Always raises: this price has no single amount to give."""
+        raise UnresolvedPriceError(
+            f"this price is open-ended — RC states a minimum of "
+            f"{self.minimum.copper} cp and no exact price — so a concrete "
+            f"cost must be resolved explicitly by DM or simulation policy "
+            f"rather than defaulted to the minimum (CHAR-004 §4.1.2)"
+        )
+
+    def resolve(self, amount: Coin) -> FixedPrice:
+        """This price fixed at an explicitly chosen ``amount``.
+
+        The amount must be at least RC's printed floor; below it is refused
+        (approved case E65). Nothing bounds it from above, because RC does
+        not.
+        """
+        if not isinstance(amount, Coin):
+            raise ValueError(f"amount must be a Coin, got {amount!r}")
+        if amount < self.minimum:
+            raise UnresolvedPriceError(
+                f"{amount.copper} cp is below the {self.minimum.copper} cp "
+                f"minimum RC prints for this item"
+            )
+        return FixedPrice(amount)
+
+
+Price = FixedPrice | QuantityPrice | OpenEndedPrice
+"""The three price-specification forms card §4.1 records.
+
+Deliberately closed. No further form is added until an approved catalog
+entry needs one, and none of these authorises a market, bargaining,
+merchant or dynamic-pricing mechanic.
+"""
+
+
+@dataclass(frozen=True, slots=True)
 class Item:
-    """One catalog row: a name, a cost and an encumbrance.
+    """One catalog row: a name, a price and an encumbrance.
 
     Deliberately flat. There is no item hierarchy, no equipped state, no
     owner and no quantity: an ``Item`` *is* the printed row, and everything
@@ -197,7 +353,7 @@ class Item:
 
     name: str
     category: ItemCategory
-    cost: Coin
+    price: Price
     encumbrance_cn: int
     size: WeaponSize | None = None
     traits: frozenset[WeaponTrait] = field(default_factory=frozenset)
@@ -206,8 +362,8 @@ class Item:
     def __post_init__(self) -> None:
         if not isinstance(self.name, str) or not self.name:
             raise ValueError(f"name must be a non-empty str, got {self.name!r}")
-        if not isinstance(self.cost, Coin):
-            raise ValueError(f"cost must be a Coin, got {self.cost!r}")
+        if not isinstance(self.price, FixedPrice | QuantityPrice | OpenEndedPrice):
+            raise ValueError(f"price must be a Price, got {self.price!r}")
         if _require_int(self.encumbrance_cn, "encumbrance_cn") < 0:
             raise ValueError(f"encumbrance_cn must not be negative, got {self.encumbrance_cn!r}")
         if self.capacity_cn is not None and _require_int(self.capacity_cn, "capacity_cn") <= 0:
@@ -284,7 +440,7 @@ def _weapon(
     return Item(
         name=name,
         category=ItemCategory.WEAPON,
-        cost=cost,
+        price=FixedPrice(cost),
         encumbrance_cn=encumbrance_cn,
         size=size,
         traits=frozenset(traits),
@@ -352,13 +508,48 @@ _WEAPON_ROWS: Final[tuple[Item, ...]] = (
     _weapon("Sling", _gp(2), 20, _S, _C, _MI, _W),
 )
 
-WEAPONS: Final[Mapping[str, Item]] = MappingProxyType({row.name: row for row in _WEAPON_ROWS})
+TORCH: Final[Item] = Item(
+    name="Torch",
+    category=ItemCategory.GEAR,
+    price=QuantityPrice(
+        offers=(
+            PurchaseOffer(1, _sp(2)),
+            PurchaseOffer(6, _gp(1)),
+        ),
+        printed_unit_notation="1/6 gp",
+    ),
+    encumbrance_cn=20,
+    size=WeaponSize.SMALL,
+    traits=frozenset({WeaponTrait.CLERIC_PERMITTED, WeaponTrait.RARELY_THROWN}),
+)
+"""The torch — **one commodity**, printed in two RC tables (card §4.1.1).
+
+RC prints it three times: the Weapons Table (p. 62) at ``1/6 gp``, ``Enc 20``,
+notes ``c,r,S``; and the Adventuring Gear Table (p. 69) as *"Torch / One torch
+/ 2 sp / 20"* and *"Torches / Six torches / 1 gp / 120"*.
+
+This **one object is placed in both** :data:`WEAPONS` and
+:data:`ADVENTURING_GEAR`, so a torch cannot acquire a second price by being
+used as a weapon (approved case E63). Its weapon size and note codes come
+from the Weapons Table; its purchase offers from the gear table.
+
+RC's separate "Torches" bundle row is represented as the **6-count offer**
+rather than a second catalog row: its printed ``1 gp`` is that offer, and its
+printed ``120 cn`` is exactly ``6 x 20``. Nothing printed is lost, and there
+is no second torch commodity for the two to drift apart.
+"""
+
+WEAPONS: Final[Mapping[str, Item]] = MappingProxyType(
+    {row.name: row for row in (*_WEAPON_ROWS, TORCH)}
+)
 """The RC Weapons Table (p. 62), less the two rows RC defines by dimension.
 
 Nets and whips carry the note code ``n`` — their cost and encumbrance are
 *"based on size"* — so they are built by :func:`net` and :func:`whip` rather
-than catalogued with a fixed cost. The "Torch" row is withheld; see the
-module docstring.
+than catalogued with a fixed cost.
+
+``WEAPONS["Torch"]`` **is the same object as** ``ADVENTURING_GEAR["Torch"]``:
+see :data:`TORCH`.
 """
 
 _AMMUNITION_ROWS: Final[tuple[Ammunition, ...]] = (
@@ -377,13 +568,48 @@ AMMUNITION: Final[Mapping[str, Ammunition]] = MappingProxyType(
 """The RC Ammunition Table (p. 63), whose ``Enc`` column is shots per ``cn``."""
 
 _ARMOR_ROWS: Final[tuple[Item, ...]] = (
-    Item(name="Shield", category=ItemCategory.SHIELD, cost=_gp(10), encumbrance_cn=100),
-    Item(name="Leather Armor", category=ItemCategory.ARMOR, cost=_gp(20), encumbrance_cn=200),
-    Item(name="Scale Mail", category=ItemCategory.ARMOR, cost=_gp(30), encumbrance_cn=300),
-    Item(name="Chain Mail", category=ItemCategory.ARMOR, cost=_gp(40), encumbrance_cn=400),
-    Item(name="Banded Mail", category=ItemCategory.ARMOR, cost=_gp(50), encumbrance_cn=450),
-    Item(name="Plate Mail", category=ItemCategory.ARMOR, cost=_gp(60), encumbrance_cn=500),
-    Item(name="Suit Armor", category=ItemCategory.ARMOR, cost=_gp(250), encumbrance_cn=750),
+    Item(
+        name="Shield",
+        category=ItemCategory.SHIELD,
+        price=FixedPrice(_gp(10)),
+        encumbrance_cn=100,
+    ),
+    Item(
+        name="Leather Armor",
+        category=ItemCategory.ARMOR,
+        price=FixedPrice(_gp(20)),
+        encumbrance_cn=200,
+    ),
+    Item(
+        name="Scale Mail",
+        category=ItemCategory.ARMOR,
+        price=FixedPrice(_gp(30)),
+        encumbrance_cn=300,
+    ),
+    Item(
+        name="Chain Mail",
+        category=ItemCategory.ARMOR,
+        price=FixedPrice(_gp(40)),
+        encumbrance_cn=400,
+    ),
+    Item(
+        name="Banded Mail",
+        category=ItemCategory.ARMOR,
+        price=FixedPrice(_gp(50)),
+        encumbrance_cn=450,
+    ),
+    Item(
+        name="Plate Mail",
+        category=ItemCategory.ARMOR,
+        price=FixedPrice(_gp(60)),
+        encumbrance_cn=500,
+    ),
+    Item(
+        name="Suit Armor",
+        category=ItemCategory.ARMOR,
+        price=FixedPrice(_gp(250)),
+        encumbrance_cn=750,
+    ),
 )
 
 ARMOR: Final[Mapping[str, Item]] = MappingProxyType({row.name: row for row in _ARMOR_ROWS})
@@ -410,7 +636,7 @@ def _gear(
     return Item(
         name=name,
         category=category,
-        cost=cost,
+        price=FixedPrice(cost),
         encumbrance_cn=encumbrance_cn,
         capacity_cn=capacity_cn,
     )
@@ -430,7 +656,13 @@ _ADVENTURING_GEAR_ROWS: Final[tuple[Item, ...]] = (
     _gear("Clothes, plain", _CLOTHING, _sp(5), 20),
     _gear("Clothes, middle-class", _CLOTHING, _gp(5), 20),
     _gear("Clothes, fine", _CLOTHING, _gp(20), 20),
-    # "Clothes, extravagant" is withheld: "50+ gp" is not one amount.
+    Item(
+        name="Clothes, extravagant",
+        category=_CLOTHING,
+        # RC prints "50+ gp": a floor, and no exact price (card §4.1.2).
+        price=OpenEndedPrice(_gp(50)),
+        encumbrance_cn=30,
+    ),
     _gear("Garlic", _GEAR, _gp(5), 1),
     _gear("Grappling hook", _GEAR, _gp(25), 80),
     _gear("Hammer", _GEAR, _gp(2), 10),
@@ -454,8 +686,7 @@ _ADVENTURING_GEAR_ROWS: Final[tuple[Item, ...]] = (
     _gear("Stakes (3) and mallet", _GEAR, _gp(3), 10),
     _gear("Thieves' tools", _GEAR, _gp(25), 10),
     _gear("Tinder box", _GEAR, _gp(3), 5),
-    _gear("Torch", _GEAR, _sp(2), 20),
-    _gear("Torches", _GEAR, _gp(1), 120),
+    TORCH,
     _gear("Waterskin/wineskin", _GEAR, _gp(1), 5),
     _gear("Wine", _GEAR, _gp(1), 30),
     _gear("Wolfsbane", _GEAR, _gp(10), 1),
@@ -476,6 +707,11 @@ Questions 1). It is catalogued as ``CLOTHING`` on that basis.
 The quiver is a ``CONTAINER`` but carries no ``capacity_cn``: RC prints none
 for it, and its filled encumbrance is the stated total at
 :data:`FILLED_QUIVER_ENCUMBRANCE_CN` rather than a derivation from contents.
+
+Two rows do not carry a single fixed amount (card §4.1): the torch, whose
+price is its printed quantity offers (:data:`TORCH`), and "Clothes,
+extravagant", whose ``50+ gp`` is a floor. RC's "Torches" row is the torch's
+6-count offer rather than a row of its own.
 """
 
 _CATALOGS: Final[tuple[Mapping[str, Item], ...]] = (WEAPONS, ARMOR, ADVENTURING_GEAR)
@@ -515,6 +751,10 @@ def unlisted_item(
     Card §8 is explicit that the DM **must** set cost, encumbrance and other
     characteristics, and that **no default is invented**. Omitting either is
     an error rather than a zero or a guess (approved case E57).
+
+    The DM supplies one exact amount, so the result carries a
+    :class:`FixedPrice`. RC's other two price forms describe *printed* rows;
+    nothing in card §8 asks a DM to invent a bundle or a floor.
     """
     if cost is None or encumbrance_cn is None:
         raise UnlistedItemError(
@@ -522,7 +762,33 @@ def unlisted_item(
             f"{'no cost' if cost is None else 'no encumbrance'}; CHAR-004 §8 "
             f"requires both to be set and permits no default"
         )
-    return Item(name=name, category=category, cost=cost, encumbrance_cn=encumbrance_cn)
+    return Item(
+        name=name,
+        category=category,
+        price=FixedPrice(cost),
+        encumbrance_cn=encumbrance_cn,
+    )
+
+
+def resolve_price(item: Item, amount: Coin) -> Item:
+    """``item`` with its open-ended price fixed at an explicitly chosen amount.
+
+    The one way an open-ended price becomes a purchasable one (card §4.1.2,
+    approved case E65). The amount comes from the caller's DM or simulation
+    policy, must be at least RC's printed floor, and is bounded above by
+    nothing, because RC bounds it by nothing.
+
+    Refused for an item whose price is already exact: there would be nothing
+    to resolve, and quietly overwriting a printed price is not resolution.
+    """
+    if not isinstance(item, Item):
+        raise ValueError(f"item must be an Item, got {item!r}")
+    if not isinstance(item.price, OpenEndedPrice):
+        raise UnresolvedPriceError(
+            f"{item.name!r} has no open-ended price to resolve; RC prints its "
+            f"price, and this operation will not overwrite one"
+        )
+    return replace(item, price=item.price.resolve(amount))
 
 
 # --- Derived encumbrance (card §6.2) ---------------------------------------
@@ -560,6 +826,8 @@ STANDARD_LOAD_SHOTS: Final[Mapping[str, int]] = MappingProxyType(
         "Crossbow, Lt": 30,
         "Crossbow, Hvy": 30,
         "Sling": 30,
+        "Blowgun, up to 2'": 5,
+        "Blowgun, 2' +": 5,
     }
 )
 """The normal load already included in a missile weapon's printed ``Enc``.
@@ -568,12 +836,18 @@ RC's Weapons Table note ``a`` (p. 63): *"bow: 20 arrows; crossbow: 30
 quarrels; sling: 30 stones; blowgun: 5 darts"*, and card §6.2 restates the
 rule.
 
-**The blowgun is absent, deliberately.** RC's note ``a`` and its Ammunition
-Table both say **5 darts**, visually verified; the approved card's summary
-says **3 darts**. The two disagree, and the card is the specification — so
-this module implements neither figure and refuses the blowgun rather than
-choosing between an approved card and its own designated source. No approved
-case needs it. See :func:`missile_weapon_encumbrance`.
+**Keyed by note ``a``'s text, not by the printed marker.** The note names four
+weapon families — bow, crossbow, sling, blowgun — but RC's Sling row prints
+``c,m,w,S`` and **no** ``a`` marker. The note's text is the rule; the row's
+missing marker is a printed-marker omission, and no marker is invented for the
+row to compensate. This is why :func:`missile_weapon_encumbrance` gates on
+this table rather than on :attr:`WeaponTrait.AMMUNITION_INCLUDED`.
+
+**The blowgun is 5 darts** (approved case E66). Slice B originally refused it,
+because the approved card's summary said 3 and RC's two governing objects said
+5; the human-approved amendment of 2026-09-26 recorded the card's figure as a
+transcription defect and corrected it. The RC figure is also the coherent one:
+at RC's rate of 5 darts per ``cn``, a normal load is exactly ``1 cn``.
 """
 
 PLAIN_CLOTHES_SETS: Final[tuple[int, ...]] = (2, 3)
@@ -682,23 +956,17 @@ def missile_weapon_encumbrance(weapon: Item, ammunition: Ammunition, shots: int)
     arrows, ``20 cn`` with none, and a light crossbow is ``40 cn`` without its
     quarrels — the two figures RC works out itself (approved cases E20-E22).
 
-    The blowgun is refused: RC's note ``a`` says its normal load is 5 darts,
-    the approved card's summary says 3, and this module settles neither (see
-    :data:`STANDARD_LOAD_SHOTS`).
+    The blowgun's normal load is **5 darts**, which at RC's rate of 5 darts
+    per ``cn`` is exactly ``1 cn``: a short blowgun is ``6 cn`` as printed and
+    ``5 cn`` empty (approved case E66).
     """
     if not isinstance(weapon, Item):
         raise ValueError(f"weapon must be an Item, got {weapon!r}")
-    if WeaponTrait.AMMUNITION_INCLUDED not in weapon.traits:
-        raise EncumbranceError(
-            f"{weapon.name!r} does not carry RC's note a, so its printed "
-            f"encumbrance includes no load to vary"
-        )
     standard_load = STANDARD_LOAD_SHOTS.get(weapon.name)
     if standard_load is None:
         raise EncumbranceError(
-            f"the normal load of {weapon.name!r} is not established: RC's note a "
-            f"states 5 darts and the approved CHAR-004 card states 3, and this "
-            f"module does not choose between an approved card and its source"
+            f"RC's note a states no normal load for {weapon.name!r}, so its "
+            f"printed encumbrance includes nothing to vary"
         )
     return (
         weapon.encumbrance_cn
@@ -726,7 +994,7 @@ def net(side_feet: int) -> Item:
     return Item(
         name=f"Net, {side_feet}' x {side_feet}'",
         category=ItemCategory.WEAPON,
-        cost=NET_COST_PER_SQUARE_FOOT * square_feet,
+        price=FixedPrice(NET_COST_PER_SQUARE_FOOT * square_feet),
         encumbrance_cn=NET_ENCUMBRANCE_CN_PER_SQUARE_FOOT * square_feet,
         traits=frozenset({WeaponTrait.SPECIAL_FEATURES, WeaponTrait.THROWN, _W}),
     )
@@ -744,7 +1012,7 @@ def whip(length_feet: int) -> Item:
     return Item(
         name=f"Whip, {length_feet} ft",
         category=ItemCategory.WEAPON,
-        cost=WHIP_COST_PER_FOOT * length_feet,
+        price=FixedPrice(WHIP_COST_PER_FOOT * length_feet),
         encumbrance_cn=WHIP_ENCUMBRANCE_CN_PER_FOOT * length_feet,
         size=WeaponSize.MEDIUM,
         traits=frozenset({WeaponTrait.SPECIAL_FEATURES, _W}),
@@ -837,10 +1105,16 @@ def selection_cost(items: Iterable[Item]) -> Coin:
 
     **Printed cost only.** The Druid's +50% wooden-weapon surcharge is card
     §7 and Slice C; this function applies no class-dependent price.
+
+    Each item contributes the cost of **one** unit. An item whose price
+    states no single amount — extravagant clothes, whose ``50+ gp`` has no
+    exact value until DM or simulation policy sets one — raises rather than
+    contributing its floor; resolve it first with :func:`resolve_price`
+    (approved case E64).
     """
     total = Coin(0)
     for item in items:
         if not isinstance(item, Item):
             raise ValueError(f"every selected item must be an Item, got {item!r}")
-        total = total + item.cost
+        total = total + item.price.cost_of(1)
     return total

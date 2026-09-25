@@ -28,12 +28,17 @@ from rules.character_creation.equipment import (
     ARMOR,
     FILLED_QUIVER_ENCUMBRANCE_CN,
     STANDARD_LOAD_SHOTS,
+    TORCH,
     WATERSKIN_FILLED_ENCUMBRANCE_CN,
     WEAPONS,
     Ammunition,
+    FixedPrice,
     Item,
     ItemCategory,
     KitEntry,
+    OpenEndedPrice,
+    PurchaseOffer,
+    QuantityPrice,
     WeaponSize,
     WeaponTrait,
     ammunition_encumbrance,
@@ -43,13 +48,18 @@ from rules.character_creation.equipment import (
     free_starting_kit,
     missile_weapon_encumbrance,
     net,
+    resolve_price,
     selection_cost,
     starting_gold,
     starting_kit_encumbrance,
     unlisted_item,
     whip,
 )
-from rules.character_creation.errors import EncumbranceError, UnlistedItemError
+from rules.character_creation.errors import (
+    EncumbranceError,
+    UnlistedItemError,
+    UnresolvedPriceError,
+)
 from rules.currency import Coin, Denomination
 
 GP = Denomination.GOLD
@@ -222,14 +232,14 @@ def test_net_cost_and_encumbrance_follow_its_area(case: str, side: int, expected
     """E17, E18 — a net costs 1 sp and weighs 1 cn per square foot."""
     made = net(side)
     assert made.encumbrance_cn == expected
-    assert made.cost == Coin.of(expected, SP)
+    assert made.price == FixedPrice(Coin.of(expected, SP))
 
 
 def test_e19_a_ten_foot_whip_is_100_cn_and_10_gp() -> None:
     """E19 — whip, 10 ft: 100 cn, cost 10 gp."""
     made = whip(10)
     assert made.encumbrance_cn == 100
-    assert made.cost == Coin.of(10, GP)
+    assert made.price == FixedPrice(Coin.of(10, GP))
 
 
 def test_e20_long_bow_with_its_standard_load_is_30_cn() -> None:
@@ -331,7 +341,10 @@ def test_a_dm_allowed_item_with_both_values_is_built_as_given() -> None:
         "Spyglass", ItemCategory.GEAR, cost=Coin.of(5, GP), encumbrance_cn=10
     )
     assert item == Item(
-        name="Spyglass", category=ItemCategory.GEAR, cost=Coin.of(5, GP), encumbrance_cn=10
+        name="Spyglass",
+        category=ItemCategory.GEAR,
+        price=FixedPrice(Coin.of(5, GP)),
+        encumbrance_cn=10,
     )
 
 
@@ -411,6 +424,114 @@ def test_e60_this_card_cannot_be_asked_for_a_movement_rate() -> None:
     assert "dungeon_movement" not in source
 
 
+# --- Price-specification forms and the blowgun load: E61-E66 ---------------
+# Added by the human-approved CHAR-004 amendment of 2026-09-26 (§4.1).
+
+
+def test_e61_one_torch_costs_two_silver_pieces_exactly() -> None:
+    """E61 — one torch purchased: 2 sp = 20 cp exactly, no fractional copper."""
+    assert TORCH.price.cost_of(1) == Coin.of(2, SP)
+    assert TORCH.price.cost_of(1) == Coin(20)
+
+
+def test_e62_six_torches_cost_one_gold_piece_exactly() -> None:
+    """E62 — six torches: 1 gp = 100 cp, the printed bundle offer.
+
+    Not derived as six times one sixth of a gold piece: that fraction is
+    16 2/3 cp, which RC cannot express and Coin cannot hold.
+    """
+    assert TORCH.price.cost_of(6) == Coin.of(1, GP)
+    assert TORCH.price.cost_of(6) == Coin(100)
+    # The printed source notation is preserved, not replaced.
+    assert isinstance(TORCH.price, QuantityPrice)
+    assert TORCH.price.printed_unit_notation == "1/6 gp"
+
+
+def test_e62_a_count_rc_prints_no_offer_for_is_refused_not_prorated() -> None:
+    """E62, other side — RC states no price for four torches, so none is invented."""
+    with pytest.raises(UnresolvedPriceError, match="will not prorate"):
+        TORCH.price.cost_of(4)
+
+
+def test_e63_a_torch_used_as_a_weapon_is_the_same_commodity() -> None:
+    """E63 — a torch used as a weapon: the same item, not a second priced commodity."""
+    assert WEAPONS["Torch"] is ADVENTURING_GEAR["Torch"]
+    assert WEAPONS["Torch"] is TORCH
+    # It carries its Weapons Table size and note codes, and one price.
+    assert TORCH.size is WeaponSize.SMALL
+    assert WeaponTrait.CLERIC_PERMITTED in TORCH.traits
+    assert TORCH.encumbrance_cn == 20
+
+
+def test_e64_extravagant_clothes_refuse_to_answer_a_concrete_cost() -> None:
+    """E64 — asked for a concrete cost: ERROR. Must not silently answer 50 gp."""
+    clothes = ADVENTURING_GEAR["Clothes, extravagant"]
+    assert isinstance(clothes.price, OpenEndedPrice)
+    assert clothes.price.minimum == Coin.of(50, GP)
+    with pytest.raises(UnresolvedPriceError, match="open-ended"):
+        clothes.price.cost_of(1)
+    # A consumer needing a total cannot get the floor by the back door either.
+    with pytest.raises(UnresolvedPriceError, match="open-ended"):
+        selection_cost([clothes])
+
+
+@pytest.mark.parametrize("gp", [50, 51, 200, 5000])
+def test_e65_a_resolved_price_at_or_above_the_floor_is_accepted(gp: int) -> None:
+    """E65 — an explicitly resolved amount >= 50 gp is accepted; RC bounds it above by nothing."""
+    resolved = resolve_price(ADVENTURING_GEAR["Clothes, extravagant"], Coin.of(gp, GP))
+    assert resolved.price == FixedPrice(Coin.of(gp, GP))
+    assert selection_cost([resolved]) == Coin.of(gp, GP)
+    # Resolution does not disturb anything else about the row.
+    assert resolved.encumbrance_cn == 30
+    assert resolved.category is ItemCategory.CLOTHING
+
+
+@pytest.mark.parametrize("gp", [49, 1, 0])
+def test_e65_a_resolved_price_below_the_floor_is_refused(gp: int) -> None:
+    """E65, other side — below the printed 50 gp minimum is refused."""
+    with pytest.raises(UnresolvedPriceError, match="below the 5000 cp minimum"):
+        resolve_price(ADVENTURING_GEAR["Clothes, extravagant"], Coin.of(gp, GP))
+
+
+def test_e65_the_catalog_row_is_not_mutated_by_resolving_it() -> None:
+    """E65 — resolution produces a new item; the printed open-ended row stands."""
+    resolve_price(ADVENTURING_GEAR["Clothes, extravagant"], Coin.of(80, GP))
+    assert isinstance(ADVENTURING_GEAR["Clothes, extravagant"].price, OpenEndedPrice)
+
+
+def test_e66_a_blowgun_normal_load_is_five_darts() -> None:
+    """E66 — blowgun normal load: 5 darts (Weapons note a; Ammunition Table)."""
+    assert STANDARD_LOAD_SHOTS["Blowgun, up to 2'"] == 5
+    assert STANDARD_LOAD_SHOTS["Blowgun, 2' +"] == 5
+    assert AMMUNITION["Dart"].standard_load_shots == 5
+
+
+def test_e66_the_blowgun_normal_load_is_exactly_one_cn() -> None:
+    """E66 — at RC's rate of 5 darts per cn, the normal load is exactly 1 cn."""
+    dart = AMMUNITION["Dart"]
+    assert dart.shots_per_cn == 5
+    assert ammunition_encumbrance(dart, 5) == 1
+
+
+@pytest.mark.parametrize(
+    ("weapon", "printed_cn", "empty_cn"),
+    [("Blowgun, up to 2'", 6, 5), ("Blowgun, 2' +", 15, 14)],
+)
+def test_e66_blowgun_load_arithmetic_is_coherent(
+    weapon: str, printed_cn: int, empty_cn: int
+) -> None:
+    """E66 — the former deliberate refusal is gone and the arithmetic works out.
+
+    The printed Enc includes 5 darts, which weigh exactly 1 cn, so a blowgun
+    without darts is one cn lighter than printed.
+    """
+    dart = AMMUNITION["Dart"]
+    assert WEAPONS[weapon].encumbrance_cn == printed_cn
+    assert missile_weapon_encumbrance(WEAPONS[weapon], dart, 5) == printed_cn
+    assert missile_weapon_encumbrance(WEAPONS[weapon], dart, 0) == empty_cn
+    assert missile_weapon_encumbrance(WEAPONS[weapon], dart, 10) == printed_cn + 1
+
+
 # ===========================================================================
 # Implementation and coverage tests below. NOT approved contract cases.
 # ===========================================================================
@@ -447,6 +568,36 @@ def test_no_floating_point_literal_or_conversion_appears_in_the_module() -> None
     assert "round(" not in source
 
 
+def test_the_currency_primitive_was_not_weakened_by_the_price_forms() -> None:
+    # The 1/6 gp discovery must not have leaked a fraction into Coin. It is
+    # still integral copper, non-negative, and refuses a non-whole result.
+    assert Coin(450) == Coin.of(45, SP)
+    with pytest.raises(ValueError, match="must be an int"):
+        Coin(16.67)  # type: ignore[arg-type]
+    with pytest.raises(ValueError, match="must not be negative"):
+        Coin(-1)
+    with pytest.raises(ValueError, match="will not round"):
+        # One sixth of a gold piece is exactly what Coin still refuses.
+        Coin.of(1, GP).scaled(1, 6)
+
+
+def test_every_price_form_yields_only_whole_copper_amounts() -> None:
+    amounts = []
+    for catalog in (WEAPONS, ARMOR, ADVENTURING_GEAR):
+        for row in catalog.values():
+            if isinstance(row.price, FixedPrice):
+                amounts.append(row.price.unit)
+            elif isinstance(row.price, QuantityPrice):
+                amounts.extend(offer.price for offer in row.price.offers)
+            else:
+                amounts.append(row.price.minimum)
+    assert amounts
+    for amount in amounts:
+        assert isinstance(amount.copper, int)
+        assert not isinstance(amount.copper, bool)
+        assert amount.copper >= 0
+
+
 # --- Catalog integrity -----------------------------------------------------
 
 
@@ -465,12 +616,25 @@ def test_catalog_rows_are_keyed_by_their_own_name() -> None:
             assert key == row.name
 
 
-def test_every_catalog_cost_is_an_exact_coin() -> None:
+def test_every_catalog_price_is_one_of_the_three_approved_forms() -> None:
+    forms = (FixedPrice, QuantityPrice, OpenEndedPrice)
     for catalog in (WEAPONS, ARMOR, ADVENTURING_GEAR):
         for row in catalog.values():
-            assert isinstance(row.cost, Coin)
+            assert isinstance(row.price, forms)
     for ammunition in AMMUNITION.values():
         assert isinstance(ammunition.cost, Coin)
+
+
+def test_only_the_two_adjudicated_rows_carry_a_non_fixed_price() -> None:
+    # Card §4.1 records exactly two printed rows that are not one fixed
+    # amount. No speculative price form is attached to anything else.
+    non_fixed = {
+        name
+        for catalog in (WEAPONS, ARMOR, ADVENTURING_GEAR)
+        for name, row in catalog.items()
+        if not isinstance(row.price, FixedPrice)
+    }
+    assert non_fixed == {"Torch", "Clothes, extravagant"}
 
 
 @pytest.mark.parametrize(
@@ -491,7 +655,7 @@ def test_sampled_weapon_rows_match_the_printed_table(
     name: str, cost_cp: int, encumbrance_cn: int
 ) -> None:
     row = WEAPONS[name]
-    assert row.cost == Coin(cost_cp)
+    assert row.price == FixedPrice(Coin(cost_cp))
     assert row.encumbrance_cn == encumbrance_cn
 
 
@@ -509,7 +673,7 @@ def test_sampled_weapon_rows_match_the_printed_table(
 )
 def test_armor_rows_match_card_section_6_1(name: str, cost_gp: int, encumbrance_cn: int) -> None:
     row = ARMOR[name]
-    assert row.cost == Coin.of(cost_gp, GP)
+    assert row.price == FixedPrice(Coin.of(cost_gp, GP))
     assert row.encumbrance_cn == encumbrance_cn
 
 
@@ -520,7 +684,7 @@ def test_suit_armor_is_750_cn_and_carries_no_rate_of_its_own() -> None:
     assert suit == Item(
         name="Suit Armor",
         category=ItemCategory.ARMOR,
-        cost=Coin.of(250, GP),
+        price=FixedPrice(Coin.of(250, GP)),
         encumbrance_cn=750,
     )
     # Named nowhere in executable logic: no function in the module mentions
@@ -532,15 +696,13 @@ def test_suit_armor_is_750_cn_and_carries_no_rate_of_its_own() -> None:
                 assert not (isinstance(inner, ast.Constant) and inner.value == "Suit Armor")
 
 
-def test_the_two_rows_that_cannot_be_represented_exactly_are_withheld() -> None:
-    # The Weapons Table torch costs 1/6 gp — 16 2/3 cp, and RC names no unit
-    # below the copper piece. "Clothes, extravagant" costs "50+ gp", which is
-    # not one amount. Neither is guessed, rounded or defaulted.
-    assert "Torch" not in WEAPONS
-    assert "Clothes, extravagant" not in ADVENTURING_GEAR
-    # The gear torch, which RC prices exactly, is catalogued.
-    assert ADVENTURING_GEAR["Torch"].cost == Coin.of(2, SP)
-    assert ADVENTURING_GEAR["Torches"].cost == Coin.of(1, GP)
+def test_rcs_six_torch_bundle_row_is_the_six_count_offer_not_a_second_row() -> None:
+    # RC prints "Torches / Six torches / 1 gp / 120". Both of its printed
+    # values are represented: the price is the 6-count offer, and the 120 cn
+    # is exactly six of the single torch's 20 cn.
+    assert "Torches" not in ADVENTURING_GEAR
+    assert TORCH.price.cost_of(6) == Coin.of(1, GP)
+    assert 6 * TORCH.encumbrance_cn == 120
 
 
 def test_clothing_is_exactly_the_rows_carrying_footnote_two_stars() -> None:
@@ -558,6 +720,7 @@ def test_clothing_is_exactly_the_rows_carrying_footnote_two_stars() -> None:
         "Clothes, plain",
         "Clothes, middle-class",
         "Clothes, fine",
+        "Clothes, extravagant",
         "Shoes",
     }
     # "Hat or cap" prints no footnote marker, so it is not clothing.
@@ -605,18 +768,33 @@ def test_an_ammunition_count_rc_does_not_state_is_refused_rather_than_rounded() 
         ammunition_encumbrance(AMMUNITION["Arrow"], 3)
 
 
-def test_the_blowgun_standard_load_is_refused_because_card_and_source_disagree() -> None:
-    # RC note a says 5 darts; the approved CHAR-004 card says 3. Neither is
-    # chosen here.
-    assert "Blowgun, up to 2'" not in STANDARD_LOAD_SHOTS
-    with pytest.raises(EncumbranceError, match="does not choose"):
-        missile_weapon_encumbrance(
-            WEAPONS["Blowgun, up to 2'"], AMMUNITION["Dart"], 5
-        )
+def test_standard_loads_are_exactly_the_weapons_rc_note_a_names() -> None:
+    # Note a names four families: bow, crossbow, sling, blowgun.
+    assert set(STANDARD_LOAD_SHOTS) == {
+        "Bow, Short",
+        "Bow, Long",
+        "Crossbow, Lt",
+        "Crossbow, Hvy",
+        "Sling",
+        "Blowgun, up to 2'",
+        "Blowgun, 2' +",
+    }
+
+
+def test_the_sling_row_prints_no_note_a_marker_but_note_a_names_it() -> None:
+    # RC's Sling row prints c,m,w,S with no `a`, while note a's text says
+    # "sling: 30 stones". The note's text governs; no marker is invented for
+    # the row, and the standard-load table is what the derivation reads.
+    assert WeaponTrait.AMMUNITION_INCLUDED not in WEAPONS["Sling"].traits
+    assert STANDARD_LOAD_SHOTS["Sling"] == 30
+    stones = AMMUNITION["Stone or lead pellet"]
+    assert WEAPONS["Sling"].encumbrance_cn == 20
+    assert missile_weapon_encumbrance(WEAPONS["Sling"], stones, 30) == 20
+    assert missile_weapon_encumbrance(WEAPONS["Sling"], stones, 0) == 14
 
 
 def test_a_weapon_without_note_a_has_no_load_to_vary() -> None:
-    with pytest.raises(EncumbranceError, match="no load to vary"):
+    with pytest.raises(EncumbranceError, match="nothing to vary"):
         missile_weapon_encumbrance(WEAPONS["Mace"], AMMUNITION["Arrow"], 10)
 
 
@@ -769,23 +947,39 @@ def test_a_non_bool_kit_entry_worn_flag_is_refused() -> None:
 @pytest.mark.parametrize("bad", ["", None, 7])
 def test_an_item_without_a_usable_name_is_refused(bad: object) -> None:
     with pytest.raises(ValueError, match="name must be a non-empty str"):
-        Item(name=bad, category=ItemCategory.GEAR, cost=Coin(1), encumbrance_cn=1)  # type: ignore[arg-type]
+        Item(
+            name=bad,  # type: ignore[arg-type]
+            category=ItemCategory.GEAR,
+            price=FixedPrice(Coin(1)),
+            encumbrance_cn=1,
+        )
 
 
-def test_an_item_cost_that_is_not_a_coin_is_refused() -> None:
-    with pytest.raises(ValueError, match="cost must be a Coin"):
-        Item(name="x", category=ItemCategory.GEAR, cost=5, encumbrance_cn=1)  # type: ignore[arg-type]
+def test_an_item_price_that_is_not_a_price_form_is_refused() -> None:
+    with pytest.raises(ValueError, match="price must be a Price"):
+        # A bare Coin is an amount, not a price specification.
+        Item(name="x", category=ItemCategory.GEAR, price=Coin(1), encumbrance_cn=1)  # type: ignore[arg-type]
 
 
 def test_a_negative_item_encumbrance_is_refused() -> None:
     with pytest.raises(ValueError, match="encumbrance_cn must not be negative"):
-        Item(name="x", category=ItemCategory.GEAR, cost=Coin(1), encumbrance_cn=-1)
+        Item(
+            name="x",
+            category=ItemCategory.GEAR,
+            price=FixedPrice(Coin(1)),
+            encumbrance_cn=-1,
+        )
 
 
 @pytest.mark.parametrize("bad", [True, False])
 def test_a_bool_item_encumbrance_is_refused(bad: bool) -> None:
     with pytest.raises(ValueError, match="encumbrance_cn must be an int"):
-        Item(name="x", category=ItemCategory.GEAR, cost=Coin(1), encumbrance_cn=bad)
+        Item(
+            name="x",
+            category=ItemCategory.GEAR,
+            price=FixedPrice(Coin(1)),
+            encumbrance_cn=bad,
+        )
 
 
 @pytest.mark.parametrize("bad", [0, -1])
@@ -794,7 +988,7 @@ def test_an_item_capacity_that_is_not_positive_is_refused(bad: int) -> None:
         Item(
             name="x",
             category=ItemCategory.CONTAINER,
-            cost=Coin(1),
+            price=FixedPrice(Coin(1)),
             encumbrance_cn=1,
             capacity_cn=bad,
         )
@@ -817,6 +1011,92 @@ def test_items_are_immutable() -> None:
 
     with pytest.raises(dataclasses.FrozenInstanceError):
         ADVENTURING_GEAR["Backpack"].encumbrance_cn = 1  # type: ignore[misc]
+
+
+# --- Price-form validation and coverage ------------------------------------
+
+
+def test_a_fixed_price_multiplies_by_the_count() -> None:
+    assert FixedPrice(Coin.of(3, GP)).cost_of(4) == Coin.of(12, GP)
+    assert FixedPrice(Coin.of(3, GP)).cost_of() == Coin.of(3, GP)
+
+
+@pytest.mark.parametrize("bad", [0, -1])
+def test_a_fixed_price_count_that_is_not_positive_is_refused(bad: int) -> None:
+    with pytest.raises(ValueError, match="count must be positive"):
+        FixedPrice(Coin(1)).cost_of(bad)
+
+
+@pytest.mark.parametrize("bad", [True, False])
+def test_a_bool_fixed_price_count_is_refused(bad: bool) -> None:
+    with pytest.raises(ValueError, match="count must be an int"):
+        FixedPrice(Coin(1)).cost_of(bad)
+
+
+def test_a_fixed_price_unit_that_is_not_a_coin_is_refused() -> None:
+    with pytest.raises(ValueError, match="unit must be a Coin"):
+        FixedPrice(5)  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize("bad", [0, -1])
+def test_a_quantity_price_count_that_is_not_positive_is_refused(bad: int) -> None:
+    with pytest.raises(ValueError, match="count must be positive"):
+        TORCH.price.cost_of(bad)
+
+
+@pytest.mark.parametrize("bad", [True, False])
+def test_a_bool_quantity_price_count_is_refused(bad: bool) -> None:
+    with pytest.raises(ValueError, match="count must be an int"):
+        TORCH.price.cost_of(bad)
+
+
+def test_a_quantity_price_needs_at_least_one_offer() -> None:
+    with pytest.raises(ValueError, match="offers must not be empty"):
+        QuantityPrice(offers=())
+
+
+def test_a_quantity_price_may_not_repeat_a_count() -> None:
+    with pytest.raises(ValueError, match="must not repeat a count"):
+        QuantityPrice(
+            offers=(PurchaseOffer(1, Coin(10)), PurchaseOffer(1, Coin(20))),
+        )
+
+
+@pytest.mark.parametrize("bad", [0, -1])
+def test_a_purchase_offer_count_that_is_not_positive_is_refused(bad: int) -> None:
+    with pytest.raises(ValueError, match="count must be positive"):
+        PurchaseOffer(bad, Coin(10))
+
+
+@pytest.mark.parametrize("bad", [True, False])
+def test_a_bool_purchase_offer_count_is_refused(bad: bool) -> None:
+    with pytest.raises(ValueError, match="count must be an int"):
+        PurchaseOffer(bad, Coin(10))
+
+
+def test_a_purchase_offer_price_that_is_not_a_coin_is_refused() -> None:
+    with pytest.raises(ValueError, match="price must be a Coin"):
+        PurchaseOffer(1, 10)  # type: ignore[arg-type]
+
+
+def test_an_open_ended_minimum_that_is_not_a_coin_is_refused() -> None:
+    with pytest.raises(ValueError, match="minimum must be a Coin"):
+        OpenEndedPrice(50)  # type: ignore[arg-type]
+
+
+def test_an_open_ended_price_resolved_with_a_non_coin_is_refused() -> None:
+    with pytest.raises(ValueError, match="amount must be a Coin"):
+        OpenEndedPrice(Coin(10)).resolve(20)  # type: ignore[arg-type]
+
+
+def test_resolving_a_row_whose_price_rc_prints_is_refused() -> None:
+    with pytest.raises(UnresolvedPriceError, match="no open-ended price to resolve"):
+        resolve_price(ADVENTURING_GEAR["Rope"], Coin.of(5, GP))
+
+
+def test_resolving_a_non_item_is_refused() -> None:
+    with pytest.raises(ValueError, match="item must be an Item"):
+        resolve_price("Clothes, extravagant", Coin.of(50, GP))  # type: ignore[arg-type]
 
 
 def test_catalog_lookup_finds_rows_in_every_catalog() -> None:
