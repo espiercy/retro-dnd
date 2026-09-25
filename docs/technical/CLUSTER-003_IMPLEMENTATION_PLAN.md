@@ -127,14 +127,15 @@ Recorded explicitly so a reviewer can see what the plan decided versus what the 
 src/rules/currency.py                        NEW -- shared primitive
 
     class Denomination(Enum)      PP EP GP SP CP
-    _IN_COPPER: Mapping           pp=500 ep=10 gp=10 sp=10 cp=1
+    IN_COPPER: Mapping            PP=500 cp  GP=100 cp  EP=50 cp
+                                  SP=10 cp   CP=1 cp
                                   (from RC 1 pp = 5 gp = 10 ep
                                    = 50 sp = 500 cp)
 
     @dataclass(frozen=True, slots=True)
     class Coin
         copper: int               the ONLY stored field
-        @classmethod from_(cls, amount: int, d: Denomination) -> Coin
+        @classmethod of(cls, amount: int, d: Denomination) -> Coin
         def __add__ / __sub__ / __mul__(int) -> Coin
         def __lt__ / __le__ ...   exact ordering
         def scaled(numerator, denominator) -> Coin    exact; Druid +50%
@@ -144,7 +145,7 @@ src/rules/currency.py                        NEW -- shared primitive
 
 **Why new.** No currency representation exists anywhere in `src/`. This is genuine novelty, not parallel-framework invention.
 
-**Druid `+50%`:** `Coin.from_(3, GP).scaled(3, 2)` → `450 cp`. Exact, no float, no rounding question.
+**Druid `+50%`:** `Coin.of(3, GP).scaled(3, 2)` → `450 cp`. Exact, no float, no rounding question.
 
 ### 6.2 New — `CHAR-004` equipment
 

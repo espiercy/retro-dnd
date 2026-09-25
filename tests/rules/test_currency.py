@@ -8,6 +8,7 @@ these tests pin down is what those slices will depend on.
 """
 
 import dataclasses
+from types import MappingProxyType
 from typing import Any
 
 import pytest
@@ -37,6 +38,21 @@ def test_conversion_table_matches_rc_exactly() -> None:
     assert IN_COPPER[Denomination.ELECTRUM] == 50
     assert IN_COPPER[Denomination.SILVER] == 10
     assert IN_COPPER[Denomination.COPPER] == 1
+
+
+def test_conversion_table_is_immutable() -> None:
+    # IN_COPPER is a public shared rules constant, so a caller must be able
+    # to read a conversion but must not be able to add, remove or alter one.
+    # MappingProxyType refuses all three (the landed frozen-table pattern:
+    # _HIT_DIE, _NAME_LEVEL, _MAXIMUM_LEVEL).
+    assert isinstance(IN_COPPER, MappingProxyType)
+    with pytest.raises(TypeError):
+        IN_COPPER[Denomination.GOLD] = 1  # type: ignore[index]
+    with pytest.raises(TypeError):
+        del IN_COPPER[Denomination.GOLD]  # type: ignore[attr-defined]
+    with pytest.raises(AttributeError):
+        IN_COPPER.clear()  # type: ignore[attr-defined]
+    assert IN_COPPER[Denomination.GOLD] == 100
 
 
 @pytest.mark.parametrize(
