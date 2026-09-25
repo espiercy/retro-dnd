@@ -17,7 +17,12 @@ DEC-0011 (BECMI)       COMPLETE -- seven authorized questions,
 HUMAN ADJUDICATION     COMPLETE -- 2026-09-24, seven determinations
                        (SR-6 .. SR-10, plus two non-rulings)
 STAGE B (SYNTHESIS)    COMPLETE -- three Rule Cards drafted 2026-09-24
-RULE CARDS             AWAITING_APPROVAL
+RULE CARDS             ALL THREE APPROVED -- human project owner,
+                       2026-09-24
+PRE-CODE GATE          PASS -- 2026-09-24
+                       docs/technical/CLUSTER-003_PRE_CODE_GATE.md
+SS15.2 STEP 4          NOT GIVEN -- implementation readiness
+                       re-approval outstanding (human act)
 CLUSTER BOUNDARY       RE-APPROVED BY HUMAN DECISION, 2026-09-14
 OWNERSHIP GOVERNANCE   APPLIED, 2026-09-14 (five decisions -- SS3.1)
 STAGE B (SYNTHESIS)    NOT BEGUN, NOT AUTHORIZED
@@ -57,7 +62,9 @@ Q6 Mystic encounter       RC Explicit ratio + Necessary Mathematical
 
 **Full Stage-B record, including what each ruling rejected:** `docs/rules/clusters/CLUSTER-003-stage-b-synthesis.md`.
 
-**Implementation remains NOT AUTHORIZED. The Pre-Code Gate has not been begun.**
+**Human Rule Card review: `PASSED` 2026-09-24 — all three cards `APPROVED`.** The `CHAR-005` §6.1 Mystic running-speed derivation was **expressly approved** as a `Necessary Mathematical / Mechanical Consequence`, **not** an additional Simulator Ruling.
+
+**Pre-Code Gate: `PASS` 2026-09-24** — `docs/technical/CLUSTER-003_PRE_CODE_GATE.md`. No blocking defects; three non-blocking implementation cautions recorded. **`ARCHITECTURE.md` §15.2 step 4 (implementation-readiness re-approval) has NOT been given, so implementation remains NOT AUTHORIZED.**
 
 ### 3.0a Second independent completeness / boundary review — result
 
@@ -462,8 +469,10 @@ HUMAN ADJUDICATION          COMPLETE -- 2026-09-24
 STAGE B                     COMPLETE -- three Rule Cards drafted
 RULE CARDS                  AWAITING_APPROVAL
 
-HUMAN RULE CARD REVIEW:     PENDING
-IMPLEMENTATION:             NOT AUTHORIZED
-PRE-CODE GATE:              NOT BEGUN
+HUMAN RULE CARD REVIEW:     PASSED -- 2026-09-24, all three APPROVED
+PRE-CODE GATE:              PASS -- 2026-09-24, no blocking defects
+                            three non-blocking cautions recorded
+IMPLEMENTATION:             NOT AUTHORIZED -- SS15.2 step 4 outstanding
+READY FOR IMPL. PLANNING:   YES
 FURTHER LINEAGE RESEARCH:   NOT STARTED / NOT AUTHORIZED
 ```

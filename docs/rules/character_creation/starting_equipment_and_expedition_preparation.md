@@ -12,9 +12,15 @@ Starting Equipment & Expedition Preparation
 
 ## Status
 
-`AWAITING_APPROVAL`
+`APPROVED`
 
-> **Drafted 2026-09-24.** Stage-A evidence (`docs/rules/evidence/CHAR-004-evidence.md`) passed independent `DEC-0010` completeness review; `DEC-0011` BECMI gap research and its remediation are complete; the human project owner issued the governing adjudications on 2026-09-24.
+> **Approved by the human project owner, 2026-09-24.** Stage-A evidence passed independent `DEC-0010` completeness review; `DEC-0011` BECMI gap research and its remediation are complete; the human adjudications of 2026-09-24 are recorded below and in `docs/rules/clusters/CLUSTER-003-stage-b-synthesis.md`.
+>
+> **Ratified as approved, without change to the submitted contract:** the §1–§8 mechanical specification, **`SR-6`** and **`SR-7`**, and the treatment of the "Clothes, plain" footnote marker as a **typographic defect rather than a Simulator Ruling** (Open Questions 1 — expressly approved; no executable mechanic depends on reinterpreting it).
+>
+> **Approval of this card does not authorize implementation.** `CLUSTER-003` implementation is **NOT AUTHORIZED** and requires separate explicit human authorization under `ARCHITECTURE.md` §15.2 step 4.
+>
+> **Originally drafted 2026-09-24.** Stage-A evidence (`docs/rules/evidence/CHAR-004-evidence.md`) passed independent `DEC-0010` completeness review; `DEC-0011` BECMI gap research and its remediation are complete; the human project owner issued the governing adjudications on 2026-09-24.
 >
 > **This card carries two Simulator Rulings — `SR-6` and `SR-7`.** Both are recorded below with the readings they rejected.
 >
@@ -440,8 +446,8 @@ STATUS:  researched / preserved / NOT V1-WIRED
 
 ## Approval
 
-- Approved by: `<pending>`
-- Date: `<pending>`
-- Notes: `<pending>`
+- Approved by: **Human project owner**
+- Date: **2026-09-24**
+- Notes: Ratifies the §1–§8 mechanical contract, carrying **`SR-6`** (belt pouch filled = `52 cn`) and **`SR-7`** (Magic-User dagger unconditional). The "Clothes, plain" footnote treatment is **expressly approved as a typographic defect, not elevated to a ruling**. V1 exclusions (mounts, vehicles, ships, siege) and the `NOT V1-WIRED` status of the Chapter 10 pathway are **preserved unchanged**. Implementation is not authorized by this approval.
 
 **Submitted contract:** the §1–§8 mechanical specification, carrying **`SR-6`** and **`SR-7`**, and asserting **no** `Alternate-Source Compatible Completion` and **no** `Human-Approved Variant`.

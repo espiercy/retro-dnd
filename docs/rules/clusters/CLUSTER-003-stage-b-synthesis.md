@@ -22,9 +22,9 @@ CLUSTER-003 DEC-0011:       COMPLETE -- BECMI, seven authorized questions,
                                        remediation 1 applied
 Human adjudication:         COMPLETE -- 2026-09-24, seven rulings (SS1)
 CLUSTER-003 Stage B:        COMPLETE -- three Rule Cards drafted
-Human Rule Card review:     PENDING
-Implementation:             NOT AUTHORIZED
-Pre-Code Gate:              NOT BEGUN
+Human Rule Card review:     PASSED -- 2026-09-24, all three APPROVED
+Pre-Code Gate:              PASS -- 2026-09-24
+Implementation:             NOT AUTHORIZED -- SS15.2 step 4 outstanding
 ```
 
 ## 1. The Seven Human Adjudications, 2026-09-24
@@ -129,9 +129,9 @@ This mirrors the project's standing separation of canonical simulation from pres
 
 | Card | File | Status | Owns |
 |---|---|---|---|
-| `CHAR-004` | `docs/rules/character_creation/starting_equipment_and_expedition_preparation.md` | `AWAITING_APPROVAL` | Money, catalogs, cost, encumbrance values, container capacities, per-class mundane equipment legality, unlisted-item procedure |
-| `CHAR-005` | `docs/rules/character_creation/encumbrance_and_movement_rate.md` | `AWAITING_APPROVAL` | The authoritative numerical movement rate: normal, encounter, running; encumbrance derivation; Mystic `MV`; condition movement effects |
-| `EXP-003` | `docs/rules/exploration/dungeon_movement.md` | `AWAITING_APPROVAL` | Spending the normal-speed rate against the landed `EXP-002` dungeon turn |
+| `CHAR-004` | `docs/rules/character_creation/starting_equipment_and_expedition_preparation.md` | **`APPROVED` 2026-09-24** | Money, catalogs, cost, encumbrance values, container capacities, per-class mundane equipment legality, unlisted-item procedure |
+| `CHAR-005` | `docs/rules/character_creation/encumbrance_and_movement_rate.md` | **`APPROVED` 2026-09-24** | The authoritative numerical movement rate: normal, encounter, running; encumbrance derivation; Mystic `MV`; condition movement effects |
+| `EXP-003` | `docs/rules/exploration/dungeon_movement.md` | **`APPROVED` 2026-09-24** | Spending the normal-speed rate against the landed `EXP-002` dungeon turn |
 
 ### 3.1 Ownership constraints carried forward from earlier human decisions
 
@@ -168,7 +168,7 @@ Unchanged by this Stage B, and restated on each card:
 | **Racial-armour movement penalty** (RC Ch. 4 p. 67) | RC **delegates it to DM discretion by design** — established during remediation as *not* a gap. The cards record it as a DM-discretionary input, not a missing rule |
 | **Rough/broken-terrain modifier presupposed by Mystic Acrobatics** | **Unowned and deliberately so.** `EXP-003` no longer claims Special Terrain, and no terrain mechanic is invented from the Acrobatics wording |
 | **Mystic *"personal possessions"* framing** | Recorded as flavour the source's own rules do not implement. **Not converted into a restriction** |
-| **Mystic running speed under enhanced `MV`** | A **derivation**, flagged on `CHAR-005` for human confirmation — see §5 |
+| ~~**Mystic running speed under enhanced `MV`**~~ | **CLOSED 2026-09-24 — expressly approved.** `running = MV` feet per round, `Necessary Mathematical / Mechanical Consequence`, **not** an additional ruling. See §5 |
 
 ## 5. One Derivation Flagged for Human Confirmation
 
@@ -212,9 +212,9 @@ This is a direct application of an explicit RC rule to the Mystic's normal speed
 | Stage B drafted | 2026-09-24 |
 
 ```text
-CLUSTER-003 STAGE B:  COMPLETE -- THREE RULE CARDS DRAFTED
-                      AWAITING_APPROVAL
+CLUSTER-003 STAGE B:  COMPLETE -- THREE RULE CARDS APPROVED 2026-09-24
 
-IMPLEMENTATION:       NOT AUTHORIZED
-PRE-CODE GATE:        NOT BEGUN
+PRE-CODE GATE:        PASS -- 2026-09-24
+                      docs/technical/CLUSTER-003_PRE_CODE_GATE.md
+IMPLEMENTATION:       NOT AUTHORIZED -- SS15.2 step 4 outstanding
 ```

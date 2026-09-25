@@ -12,9 +12,15 @@ Dungeon Movement
 
 ## Status
 
-`AWAITING_APPROVAL`
+`APPROVED`
 
-> **Drafted 2026-09-24.** Stage-A evidence (`docs/rules/evidence/EXP-003-evidence.md`) passed independent `DEC-0010` completeness review. No `DEC-0011` question was authorized for this card — none was needed.
+> **Approved by the human project owner, 2026-09-24.** Stage-A evidence passed independent `DEC-0010` completeness review. No `DEC-0011` question was authorized for this card — none was needed.
+>
+> **Ratified as approved, without change to the submitted contract:** the §1–§8 mechanical specification, **carrying no Simulator Ruling**; the treatment of **mapping as owning no mechanic**; the removal of **Special Terrain** from this card's responsibilities; and the **rough/broken-terrain modifier remaining unowned** (Open Questions 1 — expressly approved; no generic terrain mechanic is to be invented).
+>
+> **Approval of this card does not authorize implementation.** `CLUSTER-003` implementation is **NOT AUTHORIZED** and requires separate explicit human authorization under `ARCHITECTURE.md` §15.2 step 4.
+>
+> **Originally drafted 2026-09-24.** Stage-A evidence (`docs/rules/evidence/EXP-003-evidence.md`) passed independent `DEC-0010` completeness review. No `DEC-0011` question was authorized for this card — none was needed.
 >
 > **This card carries no Simulator Ruling.** Every clause is `Rules Cyclopedia Explicit` or a necessary consequence of one. It is the simplest of the three `CLUSTER-003` cards, and that is a finding rather than an omission.
 >
@@ -347,8 +353,8 @@ Removed from this card's scope by the 2026-09-14 governance decision. The terrai
 
 ## Approval
 
-- Approved by: `<pending>`
-- Date: `<pending>`
-- Notes: `<pending>`
+- Approved by: **Human project owner**
+- Date: **2026-09-24**
+- Notes: Ratifies the §1–§8 mechanical contract. **This card owns no Simulator Ruling** — every clause is `Rules Cyclopedia Explicit` or a necessary consequence of one. Mapping owns no separate time procedure, roll, failure mechanic or movement penalty; Special Terrain is not this card's responsibility; the unpublished Mystic Acrobatics terrain modifier **remains unowned by express approval**. Implementation is not authorized by this approval.
 
 **Submitted contract:** the §1–§8 mechanical specification, carrying **no Simulator Ruling**, **no `Alternate-Source Compatible Completion`** and **no `Human-Approved Variant`** — every clause `Rules Cyclopedia Explicit` or a necessary consequence of one.

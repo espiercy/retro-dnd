@@ -10,9 +10,19 @@ Encumbrance & Movement Rate
 
 ## Status
 
-`AWAITING_APPROVAL`
+`APPROVED`
 
-> **Drafted 2026-09-24.** Stage-A evidence (`docs/rules/evidence/CHAR-005-evidence.md`) passed independent `DEC-0010` completeness review; `DEC-0011` BECMI gap research and its remediation are complete; the human project owner issued the governing adjudications on 2026-09-24.
+> **Approved by the human project owner, 2026-09-24.** Stage-A evidence passed independent `DEC-0010` completeness review; `DEC-0011` BECMI gap research and its remediation are complete; the human adjudications of 2026-09-24 are recorded below and in `docs/rules/clusters/CLUSTER-003-stage-b-synthesis.md`.
+>
+> **Ratified as approved, without change to the submitted contract:** the §1–§11 mechanical specification; **`SR-8`**, **`SR-9`** and **`SR-10`**; and the treatment of Q4 (running speed) and Q6 (exact fractional Mystic encounter movement) as **RC-explicit interpretation plus necessary consequence and NOT as Simulator Rulings**.
+>
+> **§6.1 Mystic running speed — EXPRESSLY APPROVED, 2026-09-24.** The derivation flagged at draft time is confirmed and is **not** an additional Simulator Ruling. See §6.1.
+>
+> **Also expressly approved:** exact fractional encounter movement remains **authoritative and unrounded**; spatial/grid quantisation remains a **separate future execution concern not owned by this cluster**.
+>
+> **Approval of this card does not authorize implementation.** `CLUSTER-003` implementation is **NOT AUTHORIZED** and requires separate explicit human authorization under `ARCHITECTURE.md` §15.2 step 4.
+>
+> **Originally drafted 2026-09-24.** Stage-A evidence (`docs/rules/evidence/CHAR-005-evidence.md`) passed independent `DEC-0010` completeness review; `DEC-0011` BECMI gap research and its remediation are complete; the human project owner issued the governing adjudications on 2026-09-24.
 >
 > **This card is the authoritative owner of the numerical character movement rate** — normal, encounter and running — including encumbrance derivation, the Mystic level-dependent `MV`, and the movement effect of conditions whose causation is owned elsewhere. `CHAR-009` may *reference* Mystic movement but **must not** be a second implementation owner.
 >
@@ -299,9 +309,35 @@ The ⅓ relationship is **`Rules Cyclopedia Explicit`**; exact fractional retent
 
 **Architecture constraint.** The authoritative movement allowance may remain rational/fractional internally. **Any later snapping or conversion to discrete map or grid units is a separate spatial execution / presentation concern and must not silently change the authoritative rate.** No such conversion is specified by this card.
 
-#### 6.1 One derivation flagged for human confirmation
+#### 6.1 Mystic running speed — **CONFIRMED BY HUMAN APPROVAL, 2026-09-24**
 
-The rulings specify the Mystic's **normal** movement (`SR-9`) and **encounter** movement (Q6). They do **not** explicitly address **running** movement. §4's general rule, applied to the Mystic's normal speed, gives `running = MV feet per round`. This is classified **Necessary Mechanical Consequence**, and is **flagged rather than assumed** — see Open Questions 1.
+This derivation was flagged at draft time rather than assumed. **The human project owner expressly approved it on 2026-09-24.** While enhanced Mystic `MV` is active:
+
+```text
+normal movement    = Mystic MV            feet per TURN
+encounter movement = Mystic MV x 1/3      feet per ROUND   (exact)
+running movement   = Mystic MV            feet per ROUND
+```
+
+**Classification: `Necessary Mathematical / Mechanical Consequence`. This is NOT an additional Simulator Ruling.**
+
+**Approved rationale.** The RC running rule established in Q4 uses the **numerical value of normal movement** as running movement **per round**. When the Mystic's enhanced `MV` is active, that class-specific value **is** the character's applicable normal movement value. The ordinary running transformation therefore applies to the enhanced `MV` unchanged.
+
+**Worked example:**
+
+```text
+Mystic MV = 210'
+    normal     210' per turn
+    encounter   70' per round
+    running    210' per round
+```
+
+```text
+Do NOT introduce a separate Mystic running formula.
+The SR-9 encumbrance gate still governs whether enhanced MV is
+active at all; when it is not, SS3's standard table supplies all
+three rates in the ordinary way.
+```
 
 ### 7. Condition movement effects
 
@@ -530,7 +566,7 @@ The Mystic `MV` values are printed in **RC Chapter 2**, inside the class entry. 
 | §3 table; §4 rate definitions; §5 scale boundary; §6 `MV` values; §7 blindness, stunning, prone, and the first three starvation rows; §8 group rule; §9 exhaustion; §10 units | **Rules Cyclopedia Explicit** |
 | §4 Q4 interpretation of Ch. 8's `"3 × normal movement"` | **Rules Cyclopedia Explicit interpretation/correction**, reinforced by **Necessary Mechanical Consequence**. **NOT a Simulator Ruling** |
 | §6 `encounter = MV ÷ 3` | **Rules Cyclopedia Explicit** (the ratio) + **Necessary Mathematical Consequence** (exact fractional retention). **NOT a Simulator Ruling** |
-| §6.1 Mystic running speed | **Necessary Mechanical Consequence** — flagged derivation |
+| §6.1 Mystic running speed | **Necessary Mathematical / Mechanical Consequence** — **expressly approved 2026-09-24; not a Simulator Ruling** |
 | §M25 consequence that Suit Armor alone yields `90' (30')` | **Necessary Mechanical Consequence** of `SR-8` + the table |
 | **§2/§6 Suit Armor has no special rate** | **Simulator Ruling `SR-8`** |
 | **§6 Mystic `MV` encumbrance gate** | **Simulator Ruling `SR-9`** |
@@ -546,7 +582,7 @@ The Mystic `MV` values are printed in **RC Chapter 2**, inside the class entry. 
 
 **None block approval.**
 
-1. **Mystic running speed while enhanced `MV` is active.** The rulings specified normal (`SR-9`) and encounter (Q6) movement and stopped. §6.1 derives running as `MV` feet per round by direct application of §4's explicit rule. **Flagged rather than assumed.** If a reviewer intends something different, say so at approval — the derivation is visible, not buried.
+1. ~~**Mystic running speed while enhanced `MV` is active.**~~ **CLOSED 2026-09-24 — expressly approved by the human project owner.** §6.1 records the confirmed contract: `running = MV` feet per round, classified **Necessary Mathematical / Mechanical Consequence**, **not** an additional Simulator Ruling. The `SR-9` gate still governs whether enhanced `MV` is active at all. **No separate Mystic running formula is to be introduced.**
 2. **Prone → standing is stated twice**, as *"one round of movement"* (Ch. 13 p. 150) and as *"an action in a combat round"* (Ch. 8 p. 103). Both are RC Explicit and both are recorded. They may describe the same cost in different vocabularies; they may not. **No mechanic in this card turns on the difference**, because neither statement changes a movement *rate*. Left open deliberately rather than harmonised by assumption.
 3. **The rough/broken-terrain modifier presupposed by RC's Mystic Acrobatics wording is unowned**, and deliberately so. **No terrain mechanic is created from it here** — guard test M76.
 4. **Spatial quantisation** of fractional movement is unspecified and unowned. Recorded so its absence is not mistaken for an omission.
@@ -557,8 +593,8 @@ The Mystic `MV` values are printed in **RC Chapter 2**, inside the class entry. 
 
 ## Approval
 
-- Approved by: `<pending>`
-- Date: `<pending>`
-- Notes: `<pending>`
+- Approved by: **Human project owner**
+- Date: **2026-09-24**
+- Notes: Ratifies the §1–§11 mechanical contract, carrying **`SR-8`** (Suit Armor has no special movement rate; it is `750 cn` and nothing else), **`SR-9`** (Mystic enhanced `MV` gated on the unencumbered band) and **`SR-10`** (starvation `×3/4 → ×1/2 → ×1/4`). Q4 and Q6 are ratified as **RC-explicit interpretation plus necessary consequence, NOT rulings**. **§6.1 Mystic running speed is expressly approved** as a `Necessary Mathematical / Mechanical Consequence`. Exact fractional encounter movement remains authoritative and **unrounded**; spatial/grid quantisation is **not owned by this cluster**. Implementation is not authorized by this approval.
 
 **Submitted contract:** the §1–§11 mechanical specification, carrying **`SR-8`**, **`SR-9`** and **`SR-10`**; treating Q4 and Q6 as **RC-explicit interpretation plus necessary consequence and not as rulings**; and asserting **no** `Alternate-Source Compatible Completion` and **no** `Human-Approved Variant`.
