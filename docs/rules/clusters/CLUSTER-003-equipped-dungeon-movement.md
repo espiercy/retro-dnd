@@ -478,6 +478,64 @@ PRE-CODE GATE:              PASS -- 2026-09-24, no blocking defects
 IMPLEMENTATION PLAN:        DRAFT -- 2026-09-25
                             docs/technical/CLUSTER-003_IMPLEMENTATION_PLAN.md
                             AWAITING HUMAN APPROVAL
-IMPLEMENTATION:             NOT AUTHORIZED -- SS15.2 step 4 outstanding
+IMPLEMENTATION PLAN:        APPROVED -- 2026-09-25
+IMPLEMENTATION:             COMPLETE ON BRANCH -- Slices A-F, 2026-09-27
+                            cluster-003-stage-a-evidence, NOT MERGED
 FURTHER LINEAGE RESEARCH:   NOT STARTED / NOT AUTHORIZED
+```
+
+## 14. Implementation Record
+
+**Added 2026-09-27, on completion of Slice F.**
+
+All three Rule Cards are implemented on `cluster-003-stage-a-evidence`,
+**not merged**. Six slices, each independently reviewed before the next
+began.
+
+| Slice | Responsibility | Record | Status |
+|---|---|---|---|
+| A | Shared currency primitive | `ISSUE-015` | Accepted 2026-09-25 |
+| B | `CHAR-004` catalogs, money, derived encumbrance | `ISSUE-016` | Accepted 2026-09-27 |
+| C | `CHAR-004` class legality and Druid pricing | `ISSUE-017` | Accepted 2026-09-27 |
+| D | `CHAR-005` encumbrance and movement | `ISSUE-018` | Changes required 2026-09-27; applied |
+| E | `EXP-003` dungeon movement, `EXP-002` integration | `ISSUE-019` | Awaiting review |
+| F | Cross-card integration and cluster records | `ISSUE-020` | Awaiting review |
+
+**Production modules added:** `src/rules/currency.py`,
+`src/rules/character_creation/equipment.py`,
+`src/rules/character_creation/encumbrance_and_movement.py`,
+`src/rules/exploration/dungeon_movement.py`, plus five error types on the
+landed `CharacterCreationError` hierarchy.
+
+### Rule Card amendments made during implementation
+
+Both were human-approved; **no Simulator Ruling was made, granted or
+renumbered anywhere in this cluster's implementation.** `SR-6`, `SR-7`,
+`SR-8`, `SR-9` and `SR-10` stand exactly as ratified on 2026-09-24.
+
+| Date | Card | Change |
+|---|---|---|
+| 2026-09-26 | `CHAR-004` | Blowgun normal load `3` → `5` (a transcription defect in the card); new §4.1 price-specification forms — the torch's quantity offers and "Clothes, extravagant"'s open-ended price; cases `E61`–`E66` |
+| 2026-09-27 | `CHAR-004` | New §6.3 — the Sling's `20 cn` includes its normal 30-stone load; the missing `a` marker is a table-marker defect; cases `E67`–`E68` |
+
+### Independent catalog-transcription review
+
+`docs/rules/evidence/CLUSTER-003-catalog-transcription-review.md`, 2026-09-26.
+A separate reviewer that did not author the transcription compared every
+executable catalog row against the RC page images: **120 line items, 115
+MATCH, 4 DEFECT, 3 SOURCE-AMBIGUOUS**, all five governing pages verified
+visually. **No numeric transcription error was found in any of the four
+catalogs.** All four defects were corrected; of the three ambiguities, one
+was adjudicated by the human project owner (the sling) and two were
+accepted as documented-and-deferred.
+
+### Deferred, and still deferred
+
+```text
+CHAR-005 §7 condition modifiers        NOT V1-WIRED -- 11 approved cases
+                                       M49-M59; SR-10 preserved on the card
+Chapter 10 high-level equipment        NOT V1-WIRED
+Mounts, vehicles, ships, siege         Out of V1
+Spatial / grid quantisation            Unowned
+Rough / broken-terrain modifier        Unowned, by express approval
 ```
