@@ -9,8 +9,9 @@ owning test, and complete the cluster records.
 
 **This slice adds no production code.** Tests and records only.
 
-**Status: awaiting human review.** `CLUSTER-003` implementation is complete
-on `cluster-003-stage-a-evidence` and **not merged**.
+**Status: accepted by the human project owner, 2026-09-27.**
+`CLUSTER-003` implementation is complete and **accepted**; commits through
+`031c416` are approved and the merge to `main` is authorized.
 
 ## 2. Approved Inputs/Specifications
 

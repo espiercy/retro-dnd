@@ -479,8 +479,8 @@ IMPLEMENTATION PLAN:        DRAFT -- 2026-09-25
                             docs/technical/CLUSTER-003_IMPLEMENTATION_PLAN.md
                             AWAITING HUMAN APPROVAL
 IMPLEMENTATION PLAN:        APPROVED -- 2026-09-25
-IMPLEMENTATION:             COMPLETE ON BRANCH -- Slices A-F, 2026-09-27
-                            cluster-003-stage-a-evidence, NOT MERGED
+IMPLEMENTATION:             COMPLETE AND ACCEPTED -- Slices A-F, 2026-09-27
+                            merged to main, --no-ff
 FURTHER LINEAGE RESEARCH:   NOT STARTED / NOT AUTHORIZED
 ```
 
@@ -488,9 +488,9 @@ FURTHER LINEAGE RESEARCH:   NOT STARTED / NOT AUTHORIZED
 
 **Added 2026-09-27, on completion of Slice F.**
 
-All three Rule Cards are implemented on `cluster-003-stage-a-evidence`,
-**not merged**. Six slices, each independently reviewed before the next
-began.
+All three Rule Cards are implemented, **accepted by the human project owner
+on 2026-09-27**, and merged to `main`. Six slices, each independently
+reviewed before the next began.
 
 | Slice | Responsibility | Record | Status |
 |---|---|---|---|
@@ -498,8 +498,8 @@ began.
 | B | `CHAR-004` catalogs, money, derived encumbrance | `ISSUE-016` | Accepted 2026-09-27 |
 | C | `CHAR-004` class legality and Druid pricing | `ISSUE-017` | Accepted 2026-09-27 |
 | D | `CHAR-005` encumbrance and movement | `ISSUE-018` | Changes required 2026-09-27; applied |
-| E | `EXP-003` dungeon movement, `EXP-002` integration | `ISSUE-019` | Awaiting review |
-| F | Cross-card integration and cluster records | `ISSUE-020` | Awaiting review |
+| E | `EXP-003` dungeon movement, `EXP-002` integration | `ISSUE-019` | Accepted 2026-09-27 |
+| F | Cross-card integration and cluster records | `ISSUE-020` | Accepted 2026-09-27 |
 
 **Production modules added:** `src/rules/currency.py`,
 `src/rules/character_creation/equipment.py`,

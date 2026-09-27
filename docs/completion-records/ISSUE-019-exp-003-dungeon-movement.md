@@ -6,8 +6,10 @@ ISSUE-019 (completion-record ledger). Implement **Slice E** of
 `docs/technical/CLUSTER-003_IMPLEMENTATION_PLAN.md` §10: spend the
 authoritative movement rate against the landed dungeon turn.
 
-All three `CLUSTER-003` Rule Cards are now implemented. **Status: awaiting
-human review.** Slice F is not started.
+All three `CLUSTER-003` Rule Cards are now implemented.
+
+**Status: accepted by the human project owner, 2026-09-27.** Slice F was
+authorized on that acceptance.
 
 ## 2. Approved Inputs/Specifications
 
