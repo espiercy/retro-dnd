@@ -9,8 +9,19 @@ This module was populated slice by slice, as each approved rejection path
 became executable: Slice A added the base and the ability-score domain
 error, Slice C the two CHAR-003 hit-point errors, Slice D the four CHAR-001
 trade and switch errors, and Slice E the Chapter 10 point-allocation error.
-**The hierarchy is now complete for CLUSTER-002** — Slice F adds no
+**The hierarchy was complete for CLUSTER-002** — its Slice F added no
 production code and therefore no error type.
+
+CLUSTER-003 extends the same hierarchy rather than opening a parallel one
+(docs/technical/CLUSTER-003_IMPLEMENTATION_PLAN.md §6.5). Its Slice B adds
+:class:`EncumbranceError` and :class:`UnlistedItemError`; the remaining
+two types that plan names belong to later slices and are not added here.
+
+Slice B's remediation of 2026-09-26 adds a third, :class:`UnresolvedPriceError`.
+The plan's §6.5 did not foresee it because the plan predates CHAR-004 §4.1,
+the human-approved amendment that made price *specification* distinct from a
+price *amount*. It is recorded here as a deliberate departure from that list
+rather than an unnoticed one.
 """
 
 from __future__ import annotations
@@ -172,4 +183,141 @@ class PointAllocationError(CharacterCreationError):
     3-18.** That is the standing range limitation and raises
     :class:`AbilityScoreDomainError` — the rejected value there is a
     score, not a total (approved case H4).
+    """
+
+
+class EncumbranceError(CharacterCreationError):
+    """A CHAR-004 encumbrance derivation cannot be performed as asked.
+
+    CLUSTER-003 Slice B. Four causes, distinguished by message:
+
+    - a **capacity violation** — goods exceeding a container's stated
+      capacity. RC prints the capacity as a property of the container, so
+      it is a hard limit and the request is refused rather than silently
+      overfilled (approved case E13);
+    - the **wrong derivation for the item** — the quiver is asked for the
+      footnote ``*`` container arithmetic, which RC's footnote ``***``
+      replaces for that one item (approved case E12);
+    - a quantity of ammunition whose encumbrance **RC does not state**.
+      RC gives whole-cn conversion rates ("2 arrows equal 1 cn"), and
+      states nothing about a quantity that lands between them. The
+      operation refuses rather than rounding, because a rounded answer
+      would be a value the source does not have (AGENTS.md §3);
+    - a derivation whose inputs the approved card and RC **disagree**
+      about, which this card cannot settle for itself.
+
+    Structural violations — a non-``int``, a ``bool``, a negative count —
+    raise the plain ``ValueError`` that value objects raise, following the
+    convention :class:`CharacterCreationError` records.
+    """
+
+
+class MovementLevelError(CharacterCreationError):
+    """A movement rate was requested for a level that is not a valid level.
+
+    CHAR-005 §1.1 (amended 2026-09-25), CLUSTER-003 Slice D. Covers both the
+    structural and the domain case, because the invalid value is supplied
+    for the same parameter either way:
+
+    - **structural** — ``level`` is not an ``int``, or is a ``bool``.
+      ``bool`` is a subtype of ``int``, so static typing alone permits it
+      and ``True`` would otherwise read as level 1;
+    - **domain** — below 1, or above the applicable per-class maximum. For
+      the Mystic, whose ``MV`` table §6 indexes, that maximum is **16**
+      (approved case M40).
+
+    **Deliberately mirrors** :class:`HitPointLevelError`: one parameter, one
+    error, for exactly the reasons that docstring already records. The
+    request is rejected rather than clamped, because a clamped level would
+    silently answer for a character who does not exist.
+    """
+
+
+class MovementNotPermittedError(CharacterCreationError):
+    """A movement the rules do not permit was requested.
+
+    CHAR-005 §5 and §9, CLUSTER-003 Slice D. Three causes, distinguished by
+    message:
+
+    - **normal speed inside the combat sequence.** RC Ch. 8 p. 103 is
+      categorical: *"A character's normal speed is **never used** during
+      the combat sequence"* (approved case M21). Normal speed is feet per
+      *turn*; the combat sequence runs in rounds;
+    - **running while already engaged in combat** (case M24);
+    - **running past the 30-round limit** (case M64). §9 states the limit
+      as a maximum, not as a threshold that converts into exhaustion
+      silently part-way through a longer run.
+
+    Not in the implementation plan's §6.5 error list, which named only
+    :class:`MovementLevelError` for this card. The plan's §6.3 sketch did
+    not carry a §5 scale-boundary API at all, and these three refusals are
+    what approved cases M21, M24 and M64 require; recorded here as a
+    deliberate departure rather than an unnoticed one.
+    """
+
+
+class EquipmentLegalityError(CharacterCreationError):
+    """A character's class may not use this item.
+
+    CHAR-004 §7, CLUSTER-003 Slice C. Card §5 step 3 is explicit that a
+    selection rejects *"any item not legal for the character's class"*, and
+    this is that rejection — raised where a class-illegal item would
+    otherwise be priced or bought, never by :func:`equipment.is_legal`,
+    which answers the question rather than refusing it.
+
+    **Every message names the rule that was violated**, so a test
+    discriminates with ``pytest.raises(EquipmentLegalityError, match=...)``
+    — the idiom src/rules/exploration already uses — without one exception
+    type per class.
+
+    **This is mundane equipment legality only.** Magic-item restrictions
+    are TREAS-004's, including the Mystic's prohibition on protective
+    magical devices, and thief-skill prerequisites are CHAR-010's. CHAR-009
+    may describe any of these as class features but is explicitly *not* a
+    second implementation owner (human governance decision, 2026-09-14).
+    """
+
+
+class UnresolvedPriceError(CharacterCreationError):
+    """A concrete amount was asked of a price that does not state one.
+
+    CHAR-004 §4.1 (human-approved amendment 2026-09-26), CLUSTER-003 Slice B.
+    RC does not always print one exact price per row, and the card requires
+    the difference to stay visible rather than being flattened. Two causes,
+    distinguished by message:
+
+    - an **open-ended** price — "Clothes, extravagant" at ``50+ gp``
+      establishes a 50 gp floor and no exact price, so a caller needing a
+      purchase total must be given an explicitly resolved amount. Answering
+      the minimum would silently invent RC's missing value (approved case
+      E64). The same error rejects a resolved amount **below** the printed
+      floor (case E65);
+    - a **quantity** price asked for a count RC prints no offer for. The
+      torch is sold at 1 for 2 sp and 6 for 1 gp; RC states no price for
+      four torches, and inventing one by proration would reintroduce
+      exactly the fractional copper the approved currency primitive
+      refuses (cases E61, E62).
+
+    Distinct from :class:`UnlistedItemError`, and the distinction is not
+    cosmetic: the item *is* catalogued and its price *is* recorded — what is
+    missing is a single amount for this request.
+    """
+
+
+class UnlistedItemError(CharacterCreationError):
+    """An item outside the Chapter 4 catalogs, or allowed without its data.
+
+    CHAR-004 §8, CLUSTER-003 Slice B. RC Ch. 13 p. 147 restricts beginning
+    characters to the Chapter 4 lists unless the DM allows otherwise, and
+    requires the DM to set an allowed item's **cost, encumbrance and other
+    characteristics**. Two causes, distinguished by message:
+
+    - the name is not in the catalogs and no DM allowance was supplied
+      (approved case E56). Mounts, vehicles, ships and siege equipment are
+      refused by this path: they are printed in RC Chapter 4 but are
+      outside V1 by human decision, so they are simply not catalogued
+      (approved case E58);
+    - an allowance was supplied **without** a cost or an encumbrance
+      (approved case E57). **No default is invented** — the card is
+      explicit that none may be.
     """

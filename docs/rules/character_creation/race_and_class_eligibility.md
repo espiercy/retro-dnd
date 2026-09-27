@@ -185,7 +185,11 @@ So **no authorization can ever make a Dwarf eligible on Constitution 8, a Halfli
 
 ### A. What this card does **not** own
 
-Class special abilities (`CHAR-009`), thief skills (`CHAR-010`), Hit Dice (`CHAR-003`), saving throws (`COMBAT-004`), weapon/armor permissions (`CHAR-009`/`TREAS-004`), spell access (`MAGIC-*`), level caps and Attack Ranks (`ADV-002`), prime-requisite XP modifiers (`ADV-001`), alignment as a system (`CHAR-008`).
+Class special abilities (`CHAR-009`), thief skills (`CHAR-010`), Hit Dice (`CHAR-003`), saving throws (`COMBAT-004`), **mundane weapon/armor/shield permissions (`CHAR-004`)** and magic-item use restrictions (`TREAS-004`), spell access (`MAGIC-*`), level caps and Attack Ranks (`ADV-002`), prime-requisite XP modifiers (`ADV-001`), alignment as a system (`CHAR-008`).
+
+> **Ownership-pointer correction, 2026-09-14 (human governance decision, `CLUSTER-003` Stage-A closure).** This line previously read *"weapon/armor permissions (`CHAR-009`/`TREAS-004`)"*. Stage-A research for `CLUSTER-003` established that RC states mundane weapon and armour legality per class in the Chapter 2 class entries, and that several classes' weapon restrictions exist **only** there — so a card deciding equipment legality cannot be built without them. The human project owner has assigned canonical ownership of **mundane equipment legality** to **`CHAR-004`**; `CHAR-009` may describe such restrictions as class features but is **not** a second canonical implementation owner for the same mechanic. Magic-item-specific restrictions remain with `TREAS-004`.
+>
+> **This is a downstream ownership-reference correction only.** No `CHAR-002` mechanic, case, test, or implementation changes; this card never owned equipment legality in either reading. See `docs/rules/evidence/CLUSTER-003-remediation-pass-1.md` §4 and `docs/rules/clusters/CLUSTER-003-equipped-dungeon-movement.md` §3.1.
 
 ### B. Druid — creation eligibility only; the transition is **not** in this cluster
 

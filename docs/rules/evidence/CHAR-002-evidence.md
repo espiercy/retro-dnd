@@ -88,7 +88,8 @@ F. What is merely referenced (downstream) rather than required by this card?
 - Prime-requisite XP bonus/penalty magnitudes (Experience Bonuses and Penalties Table, p. 12) → `ADV-001`/`ADV-002`. Located here only to establish that prime requisites are *not* an eligibility gate.
 - Alignment as a system, and the Neutral requirement's meaning → `CHAR-008` (Druid's prerequisite creates a genuine cross-reference).
 - Attaining 9th level as a cleric → `ADV-002`.
-- Class special abilities, weapons/armor permissions, spell access, saving throws, level caps → `CHAR-009`, `CHAR-010`, `COMBAT-*`, `MAGIC-*`, `ADV-002`.
+- Class special abilities, spell access, saving throws, level caps → `CHAR-009`, `CHAR-010`, `COMBAT-*`, `MAGIC-*`, `ADV-002`.
+- **Mundane weapon/armor/shield permissions → `CHAR-004`** (magic-item use restrictions → `TREAS-004`). *Ownership-pointer correction, 2026-09-14: this bullet previously routed weapon/armor permissions to `CHAR-009`. Corrected by human governance decision at `CLUSTER-003` Stage-A closure; see `docs/rules/evidence/CLUSTER-003-remediation-pass-1.md` §4. **No `CHAR-002` finding, conclusion, or mechanic changes** — this packet excluded the subject in either reading.*
 - Hit Dice by class → `CHAR-003` (see `CHAR-003-evidence.md`).
 
 ## 7. Whole-Source Cross-Reference Pass

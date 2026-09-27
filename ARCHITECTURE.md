@@ -498,6 +498,17 @@ historical-rules implementation
 
 This does not authorize or select another cluster; subsequent historical-rules work must independently satisfy the cluster workflow and governance gates above, exactly as before. §15.1 and §15.2 remain **readiness** gates — §15.2 step 4 records that implementation readiness was re-approved on 2026-09-12, which is not itself the completion event; this paragraph is. The general Pre-Code Development Gate (§16) and the per-cluster Rules Baseline Migration Gate requirement are unaffected and remain active project-wide.
 
+**Status update (2026-09-24) — `CLUSTER-003` steps (2)–(3) satisfied; step (4) NOT given.**
+
+- **Step 1 — Rules Cyclopedia V1 inventory:** `COMPLETE / APPROVED` (unchanged from 2026-08-16, above).
+- **Step 2 — `CLUSTER-003` boundary:** `COMPLETE / APPROVED`, human-re-approved 2026-09-14. Boundary: `CHAR-004` (Starting Equipment & Expedition Preparation) + `CHAR-005` (Encumbrance & Movement Rate) + `EXP-003` (Dungeon Movement) — see `docs/rules/clusters/CLUSTER-003-equipped-dungeon-movement.md`. `CHAR-006`, `CHAR-008`, `CHAR-009` and `EXP-010` are explicitly **outside** the boundary, and the boundary-reopen condition raised on 2026-09-13 was resolved by a narrow ownership correction rather than by adding a card.
+- **Step 3 — required Rule Cards:** `COMPLETE`. All three `APPROVED`, human-approved 2026-09-24. The cluster carries five Simulator Rulings (`SR-6`–`SR-10`, continuing the project sequence from `CLUSTER-002`'s `SR-1`–`SR-5`); two further determinations — running speed and exact fractional Mystic encounter movement — are **`Rules Cyclopedia Explicit` interpretation plus necessary consequence and are expressly not rulings**.
+- **Step 4 — implementation readiness:** **NOT (RE-)APPROVED.** No authoritative implementation plan exists for `CLUSTER-003`, and none was drafted: drafting one is not a required artifact of this gate (`docs/technical/CLUSTER-003_PRE_CODE_GATE.md` §1.2).
+
+**`CLUSTER-003` PRE-CODE GATE: `PASS` — 2026-09-24.** The per-cluster readiness assessment against §15.1's five criteria and this section's steps 1–3 is recorded at `docs/technical/CLUSTER-003_PRE_CODE_GATE.md`: **no blocking defects**, three non-blocking implementation cautions. **This `PASS` is a readiness finding, not an authorization.**
+
+**`CLUSTER-003` HISTORICAL-RULES IMPLEMENTATION: `NOT AUTHORIZED`.** Step (4) above is outstanding and is a human act. The governance distinction recorded for `CLUSTER-001` and `CLUSTER-002` applies unchanged: clearing steps for one cluster states nothing about any other, and §16's general Pre-Code Development Gate — already `CLEARED` project-wide — is neither re-performed nor weakened by this entry.
+
 ## 16. Pre-Code Development Gate
 
 Production code must not begin — including Issue 1 (§15) — until a human has reviewed and approved each of the following foundational items:

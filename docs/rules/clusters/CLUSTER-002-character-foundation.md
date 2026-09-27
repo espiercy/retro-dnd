@@ -275,8 +275,10 @@ CLUSTER-002 — Character Foundation              (boundary APPROVED — this do
         ↓
 later: equipment / encumbrance / movement capability
         ↓
-EXP-003 — Dungeon Movement, Mapping & Special Terrain
+EXP-003 — Dungeon Movement
 ```
+
+> *Roadmap-reference update, 2026-09-14: `EXP-003` was renamed from "Dungeon Movement, Mapping & Special Terrain" to **"Dungeon Movement"** by human governance decision at `CLUSTER-003` Stage-A closure. This is a forward reference only; nothing in `CLUSTER-002` changes.*
 
 **Everything after `CLUSTER-002` is provisional.** No future cluster number,
 name, or boundary is formalized by this document. `EXP-003` remains a
