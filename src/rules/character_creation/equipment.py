@@ -5,11 +5,16 @@ See docs/rules/character_creation/starting_equipment_and_expedition_preparation.
 and docs/technical/CLUSTER-003_IMPLEMENTATION_PLAN.md §6.2 and §10 (Slice B)
 for the approved implementation contract this module implements.
 
-**Slice B only.** This module currently owns starting money, the V1 mundane
-equipment catalogs, and the derived-encumbrance cases of card §6.2. **Per-class
-equipment legality and the Druid +50% wooden-weapon surcharge are card §5 and
-§7 and are Slice C**; no symbol here decides either, and a guard test asserts
-their absence.
+**Slices B and C.** This module owns starting money, the V1 mundane equipment
+catalogs, the derived-encumbrance cases of card §6.2, and — added by Slice C —
+per-class mundane equipment legality and the Druid +50% wooden-weapon
+surcharge (card §5 and §7).
+
+**CHAR-004 is the canonical owner of equipment-facing class restrictions**, by
+human governance decision of 2026-09-14: CHAR-009 may describe them as class
+features and must not become a second implementation owner. That is also why
+``character_class.py`` carries identity and nothing else — the data *about*
+classes lives here, as it does for CHAR-002 and CHAR-003.
 
 WHAT THIS MODULE SUPPLIES, AND WHAT IT REFUSES TO
 --------------------------------------------------
@@ -56,10 +61,24 @@ The blowgun's normal load, formerly refused because the approved card and RC
 disagreed, is ``5`` darts: the card's ``3`` was a transcription defect,
 corrected by the same amendment.
 
+TWO §7 BOUNDARIES NOT DECIDED HERE
+----------------------------------
+Slice C implements card §7 as written. Two questions the card does not reach
+were found while implementing it, and **neither is answered**: no approved
+case covers either, and deciding them would be the silent rules decision
+AGENTS.md §3 forbids.
+
+- **A thief with a large net.** RC p. 65 makes a net's handedness depend on
+  its size, but card §7's thief prohibition is stated over the printed ``2H``
+  marker, which no net row carries. :func:`is_legal` therefore permits it.
+- **A dual-role item used as a weapon.** The torch is printed in both the
+  Weapons Table and the Adventuring Gear Table, and is one commodity here.
+  It is catalogued as ``GEAR``, so §7's weapon restrictions do not reach it
+  and every class may carry one — plainly right for a light source, and
+  unaddressed by the card for a torch swung in anger.
+
 This module does not, and must not, carry:
 
-- per-class legality, weapon predicates or the Druid surcharge — card §5/§7,
-  Slice C;
 - movement, encumbrance bands or a total carried load — CHAR-005;
 - dungeon movement or turn accounting — EXP-003 and landed EXP-002;
 - mounts, vehicles, ships or siege equipment (card §B, approved case E58) or
@@ -80,8 +99,10 @@ from types import MappingProxyType
 from typing import Final
 
 from rng import RNG
+from rules.character_creation.character_class import CharacterClass
 from rules.character_creation.errors import (
     EncumbranceError,
+    EquipmentLegalityError,
     UnlistedItemError,
     UnresolvedPriceError,
 )
@@ -91,6 +112,8 @@ __all__ = [
     "ADVENTURING_GEAR",
     "AMMUNITION",
     "ARMOR",
+    "DRUID_WOODEN_WEAPON_SURCHARGE",
+    "HALFLING_MAXIMUM_NET_FEET",
     "FILLED_QUIVER_ENCUMBRANCE_CN",
     "IRON_SPIKE",
     "NET_COST_PER_SQUARE_FOOT",
@@ -107,6 +130,7 @@ __all__ = [
     "Item",
     "ItemCategory",
     "KitEntry",
+    "Material",
     "OpenEndedPrice",
     "Price",
     "PurchaseOffer",
@@ -116,10 +140,14 @@ __all__ = [
     "ammunition_encumbrance",
     "catalog_item",
     "clothing_encumbrance",
+    "commissioned",
     "filled_container_encumbrance",
     "free_starting_kit",
+    "is_legal",
+    "made_for",
     "missile_weapon_encumbrance",
     "net",
+    "purchase_cost",
     "resolve_price",
     "selection_cost",
     "starting_gold",
@@ -350,6 +378,22 @@ class Item:
     ``capacity_cn`` is the container capacity RC prints, and is ``None`` for
     every item that prints none. It is **not** a carrying capacity for a
     character: RC gives none, and encumbrance bands are CHAR-005's.
+
+    Three fields are ``None`` on every printed row and set only by the
+    derived-item constructors, because RC states them only for particular
+    items rather than tabulating them:
+
+    - ``dimension_feet`` — the size RC prices a row by, for the two rows it
+      defines by dimension (:func:`net`, :func:`whip`). Card §7 needs it for
+      one rule: a halfling cannot use a net larger than 6' x 6';
+    - ``material`` — the commissioned material RC names for the druid
+      (:func:`commissioned`);
+    - ``made_for_race`` — the race a suit of armour was made for, which RC
+      says armour *"is normally"* made for (:func:`made_for`).
+
+    **They are not an equipment-state system.** Each exists because card §7
+    states a rule that turns on it, and nothing sets them except the
+    constructor that owns them.
     """
 
     name: str
@@ -359,6 +403,9 @@ class Item:
     size: WeaponSize | None = None
     traits: frozenset[WeaponTrait] = field(default_factory=frozenset)
     capacity_cn: int | None = None
+    dimension_feet: int | None = None
+    material: Material | None = None
+    made_for_race: CharacterClass | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.name, str) or not self.name:
@@ -369,6 +416,11 @@ class Item:
             raise ValueError(f"encumbrance_cn must not be negative, got {self.encumbrance_cn!r}")
         if self.capacity_cn is not None and _require_int(self.capacity_cn, "capacity_cn") <= 0:
             raise ValueError(f"capacity_cn must be positive, got {self.capacity_cn!r}")
+        if (
+            self.dimension_feet is not None
+            and _require_int(self.dimension_feet, "dimension_feet") <= 0
+        ):
+            raise ValueError(f"dimension_feet must be positive, got {self.dimension_feet!r}")
 
 
 @dataclass(frozen=True, slots=True)
@@ -1043,6 +1095,7 @@ def net(side_feet: int) -> Item:
         price=FixedPrice(NET_COST_PER_SQUARE_FOOT * square_feet),
         encumbrance_cn=NET_ENCUMBRANCE_CN_PER_SQUARE_FOOT * square_feet,
         traits=frozenset({WeaponTrait.SPECIAL_FEATURES, WeaponTrait.THROWN, _W}),
+        dimension_feet=side_feet,
     )
 
 
@@ -1062,6 +1115,7 @@ def whip(length_feet: int) -> Item:
         encumbrance_cn=WHIP_ENCUMBRANCE_CN_PER_FOOT * length_feet,
         size=WeaponSize.MEDIUM,
         traits=frozenset({WeaponTrait.SPECIAL_FEATURES, _W}),
+        dimension_feet=length_feet,
     )
 
 
@@ -1164,3 +1218,312 @@ def selection_cost(items: Iterable[Item]) -> Coin:
             raise ValueError(f"every selected item must be an Item, got {item!r}")
         total = total + item.price.cost_of(1)
     return total
+
+
+# --- Per-class mundane equipment legality (card §7) -------------------------
+#
+# Slice C. CHAR-004 is the canonical owner of equipment-facing class
+# restrictions (human governance decision, 2026-09-14): CHAR-009 may describe
+# them as class features and must not be a second implementation owner.
+#
+# One table and one predicate, not a per-class type hierarchy — implementation
+# plan §5.5, which records that a class-rule architecture invented for the
+# Druid and Mystic exceptions is exactly the over-abstraction §4.3 forbids.
+
+
+class Material(Enum):
+    """A commissioned material RC names for the Druid (card §7).
+
+    Closed at two members because card §7 names two: the druid's weapons
+    must have **no metal parts**, and the one shield permitted is made of
+    **wood and leather**. This is not a materials system — no other class,
+    item or rule consults it.
+    """
+
+    ALL_WOODEN = 1
+    WOOD_AND_LEATHER = 2
+
+
+def commissioned(item: Item, material: Material) -> Item:
+    """``item`` commissioned in a particular material (card §7).
+
+    RC's Weapons Table note ``c`` extends the cleric's weapons to druids
+    *"if they can find a form of this weapon with no metal or stone
+    parts"* — a **form of the weapon**, not the catalog row, which is why
+    this produces a distinct item rather than a flag on the printed one.
+
+    Only weapons and shields can be commissioned, because those are the two
+    card §7 names.
+    """
+    if not isinstance(item, Item):
+        raise ValueError(f"item must be an Item, got {item!r}")
+    if not isinstance(material, Material):
+        raise ValueError(f"material must be a Material, got {material!r}")
+    if item.category not in (ItemCategory.WEAPON, ItemCategory.SHIELD):
+        raise EquipmentLegalityError(
+            f"CHAR-004 §7 names a commissioned material only for weapons and "
+            f"shields, and {item.name!r} is neither"
+        )
+    return replace(item, material=material)
+
+
+def made_for(item: Item, race: CharacterClass) -> Item:
+    """A suit of armour or a shield made for a particular race (card §7).
+
+    RC p. 67: *"Armor is normally made for a specific race"*, and card §7
+    records the consequence — a halfling's armour and shields **must be made
+    for halflings**, because *"even dwarf-sized armor is too large for
+    them"*. A printed catalog row states no race, so the fit is carried by
+    a derived item rather than assumed.
+
+    ``race`` reuses :class:`CharacterClass`, which is how RC's demihuman
+    races appear in this ruleset. It expresses who the armour was made for,
+    and decides nothing about who may wear it — that is :func:`is_legal`.
+    """
+    if not isinstance(item, Item):
+        raise ValueError(f"item must be an Item, got {item!r}")
+    if not isinstance(race, CharacterClass):
+        raise ValueError(f"race must be a CharacterClass, got {race!r}")
+    if item.category not in (ItemCategory.ARMOR, ItemCategory.SHIELD):
+        raise EquipmentLegalityError(
+            f"RC states a racial fit for armour and shields, and {item.name!r} is neither"
+        )
+    return replace(item, made_for_race=race)
+
+
+_ANY_ARMOR: Final[frozenset[CharacterClass]] = frozenset(
+    {
+        CharacterClass.CLERIC,
+        CharacterClass.FIGHTER,
+        CharacterClass.DWARF,
+        CharacterClass.ELF,
+    }
+)
+"""The classes card §7 permits any armour and a shield, with no further test.
+
+The halfling is **not** here, although card §7 also permits it "any armour":
+its armour must additionally be halfling-made, which is a second condition
+rather than a different permission.
+"""
+
+_NO_ARMOR: Final[frozenset[CharacterClass]] = frozenset(
+    {CharacterClass.MAGIC_USER, CharacterClass.MYSTIC}
+)
+"""The classes card §7 permits no armour and no shield.
+
+The Mystic's is absolute — *"None, ever"*, at any level (approved case E48).
+"""
+
+_ANY_WEAPON: Final[frozenset[CharacterClass]] = frozenset(
+    {
+        CharacterClass.FIGHTER,
+        CharacterClass.ELF,
+        CharacterClass.MYSTIC,
+    }
+)
+"""The classes card §7 permits any weapon.
+
+The Mystic is here because card §7 records *"trained in all weapons"*; its
+armour prohibition is separate and absolute.
+"""
+
+_DWARF_BOWS: Final[frozenset[str]] = frozenset({"Bow, Short", "Crossbow, Lt", "Crossbow, Hvy"})
+"""The missile weapons card §7 permits a dwarf: *"short bows and crossbows"*.
+
+Longbows are forbidden (approved case E43). A stated set rather than a size
+test, because RC forbids the long bow by name and not by size class.
+"""
+
+_HALFLING_BOWS: Final[frozenset[str]] = frozenset({"Bow, Short", "Crossbow, Lt"})
+"""The missile weapons card §7 permits a halfling: *"short bow; light crossbow"*."""
+
+HALFLING_MAXIMUM_NET_FEET: Final = 6
+"""A halfling cannot use a net larger than 6' x 6' (card §7; RC p. 65)."""
+
+_CLERIC_FORBIDDEN_AMMUNITION: Final[frozenset[str]] = frozenset(
+    {"Arrow", "Silver-tipped arrow", "Quarrel", "Silver-tipped quarrel"}
+)
+"""The ammunition card §7 names in the cleric's edged-or-pointed prohibition.
+
+*"No edged or pointed weapons — this includes **arrows and quarrels**"*
+(approved case E39). Sling stones and pellets are neither and are not
+refused. **Blowgun darts are not named**, and nothing is inferred about
+them: a cleric may not use a blowgun at all, since neither Blowgun row
+carries note ``c``, so no approved behaviour turns on it.
+"""
+
+_DAGGERS: Final[frozenset[str]] = frozenset({"Dagger, Normal", "Dagger, Silver"})
+"""The dagger rows a Magic-User may use unconditionally (``SR-7``).
+
+Both printed rows are daggers, and ``SR-7`` reaches *"the dagger"* rather
+than one row. RC Ch. 2 p. 19 states the dagger as the baseline weapon
+without qualification; Ch. 4's note ``w``, insofar as it makes the dagger
+itself discretionary, is the compilation defect ``SR-7`` records.
+"""
+
+
+def _armour_is_legal(cls: CharacterClass, item: Item) -> bool:
+    """Card §7's armour and shield column."""
+    is_shield = item.category is ItemCategory.SHIELD
+    if cls in _NO_ARMOR:
+        return False
+    if cls is CharacterClass.DRUID:
+        if is_shield:
+            return item.material is Material.WOOD_AND_LEATHER
+        return item.name == "Leather Armor"
+    if cls is CharacterClass.THIEF:
+        return not is_shield and item.name == "Leather Armor"
+    if cls is CharacterClass.HALFLING:
+        # "Any armour; shield permitted — must be made for halflings;
+        # dwarf-sized armour is too large" (approved cases E31, E46). A
+        # printed row states no race, so its fit is not assumed.
+        return item.made_for_race is CharacterClass.HALFLING
+    return cls in _ANY_ARMOR
+
+
+def _weapon_is_legal(cls: CharacterClass, item: Item, *, expanded_list: bool) -> bool:
+    """Card §7's weapon column."""
+    if cls in _ANY_WEAPON:
+        return True
+    missile = WeaponTrait.MISSILE_ONLY in item.traits
+
+    if cls is CharacterClass.CLERIC:
+        # RC's own note c — "Clerics may use this weapon" — is the printed
+        # form of card §7's "no edged or pointed weapons".
+        return WeaponTrait.CLERIC_PERMITTED in item.traits
+
+    if cls is CharacterClass.DRUID:
+        # Note c's second sentence: druids may use the same weapons "if they
+        # can find a form of this weapon with no metal or stone parts". RC
+        # tabulates no per-row metal content, so a printed row is not assumed
+        # to be such a form; a commissioned one is (approved case E49).
+        return (
+            WeaponTrait.CLERIC_PERMITTED in item.traits
+            and item.material is Material.ALL_WOODEN
+        )
+
+    if cls is CharacterClass.MAGIC_USER:
+        # SR-7: the dagger is unconditional and must not depend on the flag
+        # in either direction (case E26). The expanded list is exactly RC's
+        # note w minus the daggers, and is policy-gated (cases E36, E37).
+        if item.name in _DAGGERS:
+            return True
+        return expanded_list and WeaponTrait.MAGIC_USER_DISCRETIONARY in item.traits
+
+    if cls is CharacterClass.THIEF:
+        # "Any missile weapon; any one-handed melee weapon. Two-handed
+        # weapons prohibited" (approved case E40). Read from the printed 2H
+        # marker, so a bastard sword is legal on its one-handed row and not
+        # on its two-handed one.
+        #
+        # NOT DECIDED HERE: RC p. 65 makes a net's handedness depend on its
+        # size — "Nets 6' x 6' or smaller may be used one-handed. Larger
+        # nets require two hands" — but card §7 does not carry that into the
+        # thief's two-handed prohibition, no printed net row carries a 2H
+        # marker, and no approved case covers a thief with a large net.
+        # Nothing is inferred; see the module docstring.
+        return missile or WeaponTrait.TWO_HANDED not in item.traits
+
+    if cls is CharacterClass.DWARF:
+        if missile:
+            return item.name in _DWARF_BOWS
+        return item.size in (WeaponSize.SMALL, WeaponSize.MEDIUM)
+
+    # Halfling: "Any Small melee weapon; short bow; light crossbow", and no
+    # net larger than 6' x 6' (approved cases E45, E47).
+    if item.name.startswith("Net, "):
+        return item.dimension_feet is not None and item.dimension_feet <= (
+            HALFLING_MAXIMUM_NET_FEET
+        )
+    if missile:
+        return item.name in _HALFLING_BOWS
+    return item.size is WeaponSize.SMALL
+
+
+def is_legal(
+    cls: CharacterClass,
+    item: Item | Ammunition,
+    *,
+    magic_user_expanded_list: bool = False,
+) -> bool:
+    """Whether ``cls`` may use ``item`` — card §7, all nine classes.
+
+    One predicate over one table, per implementation plan §5.5. It answers
+    the question and never raises on a "no": card §5 step 3 rejects an
+    illegal item at the point of purchase, which is :func:`purchase_cost`.
+
+    ``magic_user_expanded_list`` is the simulation policy card §1 declares,
+    defaulting **OFF**. It gates only the Magic-User's optional list —
+    staff, blowgun, flaming oil, holy water, net, thrown rock, sling, whip.
+    **The dagger is unconditional** and is unaffected by the flag in either
+    direction (``SR-7``, approved case E26).
+
+    Ammunition is accepted because card §7's cleric prohibition names it:
+    arrows and quarrels are edged or pointed and are refused (case E39).
+
+    Gear, containers and clothing are legal for every class. Card §7
+    restricts weapons, armour and shields, and inventing a restriction it
+    does not state would be the silent rules decision AGENTS.md §3 forbids.
+    """
+    if not isinstance(cls, CharacterClass):
+        raise ValueError(f"cls must be a CharacterClass, got {cls!r}")
+    if not isinstance(magic_user_expanded_list, bool):
+        raise ValueError(
+            f"magic_user_expanded_list must be a bool, got {magic_user_expanded_list!r}"
+        )
+    if isinstance(item, Ammunition):
+        return not (cls is CharacterClass.CLERIC and item.name in _CLERIC_FORBIDDEN_AMMUNITION)
+    if not isinstance(item, Item):
+        raise ValueError(f"item must be an Item or an Ammunition, got {item!r}")
+    if item.category in (ItemCategory.ARMOR, ItemCategory.SHIELD):
+        return _armour_is_legal(cls, item)
+    if item.category is ItemCategory.WEAPON:
+        return _weapon_is_legal(cls, item, expanded_list=magic_user_expanded_list)
+    return True
+
+
+DRUID_WOODEN_WEAPON_SURCHARGE: Final[tuple[int, int]] = (3, 2)
+"""The Druid's ``+50%`` for a commissioned all-wooden weapon, as an exact ratio.
+
+Card §7: *"**+50%** over the counterpart's printed cost for commissioned
+all-wooden versions; otherwise identical"*. Expressed as ``3/2`` rather than
+``1.5`` so it is applied by :meth:`Coin.scaled`, which is exact or refuses —
+a 3 gp club becomes ``300 x 3 / 2 = 450 cp``, which is ``4.5 gp`` with no
+float and no rounding anywhere (approved case E51).
+"""
+
+
+def purchase_cost(
+    cls: CharacterClass,
+    item: Item,
+    *,
+    magic_user_expanded_list: bool = False,
+) -> Coin:
+    """What ``cls`` pays for ``item`` — card §5 steps 3 and 6, and §7.
+
+    Card §5 step 3 rejects *"any item not legal for the character's class"*
+    before cost is summed, so an illegal item is not priced: this raises
+    :class:`EquipmentLegalityError` rather than returning a number a caller
+    might spend.
+
+    The **Druid's +50%** applies to a commissioned all-wooden weapon and
+    nothing else. It is class-specific: the same commissioned club costs a
+    non-druid its printed price (approved cases E51, E52). Armour, shields
+    and gear carry no surcharge, because card §7 states the pricing rule for
+    *"commissioned all-wooden versions"* of weapons only.
+    """
+    if not isinstance(item, Item):
+        raise ValueError(f"item must be an Item, got {item!r}")
+    if not is_legal(cls, item, magic_user_expanded_list=magic_user_expanded_list):
+        raise EquipmentLegalityError(
+            f"CHAR-004 §7 does not permit a {cls.name.lower().replace('_', '-')} "
+            f"to use {item.name!r}, so it cannot be bought by one"
+        )
+    printed = item.price.cost_of(1)
+    if (
+        cls is CharacterClass.DRUID
+        and item.category is ItemCategory.WEAPON
+        and item.material is Material.ALL_WOODEN
+    ):
+        return printed.scaled(*DRUID_WOODEN_WEAPON_SURCHARGE)
+    return printed

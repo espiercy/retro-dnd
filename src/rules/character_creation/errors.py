@@ -212,6 +212,28 @@ class EncumbranceError(CharacterCreationError):
     """
 
 
+class EquipmentLegalityError(CharacterCreationError):
+    """A character's class may not use this item.
+
+    CHAR-004 §7, CLUSTER-003 Slice C. Card §5 step 3 is explicit that a
+    selection rejects *"any item not legal for the character's class"*, and
+    this is that rejection — raised where a class-illegal item would
+    otherwise be priced or bought, never by :func:`equipment.is_legal`,
+    which answers the question rather than refusing it.
+
+    **Every message names the rule that was violated**, so a test
+    discriminates with ``pytest.raises(EquipmentLegalityError, match=...)``
+    — the idiom src/rules/exploration already uses — without one exception
+    type per class.
+
+    **This is mundane equipment legality only.** Magic-item restrictions
+    are TREAS-004's, including the Mystic's prohibition on protective
+    magical devices, and thief-skill prerequisites are CHAR-010's. CHAR-009
+    may describe any of these as class features but is explicitly *not* a
+    second implementation owner (human governance decision, 2026-09-14).
+    """
+
+
 class UnresolvedPriceError(CharacterCreationError):
     """A concrete amount was asked of a price that does not state one.
 

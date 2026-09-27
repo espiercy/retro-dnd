@@ -20,3 +20,4 @@ Durable per-issue implementation records for the Retro D&D Simulator project (`D
 | [ISSUE-014](ISSUE-014-cluster-002-character-foundation.md) | CLUSTER-002 Character Foundation — Cluster Completion | Complete — implementation `VERIFIED`, merged 2026-09-13 |
 | [ISSUE-015](ISSUE-015-shared-currency-primitive.md) | Shared Currency Primitive (CLUSTER-003 Slice A) | Complete — accepted 2026-09-25, not merged |
 | [ISSUE-016](ISSUE-016-char-004-catalogs-money-encumbrance.md) | CHAR-004 Catalogs, Starting Money & Derived Encumbrance (CLUSTER-003 Slice B) | Complete — accepted 2026-09-27, not merged |
+| [ISSUE-017](ISSUE-017-char-004-class-legality-and-druid-pricing.md) | CHAR-004 Class Legality & Druid Pricing (CLUSTER-003 Slice C) | Complete — awaiting human review, not merged |

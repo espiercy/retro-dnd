@@ -22,11 +22,13 @@ import pytest
 
 from rng import RollResult, ScriptedRNG
 from rules.character_creation import equipment
+from rules.character_creation.character_class import CharacterClass
 from rules.character_creation.equipment import (
     ADVENTURING_GEAR,
     AMMUNITION,
     ARMOR,
     FILLED_QUIVER_ENCUMBRANCE_CN,
+    HALFLING_MAXIMUM_NET_FEET,
     IRON_SPIKE,
     STANDARD_LOAD_SHOTS,
     TORCH,
@@ -37,6 +39,7 @@ from rules.character_creation.equipment import (
     Item,
     ItemCategory,
     KitEntry,
+    Material,
     OpenEndedPrice,
     PurchaseOffer,
     QuantityPrice,
@@ -45,10 +48,14 @@ from rules.character_creation.equipment import (
     ammunition_encumbrance,
     catalog_item,
     clothing_encumbrance,
+    commissioned,
     filled_container_encumbrance,
     free_starting_kit,
+    is_legal,
+    made_for,
     missile_weapon_encumbrance,
     net,
+    purchase_cost,
     resolve_price,
     selection_cost,
     starting_gold,
@@ -58,6 +65,7 @@ from rules.character_creation.equipment import (
 )
 from rules.character_creation.errors import (
     EncumbranceError,
+    EquipmentLegalityError,
     UnlistedItemError,
     UnresolvedPriceError,
 )
@@ -562,6 +570,293 @@ def test_e66_blowgun_load_arithmetic_is_coherent(
     assert missile_weapon_encumbrance(WEAPONS[weapon], dart, 10) == printed_cn + 1
 
 
+# --- Class legality, permitted: E26-E33 ------------------------------------
+# Slice C. CHAR-004 §7, all nine classes, both directions.
+
+CC = CharacterClass
+LEATHER = ARMOR["Leather Armor"]
+CHAIN = ARMOR["Chain Mail"]
+PLATE = ARMOR["Plate Mail"]
+SHIELD = ARMOR["Shield"]
+
+
+def test_e26_a_magic_user_may_always_buy_a_dagger() -> None:
+    """E26 — Magic-User buys a dagger: LEGAL unconditionally (SR-7).
+
+    Must not depend on any policy flag, in either direction.
+    """
+    dagger = WEAPONS["Dagger, Normal"]
+    assert is_legal(CC.MAGIC_USER, dagger, magic_user_expanded_list=False)
+    assert is_legal(CC.MAGIC_USER, dagger, magic_user_expanded_list=True)
+    assert is_legal(CC.MAGIC_USER, dagger)
+    # A silver dagger is a dagger; SR-7 reaches "the dagger", not one row.
+    assert is_legal(CC.MAGIC_USER, WEAPONS["Dagger, Silver"])
+
+
+def test_e27_a_cleric_may_buy_a_mace() -> None:
+    """E27 — Cleric buys a mace: LEGAL."""
+    assert is_legal(CC.CLERIC, WEAPONS["Mace"])
+
+
+def test_e28_a_fighter_may_buy_a_two_handed_sword_and_plate_mail() -> None:
+    """E28 — Fighter buys a two-handed sword and plate mail: LEGAL."""
+    assert is_legal(CC.FIGHTER, WEAPONS["Sword, Two-Handed"])
+    assert is_legal(CC.FIGHTER, PLATE)
+
+
+def test_e29_an_elf_may_buy_plate_mail_and_a_long_bow() -> None:
+    """E29 — Elf buys plate mail and a long bow: LEGAL."""
+    assert is_legal(CC.ELF, PLATE)
+    assert is_legal(CC.ELF, WEAPONS["Bow, Long"])
+
+
+def test_e30_a_dwarf_may_buy_a_short_bow() -> None:
+    """E30 — Dwarf buys a short bow: LEGAL."""
+    assert is_legal(CC.DWARF, WEAPONS["Bow, Short"])
+
+
+def test_e31_a_halfling_may_buy_a_short_bow_and_halfling_made_chain_mail() -> None:
+    """E31 — Halfling buys a short bow and halfling-made chain mail: LEGAL."""
+    assert is_legal(CC.HALFLING, WEAPONS["Bow, Short"])
+    assert is_legal(CC.HALFLING, made_for(CHAIN, CC.HALFLING))
+
+
+def test_e32_a_thief_may_buy_a_sling_and_leather_armour() -> None:
+    """E32 — Thief buys a sling and leather armour: LEGAL."""
+    assert is_legal(CC.THIEF, WEAPONS["Sling"])
+    assert is_legal(CC.THIEF, LEATHER)
+
+
+def test_e33_a_druid_may_buy_leather_and_a_wood_and_leather_shield() -> None:
+    """E33 — Druid buys leather armour and a wood-and-leather shield: LEGAL."""
+    assert is_legal(CC.DRUID, LEATHER)
+    assert is_legal(CC.DRUID, commissioned(SHIELD, Material.WOOD_AND_LEATHER))
+
+
+# --- Class legality, refused: E34-E50 --------------------------------------
+
+
+def test_e34_a_magic_user_may_not_buy_chain_mail() -> None:
+    """E34 — Magic-User buys chain mail: REFUSED."""
+    assert not is_legal(CC.MAGIC_USER, CHAIN)
+
+
+def test_e35_a_magic_user_may_not_buy_a_shield() -> None:
+    """E35 — Magic-User buys a shield: REFUSED."""
+    assert not is_legal(CC.MAGIC_USER, SHIELD)
+
+
+def test_e36_a_magic_user_may_not_buy_a_staff_with_the_expanded_list_off() -> None:
+    """E36 — Magic-User buys a staff with the expanded list OFF: REFUSED."""
+    assert not is_legal(CC.MAGIC_USER, WEAPONS["Staff"], magic_user_expanded_list=False)
+    # OFF is the declared default (card §1).
+    assert not is_legal(CC.MAGIC_USER, WEAPONS["Staff"])
+
+
+def test_e37_a_magic_user_may_buy_a_staff_with_the_expanded_list_on() -> None:
+    """E37 — with the expanded list ON: LEGAL, and E26 is unaffected either way.
+
+    E26 + E36 + E37 together prove SR-7: the dagger is legal with the flag
+    both ON and OFF, while a staff is legal only with it ON.
+    """
+    staff = WEAPONS["Staff"]
+    dagger = WEAPONS["Dagger, Normal"]
+    assert is_legal(CC.MAGIC_USER, staff, magic_user_expanded_list=True)
+    assert not is_legal(CC.MAGIC_USER, staff, magic_user_expanded_list=False)
+    assert is_legal(CC.MAGIC_USER, dagger, magic_user_expanded_list=True)
+    assert is_legal(CC.MAGIC_USER, dagger, magic_user_expanded_list=False)
+
+
+@pytest.mark.parametrize(
+    "weapon",
+    ["Staff", "Blowgun, up to 2'", "Oil, Burning", "Holy Water", "Rock, Thrown", "Sling"],
+)
+def test_e37_the_expanded_list_is_exactly_rcs_note_w_minus_the_daggers(weapon: str) -> None:
+    """E37 — the policy-gated set is card §7's list, read from RC's note w."""
+    assert not is_legal(CC.MAGIC_USER, WEAPONS[weapon], magic_user_expanded_list=False)
+    assert is_legal(CC.MAGIC_USER, WEAPONS[weapon], magic_user_expanded_list=True)
+
+
+def test_e37_the_expanded_list_also_covers_the_net_and_the_whip() -> None:
+    """E37 — card §7 names the net and the whip, which are built by dimension."""
+    for item in (net(6), whip(10)):
+        assert not is_legal(CC.MAGIC_USER, item, magic_user_expanded_list=False)
+        assert is_legal(CC.MAGIC_USER, item, magic_user_expanded_list=True)
+
+
+def test_e38_a_cleric_may_not_buy_a_sword() -> None:
+    """E38 — Cleric buys a sword: REFUSED — edged."""
+    assert not is_legal(CC.CLERIC, WEAPONS["Sword, Normal"])
+    assert WeaponTrait.CLERIC_PERMITTED not in WEAPONS["Sword, Normal"].traits
+
+
+@pytest.mark.parametrize(
+    "ammunition",
+    ["Arrow", "Silver-tipped arrow", "Quarrel", "Silver-tipped quarrel"],
+)
+def test_e39_a_cleric_may_not_buy_arrows_or_quarrels(ammunition: str) -> None:
+    """E39 — Cleric buys arrows: REFUSED. RC names arrows and quarrels explicitly."""
+    assert not is_legal(CC.CLERIC, AMMUNITION[ammunition])
+
+
+@pytest.mark.parametrize("ammunition", ["Stone or lead pellet", "Silver pellet"])
+def test_e39_sling_ammunition_is_neither_edged_nor_pointed(ammunition: str) -> None:
+    """E39, other side — card §7 names arrows and quarrels, and nothing else."""
+    assert is_legal(CC.CLERIC, AMMUNITION[ammunition])
+
+
+def test_e40_a_thief_may_not_buy_a_two_handed_sword() -> None:
+    """E40 — Thief buys a two-handed sword: REFUSED."""
+    assert not is_legal(CC.THIEF, WEAPONS["Sword, Two-Handed"])
+    # A one-handed melee weapon is permitted, which is what makes E40 a rule
+    # about two-handedness rather than about swords.
+    assert is_legal(CC.THIEF, WEAPONS["Sword, Short"])
+
+
+def test_e41_a_thief_may_not_buy_chain_mail() -> None:
+    """E41 — Thief buys chain mail: REFUSED — leather only."""
+    assert not is_legal(CC.THIEF, CHAIN)
+
+
+def test_e42_a_thief_may_not_buy_a_shield() -> None:
+    """E42 — Thief buys a shield: REFUSED."""
+    assert not is_legal(CC.THIEF, SHIELD)
+
+
+def test_e43_a_dwarf_may_not_buy_a_long_bow() -> None:
+    """E43 — Dwarf buys a long bow: REFUSED."""
+    assert not is_legal(CC.DWARF, WEAPONS["Bow, Long"])
+    # Crossbows of both weights are permitted alongside the short bow.
+    assert is_legal(CC.DWARF, WEAPONS["Crossbow, Lt"])
+    assert is_legal(CC.DWARF, WEAPONS["Crossbow, Hvy"])
+
+
+def test_e44_a_dwarf_may_not_buy_a_large_melee_weapon() -> None:
+    """E44 — Dwarf buys a two-handed sword (Large): REFUSED — Small/Medium melee only."""
+    assert WEAPONS["Sword, Two-Handed"].size is WeaponSize.LARGE
+    assert not is_legal(CC.DWARF, WEAPONS["Sword, Two-Handed"])
+    assert is_legal(CC.DWARF, WEAPONS["Sword, Short"])
+    assert is_legal(CC.DWARF, WEAPONS["Mace"])
+
+
+def test_e45_a_halfling_may_not_buy_a_medium_melee_weapon() -> None:
+    """E45 — Halfling buys a Medium melee weapon: REFUSED — Small only."""
+    assert WEAPONS["Mace"].size is WeaponSize.MEDIUM
+    assert not is_legal(CC.HALFLING, WEAPONS["Mace"])
+    assert is_legal(CC.HALFLING, WEAPONS["Dagger, Normal"])
+
+
+def test_e46_a_halfling_may_not_buy_dwarf_made_chain_mail() -> None:
+    """E46 — Halfling buys dwarf-made chain mail: REFUSED — must be halfling-made."""
+    assert not is_legal(CC.HALFLING, made_for(CHAIN, CC.DWARF))
+    assert is_legal(CC.HALFLING, made_for(CHAIN, CC.HALFLING))
+
+
+def test_e47_a_halfling_may_not_use_a_net_larger_than_six_feet() -> None:
+    """E47 — Halfling buys a 9' x 9' net: REFUSED. 6' x 6' is the limit (RC p. 65)."""
+    assert HALFLING_MAXIMUM_NET_FEET == 6
+    assert not is_legal(CC.HALFLING, net(9))
+    assert is_legal(CC.HALFLING, net(6))
+    assert is_legal(CC.HALFLING, net(4))
+
+
+@pytest.mark.parametrize("armour", sorted(ARMOR))
+def test_e48_a_mystic_may_never_wear_any_armour(armour: str) -> None:
+    """E48 — Mystic buys any armour: REFUSED — never, at any level."""
+    assert not is_legal(CC.MYSTIC, ARMOR[armour])
+
+
+def test_e48_a_mystic_is_nonetheless_trained_in_all_weapons() -> None:
+    """E48, other side — card §7's weapon column for the Mystic is unrestricted."""
+    for weapon in ("Sword, Two-Handed", "Bow, Long", "Halberd", "Dagger, Normal"):
+        assert is_legal(CC.MYSTIC, WEAPONS[weapon])
+
+
+def test_e49_a_druid_may_not_buy_a_metal_headed_mace() -> None:
+    """E49 — Druid buys a metal-headed mace: REFUSED — no metal parts.
+
+    RC's note c lets a druid use a cleric's weapon "if they can find a form
+    of this weapon with no metal or stone parts". RC tabulates no per-row
+    metal content, so the printed row is not assumed to be such a form; the
+    commissioned one is.
+    """
+    mace = WEAPONS["Mace"]
+    assert WeaponTrait.CLERIC_PERMITTED in mace.traits
+    assert not is_legal(CC.DRUID, mace)
+    assert is_legal(CC.DRUID, commissioned(mace, Material.ALL_WOODEN))
+
+
+def test_e50_a_druid_may_not_buy_a_sword() -> None:
+    """E50 — Druid buys a sword: REFUSED — edged, whatever it is made of."""
+    sword = WEAPONS["Sword, Normal"]
+    assert not is_legal(CC.DRUID, sword)
+    assert not is_legal(CC.DRUID, commissioned(sword, Material.ALL_WOODEN))
+
+
+# --- Druid pricing: E51-E52 ------------------------------------------------
+
+
+def test_e51_a_druid_pays_fifty_percent_more_for_a_commissioned_wooden_club() -> None:
+    """E51 — Druid commissions an all-wooden club (printed 3 gp): 4.5 gp.
+
+    Exact, in copper: 300 cp x 3/2 = 450 cp. No float, no rounding.
+    """
+    club = commissioned(WEAPONS["Club"], Material.ALL_WOODEN)
+    assert WEAPONS["Club"].price.cost_of(1) == Coin.of(3, GP)
+    cost = purchase_cost(CC.DRUID, club)
+    assert cost == Coin(450)
+    assert cost == Coin.of(45, SP)
+    assert cost == Coin.of(3, GP).scaled(3, 2)
+
+
+def test_e52_a_non_druid_pays_the_printed_price_for_the_same_club() -> None:
+    """E52 — Non-druid buys the same club: 3 gp. The surcharge is class-specific."""
+    club = commissioned(WEAPONS["Club"], Material.ALL_WOODEN)
+    assert purchase_cost(CC.FIGHTER, club) == Coin.of(3, GP)
+    assert purchase_cost(CC.MYSTIC, club) == Coin.of(3, GP)
+
+
+def test_e52_the_surcharge_applies_only_to_a_commissioned_wooden_weapon() -> None:
+    """E51/E52 — card §7 states the surcharge for wooden weapons and nothing else."""
+    # A druid's leather armour and a wood-and-leather shield carry no surcharge.
+    assert purchase_cost(CC.DRUID, LEATHER) == Coin.of(20, GP)
+    assert (
+        purchase_cost(CC.DRUID, commissioned(SHIELD, Material.WOOD_AND_LEATHER))
+        == Coin.of(10, GP)
+    )
+    # And ordinary gear is priced as printed for everyone.
+    assert purchase_cost(CC.DRUID, ADVENTURING_GEAR["Rope"]) == Coin.of(1, GP)
+
+
+def test_purchase_cost_refuses_an_item_the_class_may_not_use() -> None:
+    """Card §5 step 3 — an illegal item is rejected, not priced."""
+    with pytest.raises(EquipmentLegalityError, match="does not permit a magic-user"):
+        purchase_cost(CC.MAGIC_USER, PLATE)
+    with pytest.raises(EquipmentLegalityError, match="does not permit a mystic"):
+        purchase_cost(CC.MYSTIC, LEATHER)
+
+
+def test_purchase_cost_honours_the_expanded_list_policy() -> None:
+    """The flag reaches pricing too, because pricing rejects illegal items."""
+    staff = WEAPONS["Staff"]
+    with pytest.raises(EquipmentLegalityError, match="does not permit a magic-user"):
+        purchase_cost(CC.MAGIC_USER, staff)
+    assert purchase_cost(
+        CC.MAGIC_USER, staff, magic_user_expanded_list=True
+    ) == Coin.of(5, GP)
+
+
+def test_purchase_cost_of_a_torch_uses_its_quantity_offer() -> None:
+    """Slice B's price forms still govern; Slice C only decides legality."""
+    assert purchase_cost(CC.FIGHTER, TORCH) == Coin.of(2, SP)
+
+
+def test_purchase_cost_refuses_an_open_ended_price_rather_than_defaulting() -> None:
+    """E64 still holds through the pricing path added by Slice C."""
+    with pytest.raises(UnresolvedPriceError, match="open-ended"):
+        purchase_cost(CC.FIGHTER, ADVENTURING_GEAR["Clothes, extravagant"])
+
+
 # ===========================================================================
 # Implementation and coverage tests below. NOT approved contract cases.
 # ===========================================================================
@@ -569,26 +864,50 @@ def test_e66_blowgun_load_arithmetic_is_coherent(
 # --- Slice C boundary: legality and Druid pricing must not exist yet -------
 
 
-def test_slice_b_exposes_no_class_legality_or_druid_pricing() -> None:
+def test_slice_d_and_later_have_not_leaked_in() -> None:
+    # Slice C landed legality and Druid pricing, so the Slice-C guards are
+    # retired. The boundary that still holds is CHAR-005's and EXP-003's:
+    # this module supplies cn and legality, and computes no movement.
     public = {name for name in vars(equipment) if not name.startswith("_")}
     forbidden = {
-        "is_legal",
-        "purchase_cost",
-        "legality",
-        "CLASS_LEGALITY",
-        "DRUID_SURCHARGE",
-        "druid_price",
-        "wooden_weapon_cost",
-        "EquipmentLegalityError",
-        "magic_user_expanded_list",
+        "movement_rate",
+        "MovementRate",
+        "party_movement_rate",
+        "encumbrance_band",
+        "ENCUMBRANCE_BANDS",
+        "total_encumbrance",
+        "carried_encumbrance",
+        "turn_movement_allowance",
+        "DungeonMovementAllowance",
+        "ExhaustionPenalty",
     }
     assert public & forbidden == set()
 
 
-def test_slice_b_imports_no_character_class() -> None:
-    # Legality is the only reason this module would need class identity, and
-    # legality is Slice C.
-    assert "CharacterClass" not in inspect.getsource(equipment)
+def test_class_identity_is_used_for_legality_and_nothing_else() -> None:
+    # CharacterClass is imported now, which Slice C required. Its docstring
+    # says it must carry identity only, so this module must not attach Hit
+    # Dice, prime requisites, levels or advancement to it.
+    source = inspect.getsource(equipment)
+    for forbidden in ("hit_die", "HIT_DIE", "prime_requisite", "maximum_level", "name_level"):
+        assert forbidden not in source
+
+
+def test_no_magic_item_or_thief_skill_behaviour_leaked_in() -> None:
+    # TREAS-004 owns magic-item restrictions, including the Mystic's
+    # prohibition on protective magical devices; CHAR-010 owns thief skills.
+    # This module supplies thieves' tools as an item and nothing more.
+    public = {name for name in vars(equipment) if not name.startswith("_")}
+    forbidden = {
+        "magic_item",
+        "MagicItem",
+        "protective_device",
+        "open_locks",
+        "thief_skill",
+        "ThiefSkill",
+    }
+    assert public & forbidden == set()
+    assert ADVENTURING_GEAR["Thieves' tools"].category is ItemCategory.GEAR
 
 
 def test_no_floating_point_literal_or_conversion_appears_in_the_module() -> None:
@@ -1163,6 +1482,127 @@ def test_resolving_a_row_whose_price_rc_prints_is_refused() -> None:
 def test_resolving_a_non_item_is_refused() -> None:
     with pytest.raises(ValueError, match="item must be an Item"):
         resolve_price("Clothes, extravagant", Coin.of(50, GP))  # type: ignore[arg-type]
+
+
+# --- Slice C validation and coverage ---------------------------------------
+
+
+def test_only_weapons_and_shields_can_be_commissioned() -> None:
+    with pytest.raises(EquipmentLegalityError, match="weapons and"):
+        commissioned(ARMOR["Chain Mail"], Material.ALL_WOODEN)
+    with pytest.raises(EquipmentLegalityError, match="weapons and"):
+        commissioned(ADVENTURING_GEAR["Rope"], Material.ALL_WOODEN)
+
+
+def test_commissioning_a_non_item_or_non_material_is_refused() -> None:
+    with pytest.raises(ValueError, match="item must be an Item"):
+        commissioned("Club", Material.ALL_WOODEN)  # type: ignore[arg-type]
+    with pytest.raises(ValueError, match="material must be a Material"):
+        commissioned(WEAPONS["Club"], "wood")  # type: ignore[arg-type]
+
+
+def test_only_armour_and_shields_carry_a_racial_fit() -> None:
+    with pytest.raises(EquipmentLegalityError, match="armour and shields"):
+        made_for(WEAPONS["Club"], CharacterClass.HALFLING)
+
+
+def test_made_for_a_non_item_or_non_class_is_refused() -> None:
+    with pytest.raises(ValueError, match="item must be an Item"):
+        made_for("Chain Mail", CharacterClass.HALFLING)  # type: ignore[arg-type]
+    with pytest.raises(ValueError, match="race must be a CharacterClass"):
+        made_for(ARMOR["Chain Mail"], "halfling")  # type: ignore[arg-type]
+
+
+def test_a_shield_may_carry_both_a_material_and_a_racial_fit() -> None:
+    # A halfling druid is not a class, but the two qualifiers are independent
+    # and neither constructor refuses the other's field.
+    shield = made_for(
+        commissioned(ARMOR["Shield"], Material.WOOD_AND_LEATHER), CharacterClass.HALFLING
+    )
+    assert shield.material is Material.WOOD_AND_LEATHER
+    assert shield.made_for_race is CharacterClass.HALFLING
+
+
+def test_is_legal_refuses_a_non_class_or_non_item() -> None:
+    with pytest.raises(ValueError, match="cls must be a CharacterClass"):
+        is_legal("fighter", WEAPONS["Club"])  # type: ignore[arg-type]
+    with pytest.raises(ValueError, match="item must be an Item or an Ammunition"):
+        is_legal(CharacterClass.FIGHTER, "Club")  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize("bad", [1, 0, "yes", None])
+def test_is_legal_refuses_a_non_bool_policy_flag(bad: object) -> None:
+    with pytest.raises(ValueError, match="magic_user_expanded_list must be a bool"):
+        is_legal(
+            CharacterClass.MAGIC_USER,
+            WEAPONS["Staff"],
+            magic_user_expanded_list=bad,  # type: ignore[arg-type]
+        )
+
+
+def test_purchase_cost_refuses_a_non_item() -> None:
+    with pytest.raises(ValueError, match="item must be an Item"):
+        purchase_cost(CharacterClass.FIGHTER, "Club")  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize(
+    "category", [ItemCategory.GEAR, ItemCategory.CONTAINER, ItemCategory.CLOTHING]
+)
+def test_gear_containers_and_clothing_are_legal_for_every_class(
+    category: ItemCategory,
+) -> None:
+    # Card §7 restricts weapons, armour and shields. Inventing a restriction
+    # it does not state would be a silent rules decision.
+    row = next(
+        item for item in ADVENTURING_GEAR.values() if item.category is category
+    )
+    for cls in CharacterClass:
+        assert is_legal(cls, row)
+
+
+def test_two_section_7_boundaries_are_left_undecided_and_are_recorded() -> None:
+    """Neither is answered by the card, and neither is inferred here.
+
+    A thief with a large net: RC p. 65 makes a net's handedness depend on
+    its size, but §7's thief prohibition is stated over the printed 2H
+    marker, which no net row carries. A dual-role item used as a weapon:
+    the torch is printed in both tables and catalogued as GEAR, so §7's
+    weapon restrictions do not reach it.
+    """
+    assert is_legal(CharacterClass.THIEF, net(9))
+    assert WeaponTrait.TWO_HANDED not in net(9).traits
+    assert TORCH.category is ItemCategory.GEAR
+    for cls in CharacterClass:
+        assert is_legal(cls, TORCH)
+    # Both are recorded in the module rather than silently resolved.
+    source = inspect.getsource(equipment)
+    assert "NOT DECIDED HERE" in source
+    assert "TWO §7 BOUNDARIES NOT DECIDED HERE" in source
+
+
+def test_a_net_built_without_a_dimension_is_not_assumed_to_fit_a_halfling() -> None:
+    # Defence in depth: net() always sets dimension_feet, but a hand-built
+    # item named like a net and carrying none must not pass the 6' test by
+    # default.
+    faked = Item(
+        name="Net, unknown",
+        category=ItemCategory.WEAPON,
+        price=FixedPrice(Coin(1)),
+        encumbrance_cn=1,
+    )
+    assert not is_legal(CharacterClass.HALFLING, faked)
+
+
+@pytest.mark.parametrize("bad", [0, -1])
+def test_an_item_dimension_that_is_not_positive_is_refused(bad: int) -> None:
+    with pytest.raises(ValueError, match="dimension_feet must be positive"):
+        Item(
+            name="x",
+            category=ItemCategory.WEAPON,
+            price=FixedPrice(Coin(1)),
+            encumbrance_cn=1,
+            dimension_feet=bad,
+        )
 
 
 def test_catalog_lookup_finds_rows_in_every_catalog() -> None:
