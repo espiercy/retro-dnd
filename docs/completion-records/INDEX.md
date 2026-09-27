@@ -18,3 +18,5 @@ Durable per-issue implementation records for the Retro D&D Simulator project (`D
 | [ISSUE-012](ISSUE-012-char-001-high-level-generation-methods.md) | CHAR-001 §5 Chapter 10 High-Level Generation (CLUSTER-002 Slice E) | Complete |
 | [ISSUE-013](ISSUE-013-cluster-002-cross-card-integration.md) | CLUSTER-002 Cross-Card Integration (Slice F) | Complete |
 | [ISSUE-014](ISSUE-014-cluster-002-character-foundation.md) | CLUSTER-002 Character Foundation — Cluster Completion | Complete — implementation `VERIFIED`, merged 2026-09-13 |
+| [ISSUE-015](ISSUE-015-shared-currency-primitive.md) | Shared Currency Primitive (CLUSTER-003 Slice A) | Complete — accepted 2026-09-25, not merged |
+| [ISSUE-016](ISSUE-016-char-004-catalogs-money-encumbrance.md) | CHAR-004 Catalogs, Starting Money & Derived Encumbrance (CLUSTER-003 Slice B) | Complete — accepted 2026-09-27, not merged |

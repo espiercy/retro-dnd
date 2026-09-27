@@ -14,6 +14,8 @@ Starting Equipment & Expedition Preparation
 
 `APPROVED`
 
+> **Amended 2026-09-27 — human-approved resolution of the Sling `Enc` marker defect.** The independent catalog-transcription review found that RC's Weapons Table prints the Sling row as `20 cn` with notes `c,m,w,S`, **omitting the `a` marker**, while note `a`'s own text explicitly lists *"sling: 30 stones"* among the weapons whose normal load is already included. **The human project owner resolved it: the Sling's `20 cn` includes its normal load of 30 stones**, the missing marker being a **table-marker / compilation defect**. New §6.3 and cases **E67–E68**. **Provenance: Rules Cyclopedia Explicit interpretation/correction, reinforced by BECMI lineage. NOT a Simulator Ruling**, and **no `Alternate-Source Compatible Completion` is claimed** — the mechanic is RC's own.
+>
 > **Amended 2026-09-26 — human-approved corrections surfaced by Slice-B implementation.** Three items, none of them a Simulator Ruling: (1) §"Rules Cyclopedia Explicitly Establishes" item 9 gave the blowgun a normal load of **3 darts**; RC states **5** in two governing objects, so the card's figure was a **transcription defect** and is corrected. (2) New **§4.1** records the two **price-specification forms** RC prints besides a single fixed amount — the torch's quantity offers and "Clothes, extravagant"'s open-ended `50+ gp` — both **Rules Cyclopedia Explicit**. (3) New cases **E61–E66**. **The card remains `APPROVED`** — an amendment to an approved card, not a return to review. **`SR-6` and `SR-7` stand exactly as ratified and are not renumbered; there is no `SR-8` on this card.** See §4.1, the new cases, and the Amendment History.
 >
 > **Approved by the human project owner, 2026-09-24.** Stage-A evidence passed independent `DEC-0010` completeness review; `DEC-0011` BECMI gap research and its remediation are complete; the human adjudications of 2026-09-24 are recorded below and in `docs/rules/clusters/CLUSTER-003-stage-b-synthesis.md`.
@@ -81,7 +83,8 @@ Narrowly, and only these:
 1. **Belt pouch arithmetic.** RC prints empty `2 cn`, capacity `50 cn`, and a worked filled total of `55 cn`. `2 + 50 = 52`. All three are on the same page, visually verified. → **`SR-6`**.
 2. **Magic-User dagger status.** Ch. 2 p. 19 makes the dagger the unconditional baseline weapon and names a separate optional list; Ch. 4's note `w` (*"Magic-users may use this weapon at the DM's discretion"*) is applied to **both dagger rows**, placing the dagger inside the discretionary set. → **`SR-7`**.
 3. **"Clothes, plain" footnote marker.** Prints `20***` (the *quiver* footnote) where every other clothing row prints `**`. → recorded as a **typographic defect**; the `**` rule is applied. Not a Simulator Ruling — see §Open Questions 1.
-4. **Racial-armour penalty magnitude.** RC states *"The DM **can** impose penalties on a character who wears the armor of a different race"*, giving an unquantified movement reduction as an example. → **Not a gap.** RC delegates by design; this card records it as a **DM-discretionary input** and quantifies nothing.
+4. **Sling `Enc` marker.** The Weapons Table prints `20 cn` with notes `c,m,w,S`, **omitting the `a` marker**, while note `a`'s text names *"sling: 30 stones"* explicitly. → **Resolved 2026-09-27 by human-approved amendment** as a **table-marker / compilation defect**: the `20 cn` includes the load (§6.3). Not a Simulator Ruling.
+5. **Racial-armour penalty magnitude.** RC states *"The DM **can** impose penalties on a character who wears the armor of a different race"*, giving an unquantified movement reduction as an example. → **Not a gap.** RC delegates by design; this card records it as a **DM-discretionary input** and quantifies nothing.
 
 ---
 
@@ -284,6 +287,30 @@ Read directly from the Weapons, Ammunition, Armor and Adventuring Gear tables as
 | **Ammunition purchased separately** | the Ammunition Table's `Enc` column is **shots per `cn`**, an inverse rate — e.g. arrows at `2` means 2 arrows weigh 1 cn | **Necessary Mechanical Consequence** of the printed column semantics |
 | **Waterskin** | `5 cn` empty, `30 cn` filled | RC Explicit |
 
+### 6.3 The Sling's missing `a` marker — a table-marker defect
+
+**Added 2026-09-27 by human-approved amendment.** RC prints the Sling row as:
+
+```text
+Sling    1d4    40/80/160    2    20    c,m,w,S
+```
+
+— `20 cn`, and **no `a` marker**, although note `a`'s own text reads *"The weapon's normal load of ammunition is already included in the weapon's encumbrance (bow: 20 arrows; crossbow: 30 quarrels; sling: 30 stones; blowgun: 5 darts)"* and adds *"5 sling stones equal 1 cn"*. RC works the subtraction itself only for the long bow and the light crossbow, never for the sling.
+
+**Approved resolution.** The Sling's printed `20 cn` **includes its normal load of 30 stones**. The absent marker is a **table-marker / compilation defect**, not a statement that the sling carries no included load: note `a` names the sling explicitly and establishes the mechanic, and the BECMI Expert parent source independently preserves it, listing *"Sling (+ 30 stones)"* at `20 cn` with ammunition included in encumbrance.
+
+```text
+Sling, loaded         20 cn    [RC Explicit, printed]
+Normal load           30 stones
+Stone rate             5 stones per cn    [RC Explicit, note a]
+Normal load weight     6 cn
+Sling, empty          14 cn    [necessary arithmetic consequence]
+```
+
+**Provenance: Rules Cyclopedia Explicit interpretation/correction, reinforced by BECMI lineage. Not a Simulator Ruling**, and **no `Alternate-Source Compatible Completion` is claimed** — as with `SR-6` and `SR-7`, BECMI contributed corroboration, not a mechanic. The `14 cn` empty figure is a necessary arithmetic consequence of RC's own two values and is **not** replaced by any unofficial companion's house-corrected figure.
+
+**The transcribed row keeps its printed notes exactly as printed.** No `a` marker is added to it; the defect is recorded here rather than papered over in the catalog data.
+
 ### 7. Per-class mundane equipment legality
 
 **This card is the canonical owner** (human ownership decision, 2026-09-14). `CHAR-009` may describe these as class features but **must not** be a second implementation owner.
@@ -482,6 +509,15 @@ STATUS:  researched / preserved / NOT V1-WIRED
 | E65 | **"Clothes, extravagant" resolved by DM policy** | An explicitly supplied amount **≥ `50 gp`** is accepted; **below `50 gp` is refused** — RC states the floor |
 | E66 | **Blowgun with its normal load** | **`5` darts** (Weapons note `a`; Ammunition Table), and at RC's rate of 5 darts per `cn` that load is exactly `1 cn` |
 
+### The Sling's included load
+
+**Added 2026-09-27 by human-approved amendment (§6.3).**
+
+| # | Input | Expected |
+|---|---|---|
+| E67 | **Sling with its normal load** | **`20 cn`** as printed — it already includes 30 stones, despite the row's missing `a` marker |
+| E68 | **Sling without stones** | **`14 cn`** — `20 - (30 ÷ 5)`. Not the unofficial companion's house-corrected `3 cn` |
+
 ---
 
 ## Provenance Classification
@@ -497,6 +533,7 @@ STATUS:  researched / preserved / NOT V1-WIRED
 | **§4.1.1 torch purchase offers (`1 torch = 2 sp`, `6 torches = 1 gp`)** | **Rules Cyclopedia Explicit** — both are printed on p. 69 |
 | **§4.1.1 the Weapons Table's `1/6 gp` read as the per-six rate** | **Printed-notation reading**, the same category as the "Clothes, plain" marker above, and expressly **not** a Simulator Ruling — the three printed values are mutually consistent under this reading, so there is no conflict to adjudicate |
 | **§4.1.2 "Clothes, extravagant" as an open-ended price with a `50 gp` floor** | **Rules Cyclopedia Explicit** — RC prints `50+ gp`, which establishes a minimum and no exact price. The exact price is a **DM / simulation-policy input**, quantified nowhere here |
+| **§6.3 Sling `20 cn` includes its normal 30-stone load; `14 cn` empty** | **Rules Cyclopedia Explicit interpretation/correction, reinforced by BECMI lineage.** Note `a` names the sling and establishes the mechanic; the row's absent marker is a **table-marker / compilation defect**. The `14 cn` is a **Necessary Mathematical-Mechanical Consequence** of RC's own two values. **Not a Simulator Ruling**, and **no `Alternate-Source Compatible Completion` is claimed** — BECMI corroborates, it does not supply |
 | **Blowgun normal load = 5 darts** | **Rules Cyclopedia Explicit** (Weapons note `a`; Ammunition Table). The card's previous "3 darts" was a **transcription defect in this card**, corrected 2026-09-26 — **not** a Simulator Ruling and **not** a change to RC |
 | Racial-armour penalty | **RC delegates to DM discretion by design.** Not a gap, not quantified here |
 | §B mounts/vehicles/ships/siege; §C Chapter 10 | **Intentionally deferred — out of V1 / `NOT V1-WIRED`** |
@@ -521,7 +558,16 @@ STATUS:  researched / preserved / NOT V1-WIRED
 
 | Date | Change | Approved by | Effect on status |
 |---|---|---|---|
+| **2026-09-27** | **Sling `Enc` marker defect resolved.** Raised by the independent catalog-transcription review (`docs/rules/evidence/CLUSTER-003-catalog-transcription-review.md`, AMBIGUITY-2): RC prints the Sling row at `20 cn` with notes `c,m,w,S` and **no `a` marker**, while note `a`'s text names *"sling: 30 stones"*. New **§6.3** records the approved resolution — the `20 cn` **includes** the normal load; empty is `14 cn`; the missing marker is a **table-marker / compilation defect** and is **not** added to the transcribed row. New cases **E67–E68**. Provenance: **Rules Cyclopedia Explicit interpretation/correction, reinforced by BECMI lineage; not a ruling, and no Compatible Completion claimed** | Human project owner | **Remains `APPROVED`** |
 | **2026-09-26** | **Three corrections surfaced by Slice-B implementation, none of them a ruling.** (1) *Transcription defect in this card* — item 9 of "Rules Cyclopedia Explicitly Establishes" gave the blowgun a normal load of **3 darts**; RC states **5** in two governing objects, both visually verified. (2) New **§4.1**, recording the two **price-specification forms** besides a fixed amount that RC prints — the torch's **quantity offers** (`1 = 2 sp`, `6 = 1 gp`, with the Weapons Table's `1/6 gp` read as the per-six rate and preserved as source notation) and **"Clothes, extravagant"**'s **open-ended** `50+ gp` (a `50 gp` floor, exact price a DM / simulation-policy input). Both **Rules Cyclopedia Explicit**. (3) New deterministic cases **E61–E66** | Human project owner | **Remains `APPROVED`** — amendment to an approved card, **not** a return to `AWAITING_APPROVAL` |
+
+**What the 2026-09-27 amendment did *not* do**, recorded so it cannot later be misread:
+
+- **No Simulator Ruling was made, granted, or renumbered.** `SR-6` and `SR-7` stand; there is still no `SR-8` on this card.
+- **No `Alternate-Source Compatible Completion` was claimed and no BECMI mechanic was imported.** BECMI is cited exactly as it already is for `SR-6` and `SR-7` — as corroboration of an RC reading, not as a source of rules. `DEC-0011` was not reopened, and the card's Alternate-Source Completion Research section is unchanged.
+- **The transcribed Sling row was not altered.** Its printed notes remain `c,m,w,S`; no `a` marker was added to the catalog data to make the resolution tidy.
+- **No other missing or anomalous table marker was resolved by analogy.** This amendment reaches the sling and nothing else.
+- **The `14 cn` empty figure is RC's own arithmetic**, not an imported figure. The unofficial companion's house-corrected `3 cn` is expressly **not** adopted, because that source corrects RC rather than interpreting it.
 
 **What the 2026-09-26 amendment did *not* do**, recorded so it cannot later be misread:
 

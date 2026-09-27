@@ -433,7 +433,7 @@ The review above is preserved unaltered; nothing in it has been edited, softened
 | # | Finding | Disposition |
 |---|---|---|
 | 1 | The net's printed size is the disjunction `M or L`; `net()` sets `size=None` with no comment | **DOCUMENTED, not decided.** `net()`'s docstring now records that RC makes a net's size class follow its dimensions through the Nets Table (p. 65), that a disjunction is not a size, and that `size` is therefore left `None` rather than guessed from `side_feet`. Test: `test_a_net_carries_no_size_because_rc_prints_a_disjunction` |
-| 2 | RC contradicts itself about whether the sling has an included normal load | **ESCALATED FOR HUMAN ADJUDICATION. The reviewer is right and the implementing session was wrong.** The earlier remediation had gated `missile_weapon_encumbrance` on `STANDARD_LOAD_SHOTS` and registered `"Sling": 30`, which resolved the contradiction in favour of note `a`'s text — a rules decision that was not the implementing session's to make. `"Sling"` has been **removed** from `STANDARD_LOAD_SHOTS`, and `missile_weapon_encumbrance` now refuses the sling with a message naming the conflict, the same stop-at-the-boundary treatment the blowgun had before its adjudication. Buying sling stones separately is unaffected (approved case E24). Test: `test_the_sling_is_refused_because_rc_contradicts_itself_about_its_load` |
+| 2 | RC contradicts itself about whether the sling has an included normal load | **ESCALATED, AND SINCE ADJUDICATED — see the 2026-09-27 note below. The reviewer was right and the implementing session was wrong.** The earlier remediation had gated `missile_weapon_encumbrance` on `STANDARD_LOAD_SHOTS` and registered `"Sling": 30`, which resolved the contradiction in favour of note `a`'s text — a rules decision that was not the implementing session's to make. `"Sling"` has been **removed** from `STANDARD_LOAD_SHOTS`, and `missile_weapon_encumbrance` now refuses the sling with a message naming the conflict, the same stop-at-the-boundary treatment the blowgun had before its adjudication. Buying sling stones separately is unaffected (approved case E24). Test: `test_the_sling_is_refused_because_rc_contradicts_itself_about_its_load` |
 | 3 | The printed "Torches" row has no catalog identity | **LEFT AS IS, flagged.** The one-commodity reading is what the human project owner approved on 2026-09-26 and what card §4.1.1 states, and no printed value is lost. The consequence the reviewer identifies is real and is reported to the human project owner: `catalog_item("Torches")` raises `UnlistedItemError` for a name RC prints. The same is now true of `catalog_item("Iron spikes")` |
 
 ### Armor note codes `D` / `T` / `S`
@@ -453,3 +453,38 @@ encumbrance, capacity, size class, note code, shots-per-cn rate and standard loa
 `AMMUNITION`, `ARMOR` and `ADVENTURING_GEAR` matched the printed page on independent second-pass
 review. The four corrections are one dropped printed quantity and three documentation defects;
 the one behavioural change is a **withdrawal** of an over-reach, not an addition.
+
+
+---
+
+## AMBIGUITY-2 closed by human adjudication (appended 2026-09-27)
+
+The human project owner resolved the sling question the review escalated:
+
+> **The Sling's printed `20 cn` includes its normal load of 30 stones.** The absent `a` marker
+> on the row is a **table-marker / compilation defect**. RC's note `a` names the sling explicitly
+> and establishes the included load, and the BECMI Expert parent source independently preserves
+> the same mechanic, listing *"Sling (+ 30 stones)"* at `20 cn` with ammunition included in
+> encumbrance.
+>
+> Provenance: **Rules Cyclopedia Explicit interpretation/correction, reinforced by BECMI
+> lineage. No Simulator Ruling.**
+
+```text
+Sling loaded        20 cn
+Normal load         30 stones
+Stone rate           5 stones / cn
+Normal ammo weight   6 cn
+Empty sling         14 cn
+```
+
+Recorded on the card as **§6.3** with cases **E67–E68**. `STANDARD_LOAD_SHOTS["Sling"] = 30` is
+restored and the temporary refusal removed. **The transcribed row keeps its printed notes
+`c,m,w,S`** — no `a` marker was added to the data — which is pinned by
+`test_the_transcribed_sling_row_still_prints_no_note_a_marker`. The unofficial companion's
+house-corrected `3 cn` empty sling is expressly not adopted.
+
+**AMBIGUITY-1 (net `M or L`)** and **AMBIGUITY-3 (bundle-row lookup names)** were both accepted
+as documented-and-deferred by the human project owner on 2026-09-27; neither blocks Slice C.
+
+**With that, every finding of this review is closed.**

@@ -853,6 +853,7 @@ STANDARD_LOAD_SHOTS: Final[Mapping[str, int]] = MappingProxyType(
         "Bow, Long": 20,
         "Crossbow, Lt": 30,
         "Crossbow, Hvy": 30,
+        "Sling": 30,
         "Blowgun, up to 2'": 5,
         "Blowgun, 2' +": 5,
     }
@@ -863,17 +864,16 @@ RC's Weapons Table note ``a`` (p. 63): *"bow: 20 arrows; crossbow: 30
 quarrels; sling: 30 stones; blowgun: 5 darts"*, and card §6.2 restates the
 rule.
 
-**The sling is absent, and its absence is a refusal to decide.** RC states
-both sides and neither can simply be transcribed: note ``a``'s text lists
-*"sling: 30 stones"*, while the printed Sling row's Notes are ``c,m,w,S`` with
-**no** ``a`` marker. RC works the subtraction itself only for the long bow
-(``30`` → ``20``) and the light crossbow (``50`` → ``40``), never for the
-sling, so nothing in the source settles whether the sling's printed ``20 cn``
-already includes 30 stones. **Whether it does is a rules question**, raised by
-the independent transcription review of 2026-09-26 and escalated rather than
-answered here; :func:`missile_weapon_encumbrance` refuses the sling and names
-the conflict. Buying sling stones separately is unaffected — that is
-:func:`ammunition_encumbrance`, and approved case E24 covers it.
+**The sling is 30 stones, and this table is keyed by note ``a``'s text rather
+than by the printed marker.** The Sling row prints ``c,m,w,S`` with **no**
+``a`` marker, although note ``a`` names *"sling: 30 stones"* explicitly. The
+independent transcription review of 2026-09-26 raised it; the human project
+owner resolved it on 2026-09-27 as a **table-marker / compilation defect**
+(card §6.3): the printed ``20 cn`` includes the load, so an empty sling is
+``14 cn``. **No ``a`` marker is added to the transcribed row** — the defect is
+recorded on the card, not papered over in the data — which is why
+:func:`missile_weapon_encumbrance` reads this table and not
+:attr:`WeaponTrait.AMMUNITION_INCLUDED`.
 
 **The blowgun is 5 darts** (approved case E66). Slice B originally refused it,
 because the approved card's summary said 3 and RC's two governing objects said
@@ -992,19 +992,14 @@ def missile_weapon_encumbrance(weapon: Item, ammunition: Ammunition, shots: int)
     per ``cn`` is exactly ``1 cn``: a short blowgun is ``6 cn`` as printed and
     ``5 cn`` empty (approved case E66).
 
-    **The sling is refused**, because RC contradicts itself about whether it
-    has an included load at all — see :data:`STANDARD_LOAD_SHOTS`. That is an
-    open rules question, not a defect this module may settle.
+    The sling's ``20 cn`` **includes** its normal 30 stones, so an empty sling
+    is ``14 cn`` (approved cases E67, E68). Its row prints no ``a`` marker;
+    card §6.3 records that as a table-marker defect, and this operation reads
+    :data:`STANDARD_LOAD_SHOTS` rather than the marker for exactly that
+    reason.
     """
     if not isinstance(weapon, Item):
         raise ValueError(f"weapon must be an Item, got {weapon!r}")
-    if weapon.name == "Sling":
-        raise EncumbranceError(
-            "whether a sling's printed 20 cn already includes 30 stones is "
-            "unresolved: RC's note a names the sling, its printed row carries "
-            "no note a marker, and RC works the subtraction for no sling. "
-            "Escalated for human adjudication rather than decided here"
-        )
     standard_load = STANDARD_LOAD_SHOTS.get(weapon.name)
     if standard_load is None:
         raise EncumbranceError(

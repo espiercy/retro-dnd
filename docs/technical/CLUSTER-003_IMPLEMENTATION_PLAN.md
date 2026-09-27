@@ -355,11 +355,11 @@ Mirrors the landed `test_cluster_001_integration.py` / `test_cluster_002_integra
 
 ### 9.2 Traceability
 
-**174 approved cases** — `CHAR-004` **66** (`E1`–`E66`), `CHAR-005` 76 (`M1`–`M76`), `EXP-003` 32 (`D1`–`D32`).
+**176 approved cases** — `CHAR-004` **68** (`E1`–`E68`), `CHAR-005` 76 (`M1`–`M76`), `EXP-003` 32 (`D1`–`D32`).
 
-> **Updated 2026-09-26.** The plan was drafted against `CHAR-004`'s then-current 60 cases. The human-approved `CHAR-004` amendment of 2026-09-26 added `E61`–`E66` (price-specification forms; blowgun normal load), so the Slice F ledger reconciles **174**, not 168. The `CLUSTER-003` Pre-Code Gate record's "168" is **historically correct for 2026-09-24 and is deliberately left unchanged**.
+> **Updated 2026-09-26, again 2026-09-27.** The plan was drafted against `CHAR-004`'s then-current 60 cases. The human-approved `CHAR-004` amendments of 2026-09-26 (`E61`–`E66`: price-specification forms; blowgun normal load) and 2026-09-27 (`E67`–`E68`: the Sling's included load) bring it to 68, so the Slice F ledger reconciles **176**, not 168. The `CLUSTER-003` Pre-Code Gate record's "168" is **historically correct for 2026-09-24 and is deliberately left unchanged**.
 >
-> **Slice assignment as landed**, recorded because it differs from §10's table below: `E58`–`E60` are absence guards and landed in **Slice B**, not Slice C; `E61`–`E66` landed in Slice B with the amendment.
+> **Slice assignment as landed**, recorded because it differs from §10's table below: `E58`–`E60` are absence guards and landed in **Slice B**, not Slice C; `E61`–`E68` landed in Slice B with those amendments.
 
 Not one case per test function. Each case ID appears in a test's docstring or in a `pytest.mark.parametrize` id, so `grep -r "E17" tests/` locates its coverage. A ledger in the Slice F completion record reconciles **all 168 against exactly one owning test each**, following the `CLUSTER-002` 189-case ledger precedent.
 

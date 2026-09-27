@@ -500,6 +500,35 @@ def test_e65_the_catalog_row_is_not_mutated_by_resolving_it() -> None:
     assert isinstance(ADVENTURING_GEAR["Clothes, extravagant"].price, OpenEndedPrice)
 
 
+def test_e67_a_sling_with_its_normal_load_is_its_printed_twenty_cn() -> None:
+    """E67 — sling with its normal load: 20 cn as printed; it includes 30 stones."""
+    stones = AMMUNITION["Stone or lead pellet"]
+    assert WEAPONS["Sling"].encumbrance_cn == 20
+    assert stones.shots_per_cn == 5
+    assert ammunition_encumbrance(stones, 30) == 6
+    assert missile_weapon_encumbrance(WEAPONS["Sling"], stones, 30) == 20
+
+
+def test_e68_a_sling_without_stones_is_fourteen_cn() -> None:
+    """E68 — sling without stones: 14 cn = 20 - (30 / 5).
+
+    RC's own arithmetic on RC's own two values. Not the unofficial
+    companion's house-corrected 3 cn, which corrects RC rather than
+    interpreting it (card §6.3).
+    """
+    empty = missile_weapon_encumbrance(WEAPONS["Sling"], AMMUNITION["Stone or lead pellet"], 0)
+    assert empty == 14
+    assert empty != 3
+
+
+def test_e68_a_sling_carrying_more_than_its_normal_load(
+) -> None:
+    """E68, extended — varying the load varies the encumbrance at RC's rate."""
+    stones = AMMUNITION["Stone or lead pellet"]
+    assert missile_weapon_encumbrance(WEAPONS["Sling"], stones, 60) == 26
+    assert missile_weapon_encumbrance(WEAPONS["Sling"], stones, 15) == 17
+
+
 def test_e66_a_blowgun_normal_load_is_five_darts() -> None:
     """E66 — blowgun normal load: 5 darts (Weapons note a; Ammunition Table)."""
     assert STANDARD_LOAD_SHOTS["Blowgun, up to 2'"] == 5
@@ -799,29 +828,35 @@ def test_an_ammunition_count_rc_does_not_state_is_refused_rather_than_rounded() 
         ammunition_encumbrance(AMMUNITION["Arrow"], 3)
 
 
-def test_standard_loads_hold_only_the_weapons_rc_settles() -> None:
-    # Note a names four families; the sling is escalated, not registered.
+def test_standard_loads_are_exactly_the_weapons_rc_note_a_names() -> None:
+    # Note a names four families: bow, crossbow, sling, blowgun.
     assert set(STANDARD_LOAD_SHOTS) == {
         "Bow, Short",
         "Bow, Long",
         "Crossbow, Lt",
         "Crossbow, Hvy",
+        "Sling",
         "Blowgun, up to 2'",
         "Blowgun, 2' +",
     }
 
 
-def test_the_sling_is_refused_because_rc_contradicts_itself_about_its_load() -> None:
-    # Raised by the independent transcription review: note a's text lists
-    # "sling: 30 stones", the printed Sling row carries no `a` marker, and RC
-    # works the subtraction for no sling. Neither side is adopted here.
+def test_the_transcribed_sling_row_still_prints_no_note_a_marker() -> None:
+    """§6.3 — the marker defect is recorded on the card, not papered over here.
+
+    RC prints the Sling row's notes as c,m,w,S. The approved resolution does
+    not licence adding an `a` to the transcribed data to make it tidy, which
+    is why the derivation reads STANDARD_LOAD_SHOTS instead.
+    """
     assert WeaponTrait.AMMUNITION_INCLUDED not in WEAPONS["Sling"].traits
-    assert "Sling" not in STANDARD_LOAD_SHOTS
-    stones = AMMUNITION["Stone or lead pellet"]
-    with pytest.raises(EncumbranceError, match="Escalated for human adjudication"):
-        missile_weapon_encumbrance(WEAPONS["Sling"], stones, 30)
-    # Buying stones separately is unaffected — that is E24's path.
-    assert ammunition_encumbrance(stones, 30) == 6
+    assert WEAPONS["Sling"].traits == frozenset(
+        {
+            WeaponTrait.CLERIC_PERMITTED,
+            WeaponTrait.MISSILE_ONLY,
+            WeaponTrait.MAGIC_USER_DISCRETIONARY,
+        }
+    )
+    assert STANDARD_LOAD_SHOTS["Sling"] == 30
 
 
 def test_a_weapon_without_note_a_has_no_load_to_vary() -> None:
