@@ -14,6 +14,9 @@ and units.
 
 **Status: awaiting human review.** Slice E is not started.
 
+**Human review 2026-09-27 returned `CHANGES REQUIRED`:** enforce §1.1's
+maximum level for **every** class, not only the Mystic. Applied — see §10.1.
+
 ## 2. Approved Inputs/Specifications
 
 - `docs/rules/character_creation/encumbrance_and_movement_rate.md`
@@ -121,7 +124,7 @@ uv run python scripts/verify.py
 ## 8. Verification Results
 
 ```text
-Tests:     PASS   910 passed
+Tests:     PASS   921 passed
 Coverage:  PASS
 Ruff:      PASS
 mypy:      PASS
@@ -159,22 +162,39 @@ All 17 files under `src/rules/` at 100% branch per file.
    M68's *"minimum 1"* is the recorded `minimum_damage` floor, and applying
    it to a damage roll is COMBAT-003's.
 
-### 10.1 One reading of §1.1, stated plainly
+### 10.1 §1.1's maximum level — enforced for every class
 
-§1.1 says level must be *"<= the applicable per-class maximum"*. **Only the
-Mystic's 16 is enforced.** For every other class, level is validated as an
-`int` ≥ 1 with no upper bound.
+**First submitted enforcing only the Mystic's 16**, on the reasoning that the
+per-class maxima remain `ADV-002`'s property and this card indexes exactly
+one level-dependent table, so a second projection would duplicate data the
+card does not consume for no behavioural difference.
 
-The reason is the one §6.6 itself raises: the per-class maxima remain
-**`ADV-002`'s** property, projected privately by `hit_points_and_hit_dice.py`
-to bound *hit-point* accrual. This card indexes exactly one level-dependent
-table — the Mystic's — so projecting all nine maxima here would create a
-second projection of data this card does not consume, for no behavioural
-difference. `movement_rate(FIGHTER, 36, 0)` and `movement_rate(FIGHTER, 99,
-0)` both return `120'`, because level does not reach a non-Mystic's rate.
+**Human review returned `CHANGES REQUIRED` on 2026-09-27, and the reading is
+withdrawn.** §1.1 says *"≤ the applicable per-class maximum"* without
+qualification, and the card is the specification.
 
-**It is a reading, and it is offered for correction.** If you want the full
-per-class bound enforced here, it is a table and three lines.
+`MAXIMUM_LEVEL` now projects all nine, identically to CHAR-003's projection:
+
+```text
+Cleric 36   Fighter 36   Magic-User 36   Thief 36   Druid 36
+Dwarf  12   Elf      10   Halfling    8   Mystic 16
+```
+
+The Elf's `10` and the Druid's `36` are the human adjudications of
+2026-08-29 and are not reopened; the Halfling's `8` equals its Name level.
+
+**The drift risk the original reading worried about is handled by a test
+rather than by declining to project.**
+`test_the_maximum_level_projection_matches_char_003s` asserts that the two
+card-local projections of `ADV-002`'s one property stay identical, so
+changing one without the other fails loudly here instead of leaving the two
+cards quietly disagreeing about who can reach what level. It reaches into
+CHAR-003's private table deliberately, and says so.
+
+`movement_rate(FIGHTER, 37, 0)` now raises `MovementLevelError`. Level still
+changes no *result* for any class but the Mystic; it is validated because a
+request for a 37th-level fighter is a request for a character who cannot
+exist, and answering it would be answering for nobody.
 
 ## 11. Known Limitations/Unresolved Issues
 

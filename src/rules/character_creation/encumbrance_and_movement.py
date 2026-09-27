@@ -14,7 +14,7 @@ THE ONE DERIVATION
 ``movement_rate`` validates its inputs, chooses a **normal speed** by one of
 exactly two paths, and derives every rate from it by one shared rule:
 
-    1. validate level        (§1.1, amended — int, not bool, 1..maximum)
+    1. validate level        (§1.1, amended — int, not bool, 1..class maximum)
     2. validate encumbrance  (int, not bool, >= 0)
     3. Mystic AND enc <= 400  ->  the MV table          (SR-9)
     4. otherwise              ->  the standard band table (§3)
@@ -86,6 +86,7 @@ __all__ = [
     "ENCOUNTER_SPEED_DIVISOR",
     "IMMOBILE_NORMAL_SPEED",
     "MAXIMUM_RUNNING_ROUNDS",
+    "MAXIMUM_LEVEL",
     "MYSTIC_MAXIMUM_LEVEL",
     "MYSTIC_MV",
     "MYSTIC_UNENCUMBERED_MAXIMUM_CN",
@@ -260,19 +261,46 @@ distinct** (card §B). The authoritative numerical rule is this card's;
 CHAR-009 may reference Mystic movement and must not re-specify it.
 """
 
-MYSTIC_MAXIMUM_LEVEL: Final = 16
-"""The Mystic's maximum level, which bounds the accepted level input.
+MAXIMUM_LEVEL: Final[Mapping[CharacterClass, int]] = MappingProxyType(
+    {
+        CharacterClass.CLERIC: 36,
+        CharacterClass.FIGHTER: 36,
+        CharacterClass.MAGIC_USER: 36,
+        CharacterClass.THIEF: 36,
+        CharacterClass.DWARF: 12,
+        CharacterClass.ELF: 10,
+        CharacterClass.HALFLING: 8,
+        CharacterClass.MYSTIC: 16,
+        CharacterClass.DRUID: 36,
+    }
+)
+"""Each class's maximum level, which bounds the accepted level input (§1.1).
 
-A **private, card-local projection** of a property that remains `ADV-002`'s,
-consumed here only to bound this card's own table — exactly as landed
-``hit_points_and_hit_dice.py`` projects the per-class maxima to bound
-hit-point accrual, and recorded the same way (card §1.1; plan §6.6).
+A **card-local projection** of a property that remains `ADV-002`'s, consumed
+here only to bound what this card accepts — exactly as landed
+``hit_points_and_hit_dice.py`` projects the same maxima to bound hit-point
+accrual, and recorded the same way (card §1.1; plan §6.6).
 
     ADV-002 remains the future authoritative owner of advancement limits.
     Future ADV-002 work must replace or reconcile this projection.
 
+**The values are identical to CHAR-003's projection, and a test asserts
+that they stay identical**, so the two cannot drift apart silently. The
+Elf's ``10`` and the Druid's ``36`` are human adjudications of 2026-08-29
+and are not reopened here; the Halfling's ``8`` equals its Name level.
+
 No advancement API is exported, and nothing here establishes anything about
-advancement outside movement.
+advancement outside movement. **Level changes no result for any class but
+the Mystic** — no other class indexes a level-dependent table in this card —
+but §1.1 requires the input to be validated regardless, so it is.
+"""
+
+MYSTIC_MAXIMUM_LEVEL: Final = 16
+"""The Mystic's maximum level: the one this card's own ``MV`` table indexes.
+
+Named separately because approved case M40 turns on it and because §6 states
+*"16 is the Mystic's maximum level; the table is complete for V1"*. It is the
+same value as ``MAXIMUM_LEVEL[CharacterClass.MYSTIC]``, and a test asserts so.
 """
 
 MYSTIC_UNENCUMBERED_MAXIMUM_CN: Final = 400
@@ -301,10 +329,11 @@ def _validate_level(cls: CharacterClass, level: int) -> int:
         )
     if level < 1:
         raise MovementLevelError(f"level must be at least 1, got {level!r}")
-    if cls is CharacterClass.MYSTIC and level > MYSTIC_MAXIMUM_LEVEL:
+    maximum = MAXIMUM_LEVEL[cls]
+    if level > maximum:
         raise MovementLevelError(
-            f"level must be at most {MYSTIC_MAXIMUM_LEVEL} for a mystic, whose "
-            f"MV table CHAR-005 §6 indexes, got {level!r}"
+            f"level must be at most {maximum} for a "
+            f"{cls.name.lower().replace('_', '-')}, got {level!r}"
         )
     return level
 
@@ -331,10 +360,17 @@ def movement_rate(
     already contributes ``750`` and nothing else.
 
     ``level`` is an explicit caller input, validated here (§1.1, amended
-    2026-09-25). It creates **no dependency on CHAR-002 for level and none
-    on unresearched ADV-* rules to obtain it**. For every class but the
-    Mystic it changes no result, because no other class indexes a
-    level-dependent table in this card.
+    2026-09-25): an ``int``, not a ``bool``, at least 1, and **at most the
+    applicable per-class maximum** — 36 for the human classes and the Druid,
+    12 for a Dwarf, 10 for an Elf, 8 for a Halfling, 16 for a Mystic. It
+    creates **no dependency on CHAR-002 for level and none on unresearched
+    ADV-* rules to obtain it**.
+
+    For every class but the Mystic the level changes no *result*, because no
+    other class indexes a level-dependent table in this card. It is validated
+    anyway, because §1.1 requires it: a request for a 37th-level fighter is a
+    request for a character who cannot exist, and answering it would be
+    answering for nobody.
 
     **Takes no condition parameter and no setting parameter.** Card §7's
     condition modifiers are ``NOT V1-WIRED`` (see the module docstring), and

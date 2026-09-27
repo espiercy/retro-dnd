@@ -28,6 +28,7 @@ import pytest
 from rules.character_creation import encumbrance_and_movement
 from rules.character_creation.character_class import CharacterClass
 from rules.character_creation.encumbrance_and_movement import (
+    MAXIMUM_LEVEL,
     MAXIMUM_RUNNING_ROUNDS,
     MYSTIC_MAXIMUM_LEVEL,
     MYSTIC_MV,
@@ -341,16 +342,23 @@ def test_m38_a_mystic_is_never_exempt_from_the_bands(level: int) -> None:
 
 @pytest.mark.parametrize("cls", [c for c in CharacterClass if c is not CharacterClass.MYSTIC])
 def test_m39_mv_is_mystic_only(cls: CharacterClass) -> None:
-    """M39 — non-Mystic of any level, 0 cn: 120'. MV is Mystic-only."""
-    for level in (1, 10, 16):
+    """M39 — non-Mystic of any level, 0 cn: 120'. MV is Mystic-only.
+
+    "Any level" means any level the class can reach: the per-class maximum
+    bounds the input for every class (§1.1).
+    """
+    maximum = MAXIMUM_LEVEL[cls]
+    for level in (1, (1 + maximum) // 2, maximum):
         assert movement_rate(cls, level, 0).normal == 120
 
 
 def test_m40_a_mystic_level_above_sixteen_is_refused() -> None:
     """M40 — Mystic level above 16: ERROR. 16 is the maximum."""
     assert MYSTIC_MAXIMUM_LEVEL == 16
-    with pytest.raises(MovementLevelError, match="at most 16"):
+    with pytest.raises(MovementLevelError, match="at most 16 for a mystic"):
         rate_of(0, CC.MYSTIC, 17)
+    with pytest.raises(MovementLevelError, match="at most 16 for a mystic"):
+        rate_of(0, CC.MYSTIC, 100)
     assert rate_of(0, CC.MYSTIC, 16).normal == 320
 
 
@@ -769,10 +777,45 @@ def test_a_non_int_level_is_refused(bad: object) -> None:
         rate_of(0, CC.MYSTIC, bad)  # type: ignore[arg-type]
 
 
-def test_a_non_mystic_level_above_sixteen_is_accepted() -> None:
-    # Only the Mystic indexes a level-dependent table here, so only the
-    # Mystic's maximum bounds the input. See the completion record.
-    assert movement_rate(CC.FIGHTER, 36, 0).normal == 120
+@pytest.mark.parametrize("cls", list(CharacterClass))
+def test_every_class_maximum_level_is_accepted_and_one_past_it_is_not(
+    cls: CharacterClass,
+) -> None:
+    """§1.1 — the per-class maximum bounds the input for EVERY class."""
+    maximum = MAXIMUM_LEVEL[cls]
+    assert movement_rate(cls, maximum, 0).normal > 0
+    with pytest.raises(MovementLevelError, match=f"at most {maximum}"):
+        movement_rate(cls, maximum + 1, 0)
+
+
+def test_the_maximum_level_projection_matches_char_003s() -> None:
+    """Two card-local projections of one ADV-002 property must not drift.
+
+    CHAR-003 projects the same maxima to bound hit-point accrual. Reaching
+    into its private table is deliberate: this test exists so that changing
+    one projection without the other fails loudly here rather than leaving
+    the two cards quietly disagreeing about who can reach what level.
+    """
+    from rules.character_creation.hit_points_and_hit_dice import _MAXIMUM_LEVEL
+
+    assert dict(MAXIMUM_LEVEL) == dict(_MAXIMUM_LEVEL)
+
+
+def test_the_maximum_level_table_covers_every_class() -> None:
+    assert set(MAXIMUM_LEVEL) == set(CharacterClass)
+    assert MAXIMUM_LEVEL[CC.MYSTIC] == MYSTIC_MAXIMUM_LEVEL == 16
+    # The demihuman limits and the human 36 are ADV-002's property,
+    # projected here only to bound what this card accepts.
+    assert MAXIMUM_LEVEL[CC.DWARF] == 12
+    assert MAXIMUM_LEVEL[CC.ELF] == 10
+    assert MAXIMUM_LEVEL[CC.HALFLING] == 8
+    assert MAXIMUM_LEVEL[CC.FIGHTER] == 36
+
+
+def test_the_maximum_level_table_is_immutable() -> None:
+    assert isinstance(MAXIMUM_LEVEL, MappingProxyType)
+    with pytest.raises(TypeError):
+        MAXIMUM_LEVEL[CC.FIGHTER] = 99  # type: ignore[index]
 
 
 def test_a_non_character_class_is_refused() -> None:
