@@ -21,4 +21,5 @@ Durable per-issue implementation records for the Retro D&D Simulator project (`D
 | [ISSUE-015](ISSUE-015-shared-currency-primitive.md) | Shared Currency Primitive (CLUSTER-003 Slice A) | Complete — accepted 2026-09-25, not merged |
 | [ISSUE-016](ISSUE-016-char-004-catalogs-money-encumbrance.md) | CHAR-004 Catalogs, Starting Money & Derived Encumbrance (CLUSTER-003 Slice B) | Complete — accepted 2026-09-27, not merged |
 | [ISSUE-017](ISSUE-017-char-004-class-legality-and-druid-pricing.md) | CHAR-004 Class Legality & Druid Pricing (CLUSTER-003 Slice C) | Complete — accepted 2026-09-27, not merged |
-| [ISSUE-018](ISSUE-018-char-005-encumbrance-and-movement.md) | CHAR-005 Encumbrance & Movement Rate (CLUSTER-003 Slice D) | Complete — awaiting human review, not merged |
+| [ISSUE-018](ISSUE-018-char-005-encumbrance-and-movement.md) | CHAR-005 Encumbrance & Movement Rate (CLUSTER-003 Slice D) | Complete — changes required 2026-09-27, applied; not merged |
+| [ISSUE-019](ISSUE-019-exp-003-dungeon-movement.md) | EXP-003 Dungeon Movement & EXP-002 Integration (CLUSTER-003 Slice E) | Complete — awaiting human review, not merged |
