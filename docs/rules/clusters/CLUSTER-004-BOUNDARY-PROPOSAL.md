@@ -1,8 +1,21 @@
 # CLUSTER-004 — Boundary Research and Candidate Scopes
 
 ```text
-STATUS:  PROPOSAL / AWAITING HUMAN REVIEW
+STATUS:  SUPERSEDED IN PART -- see CLUSTER-004-BOUNDARY-CORRECTION.md
 ```
+
+> **Forward pointer added 2026-09-27. The body below is unaltered and is kept as the record
+> of an analysis made against an incomplete inventory.**
+>
+> This document was written before the 42 lost `INVENTORY.md` lines were restored
+> (`6c5c73a`). It could read the deleted rows' *dependency* cells from git, but **not their
+> `Downstream Consumers`, `Status` or `Risk / Notes` columns** — which is where the findings
+> that changed the boundary were sitting.
+>
+> **Its §1 defect finding stands. Its §4 recommendation does not.** The active boundary is
+> now `EXP-006` + `ENC-005`, with `EXP-004` and `EXP-010` deferred, and the dungeon-stocking
+> cycle is three-member rather than two. See `CLUSTER-004-BOUNDARY-CORRECTION.md` §2 for the
+> full list of what changed and what remains valid.
 
 > **This document proposes nothing binding.** No Rule Card is drafted, no cluster is
 > selected, and no implementation is authorized. It exists so a human can choose a
