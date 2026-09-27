@@ -212,6 +212,50 @@ class EncumbranceError(CharacterCreationError):
     """
 
 
+class MovementLevelError(CharacterCreationError):
+    """A movement rate was requested for a level that is not a valid level.
+
+    CHAR-005 §1.1 (amended 2026-09-25), CLUSTER-003 Slice D. Covers both the
+    structural and the domain case, because the invalid value is supplied
+    for the same parameter either way:
+
+    - **structural** — ``level`` is not an ``int``, or is a ``bool``.
+      ``bool`` is a subtype of ``int``, so static typing alone permits it
+      and ``True`` would otherwise read as level 1;
+    - **domain** — below 1, or above the applicable per-class maximum. For
+      the Mystic, whose ``MV`` table §6 indexes, that maximum is **16**
+      (approved case M40).
+
+    **Deliberately mirrors** :class:`HitPointLevelError`: one parameter, one
+    error, for exactly the reasons that docstring already records. The
+    request is rejected rather than clamped, because a clamped level would
+    silently answer for a character who does not exist.
+    """
+
+
+class MovementNotPermittedError(CharacterCreationError):
+    """A movement the rules do not permit was requested.
+
+    CHAR-005 §5 and §9, CLUSTER-003 Slice D. Three causes, distinguished by
+    message:
+
+    - **normal speed inside the combat sequence.** RC Ch. 8 p. 103 is
+      categorical: *"A character's normal speed is **never used** during
+      the combat sequence"* (approved case M21). Normal speed is feet per
+      *turn*; the combat sequence runs in rounds;
+    - **running while already engaged in combat** (case M24);
+    - **running past the 30-round limit** (case M64). §9 states the limit
+      as a maximum, not as a threshold that converts into exhaustion
+      silently part-way through a longer run.
+
+    Not in the implementation plan's §6.5 error list, which named only
+    :class:`MovementLevelError` for this card. The plan's §6.3 sketch did
+    not carry a §5 scale-boundary API at all, and these three refusals are
+    what approved cases M21, M24 and M64 require; recorded here as a
+    deliberate departure rather than an unnoticed one.
+    """
+
+
 class EquipmentLegalityError(CharacterCreationError):
     """A character's class may not use this item.
 
