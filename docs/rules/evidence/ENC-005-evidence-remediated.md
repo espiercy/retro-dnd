@@ -3,14 +3,16 @@
 ```text
 RULE CARD          ENC-005   Retreat, Pursuit & Evasion (underworld)
 STAGE              A (EVIDENCE).  Stage B NOT begun, NOT authorized.
-PASS               3 -- pass 2 was a bounded remediation; pass 3 remediates the second
-                   independent review's findings, chiefly Chapter 5.
+PASS               4 -- remediates the THIRD independent review's findings: the rest
+                   of Chapter 5 (pp. 84-86), the DEC-0008 error, and two elided
+                   quotations.
 SUPERSEDES         docs/rules/evidence/ENC-005-evidence.md  (pass 1, committed e33c4e0)
                    Pass 1 returned PRIMARY-SOURCE COMPLETENESS: FAIL and is preserved
                    unaltered as the audit record of that failure.
 REVIEW HISTORY     pass 1  FAIL   CLUSTER-004-stage-a-completeness-review.md
                    pass 2  FAIL   CLUSTER-004-stage-a-completeness-review-2.md
-                   pass 3  pending third independent review
+                   pass 3  FAIL   CLUSTER-004-stage-a-completeness-review-3.md
+                   pass 4  pending fourth independent review
 PRIMARY SOURCE     D&D Rules Cyclopedia (TSR 1071)
 RECOMMENDATION     see section 19
 ```
@@ -84,7 +86,8 @@ Pursuit` (pp. 98–100), entered from the checklists on pp. 91 and 93.
 | `Castle Reactions Table` | 99 | yes | yes | **EXCLUDED** — wilderness castle encounters, `EXP-008`/`MON-001` |
 | `Balancing Encounters Checklist` | 101 | yes | yes | **EXCLUDED** — `ENC-007`, optional system |
 | `Character Movement Rates and Encumbrance Table` | 88 | yes | yes | `CHAR-005` **[LANDED]**. Consumed, not re-derived |
-| `Sample Skills Table` | **82** | **yes — pass 3** | **yes** | **GOVERNING for step 6** via `Caving`; skill ownership `CHAR-012`. §5.7. *Undispositioned by pass 2 (Guardrail C)* |
+| `Sample Skills Table` | **82** | **yes — pass 3; read ROW BY ROW in pass 4** | **yes** | **GOVERNING for step 6** via `Caving`; `Tracking` bears on N-17 (N-37); `Endurance` bears on Q4; all other rows inspected and **excluded as unrelated to retreat, pursuit or evasion**. Skill ownership `CHAR-012`. §5.7 |
+| `Skill Slot Acquisition (Humans)` / `(Demihumans)` Tables | 86 | **yes — pass 4** | **yes** | **EXCLUDED** — skill acquisition/progression, wholly `CHAR-012` |
 | `Attack Roll Modifiers Table` | **108** | **yes — pass 3** | **yes** | **EXCLUDED — `COMBAT-*`.** Its exhaustion rows are routed and a p. 88 wording tension is reported (§5.5a) |
 | `Terrain Effects on Movement Table` | 88 | yes | yes | **EXCLUDED** — wilderness movement terrain. **Not** the Evasion Table's terrain (§5.4) |
 
@@ -235,14 +238,24 @@ only in prose rather than recorded as evidence. Added:
 |---|---|---|---|
 | **N-32** | **Catch-up is a DM-tracked positional determination, not a roll:** *"If the pursuers end one round having caught up to the evaders **(the DM should be keeping track of their relative positions to determine this)** and then **win initiative the next round**, they can attack, **forcing the evaders to turn and fight**."* | p. 99 col. 3 | **DIRECT PRIMARY TEXT** |
 | **N-33** | **Obstacle branch:** *"the evaders could run into some obstacle that prevents them from continuing (a sheer cliff face, a dead-end hallway, a magically locked door, another party of enemies, and so on). In these situations, combat usually results, though **the evaders might choose to surrender instead**."* | p. 99 col. 3 | **DIRECT PRIMARY TEXT** |
-| **N-34** | **Open-ended DM adjustment:** *"The DM may adjust evasion chances for terrain, differences in speed, **and other factors**"* — the Evasion Table's condition list is **not closed** | p. 99 col. 1 | **DIRECT PRIMARY TEXT** |
+| **N-34** | **DM adjustment, quoted in full:** *"The DM may adjust evasion chances for terrain, differences in speed, and other factors **as noted in the Evasion Table**."* | p. 99 col. 1 | **DIRECT PRIMARY TEXT** |
 | **N-35** | **Area familiarity:** *"If monsters are familiar with an area, they may be able to evade pursuers by **rapidly turning corners, closing doors behind them**, and so forth."* No value is attached | p. 99 col. 1 | **DIRECT PRIMARY TEXT** |
 | **N-36** | **Step 2's automatic evasion has a printed duration and direction:** the surprising group *"may automatically evade the surprised group by **turning away and moving off at another direction at running speed for one round**"*, after which *"The nonsurprised group has enough time to get clear of the area before the surprised group can recover enough to give chase"* | pp. 98–99 | **DIRECT PRIMARY TEXT** |
 
 **N-32 matters for Stage B**: step 5b's *"caught"* is not a die roll. RC delegates it to DM
-position-tracking plus an initiative win. **N-34 matters for the terrain question (Q3)**: the
-adjustment list is explicitly open-ended, so a specification that treated the Evasion Table's
-five conditions as exhaustive would contradict the prose.
+position-tracking plus an initiative win.
+
+**N-34 is corrected in pass 4.** Pass 3 quoted it as *"…and other factors"* with the trailing
+clause dropped, and concluded the adjustment list was *"explicitly open-ended."* The full
+sentence ends **"as noted in the Evasion Table"**, which points the reader **back to the table's
+five printed conditions** rather than away from them. **That conclusion is withdrawn.**
+
+The sentence is genuinely ambiguous — *"and other factors as noted in the Evasion Table"* can be
+read as *(other factors) as noted in the table* (closed) or as *terrain, speed and other factors,
+as [those are] noted in the table* (open, with the table as exemplar). **`ENC-005` does not
+choose**, and the immediately following prose supplies unlisted adjustments anyway — the `25%`
+woods example and the `+/-25%` double-speed rule (N-13) — which is evidence but not a resolution.
+Recorded at §8 Q3 as part of the terrain question rather than settled here.
 
 **N-14 remains unadjudicated.** `INTERNAL SOURCE CONFLICT REQUIRES REVIEW`.
 
@@ -253,6 +266,7 @@ five conditions as exhaustive would contradict the prose.
 | N-15 | The Evasion Table's `Condition in Effect` column adjusts an **evasion percentage**. It is **not** a movement-rate modifier | **DIRECT PRIMARY TEXT** |
 | N-16 | *"Difficult terrain"* is given by **example only** — *"thick woods, a long dungeon corridor riddled with doors and side passages, etc."* — with **no criterion** | **DIRECT PRIMARY TEXT** |
 | N-17 | Terrain also appears as an **escape trigger**: evaders temporarily out of vision range who reach difficult terrain get **a second Evasion Table roll**, success meaning *"the pursuers fail to follow their tracks"* | **DIRECT PRIMARY TEXT** |
+| N-17a | RC has a separate **`Tracking`** skill (N-37) whose success the DM varies by *"age of the tracks, type of terrain"* — a second, **skill-based** route to the same question N-17 resolves with a percentage. **Recorded, not reconciled**; owner `CHAR-012` | **DIRECT PRIMARY TEXT** |
 | N-18 | Terrain also appears as a **capture** cause: step 5b, *"caught … because of superior speed **or terrain obstacles**"* | **DIRECT PRIMARY TEXT** |
 
 **No generic terrain mechanic is created, proposed, or imported.** The `Terrain Effects on
@@ -274,7 +288,13 @@ the DM judges the dropped item appealing to that monster**. The die is not uncon
 specification that treated it as such would be wrong.
 | N-20 | **`Regain Bearings`** is a printed subheading — step 6's content: *"If the evaders do get away, they need to **rest from their exertions** and regain their bearings—that is, determine where they now are."* | p. 100 col. 1 | **DIRECT PRIMARY TEXT** |
 | N-21 | *"**For every round the chase lasted, the evaders moved at full running speed** in directions chosen or assumed by the DM. They didn't have time to consult their map, and the DM should enforce this fact rigorously."* | p. 100 col. 1–2 | **DIRECT PRIMARY TEXT** |
-| N-22 | *"…their attempts at evasion could have carried them deep into unknown territory (such as … **unexplored dungeon levels**), and **now the characters are lost**; they'll have to explore their way back to the areas they know."* | p. 100 col. 2 | **DIRECT PRIMARY TEXT** |
+| N-22 | *"They didn't have time to consult their map, and the DM should enforce this fact rigorously. **If their movement carried them into areas they already knew or had mapped, they're fine.** But, at the DM's discretion, their attempts at evasion could have carried them deep into unknown territory (such as … **unexplored dungeon levels**), and **now the characters are lost**; they'll have to explore their way back to the areas they know."* | p. 100 col. 2 | **DIRECT PRIMARY TEXT** |
+
+**N-22's negative branch was elided in pass 3** and is restored: *"If their movement carried them
+into areas they already knew or had mapped, **they're fine**."* Becoming lost is **not** an
+automatic consequence of a chase — it is conditioned on the flight having crossed into unmapped
+territory, at DM discretion. A specification built on pass 3's truncated quote would have got
+this wrong.
 
 **Correct classification of p. 100:**
 
@@ -309,7 +329,9 @@ Tables Index; the second independent review reached it by reading that index ent
 |---|---|---|---|
 | **N-28** | **`Caving`**: *"an ability to always know where one is while exploring underground caves, cavern complexes, rivers, etc. … The Caving skill can also be used in a maze. Skill checks are necessary when the character has become disoriented. **If he is forced to flee for a long stretch, he must make a skill check to keep from being lost. (Characters without this skill automatically become lost in such a situation.)**"* | p. 83 | **DIRECT PRIMARY TEXT** |
 | N-29 | A skill check is **`1d20` ≤ the governing ability score**; `20` always fails. `Caving` is a **Wisdom** skill | pp. 82 | **DIRECT PRIMARY TEXT** |
-| N-30 | **The general-skills system is optional**: *"Using general skills is **optional**. If the DM doesn't want to use them in his or her campaign, they won't be used."* | p. 81 | **DIRECT PRIMARY TEXT** |
+| N-30 | **RC** calls the system optional: *"Using general skills is **optional**. If the DM doesn't want to use them in his or her campaign, they won't be used."* | p. 81 | **DIRECT PRIMARY TEXT** |
+| **N-30a** | **The project already required it.** `INVENTORY.md`'s `CHAR-012` row: *"RC Optional/Additional system → **Project-Selected: REQUIRED (`DEC-0008`)**"* | `INVENTORY.md`, `DEC-0008` | **repository fact, not a source fact** |
+| **N-37** | **`Tracking`**: *"The character can follow tracks. The DM is free to increase or penalize the chance of success depending on the circumstances (**age of the tracks, type of terrain**, number of tracks being followed, and so forth)."* p. 86 adds that when one tracker fails, *"there are no tracks to find,"* so others may not re-roll | pp. 85–86 | **DIRECT PRIMARY TEXT** |
 | **N-31** | **`Endurance`**: a successful check lets a character *"**run** (or perform some demanding task) **for an hour** without collapsing"*, re-checked each hour at a cumulative `+1` penalty; on completion or failure he *"must rest for **three times** the amount of time he was performing that task"* | p. 83 | **DIRECT PRIMARY TEXT** |
 
 **N-28 is step 6.** Checklist step 6 reads *"Regain Bearings: Evaders rest and determine where
@@ -322,15 +344,26 @@ without the skill**. The trigger condition is the chase itself.
 ```text
 WRONG (pass 2)   "RC supplies no dungeon getting-lost procedure."
 
-CORRECT          With the OPTIONAL general-skills system in use, RC supplies a
-                 dungeon-side procedure for becoming lost while fleeing: a Caving
-                 skill check, with automatic loss for characters lacking the skill
-                 (p. 83).  It is not a die-roll-against-a-table procedure like the
-                 wilderness Game Day step 2 (1d6, p. 91); it is a skill check.
+WRONG (pass 3)   The above, corrected -- but made CONDITIONAL on whether the
+                 optional general-skills system is in use, and escalated to the
+                 human owner as an undecided question.  DEC-0008 had already
+                 decided it (N-30a).
 
-                 With the general-skills system NOT in use, RC supplies nothing for
-                 the dungeon case, and p. 100's "now the characters are lost" remains
-                 DM discretion.
+CORRECT          RC supplies a dungeon-side procedure for becoming lost while
+                 fleeing: a Caving skill check (1d20 <= Wisdom), with AUTOMATIC
+                 loss for characters lacking the skill (p. 83).  It is not a
+                 die-roll-against-a-table procedure like the wilderness Game Day
+                 step 2 (1d6, p. 91); it is a skill check.
+
+                 DEC-0008 selected General Skills as project-REQUIRED, so this
+                 procedure is IN FORCE for V1.  It is not conditional on an
+                 open decision, and there is no open decision to escalate.
+
+                 p. 100's negative branch still applies and pass 3 elided it:
+                 "If their movement carried them into areas they already knew or
+                 had mapped, THEY'RE FINE."  Becoming lost is not automatic on a
+                 chase; it applies when the flight carried the party into
+                 unknown territory.
 ```
 
 Note that N-28's second sentence reaches **beyond skill-havers**: *"Characters without this
@@ -597,6 +630,10 @@ p. 81    Ch. 5   General Skills -- "Using general skills is optional"   -- pass 
 p. 82    Ch. 5   How Skills Are Used; SAMPLE SKILLS TABLE                -- pass 3
 p. 83    Ch. 5   CAVING; ENDURANCE (Blind Shooting/Fire-Building read,
                  routed to EXP-006)                                      -- pass 3
+p. 84-85 Ch. 5   Sample Skills Table read ROW BY ROW; TRACKING, Stealth,
+                 Survival, Hunting inspected and routed                  -- pass 4
+p. 86    Ch. 5   Positive and Negative Modifiers; Using Skills Together
+                 (the Tracking failure example, N-37)                    -- pass 4
 p. 88    Ch. 6   Character Movement Rates and Encumbrance; Terrain Effects;
                  RUNNING + EXHAUSTION rules (§5.5a)                       -- pass 3
 p. 108   Ch. 8   Attack Roll Modifiers Table -- exhaustion rows only, routed
@@ -670,7 +707,7 @@ as ambiguity.**
 | *"RC supplies no dungeon getting-lost procedure"* (pass 2) | **Pass 3:** read the p. 301 Tables Index entry by entry; opened `Sample Skills Table . 82` and Ch. 5 | **REJECTED — falsified.** `Caving`, p. 83 (N-28) |
 | *"Q8 is `BLOCKED` on unresearched `CHAR-012`"* (pass 2) | **Pass 3:** opened the one page the question actually turned on | **REJECTED.** It was unfinished inspection, not a block (§8.2) |
 | "Step 5's speed contest is unaffected by chase length" | **Pass 3:** read p. 88 in full | **REJECTED.** An exhausted runner **drops to encounter speed** (N-27c), changing the comparison step 5b decides |
-| "The Evasion Table's five conditions are the closed adjustment set" | Re-read p. 99 col. 1 | **REJECTED.** *"and other factors"* — explicitly open-ended (N-34) |
+| "The Evasion Table's five conditions are the closed adjustment set" | **Pass 4:** re-read p. 99 col. 1 **to the end of the sentence** | **NOT ESTABLISHED EITHER WAY.** Pass 3 rejected it on a truncated quote; the full sentence ends *"as noted in the Evasion Table"*, which cuts the other way. Recorded as part of Q3, **not resolved** (N-34) |
 | "Step 5b's *caught* is a die roll" | Re-read p. 99 col. 3 | **REJECTED.** DM position-tracking plus an initiative win (N-32) |
 
 ---
@@ -738,12 +775,15 @@ Q1   Is ENC-005 underworld-only, or does it own RC's one general evasion procedu
      given that EXP-010 was deferred over THREE?
 ```
 
-A third, surfaced by pass 3 and worth the human owner's attention:
+**A third item raised by pass 3 is WITHDRAWN in pass 4.** Pass 3 escalated the general-skills
+system to the human owner as a newly discovered optional system whose status the simulator had
+not decided, and claimed `BOUNDARY-CORRECTION` §6 item 2's *"none found"* was now falsified.
 
-```text
-The general-skills system is OPTIONAL (N-30).  Caving therefore makes step 6's
-outcome depend on whether an optional RC subsystem is switched on -- and the
-simulator has no recorded decision on whether it is.  BOUNDARY-CORRECTION §6
-item 2 asked "whether any newly discovered RC optional system should be enabled"
-and recorded "none found."  One has now been found.
-```
+**That was wrong.** `DEC-0008` selected General Skills as **project-REQUIRED**, and
+`INVENTORY.md`'s `CHAR-012` row states it (N-30a) — in the same registry whose `ENC-004` row
+this packet quotes `DEC-0008 REQUIRED` from, four sections earlier, in §4.4's own dependency
+table. **`BOUNDARY-CORRECTION` §6 item 2 remains correctly closed. There is no decision to
+escalate**, and the human owner's time is not asked for.
+
+The substantive consequence is the opposite of an open question: `Caving`'s step-6 determination
+is **in force for V1**, not contingent.

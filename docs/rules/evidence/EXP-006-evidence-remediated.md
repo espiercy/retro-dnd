@@ -3,14 +3,16 @@
 ```text
 RULE CARD          EXP-006   Light & Exploration Resources
 STAGE              A (EVIDENCE).  Stage B NOT begun, NOT authorized.
-PASS               3 -- pass 2 was a full DEC-0010 structure-first re-run; pass 3
-                   remediates the second independent review's findings.
+PASS               4 -- remediates the THIRD independent review's findings: the rest
+                   of Chapter 5 (pp. 84-86), the DEC-0008 error, and p. 92's
+                   terrain-keyed pointer.
 SUPERSEDES         docs/rules/evidence/EXP-006-evidence.md  (pass 1, committed e33c4e0)
                    Pass 1 returned PRIMARY-SOURCE COMPLETENESS: FAIL and is preserved
                    unaltered as the audit record of that failure.
 REVIEW HISTORY     pass 1  FAIL   CLUSTER-004-stage-a-completeness-review.md
                    pass 2  FAIL   CLUSTER-004-stage-a-completeness-review-2.md
-                   pass 3  pending third independent review
+                   pass 3  FAIL   CLUSTER-004-stage-a-completeness-review-3.md
+                   pass 4  pending fourth independent review
 PRIMARY SOURCE     D&D Rules Cyclopedia (TSR 1071)
 RECOMMENDATION     see section 19
 ```
@@ -277,6 +279,17 @@ free-floating). **RC consults the `Visibility` column only when neither side is 
 When either side is surprised, distance is a flat `1d4 x 10'` and **light does not enter the
 calculation at all**.
 
+| # | Fact | Object | Confidence |
+|---|---|---|---|
+| **E-11b** | p. 92's own pointer into the table is phrased on **terrain/setting**, not on light: *"take a look at the Encounter Distances Table. **When the type of terrain (dungeon, wilderness, ocean/sea, or underwater) is known**, the DM can find out how far apart the groups are"* | p. 92 | **DIRECT PRIMARY TEXT** |
+
+**E-11b qualifies this packet's seam claim and is added in pass 4.** The `Visibility` column is
+printed and real (E-7), but **RC's own prose introduces the table by its `Setting` column.**
+`EXP-006` should not overstate how central light is to that lookup: the table is indexed by
+both, RC's narrative emphasis is on setting, and the light row is selected within a setting.
+§7.2's arrow from *light state* to *Visibility category* stands, and is **narrower** than pass 3
+implied.
+
 This narrows `EXP-006`'s relevance to encounter distance considerably, and it is a
 qualification that a reader of the p. 93 table alone would not see. It also means the light
 state's mechanical consequence is **conditional on `ENC-002`'s output** — reinforcing, not
@@ -489,9 +502,40 @@ named object in that index.
 
 | # | Fact | Object | Confidence |
 |---|---|---|---|
-| E-33 | **The whole system is optional.** *"Using general skills is **optional**. If the DM doesn't want to use them in his or her campaign, they won't be used."* | p. 81 | **DIRECT PRIMARY TEXT** |
-| E-34 | A skill check is **`1d20` against the governing ability score**; *"If the roll on the 1d20 is **equal to or less than** the ability score, the skill use succeeds. A roll of **20 always fails**"* | p. 82 | **DIRECT PRIMARY TEXT** |
-| E-35 | `Sample Skills Table` assigns the governing ability: **`Fire-Building` → Intelligence**, **`Blind Shooting` → Dexterity**, `Caving` → Wisdom, `Endurance` / `Food Tasting` → Constitution | p. 82 | **DIRECT PRIMARY TEXT** |
+| E-33 | **RC** classifies the system as optional: *"Using general skills is **optional**. If the DM doesn't want to use them in his or her campaign, they won't be used."* | p. 81 | **DIRECT PRIMARY TEXT** |
+| **E-33a** | **The project has already decided this.** `INVENTORY.md`'s `CHAR-012` row reads: *"RC Optional/Additional system → **Project-Selected: REQUIRED (`DEC-0008`)**"* | `INVENTORY.md`, `DEC-0008` | **repository fact, not a source fact** |
+| E-34 | A skill check is **`1d20` against the governing ability score**; *"If the roll on the 1d20 is **equal to or less than** the ability score, the skill use succeeds. A roll of **20 always fails**"* (p. 82), and — **p. 86** — *"**A natural roll of 1 on 1d20 is an automatic success**, just as a roll of 20 is an automatic failure"* | pp. 82, 86 | **DIRECT PRIMARY TEXT** |
+| E-35 | `Sample Skills Table` assigns the governing ability: **`Fire-Building` → Intelligence**, **`Blind Shooting` → Dexterity**, `Caving` → Wisdom, `Endurance` / `Food Tasting` → Constitution, `Survival` / `Tracking` / `Hunting` → Intelligence | p. 82 | **DIRECT PRIMARY TEXT** |
+| **E-41** | **A third sightlessness modifier.** p. 86 `Positive and Negative Modifiers`: circumstances making a job very hard — *"such as **not being able to see**, working on the rolling deck of a ship during a severe storm"* — *"can warrant penalties of **+5, +10, or even +15** to the roll"* (added, because the roll is under-the-score) | p. 86 | **DIRECT PRIMARY TEXT** |
+| **E-42** | **`Survival (choose terrain)`**: *"allows the character to easily find food …, **shelter, and water** in a single type of terrain, selected from … desert, forest/jungle, mountain/hill, open sea, plains, arctic."* Forages automatically in fertile areas; supplying others costs *"a **+1** penalty … for **each additional person**"*; *"He must roll **each day**"* | p. 85 | **DIRECT PRIMARY TEXT** |
+| E-43 | **`Hunting`** and **`Tracking`** exist as separate Intelligence skills; `Tracking`'s success chance varies by *"age of the tracks, **type of terrain**, number of tracks"* | pp. 84–85 | **DIRECT PRIMARY TEXT** |
+
+#### E-33a — a correction this packet must make about itself
+
+**Pass 3 wrote that the general-skills system's status was an open project question, and escalated
+it to the human owner as a newly discovered optional system. That was false.** `DEC-0008`
+selected General Skills as **project-REQUIRED**, and `INVENTORY.md`'s `CHAR-012` row says so in
+terms. This packet's own §7.1 and `ENC-005`'s §7.1 both cite `DEC-0008` correctly for `ENC-004`
+in the same breath.
+
+**Consequences, applied throughout pass 4:**
+
+```text
+WITHDRAWN   "General skills NOT IN USE -> RC supplies nothing" as a live V1 branch.
+            DEC-0008 settled it.  The branch is a statement about RC's own framing,
+            not about this simulator's configuration.
+
+THEREFORE   Fire-Building's adverse-condition procedure (E-36) is IN FORCE for V1.
+            Caving's step-6 lost determination (ENC-005 N-28) is IN FORCE for V1,
+            including "characters without this skill automatically become lost."
+
+WITHDRAWN   ENC-005's escalation of a "newly discovered optional system" to the
+            human owner.  BOUNDARY-CORRECTION §6 item 2 remains correctly closed.
+```
+
+This is the third time in this cluster that a claim was asserted without opening the artifact
+that refutes it — pass 1 against the source, pass 2 against the p. 301 index, pass 3 against the
+project's own registry. **Recorded rather than quietly fixed.**
 | **E-36** | **`Fire-Building`**: *"This is the ability to start a fire **without a tinderbox**. A character **with a tinderbox and this skill** is able to start fires **automatically (no roll necessary) in ordinary conditions**. If the character is trying to build a fire **without** a tinderbox, he will eventually succeed; he must make a `1d6` roll each round, and on a **1 or 2** he ignites the fire. If the character is trying to build a fire **in adverse conditions (during high winds or using wet wood), he must make a skill check with penalties assigned by the DM**."* | p. 83 | **DIRECT PRIMARY TEXT** |
 | **E-37** | **`Blind Shooting`**: *"the ability to shoot at a target without being able to see it; it is typically used when the character is **in darkness** or when the target is outside the range of his sight or infravision. The character must be able to **hear** the target… If the character makes his skill check, he can then fire at the target; he needs an attack roll to hit the target, but **the character doesn't suffer the normal darkness penalties**."* | p. 83 | **DIRECT PRIMARY TEXT** |
 | E-38 | `Food Tasting`: *"the ability to taste food and water to see if they have **spoiled**"* — avoids food poisoning | p. 83 | **DIRECT PRIMARY TEXT** |
@@ -502,16 +546,29 @@ named object in that index.
 tinderbox use outside *"normal (comparatively dry) circumstances."* **RC establishes one**: a
 `Fire-Building` skill check with DM-assigned penalties (E-36). Withdrawn.
 
-**But the falsification is conditional, and the condition matters.** E-33 makes the whole system
-optional. So:
+**The procedure is in force for V1** (E-33a — `DEC-0008` selected General Skills as
+project-REQUIRED), and it has a **quantified** penalty scale, which pass 3 did not have because
+it never opened p. 86:
 
 ```text
-General skills IN USE      adverse conditions -> Fire-Building check, DM penalties
-                           tinderbox + skill  -> AUTOMATIC, no roll, ordinary conditions
-General skills NOT IN USE  RC supplies NOTHING for adverse conditions.
-                           The p. 70 tinderbox 1d6 / ignite on 1-2 is qualified to
-                           "normal (comparatively dry) circumstances" and stops.
+character HAS Fire-Building, ordinary conditions, with tinderbox
+    -> AUTOMATIC ignition, no roll
+
+character HAS Fire-Building, adverse conditions (high winds, wet wood)
+    -> skill check: 1d20 <= Intelligence, DM-assigned penalty ADDED to the roll
+    -> p. 86 scales that penalty: +1/+2 slightly harder, +3/+4 substantially,
+       +5/+10/+15 very hard
+    -> natural 1 always succeeds; natural 20 always fails   (E-34)
+
+character LACKS Fire-Building
+    -> p. 70 tinderbox rule governs: 1d6 each round, ignite on 1-2, and it is
+       qualified to "normal (comparatively dry) circumstances" and stops there
+    -> RC states NOTHING for a skill-less character in adverse conditions
 ```
+
+**So Q5's gap narrows rather than closing completely**: RC now answers the adverse-conditions
+question **for characters who have the skill**, and remains silent for those who do not. That
+residue is recorded at §8 Q5 rather than smoothed over.
 
 **E-30 is qualified accordingly**, not replaced: the p. 70 tinderbox rule is the
 non-optional-system rule, and E-36 supersedes it for characters who have the skill.
@@ -529,6 +586,35 @@ penalties **as darkness penalties**, from a third chapter. It is therefore addit
 *being blind* as the same mechanical state, in Chapters 5, 13 and 14 independently.
 
 Ownership of the skill is `CHAR-012`'s; the missile attack is `COMBAT-*`'s. **Neither is claimed.**
+
+### 5.8a `Survival`, `Hunting`, `Tracking` (pp. 84–85) — the food/water skills, enumerated in pass 4
+
+Pass 3 opened only pp. 81–83 — the three pages it had been quoted text from — and then wrote
+*"Chapter 5 (81-86) opened and dispositioned."* **That inspection claim was false, and it is
+corrected here.** pp. 84–86 were opened in pass 4, and the `Sample Skills Table` was read **row
+by row** rather than for the five rows already named to it.
+
+`Survival` (E-42) is the object that matters: a **per-day, per-person, penalty-scaled procedure
+for finding food, shelter and water**, sitting in the same responsibility space as this card's
+rations (§5.6) and waterskin (E-32). `Hunting` supplies food automatically in fertile areas and
+by skill check elsewhere (E-43).
+
+```text
+DISPOSITION:  CONFIRMED OUT OF SCOPE for EXP-006, owner CHAR-012 [UNRESEARCHED].
+
+Survival and Hunting are TERRAIN-SELECTED WILDERNESS skills -- desert, forest/jungle,
+mountain/hill, open sea, plains, arctic.  NO DUNGEON TERRAIN is offered.  They are
+gated behind the standing Wilderness reachability decision as well.
+
+EXP-006 owns PURCHASED, CARRIED consumables and their durations.  It does not own
+skill-based resupply, and it does not absorb the general-skills system.
+```
+
+**They are recorded rather than omitted**, because Q11 asks where RC puts water supply, and the
+honest answer is *"in a wilderness skill this card does not own"* — not *"nowhere."*
+
+`Tracking` (E-43) is routed to `ENC-005` as bearing on its N-17 (*"the pursuers fail to follow
+their tracks"*), and to `CHAR-012` for ownership.
 
 ### 5.9 `Attack Roll Modifiers Table` (p. 108) — a named table carrying a second sightlessness penalty
 
@@ -555,9 +641,23 @@ Attacker exhausted                             -2 penalty
 #### E-39 against E-2 — recorded, **not resolved**
 
 ```text
-p. 150  a completely blind character suffers  "-6 penalty to all attack rolls"
-p. 108  Attacker can't see target             "-4 penalty"
+RC states a sightlessness modifier in THREE places, in three different chapters,
+at three different magnitudes, against three different roll types:
+
+p. 150  Ch. 13  a completely blind character   "-6 penalty to all attack rolls"
+p. 108  Ch. 8   Attacker can't see target      "-4 penalty"      (attack roll)
+p.  86  Ch. 5   "not being able to see"        "+5, +10, or +15" (SKILL roll;
+                                                added, because skill rolls are
+                                                roll-under)      -- E-41
 ```
+
+**The p. 86 instance was added in pass 4** and is the one the second review predicted would be
+missed: it is the penalty scale that E-36's *"penalties assigned by the DM"* actually refers to,
+so this packet was relying on it while never having opened it.
+
+It is **not** a fourth value in the same conflict — it modifies a **skill roll**, not an attack
+roll, so it does not compete with `−6`/`−4`. It is recorded because a card that owns *whether
+there is light* must enumerate every place RC attaches a consequence to there not being any.
 
 **Both are printed. `EXP-006` does not decide which governs, and does not decide whether they
 compose or conflict.** They may be the same rule stated twice at different values (an audit
@@ -734,8 +834,8 @@ gives the default (E-13) and the infravision case (E-9) and nothing between. Tha
 | Q2 | Is a burn-tracking procedure in scope? RC gives durations (E-27, E-28) and a **manual tally instrument** (E-19, E-22), and no executable decrement or expiry rule. | **RESOLVED BY SOURCE INSPECTION** as to the source-property question (RC supplies no procedure). The **scope** half is a Stage-B/human decision, not an evidence gap |
 | Q3 | Is E-22's timetrack method intended for **light durations**, or only magical-effect durations? RC names only magical effects explicitly; the surrounding Timekeeping prose is broader. | **RETAINED AS GENUINE SOURCE AMBIGUITY** |
 | Q4 | Do **rations** belong to this card? Evidence now exists (E-23–E-25): a dungeon-conditioned consumable duration, structurally parallel to torch burn time. | **CONFIRMED OUT OF SCOPE for Stage A** — this is a card-boundary decision reserved to the human owner. Ownership **not claimed**; answering it here would be silent scope expansion |
-| Q5 | Tinderbox ignition outside *"normal (comparatively dry) circumstances"* (E-30). | **RESOLVED BY SOURCE INSPECTION — pass 3.** RC establishes a procedure at p. 83 (`Fire-Building` skill check, DM-assigned penalties, E-36). Pass 2's `PRIMARY PROCEDURE NOT YET ESTABLISHED` is **withdrawn**. The resolution is **conditional on the optional general-skills system being in use** (E-33); with it not in use, RC supplies nothing, which is then a source silence and not an uninspected gap |
-| Q11 | RC gives the `Waterskin` a capacity (one quart) and encumbrance (E-32) but **no water consumption rate**, while `Dehydration` costs `1d8/day` — the harshest row on the Starvation Table. | **RETAINED AS GENUINE SOURCE AMBIGUITY** |
+| Q5 | Tinderbox ignition outside *"normal (comparatively dry) circumstances"* (E-30). | **RESOLVED BY SOURCE INSPECTION for skill-havers** (E-36 + E-41's penalty scale; `DEC-0008` makes the system V1-required, E-33a). Pass 2's `PRIMARY PROCEDURE NOT YET ESTABLISHED` is **withdrawn**. **RETAINED AS GENUINE SOURCE AMBIGUITY for a character without `Fire-Building` in adverse conditions** — RC states nothing, and all governing objects (pp. 70, 81–86) are now inspected |
+| Q11 | Water supply and consumption. | **Restated in pass 4.** RC gives the `Waterskin` a one-quart capacity (E-32) and **no consumption rate**; `Dehydration` costs `1d8/day`, the harshest Starvation Table row. **`Survival` (E-42) supplies water** — but only in one chosen **wilderness** terrain (desert, forest/jungle, mountain/hill, open sea, plains, arctic; **no dungeon**), per day, at `+1` per additional person. So: **RETAINED AS GENUINE SOURCE AMBIGUITY for the dungeon case**, and **CONFIRMED OUT OF SCOPE for the wilderness case**, which is `CHAR-012`'s skill gated on the Wilderness reachability decision |
 | Q12 | p. 150's `−6` (completely blind) against p. 108's `−4` (attacker can't see target) — same rule at two values, or two conditions? p. 150's `Invisibility` entry gives `−6` for a sighted attacker who cannot see his foe, which cuts against the clean reading. | **CONFIRMED OUT OF SCOPE**, ownership `COMBAT-*` **[UNRESEARCHED]**, with `CHAR-005` §7 holding the movement half. **Reasoning stated at §8.2** |
 | Q13 | p. 88 says an exhausted character subtracts `2` from **damage** rolls; p. 108's table puts `−2` in the **attack roll** column. Landed `CHAR-005` §9 cites p. 88 and appears not to have opened p. 108. | **CONFIRMED OUT OF SCOPE** — `CHAR-005` / `COMBAT-*`. Reported to the human owner, **not adjudicated, not absorbed** |
 | Q6 | `Starvation Table` `75%-99%` movement reads `× 3/4`, non-monotonic (E-18). | **CONFIRMED OUT OF SCOPE** — owned by `CHAR-005` §7 and **already adjudicated** as `SR-10`. `EXP-006` re-confirmed the printed value visually and claims nothing further |
@@ -805,6 +905,12 @@ VISUALLY INSPECTED (page images)
     p. 82    Ch. 5   How Skills Are Used; SAMPLE SKILLS TABLE
     p. 83    Ch. 5   Fire-Building; Blind Shooting; Food Tasting; (Caving, Endurance
                      -- read here, routed to ENC-005/CHAR-012)
+    p. 85    Ch. 5   Survival; Tracking; Stealth; Piloting Skill: Types of
+                     Vessels Table                                      -- pass 4
+    p. 86    Ch. 5   Positive and Negative Modifiers (E-41); natural-1 rule;
+                     Improving/Learning Skills; Skill Slot Acquisition
+                     (Humans) and (Demihumans) Tables; Skills and the DM;
+                     Time Use; Using Skills Together / Against Each Other  -- pass 4
     p. 88    Ch. 6   Exhaustion + running rules   (CHAR-005 §9 [LANDED]; for E-40)
     p. 108   Ch. 8   ATTACK ROLL MODIFIERS TABLE; Target Cover Table
     p. 68    Ch. 4   Suit Armor; Barding + Barding Encumbrance Tables; START of
@@ -843,6 +949,10 @@ VISUALLY INSPECTED (page images)
 | `Monster Reactions Table` (93) | yes | yes | `ENC-003`; excluded |
 | `Land Transportation Gear Table` (70) | yes | yes | excluded, reason stated §3.2 |
 | `Riding Animal Costs Table` (70) | yes | yes | excluded — `CHAR-004`-shaped, no owner in cluster |
+| `Sample Skills Table` (82) | yes | yes | **read ROW BY ROW in pass 4.** `Fire-Building`, `Blind Shooting`, `Food Tasting` → this card's evidence; `Caving`, `Endurance` → `ENC-005`; `Survival`, `Hunting`, `Tracking` → §5.8a; all remaining rows inspected and **excluded as unrelated to light, time or exploration resources**. Skill ownership `CHAR-012` |
+| `Skill Slot Acquisition (Humans) Table` (86) | yes | yes | **excluded** — skill acquisition/progression, wholly `CHAR-012` |
+| `Skill Slot Acquisition (Demihumans) Table` (86) | yes | yes | **excluded** — same |
+| `Piloting Skill: Types of Vessels Table` (85) | yes | yes | **excluded** — water/air transport |
 | `Barding Table` (68) | yes | yes | excluded — mount armor, `CHAR-004`-shaped; no light or resource content |
 | `Barding Encumbrance Table` (68) | yes | yes | excluded — mount encumbrance; `CHAR-005`/`CHAR-004` shaped |
 
