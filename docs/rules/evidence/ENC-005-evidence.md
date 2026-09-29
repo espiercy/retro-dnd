@@ -1,6 +1,35 @@
 # Stage-A Evidence Packet — `ENC-005` Retreat, Pursuit & Evasion
 
 ```text
+STATUS:  SUPERSEDED -- PRIMARY-SOURCE COMPLETENESS: FAIL
+         see ENC-005-evidence-remediated.md (pass 2)
+```
+
+> **Forward pointer added 2026-09-29. The body below is unaltered** and is kept as the record
+> of a pass that failed its independent completeness review (§10.1.2). The `STATUS` line inside
+> the block below still reads `EVIDENCE READY FOR HUMAN REVIEW`; **that self-assessment was
+> wrong**, and it is left standing deliberately.
+>
+> **This packet's substantive findings survived review** — the Evasion Table and Evasion
+> Checklist transcriptions are exact, both p. 99 printed defects are genuine, the four-of-six
+> dependency finding is accurate, the terrain distinction is well drawn, and there is no scope
+> creep. **Its coverage record failed:**
+>
+> - **p. 100 column 1 is marked excluded while being quoted from.** It is governing — it holds
+>   the `Regain Bearings` subsection, which *is* checklist step 6.
+> - **The `d100` resolution direction is absent**, so the Evasion Table's percentages cannot be
+>   resolved. (RC: roll-under — *"on a 01-70, the PCs have successfully evaded"*.)
+> - **The p. 104 `Retreat` quote stops one paragraph short** of its operative sentence; RC
+>   gives `Retreat` the same running-speed bridge this packet attributes only to
+>   `Fighting Withdrawal`.
+> - **No `Primary-Source Coverage Checklist` section exists at all**, which §9.3 requires.
+> - Two named tables — `Ship Evasion Table . 100`, `Combat Maneuvers Table . 104` — are left
+>   undispositioned, contrary to Guardrail C.
+> - The General Index is **cited**, not enumerated.
+>
+> See `CLUSTER-004-stage-a-completeness-review.md` for the full verdict.
+
+```text
 STAGE:   A (EVIDENCE) -- DEC-0009
 STATUS:  EVIDENCE READY FOR HUMAN REVIEW
          -- carrying one BOUNDARY QUESTION the human project owner must settle

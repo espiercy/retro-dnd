@@ -1,6 +1,33 @@
 # Stage-A Evidence Packet — `EXP-006` Light & Exploration Resources
 
 ```text
+STATUS:  SUPERSEDED -- PRIMARY-SOURCE COMPLETENESS: FAIL
+         see EXP-006-evidence-remediated.md (pass 2)
+```
+
+> **Forward pointer added 2026-09-29. The body below is unaltered** and is kept as the record
+> of a pass that failed its independent completeness review (§10.1.2). The `STATUS` line inside
+> the block below still reads `EVIDENCE READY FOR HUMAN REVIEW`; **that self-assessment was
+> wrong**, and it is left standing rather than corrected, because the failure is the point of
+> this artifact.
+>
+> Two of this packet's headline conclusions were **falsified by the primary source**:
+>
+> - **§9 Q2 — *"RC states no consequence for having no light"***, described here as the single
+>   largest apparent gap in the card. **RC states it at Ch. 13 p. 150** (`Blindness`): −4
+>   saves, −6 attacks, +4 AC, ⅓ speed unguided, ⅔ guided — corroborated at p. 154.
+> - **"LIGHT-BEARING TABLES OR CHECKLISTS FOUND: NONE."** **RC has one**: the
+>   `Encounter Distances Table` (p. 93), keyed on a `Visibility` column.
+>
+> Three named objects on instruments this packet claims to have read in full were never
+> opened: `Encounter Distances Table . 93`, `Starvation Table . 150`, `Timetrack Table . 149`.
+> Its §7.1 claim that pp. 302–303 were unverifiable because of remote `504`s was **false when
+> written** — those images were already local.
+>
+> Its Chapter 4 item transcriptions were **verified correct** by the reviewer and are carried
+> forward into pass 2. See `CLUSTER-004-stage-a-completeness-review.md` for the full verdict.
+
+```text
 STAGE:   A (EVIDENCE) -- DEC-0009
 STATUS:  EVIDENCE READY FOR HUMAN REVIEW
 CARD:    EXP-006 -- Light & Exploration Resources
