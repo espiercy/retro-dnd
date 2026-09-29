@@ -3,10 +3,14 @@
 ```text
 RULE CARD          EXP-006   Light & Exploration Resources
 STAGE              A (EVIDENCE).  Stage B NOT begun, NOT authorized.
-PASS               2 -- full DEC-0010 structure-first re-run
+PASS               3 -- pass 2 was a full DEC-0010 structure-first re-run; pass 3
+                   remediates the second independent review's findings.
 SUPERSEDES         docs/rules/evidence/EXP-006-evidence.md  (pass 1, committed e33c4e0)
                    Pass 1 returned PRIMARY-SOURCE COMPLETENESS: FAIL and is preserved
                    unaltered as the audit record of that failure.
+REVIEW HISTORY     pass 1  FAIL   CLUSTER-004-stage-a-completeness-review.md
+                   pass 2  FAIL   CLUSTER-004-stage-a-completeness-review-2.md
+                   pass 3  pending third independent review
 PRIMARY SOURCE     D&D Rules Cyclopedia (TSR 1071)
 RECOMMENDATION     see section 19
 ```
@@ -46,9 +50,25 @@ OCR (LOCATOR ONLY -- never sole evidence, protocol §9.2/§9.5)
     https://archive.org/stream/TSR1071TheDDRulesCyclopedia/TSR-1071-The-DD-Rules-Cyclopedia_djvu.txt
 ```
 
-Every page cited in this packet was read **as a page image**. There are **no OCR-only
-findings in this packet.** (Pass 1 had OCR-only findings; that is one of the defects
-remediated here.)
+**Every page that carries an evidence row (`E-1` … `E-40`) in this packet was read as a page
+image**, and **no finding in this packet rests on OCR**. Pass 1 had OCR-only findings; that is
+one of the defects remediated here.
+
+**Qualification, added in pass 3.** Pass 2's blanket phrasing — *"every page cited … was read as
+a page image"* — overstated the record, because §3.2 and §3.3 also mark pages `OPENED` that were
+reached only far enough to establish **ownership or exclusion**, without an image:
+
+```text
+IMAGE-VERIFIED, carries evidence rows
+    68, 69, 70, 81, 82, 83, 88, 91, 92, 93, 98, 99, 100, 104, 108,
+    149, 150, 154, 301, 302, 303, 304
+
+OPENED VIA OCR ONLY, for routing/exclusion, carrying NO evidence row
+    72, 121, 142, 146, 147, 229, 261, 262, 24-25, 89, 125
+    Each is EXCLUDED or ROUTED in §3.2/§3.3.  None supports a mechanical claim.
+    Per §9.6 line 7 these are LOCATOR-level reads, and they are labelled as such
+    rather than presented as inspections.
+```
 
 ### 2.1 Correction of a false access claim in pass 1
 
@@ -83,7 +103,11 @@ Entries capable of governing this card, **each dispositioned**:
 | `Encounter Distances Table` | **93** | **OPENED / VISUALLY INSPECTED.** **Light-conditioned.** §5.2. *Missed entirely by pass 1* |
 | `Starvation Table` | **150** | **OPENED / VISUALLY INSPECTED.** §5.4. *Missed entirely by pass 1* |
 | `Timetrack Table` | **149** | **OPENED / VISUALLY INSPECTED.** §5.5. *Missed entirely by pass 1* |
-| `Chance of Encounter Table` | 92 | OPENED. Wandering-monster frequency. **Routed → `EXP-005`/`ENC-001`.** Light is *not* an input to it (§6.3) |
+| `Chance of Encounter Table` | 92 | **OPENED / VISUALLY INSPECTED.** Wandering-monster frequency. **Routed → `EXP-005`/`ENC-001`.** Light is *not* an input to it (§6.3) |
+| `Attack Roll Modifiers Table` | **108** | **OPENED / VISUALLY INSPECTED — pass 3.** Carries `Attacker can't see target −4`. **Routed → `COMBAT-*`.** §5.9. *Missed by passes 1 and 2* |
+| `Sample Skills Table` | **82** | **OPENED / VISUALLY INSPECTED — pass 3.** Names `Fire-Building`, `Blind Shooting`. **Routed → `CHAR-012`.** §5.8. *Missed by passes 1 and 2* |
+| `Attack Rolls Table: All Characters` / `All Monsters` | 106-107 | OPENED. THAC0 progression. **Excluded** — `COMBAT-*`; carries no sight or light circumstance |
+| `Target Cover Table` | 108 | **OPENED / VISUALLY INSPECTED.** Cover, **not** darkness — *"soft"*/*"hard"* cover only. **Excluded**, reason stated |
 | `Game Turn Checklist` | 91 | **OPENED / VISUALLY INSPECTED.** `EXP-001` **[LANDED]** owns it. Its step 1 is evidence here (§5.3) |
 | `Game Day Checklist` | 91 | **OPENED / VISUALLY INSPECTED.** Travel-scale. Routed → wilderness (gated) |
 | `Encounter Checklist` | 93 | **OPENED / VISUALLY INSPECTED.** `ENC-001`/`ENC-005` providers |
@@ -104,7 +128,14 @@ Entries capable of governing this card, **each dispositioned**:
 | `Natural Events Table` / `Unnatural Events Table` | 142 | **Excluded** — dominion/ruler events, not exploration |
 | `Pre-Game Checklist` | 262 | OPENED. DM campaign prep. No mechanic for this card |
 
-**No named table or checklist in the p. 301 index is left undispositioned.** (Guardrail C.)
+**Research-operation statement (Guardrail B), corrected in pass 3.** The p. 301 index was read
+**entry by entry** in pass 3, and every entry above is dispositioned. Pass 2 asserted *"No named
+table or checklist in the p. 301 index is left undispositioned"* — **an unqualified
+source-property claim, and it was false**: `Attack Roll Modifiers Table . 108` and
+`Sample Skills Table . 82` were both on that index and both outside the list. They are added at
+§5.9 and §5.8. The claim is restated as an operation, not a property: *every entry on p. 301 was
+read and each one relevant to light, exploration resources, time or condition consequences is
+dispositioned above or in §9.2.*
 
 ### 3.3 `General Index` (pp. 302–304) — used as an **enumeration** instrument, not a citation source
 
@@ -114,7 +145,7 @@ printed index pages and its target **opened**.
 
 | Index entry | Pages | Inspected | Disposition |
 |---|---|---|---|
-| `Adventuring gear` | **68**-70 | yes | Pass 1 recorded "69–70". The index says **68**–70; p. 68 opened — it is the Armor/Barding tables, no light or resource content. **Harmless, but pass 1's range was narrower than the index's** |
+| `Adventuring gear` | **68**-70 | yes | Pass 1 recorded "69–70". The index says **68**–70, and it is right: p. 68 carries Suit Armor, Barding, the `Barding Table` and `Barding Encumbrance Table` **and** — in its third column — the `Adventuring Gear` heading and the **start of `Adventuring Gear Descriptions`** (`Backpack`, `Boots`). **The descriptions section begins on p. 68, not p. 69.** No light source or consumable resource is among the items that start there, so **no `EXP-006` content was lost** by pass 1's narrower range; but the range was wrong and the section boundary is now stated correctly |
 | `Blindness` | **150, 154** | yes | **GOVERNING.** §5.1. *Never followed by pass 1* |
 | `Dehydration` | **150** | yes | **GOVERNING** (jointly with Starvation). §5.4 |
 | `Starvation` | **150** | yes | **GOVERNING** (boundary). §5.4 |
@@ -132,8 +163,8 @@ printed index pages and its target **opened**.
 | `Feet` / `Yards` / `Map scales` | 87 | yes | `EXP-003` **[LANDED]** |
 | `Exhaustion` | 88 | yes | `CHAR-005` §9 **[LANDED]** |
 | `Fatigue` | 119 | yes | War Machine morale. **Excluded** |
-| `Doors` / `Open doors` / `Secret door` | 10, 147 | yes | p. 147 is Ch. 13 DM procedures on doors; **no light input stated**. Routed → unowned dungeon-interaction responsibility (§8 open item) |
-| `Listening` | 147 | yes | Ch. 13. **No light input stated.** Routed |
+| `Doors` / `Open doors` / `Secret door` | 10, 147 | yes | p. 147 is Ch. 13 DM procedures on doors; **no light input stated**. **Routed → `EXP-005`**, which `INVENTORY.md` assigns this responsibility. *(Pass 2 called it "unowned" and pointed at a non-existent §8 item; both corrected in pass 3)* |
+| `Listening` | 147 | yes | Ch. 13, same page. **No light input stated.** **Routed → `EXP-005`** |
 | `Lost` | **89** | yes | **Wilderness, per-day.** §6.4. Pass 1's finding stands, **refined** by p. 100 (§6.4) |
 | `Drowning` / `Swimming` | 89 | yes | Wilderness/water hazard. **Excluded** |
 | `Mapping` | 5, 148, 256, 257 | yes | Player-facing advice + DM prep. **No executable mechanic**; no light input |
@@ -238,6 +269,18 @@ Undersea     Any light           DM's choice  1d6 x 10 yards
 | E-9 | Footnote `**`: **full darkness with infravision used is resolved as `Dim light`** | **DIRECT PRIMARY TEXT** |
 | E-10 | Dungeon rows are in **feet**; wilderness/ocean rows in **yards** | **DIRECT PRIMARY TEXT** |
 | E-11 | The evasion procedure reaches this table: p. 98 `Contact` — *"They do not have to be near one another, only within **visual range**. When the encounter occurs, the DM determines the **encounter distance**"* | **PRIMARY TEXT + CROSS-REFERENCE CONFIRMED** |
+| **E-11a** | **The table is GATED ON SURPRISE.** p. 92 `Encounter Distance`: *"When **both** parties are surprised, the encounter distance is **`1d4 x 10'`** (or yards if outdoors). When **one** party is surprised, the unsurprised party notices the surprised party at the `1d4 x 10'` … distance rolled; the surprised party won't notice the unsurprised party until they reach **half that distance**. When **neither** party is surprised, **take a look at the Encounter Distances Table**."* | **DIRECT PRIMARY TEXT** |
+
+**E-11a is the governing procedure the light-conditioned table sits inside** (protocol §8: a
+numeric fact must be interpreted inside its governing procedure, not treated as
+free-floating). **RC consults the `Visibility` column only when neither side is surprised.**
+When either side is surprised, distance is a flat `1d4 x 10'` and **light does not enter the
+calculation at all**.
+
+This narrows `EXP-006`'s relevance to encounter distance considerably, and it is a
+qualification that a reader of the p. 93 table alone would not see. It also means the light
+state's mechanical consequence is **conditional on `ENC-002`'s output** — reinforcing, not
+weakening, the routing at §7.1: `EXP-006` supplies a light state and owns none of this.
 
 **Pass 1's headline "LIGHT-BEARING TABLES OR CHECKLISTS FOUND: NONE" is FALSE and is
 withdrawn.** It was also a Guardrail-B breach: a source-property claim made from keyword
@@ -248,12 +291,30 @@ searches without enumerating the Tables Index entry that carried the answer.
 | # | Fact | Object | Confidence |
 |---|---|---|---|
 | E-12 | Game Turn Checklist step 1: wandering monsters appear *"Under **normal dungeon conditions** … **2d6 x 10'** away in a direction of the DM's choice"* | p. 91 | **DIRECT PRIMARY TEXT** |
-| E-13 | `2d6 x 10'` is the **`Dim light`** row, and the only Dungeon row bearing that value. Therefore RC treats *"normal dungeon conditions"* as **`Dim light`** | pp. 91 + 93 | **NECESSARY CONSEQUENCE** (derivation: the Dungeon setting has exactly three rows, `4d6x10'` / `2d6x10'` / `1d4x10'`; step 1's value matches exactly one) |
+| E-13 | `2d6 x 10'` is the `Dim light` row's value, and the only Dungeon row bearing it | pp. 91 + 93 | **DIRECT PRIMARY TEXT** (the value match is a reading of two printed tables) |
+| E-13a | **The inference that RC therefore *classifies* "normal dungeon conditions" as `Dim light` is QUALIFIED, not forced** | pp. 91, 92, 93 | see below |
 
-**But the finer mapping is not stated.** RC nowhere defines how many torches or lanterns
-produce `Very good light` rather than `Dim light`. E-13 establishes the *default*; it does
-not establish a function from carried light sources to a visibility category. Recorded as an
-open question (§8 Q3), **not resolved here**.
+**E-13 was classified `NECESSARY CONSEQUENCE` in pass 2. That classification is withdrawn in
+pass 3**, because the falsification pass never tested it against two passages this packet
+itself transcribes:
+
+```text
+p. 91 step 1 states 2d6 x 10' UNCONDITIONALLY for wandering monsters under normal
+      dungeon conditions.  It cites the "Encounter Distance" section but does not
+      say it is reading the Dim light row.
+
+p. 92 (E-11a) states that the Encounter Distances Table is consulted ONLY when
+      NEITHER party is surprised -- and p. 91 step 1 imposes no surprise condition
+      at all.
+```
+
+So p. 91 step 1 may be a **standing default that bypasses the table**, rather than an
+application of its `Dim light` row. A `NECESSARY CONSEQUENCE` must be *logically forced* by two
+`DIRECT PRIMARY TEXT` facts (§6); this is not forced — it is the more plausible of two readings.
+**Downgraded.** The value match is recorded; the classification claim is withdrawn.
+
+**And the finer mapping is not stated either way.** RC nowhere defines how many torches or
+lanterns produce `Very good light` rather than `Dim light`. Recorded as §8 Q1, **not resolved**.
 
 ### 5.4 `Starvation Table`, p. 150 — boundary object, with a **newly discovered printed defect**
 
@@ -353,10 +414,22 @@ rival rule.
 EXP-006 owns NO executable part of it.
 ```
 
-**Pass 1's open question — *"does RC supply any duration-tracking procedure?"* — is answered:
-RC supplies a manual bookkeeping instrument (E-19, E-22) and no executable decrement
-procedure.** The question's premise ("RC is silent") was wrong; its mechanical conclusion
-(no procedure to implement) survives, for a different and now-evidenced reason.
+**Pass 1's open question — *"does RC supply any duration-tracking procedure?"* — is answered,
+and the answer needs stating precisely** (pass 2's phrasing was in tension with its own E-22):
+
+```text
+RC DOES supply a METHOD:  mark the timetrack, or deduct from durations as time passes
+                          (E-19, E-22).  It is addressed to a human DM with a pencil.
+
+RC does NOT supply an EXECUTABLE PROCEDURE in the sense this project implements:
+                          no decrement step tied to a checklist position, no expiry
+                          rule, no statement of what happens at the moment a duration
+                          reaches zero.
+```
+
+So the premise of pass 1's question ("RC is silent") was **wrong**; and the useful conclusion
+is **not** "there is no procedure" but "the procedure RC gives is human bookkeeping, and it
+stops short of the expiry semantics an implementation would need." That gap is §8 Q10.
 
 E-22 is stated for *magical effect* durations specifically. Whether RC intends the same
 instrument for **torch and lantern burn time** is **not stated**; the general Timekeeping
@@ -398,6 +471,133 @@ by searching for light terminology.
 **Torch and lantern radii are equal (30').** No RC statement distinguishes their
 illumination quality, which is what §5.3's open mapping would need.
 
+| # | Fact | Object | Confidence |
+|---|---|---|---|
+| E-32 | **Waterskin/wineskin**: *"This flexible container is usually made of leather or a preserved animal bladder. It has a liquid capacity of **one quart** and an encumbrance of 30 cn when filled, 5 cn when empty."* | p. 70 | **DIRECT PRIMARY TEXT** |
+
+**E-32 is added in pass 3.** It is the **water-side consumable** answering to `Dehydration . 150`
+(E-14: `No Water 1d8/day`, worse than `No Food`'s `1d2`). Pass 2 marked that index entry
+`GOVERNING` while recording no container for water — an asymmetry with rations (§5.6) that had
+no justification. One quart is **not** a stated day's supply; RC gives capacity and encumbrance
+and **no consumption rate for water at all**. Recorded as §8 Q11.
+
+### 5.8 Chapter 5 `General Skills` (pp. 81–86) — an **optional** system that bears on two of this card's conclusions
+
+**Pass 2 never inspected Chapter 5.** It was surfaced by the second independent review, which
+reached it by reading the p. 301 Tables Index entry by entry. `Sample Skills Table . 82` is a
+named object in that index.
+
+| # | Fact | Object | Confidence |
+|---|---|---|---|
+| E-33 | **The whole system is optional.** *"Using general skills is **optional**. If the DM doesn't want to use them in his or her campaign, they won't be used."* | p. 81 | **DIRECT PRIMARY TEXT** |
+| E-34 | A skill check is **`1d20` against the governing ability score**; *"If the roll on the 1d20 is **equal to or less than** the ability score, the skill use succeeds. A roll of **20 always fails**"* | p. 82 | **DIRECT PRIMARY TEXT** |
+| E-35 | `Sample Skills Table` assigns the governing ability: **`Fire-Building` → Intelligence**, **`Blind Shooting` → Dexterity**, `Caving` → Wisdom, `Endurance` / `Food Tasting` → Constitution | p. 82 | **DIRECT PRIMARY TEXT** |
+| **E-36** | **`Fire-Building`**: *"This is the ability to start a fire **without a tinderbox**. A character **with a tinderbox and this skill** is able to start fires **automatically (no roll necessary) in ordinary conditions**. If the character is trying to build a fire **without** a tinderbox, he will eventually succeed; he must make a `1d6` roll each round, and on a **1 or 2** he ignites the fire. If the character is trying to build a fire **in adverse conditions (during high winds or using wet wood), he must make a skill check with penalties assigned by the DM**."* | p. 83 | **DIRECT PRIMARY TEXT** |
+| **E-37** | **`Blind Shooting`**: *"the ability to shoot at a target without being able to see it; it is typically used when the character is **in darkness** or when the target is outside the range of his sight or infravision. The character must be able to **hear** the target… If the character makes his skill check, he can then fire at the target; he needs an attack roll to hit the target, but **the character doesn't suffer the normal darkness penalties**."* | p. 83 | **DIRECT PRIMARY TEXT** |
+| E-38 | `Food Tasting`: *"the ability to taste food and water to see if they have **spoiled**"* — avoids food poisoning | p. 83 | **DIRECT PRIMARY TEXT** |
+
+#### What E-36 does to this packet's own conclusions
+
+**Pass 2's §8 Q5 is falsified as stated.** Q5 read `PRIMARY PROCEDURE NOT YET ESTABLISHED` for
+tinderbox use outside *"normal (comparatively dry) circumstances."* **RC establishes one**: a
+`Fire-Building` skill check with DM-assigned penalties (E-36). Withdrawn.
+
+**But the falsification is conditional, and the condition matters.** E-33 makes the whole system
+optional. So:
+
+```text
+General skills IN USE      adverse conditions -> Fire-Building check, DM penalties
+                           tinderbox + skill  -> AUTOMATIC, no roll, ordinary conditions
+General skills NOT IN USE  RC supplies NOTHING for adverse conditions.
+                           The p. 70 tinderbox 1d6 / ignite on 1-2 is qualified to
+                           "normal (comparatively dry) circumstances" and stops.
+```
+
+**E-30 is qualified accordingly**, not replaced: the p. 70 tinderbox rule is the
+non-optional-system rule, and E-36 supersedes it for characters who have the skill.
+
+**Ownership: `CHAR-012` [UNRESEARCHED]**, explicitly, not by silence. `EXP-006` owns *whether a
+light source can be ignited*; `CHAR-012` owns the skill system that modifies the attempt.
+**`EXP-006` does not absorb the general-skills system**, and no skill mechanic is claimed here.
+
+#### What E-37 does
+
+**`Blind Shooting` is the prior review's Finding E-6, unremediated by pass 2 and remediated
+here.** Its phrase *"the normal darkness penalties"* is RC referring to its own §5.1 blindness
+penalties **as darkness penalties**, from a third chapter. It is therefore additional
+`PRIMARY TEXT + CROSS-REFERENCE CONFIRMED` support for E-1: RC treats *being in the dark* and
+*being blind* as the same mechanical state, in Chapters 5, 13 and 14 independently.
+
+Ownership of the skill is `CHAR-012`'s; the missile attack is `COMBAT-*`'s. **Neither is claimed.**
+
+### 5.9 `Attack Roll Modifiers Table` (p. 108) — a named table carrying a second sightlessness penalty
+
+**Pass 2 never opened p. 108**, although its own §6.2 followed a p. 104 cross-reference *to*
+p. 108 and recorded it as routed. The table is a named object in the p. 301 Tables Index.
+
+```text
+Attack Roll Modifiers Table
+Circumstance                                  Attack Roll Modifier
+Attacking from behind                          +2 bonus*
+Attacker can't see target                      -4 penalty
+Larger than man-sized monster attacks halfling -1 penalty
+Target exhausted                               +2 bonus
+Attacker exhausted                             -2 penalty
+
+* Ignore defender's shield
+```
+
+| # | Fact | Confidence |
+|---|---|---|
+| **E-39** | `Attacker can't see target` — **`−4` penalty** | **DIRECT PRIMARY TEXT** |
+| E-40 | The table also carries `Target exhausted +2` and `Attacker exhausted −2`, under the note *"Characters may become **exhausted from running or overexertion**, as described in **Chapter 7**"* | **DIRECT PRIMARY TEXT** |
+
+#### E-39 against E-2 — recorded, **not resolved**
+
+```text
+p. 150  a completely blind character suffers  "-6 penalty to all attack rolls"
+p. 108  Attacker can't see target             "-4 penalty"
+```
+
+**Both are printed. `EXP-006` does not decide which governs, and does not decide whether they
+compose or conflict.** They may be the same rule stated twice at different values (an audit
+class-I duplicate presentation), or two different conditions — *completely blind* is a
+character state, *can't see target* is a per-attack circumstance, and a lit room with an
+invisible opponent satisfies the second without the first. RC's `Invisibility` entry on p. 150
+supplies exactly that case at **`−6`**, which cuts against the clean reading.
+
+```text
+DISPOSITION:  CONFIRMED OUT OF SCOPE
+              owner COMBAT-* [UNRESEARCHED], with CHAR-005 §7 [LANDED] holding
+              the movement half of the p. 150 condition.
+
+EXP-006 produces a LIGHT STATE.  It has never owned the numerical attack, save or
+AC consequences of that state, and does not claim them now.  Stage A's obligation
+for an object it does not own is to ENUMERATE, INSPECT and ROUTE it -- which this
+section does.  The reasoning is argued in full at §8.2.
+
+The relationship itself is genuinely unresolved, and the OWNING card will inherit a
+§10.2.2 case-1 situation when it reaches Stage A: conflicting passages found AND
+potentially governing objects (the Chapter 8 attack-roll procedure, the Chapter 13
+condition set) still uninspected.  Everything it needs is recorded above.
+
+A packet that chose a number here would trip §17's
+STOP -- INTERNAL SOURCE CONFLICT REQUIRES REVIEW.  This one does not choose.
+```
+
+**Ownership: `COMBAT-*` [UNRESEARCHED]**, with `CHAR-005` §7 holding the movement half of the
+p. 150 condition. `EXP-006` records the object and routes it. See §8 Q12.
+
+#### E-40 — a routed finding for another card, reported not absorbed
+
+The p. 108 exhaustion rows are a **duplicate presentation** of landed `CHAR-005` §9's material
+(RC p. 88). `CHAR-005` §9 records, from p. 88, that an exhausted character *"must subtract 2
+from all **damage** rolls."* **p. 108 places its `−2` in an `Attack Roll Modifier` column.**
+
+**This is reported, not adjudicated, and not absorbed.** `CHAR-005` is an approved, implemented
+card whose evidence packet cites p. 88 and not p. 108, so the tension appears to be unrecorded
+there. It is **out of this cluster's authorized scope**; flagged for the human owner as §8 Q13.
+
 ---
 
 ## 6. Whole-source cross-reference pass (§9)
@@ -434,8 +634,10 @@ timetrack  /  timekeeping  /  mark off  /  keep track
 
 - **Light is not an input to wandering-monster frequency.** p. 91 lists what raises the check
   rate: *"Loud noises, battles, cursed items, or exploring special areas."* Light is absent
-  from that list, and the `Chance of Encounter Table` (p. 92) has no light column. **Not
-  located after inspecting p. 91, p. 92 and the p. 301 Tables Index.**
+  from that list. The `Chance of Encounter Table` (p. 92) was **opened and read visually**: its
+  columns are `Type of Encounter` / `Roll Method`, plus a `Type of Terrain` / `Chance`
+  sub-table. **It has no light or visibility column.** Not located after inspecting p. 91,
+  p. 92 and the p. 301 Tables Index.
 - **No RC rule makes carried light a surprise or reaction modifier.** Not located after
   inspecting the Encounter Checklist steps 2 and 4 (p. 93), the `Monster Reactions Table`
   (p. 93) and the General Index entries `Surprise . 92, 93` and `Reaction . 93, 262`.
@@ -532,15 +734,47 @@ gives the default (E-13) and the infravision case (E-9) and nothing between. Tha
 | Q2 | Is a burn-tracking procedure in scope? RC gives durations (E-27, E-28) and a **manual tally instrument** (E-19, E-22), and no executable decrement or expiry rule. | **RESOLVED BY SOURCE INSPECTION** as to the source-property question (RC supplies no procedure). The **scope** half is a Stage-B/human decision, not an evidence gap |
 | Q3 | Is E-22's timetrack method intended for **light durations**, or only magical-effect durations? RC names only magical effects explicitly; the surrounding Timekeeping prose is broader. | **RETAINED AS GENUINE SOURCE AMBIGUITY** |
 | Q4 | Do **rations** belong to this card? Evidence now exists (E-23–E-25): a dungeon-conditioned consumable duration, structurally parallel to torch burn time. | **CONFIRMED OUT OF SCOPE for Stage A** — this is a card-boundary decision reserved to the human owner. Ownership **not claimed**; answering it here would be silent scope expansion |
-| Q5 | Tinderbox ignition outside *"normal (comparatively dry) circumstances"* (E-30). | **RETAINED AS GENUINE SOURCE AMBIGUITY.** `PRIMARY PROCEDURE NOT YET ESTABLISHED` for non-normal conditions |
+| Q5 | Tinderbox ignition outside *"normal (comparatively dry) circumstances"* (E-30). | **RESOLVED BY SOURCE INSPECTION — pass 3.** RC establishes a procedure at p. 83 (`Fire-Building` skill check, DM-assigned penalties, E-36). Pass 2's `PRIMARY PROCEDURE NOT YET ESTABLISHED` is **withdrawn**. The resolution is **conditional on the optional general-skills system being in use** (E-33); with it not in use, RC supplies nothing, which is then a source silence and not an uninspected gap |
+| Q11 | RC gives the `Waterskin` a capacity (one quart) and encumbrance (E-32) but **no water consumption rate**, while `Dehydration` costs `1d8/day` — the harshest row on the Starvation Table. | **RETAINED AS GENUINE SOURCE AMBIGUITY** |
+| Q12 | p. 150's `−6` (completely blind) against p. 108's `−4` (attacker can't see target) — same rule at two values, or two conditions? p. 150's `Invisibility` entry gives `−6` for a sighted attacker who cannot see his foe, which cuts against the clean reading. | **CONFIRMED OUT OF SCOPE**, ownership `COMBAT-*` **[UNRESEARCHED]**, with `CHAR-005` §7 holding the movement half. **Reasoning stated at §8.2** |
+| Q13 | p. 88 says an exhausted character subtracts `2` from **damage** rolls; p. 108's table puts `−2` in the **attack roll** column. Landed `CHAR-005` §9 cites p. 88 and appears not to have opened p. 108. | **CONFIRMED OUT OF SCOPE** — `CHAR-005` / `COMBAT-*`. Reported to the human owner, **not adjudicated, not absorbed** |
 | Q6 | `Starvation Table` `75%-99%` movement reads `× 3/4`, non-monotonic (E-18). | **CONFIRMED OUT OF SCOPE** — owned by `CHAR-005` §7 and **already adjudicated** as `SR-10`. `EXP-006` re-confirmed the printed value visually and claims nothing further |
 | Q7 | Does landed `CHAR-005` §7 record RC's printed `× 3/4`, or a silently corrected value? | **RESOLVED BY SOURCE INSPECTION.** It records the printed value as RC Explicit and the `× 1/4` separately as `SR-10`. **No defect in the landed card** |
 | Q8 | Who owns starvation **causation**? No Rule ID exists anywhere in `INVENTORY.md`. | **CONFIRMED OUT OF SCOPE** — standing open ownership issue, `BOUNDARY-CORRECTION` §6 item 8. Confirmed still true |
 | Q9 | Does light modify surprise, reaction, or wandering-monster frequency? | **RESOLVED BY SOURCE INSPECTION — negative.** §6.3, with the objects inspected named |
 | Q10 | What happens when a light source burns out mid-turn? | **RETAINED AS GENUINE SOURCE AMBIGUITY** — RC gives durations and stops |
 
-**There are zero silent unresolved research tasks at this gate.** Every item pass 1 left
-open is dispositioned in §8.1.
+**There are zero silent unresolved research tasks at this gate**, and — after pass 3 —
+**zero `BLOCKED` rows.** Every item pass 1 left open is dispositioned in §8.1.
+
+### 8.2 Why Q12 is `CONFIRMED OUT OF SCOPE` and not `BLOCKED`
+
+This distinction decides whether the packet may recommend `EVIDENCE READY` at all (§17), so it
+is argued rather than asserted.
+
+```text
+A BLOCKED row would mean: EXP-006 cannot be evidence-complete until the p. 108 / p. 150
+attack-penalty relationship is resolved.
+
+That is not true.  EXP-006's responsibility is WHETHER A LIGHT SOURCE IS LIT -- its
+radius, its remaining duration, whether it can be ignited.  It PRODUCES a light state.
+It has never owned, and does not now claim, the numerical CONSEQUENCES of that state:
+
+    movement multipliers from blindness    CHAR-005 §7   [LANDED]
+    attack / save / AC penalties           COMBAT-*      [UNRESEARCHED]
+
+Stage A's obligation for an object it does not own is to ENUMERATE, INSPECT and ROUTE it
+(§9.1, §9.8).  Pass 3 does all three: p. 108 is opened, transcribed, and routed with the
+conflict recorded in full at §5.9 for the owning card to inherit.
+```
+
+**What would have been illegitimate** is to leave p. 108 unenumerated — which is precisely what
+passes 1 and 2 did, and why the object is here at all. The failure was coverage, and coverage is
+now discharged. **When `COMBAT-*` reaches Stage A it will inherit a `§10.2.2` case-1 situation**,
+and §5.9 records everything needed for it.
+
+`EXP-006` does **not** decide which number governs, and the packet contains no attack-penalty
+mechanic.
 
 ### 8.1 Required reconciliation table (§10.2.1) — pass 1's own open statements
 
@@ -560,13 +794,26 @@ open is dispositioned in §8.1.
 
 ### 9.1 Structural units inspected
 
+**This list and §3.2/§3.3 are reconciled in pass 3** (pass 2's checklist named 17 pages while
+§3.3 implied more were opened, so the checklist was not the auditable record §9.3 requires).
+The split between image-verified pages and locator-level reads is stated at §2; **only the
+pages below carry evidence rows.**
+
 ```text
 VISUALLY INSPECTED (page images)
-    p. 68    Ch. 4   Armor / Barding tables            (index said gear = 68-70)
+    p. 81    Ch. 5   General Skills -- "Using general skills is optional"
+    p. 82    Ch. 5   How Skills Are Used; SAMPLE SKILLS TABLE
+    p. 83    Ch. 5   Fire-Building; Blind Shooting; Food Tasting; (Caving, Endurance
+                     -- read here, routed to ENC-005/CHAR-012)
+    p. 88    Ch. 6   Exhaustion + running rules   (CHAR-005 §9 [LANDED]; for E-40)
+    p. 108   Ch. 8   ATTACK ROLL MODIFIERS TABLE; Target Cover Table
+    p. 68    Ch. 4   Suit Armor; Barding + Barding Encumbrance Tables; START of
+                     "Adventuring Gear Descriptions" (Backpack, Boots)
     p. 69    Ch. 4   Adventuring Gear Table + descriptions A-S
     p. 70    Ch. 4   descriptions S-W; Land Transportation
     p. 91    Ch. 7   Exploration and the Game Turn; Game Turn & Game Day Checklists
-    p. 92    Ch. 7   Chance of Encounter Table
+    p. 92    Ch. 7   Chance of Encounter Table; ENCOUNTER DISTANCE section (E-11a);
+                     surprise 1d6 rule and its three outcomes
     p. 93    Ch. 7   Encounter Checklist; ENCOUNTER DISTANCES TABLE; Monster Reactions
     p. 98    Ch. 7   Evasion and Pursuit; Definitions; Contact
     p. 99    Ch. 7   Evasion Checklist; Evasion Table
@@ -596,6 +843,8 @@ VISUALLY INSPECTED (page images)
 | `Monster Reactions Table` (93) | yes | yes | `ENC-003`; excluded |
 | `Land Transportation Gear Table` (70) | yes | yes | excluded, reason stated §3.2 |
 | `Riding Animal Costs Table` (70) | yes | yes | excluded — `CHAR-004`-shaped, no owner in cluster |
+| `Barding Table` (68) | yes | yes | excluded — mount armor, `CHAR-004`-shaped; no light or resource content |
+| `Barding Encumbrance Table` (68) | yes | yes | excluded — mount encumbrance; `CHAR-005`/`CHAR-004` shaped |
 
 ### 9.3 Deliberate exclusions, with reasons
 
@@ -609,6 +858,15 @@ City / Castle encounter subtables (97-98) EXP-008 / MON-001 -- excluded by name.
 Ship Evasion Table (100)                 Naval; ENC-005-adjacent, not EXP-006.
 p. 150 Deafness/Invisibility/Paralysis/  Same section as Blindness; COMBAT-*/CHAR-011.
   Prone/Sleep/Stunning                   Read, not claimed.
+General skills system (81-86)            OPTIONAL system owned by CHAR-012.  Opened and
+                                         dispositioned (§5.8); Fire-Building and Blind
+                                         Shooting recorded as evidence bearing on this
+                                         card's conclusions.  NO skill mechanic claimed,
+                                         and the system itself is NOT absorbed.
+Attack Roll Modifiers Table (108)        Opened and transcribed; routed to COMBAT-*.
+                                         The -4 / -6 relationship is NOT resolved.
+Target Cover Table (108)                 Cover, not darkness.  Excluded.
+Attack Rolls Tables (106-107)            THAC0 progression; no sight circumstance.
 ```
 
 ### 9.4 Unresolved items
@@ -630,6 +888,10 @@ inspection disguised as ambiguity.**
 | "Torch radius differs from lantern radius" | Re-read both descriptions as complete units | **REJECTED.** Both 30' |
 | "The Starvation Table's `× 3/4` at 75–99% is an OCR artifact" | Magnified the page image | **REJECTED.** The defect is **printed** (E-18) |
 | "Light modifies surprise / reaction / wandering-monster rate" | Inspected pp. 91–93 + the named tables + index entries | **NOT LOCATED** after those inspections (§6.3) |
+| *"RC establishes no procedure for igniting a fire in adverse conditions"* (pass 2 Q5) | **Pass 3:** read the p. 301 Tables Index entry by entry; opened `Sample Skills Table . 82` and Ch. 5 | **REJECTED — falsified.** `Fire-Building`, p. 83 (E-36) |
+| *"No named table in the p. 301 index is undispositioned"* (pass 2 §3.2) | **Pass 3:** same operation | **REJECTED — falsified.** Two were missing (§5.8, §5.9) |
+| E-13 as a `NECESSARY CONSEQUENCE` | **Pass 3:** tested against p. 91 step 1's unconditional phrasing and against this packet's own E-11a surprise gate | **DOWNGRADED.** Not logically forced; the classification is withdrawn (§5.3) |
+| "p. 108's `−4` and p. 150's `−6` are the same rule stated twice" | Checked p. 150's `Invisibility` entry, which gives `−6` for a sighted character who cannot see his foe | **NOT ESTABLISHED.** The clean duplicate reading does not survive; recorded unresolved and routed (§5.9) |
 
 ---
 
@@ -651,10 +913,11 @@ inspection disguised as ambiguity.**
   `504`s; p. 88 required four attempts this pass. **All pages cited were ultimately obtained
   as images.** No finding in this packet rests on OCR. (See §2.1 for pass 1's false claim
   about this.)
-- **(18) Overall confidence** — **High** for §5.1, §5.2, §5.4, §5.5, §5.7 (all `DIRECT PRIMARY
-  TEXT` from page images, several cross-reference-confirmed). **Moderate** for §5.3's E-13,
-  which is a `NECESSARY CONSEQUENCE` with its derivation shown. The card's principal
-  remaining uncertainty is Q1, which is a genuine source silence, not a coverage gap.
+- **(18) Overall confidence** — **High** for §5.1, §5.2, §5.4, §5.5, §5.7, §5.8 and §5.9 (all
+  `DIRECT PRIMARY TEXT` from page images, several cross-reference-confirmed). **Lower for
+  §5.3's E-13a**, which pass 3 downgraded from `NECESSARY CONSEQUENCE` to a qualified reading
+  after testing it. The card's principal remaining uncertainty is Q1 — a genuine source
+  silence, not a coverage gap.
 
 ---
 
@@ -664,9 +927,27 @@ inspection disguised as ambiguity.**
 EVIDENCE READY FOR HUMAN REVIEW
 ```
 
-subject to the mandatory §10.1.2 **independent completeness review of this remediated
-packet** (pass 2), which has been requested separately and whose verdict is recorded in
-`docs/rules/evidence/CLUSTER-004-stage-a-completeness-review-2.md`.
+subject to the mandatory §10.1.2 **third independent completeness review**. Per §10.1.2 the
+original researcher may **not** restore a ready status on its own certification, so this
+recommendation is a submission, not a verdict.
+
+**Pass 3 remediation of the second review's findings:**
+
+```text
+ 1  Attack Roll Modifiers Table (p. 108) opened, transcribed, routed       §5.9
+ 2  Chapter 5 (81-86) opened; Fire-Building, Blind Shooting, Sample
+    Skills Table dispositioned; Q5 withdrawn; E-30 qualified; CHAR-012
+    named explicitly                                                      §5.8
+ 3  §2's blanket page-image claim qualified; locator-only reads listed     §2
+ 4  §9.1 reconciled with §3.2/§3.3                                         §9.1
+ 5  E-13 downgraded from NECESSARY CONSEQUENCE and re-derived              §5.3
+ 6  Waterskin added as the dehydration-side consumable                     E-32
+ 7  §3.2 closure sentence restated as a research operation; p. 147
+    routed to EXP-005; dangling §8 reference removed                       §3.2/§3.3
+ 8  §5.5 / E-22 tension resolved by stating method vs procedure            §5.5
+ 9  Hard-stop vocabulary no longer used as an inline label                 §8
+13  Adversarial self-review re-run FROM the p. 301 index, entry by entry   §10
+```
 
 **Stage B has not begun and is not authorized. No Rule Card is drafted. No production code
 is touched.**

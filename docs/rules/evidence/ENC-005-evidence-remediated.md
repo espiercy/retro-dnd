@@ -3,11 +3,14 @@
 ```text
 RULE CARD          ENC-005   Retreat, Pursuit & Evasion (underworld)
 STAGE              A (EVIDENCE).  Stage B NOT begun, NOT authorized.
-PASS               2 -- BOUNDED remediation.  Pass 1's substantive findings survived
-                   independent review; its COVERAGE RECORD did not.
+PASS               3 -- pass 2 was a bounded remediation; pass 3 remediates the second
+                   independent review's findings, chiefly Chapter 5.
 SUPERSEDES         docs/rules/evidence/ENC-005-evidence.md  (pass 1, committed e33c4e0)
                    Pass 1 returned PRIMARY-SOURCE COMPLETENESS: FAIL and is preserved
                    unaltered as the audit record of that failure.
+REVIEW HISTORY     pass 1  FAIL   CLUSTER-004-stage-a-completeness-review.md
+                   pass 2  FAIL   CLUSTER-004-stage-a-completeness-review-2.md
+                   pass 3  pending third independent review
 PRIMARY SOURCE     D&D Rules Cyclopedia (TSR 1071)
 RECOMMENDATION     see section 19
 ```
@@ -81,6 +84,8 @@ Pursuit` (pp. 98–100), entered from the checklists on pp. 91 and 93.
 | `Castle Reactions Table` | 99 | yes | yes | **EXCLUDED** — wilderness castle encounters, `EXP-008`/`MON-001` |
 | `Balancing Encounters Checklist` | 101 | yes | yes | **EXCLUDED** — `ENC-007`, optional system |
 | `Character Movement Rates and Encumbrance Table` | 88 | yes | yes | `CHAR-005` **[LANDED]**. Consumed, not re-derived |
+| `Sample Skills Table` | **82** | **yes — pass 3** | **yes** | **GOVERNING for step 6** via `Caving`; skill ownership `CHAR-012`. §5.7. *Undispositioned by pass 2 (Guardrail C)* |
+| `Attack Roll Modifiers Table` | **108** | **yes — pass 3** | **yes** | **EXCLUDED — `COMBAT-*`.** Its exhaustion rows are routed and a p. 88 wording tension is reported (§5.5a) |
 | `Terrain Effects on Movement Table` | 88 | yes | yes | **EXCLUDED** — wilderness movement terrain. **Not** the Evasion Table's terrain (§5.4) |
 
 ### 3.3 General Index — **enumerated**, not cited (precedent `P-001`)
@@ -103,7 +108,9 @@ Pursuit` (pp. 98–100), entered from the checklists on pp. 91 and 93.
 | `Terrain` | 119, 153 | yes | p. 119 War Machine, p. 153 monster habitat. **Neither is the Evasion Table's terrain.** Excluded |
 | `Charge` | 154 | yes | *"A monster cannot charge in certain types of terrain: broken, heavy forest, jungle, mountain, swamp"* — **monster combat, `MON-*`. Explicitly NOT imported as a generic terrain mechanic** |
 | `Move silently` | 22 | yes | Thief skill, `CHAR-012`. Excluded |
-| `Skills` / `Skill check` | 82-85, 92 | yes | `CHAR-012` **[UNRESEARCHED]** — Caving skill question (§8 Q8) |
+| `Skills` / `Skill check` | 82-85, 92 | **yes — pass 3, visually** | **GOVERNING for step 6.** `Sample Skills Table` (82); `Caving`, `Endurance` (83). §5.7, §5.5a. Skill **ownership** is `CHAR-012` **[UNRESEARCHED]**; the step-6 trigger is recorded here. *Pass 2 listed this entry and did not open it* |
+| `Exhaustion` | **88** | **yes — pass 3** | **GOVERNING for step 5.** §5.5a. `CHAR-005` §9 **[LANDED]** owns it. *Not enumerated by pass 2* |
+| `Endurance` (via `Skills`) | 83, 88 | **yes — pass 3** | The RC-named exception to the 30-round running maximum. `CHAR-012`. Bears on Q4 |
 | `High-level player characters` | 96, **98**, 129 | yes | p. 98 is DM advice on scaling encounters, **not** an evasion mechanic. Excluded with reason |
 | `Balancing encounters` | 100, 101 | yes | `ENC-007`. Excluded |
 | `Encounters` | 91-96 | yes | `ENC-001` / `EXP-005` |
@@ -132,7 +139,10 @@ Pursuit` (pp. 98–100), entered from the checklists on pp. 91 and 93.
 | N-1 | `Encounter Checklist` step 5c: *"If the PCs run away, make a **morale check** for the monsters or NPCs to see if they give chase. If so, **use the pursuit and evasion rules later this chapter** to see if the PCs get away."* | p. 93 | **DIRECT PRIMARY TEXT** |
 | N-2 | `Game Day Checklist` step 4b: *"If the characters want to **evade or pursue** encountered monsters, the DM goes to the **'Evasion and Pursuit' section** later in this chapter."* | p. 91 | **DIRECT PRIMARY TEXT** |
 | N-3 | RC's own definition: *"**'Evasion' is what happens when an encounter occurs and one side wants to escape the other; that side turns and runs.**"* | p. 91 | **DIRECT PRIMARY TEXT** |
-| N-4 | `Contact` (step 1): *"Contact occurs when the two parties encounter one another, as per the earlier encounter rules. They do not have to be near one another, **only within visual range**. When the encounter occurs, the DM determines the **encounter distance** and the parties' relative states of surprise."* | p. 98 | **PRIMARY TEXT + CROSS-REFERENCE CONFIRMED** (target p. 93 opened) |
+| N-4 | `Contact` (step 1): *"Contact occurs when the two parties encounter one another, as per the earlier encounter rules. They do not have to be near one another, **only within visual range**. When the encounter occurs, the DM determines the **encounter distance** and the parties' relative states of surprise."* | p. 98 | **PRIMARY TEXT + CROSS-REFERENCE CONFIRMED** (targets pp. 92–93 opened) |
+| **N-4a** | Step 1's encounter distance is **gated on surprise**, p. 92: **both** surprised → `1d4 x 10'`; **one** surprised → unsurprised side notices at that distance, surprised side **not until half**; **neither** surprised → consult the `Encounter Distances Table` (p. 93), which is light-keyed | p. 92 | **DIRECT PRIMARY TEXT** |
+| **N-4b** | Step 2's automatic success has its source here: p. 92, *"One Group Is Surprised: The unsurprised group can take advantage of the situation by **evading (automatic success, meaning that the other group doesn't notice them at all)**"* | p. 92 | **PRIMARY TEXT + CROSS-REFERENCE CONFIRMED** (matches checklist step 2, N-6) |
+| **N-4c** | Surprise itself: *"both sides roll `1d6`. Each side that rolls a **1 or 2** is surprised."* Asymmetric-notice detail as in N-4a | pp. 92–93 | **DIRECT PRIMARY TEXT** — recorded as `ENC-002`'s, **not claimed** |
 
 **N-4 is a new cross-reference in this pass.** It is the printed link from `ENC-005` step 1 to
 the **`Encounter Distances Table` (p. 93)** — which is keyed on a light/**Visibility** column.
@@ -168,7 +178,7 @@ Evasion Checklist
     a. The pursuers decide to give up. Monsters must make a new morale check
        every five rounds and give up the chase if they fail the check. Go to Step 6.
     b. The evading party is caught by the pursuers (because of superior speed or
-       terrain obstacles); go to the Combat Checklist in Chapter 8.
+       terrain obstacles); Combat occurs; go to the Combat Checklist in Chapter 8.
     c. The evading party escapes (by using magic spells or by finally making a
        successful evasion roll on the Evasion Table when terrain and circum-
        stances warrant). Go to Step 6.
@@ -216,6 +226,24 @@ Size    Encountered       Evasion        in Effect              to Chance
 **N-10, N-11 and N-12 are new in this pass.** N-10 in particular is mechanically essential —
 without it the table's percentages cannot be resolved at all, and pass 1 shipped without it.
 
+### 5.3a Governing mechanics on pp. 98–99 that had no evidence row until pass 3
+
+The section was read as a complete unit, but five operative statements inside it were described
+only in prose rather than recorded as evidence. Added:
+
+| # | Fact | Object | Confidence |
+|---|---|---|---|
+| **N-32** | **Catch-up is a DM-tracked positional determination, not a roll:** *"If the pursuers end one round having caught up to the evaders **(the DM should be keeping track of their relative positions to determine this)** and then **win initiative the next round**, they can attack, **forcing the evaders to turn and fight**."* | p. 99 col. 3 | **DIRECT PRIMARY TEXT** |
+| **N-33** | **Obstacle branch:** *"the evaders could run into some obstacle that prevents them from continuing (a sheer cliff face, a dead-end hallway, a magically locked door, another party of enemies, and so on). In these situations, combat usually results, though **the evaders might choose to surrender instead**."* | p. 99 col. 3 | **DIRECT PRIMARY TEXT** |
+| **N-34** | **Open-ended DM adjustment:** *"The DM may adjust evasion chances for terrain, differences in speed, **and other factors**"* — the Evasion Table's condition list is **not closed** | p. 99 col. 1 | **DIRECT PRIMARY TEXT** |
+| **N-35** | **Area familiarity:** *"If monsters are familiar with an area, they may be able to evade pursuers by **rapidly turning corners, closing doors behind them**, and so forth."* No value is attached | p. 99 col. 1 | **DIRECT PRIMARY TEXT** |
+| **N-36** | **Step 2's automatic evasion has a printed duration and direction:** the surprising group *"may automatically evade the surprised group by **turning away and moving off at another direction at running speed for one round**"*, after which *"The nonsurprised group has enough time to get clear of the area before the surprised group can recover enough to give chase"* | pp. 98–99 | **DIRECT PRIMARY TEXT** |
+
+**N-32 matters for Stage B**: step 5b's *"caught"* is not a die roll. RC delegates it to DM
+position-tracking plus an initiative win. **N-34 matters for the terrain question (Q3)**: the
+adjustment list is explicitly open-ended, so a specification that treated the Evasion Table's
+five conditions as exhaustive would contradict the prose.
+
 **N-14 remains unadjudicated.** `INTERNAL SOURCE CONFLICT REQUIRES REVIEW`.
 
 ### 5.4 Terrain — the distinction pass 1 drew, confirmed and held
@@ -239,7 +267,11 @@ the direct continuation of the dungeon/wilderness evasion procedure and carries 
 
 | # | Fact | Object | Confidence |
 |---|---|---|---|
-| N-19 | **Dropped goods:** *"Evaders can drop goods that the monsters might want… the DM rolls **1d6** … On a **1-3**, the monster stops to consume (or retrieve) the proffered goods and is **delayed long enough for the evaders to get away**."* | p. 100 col. 1 | **DIRECT PRIMARY TEXT** |
+| N-19 | **Dropped goods:** *"Evaders can drop goods that the monsters might want; a hungry monster might want meat rations, for example, while a vampire might be more content with magical treasures. In these cases, the DM rolls **1d6** **if he or she feels that the item dropped is indeed appealing to the monster**. On a **1-3**, the monster stops to consume (or retrieve) the proffered goods and is **delayed long enough for the evaders to get away**."* | p. 100 col. 1 | **DIRECT PRIMARY TEXT** |
+
+**N-19's gating condition was elided in pass 2** and is restored: the `1d6` is rolled **only if
+the DM judges the dropped item appealing to that monster**. The die is not unconditional, and a
+specification that treated it as such would be wrong.
 | N-20 | **`Regain Bearings`** is a printed subheading — step 6's content: *"If the evaders do get away, they need to **rest from their exertions** and regain their bearings—that is, determine where they now are."* | p. 100 col. 1 | **DIRECT PRIMARY TEXT** |
 | N-21 | *"**For every round the chase lasted, the evaders moved at full running speed** in directions chosen or assumed by the DM. They didn't have time to consult their map, and the DM should enforce this fact rigorously."* | p. 100 col. 1–2 | **DIRECT PRIMARY TEXT** |
 | N-22 | *"…their attempts at evasion could have carried them deep into unknown territory (such as … **unexplored dungeon levels**), and **now the characters are lost**; they'll have to explore their way back to the areas they know."* | p. 100 col. 2 | **DIRECT PRIMARY TEXT** |
@@ -262,10 +294,90 @@ does not say the chase rounds count against the 30-round maximum**, so the quest
 — but it is now an open question with direct primary text on both sides of it, not an
 inference.
 
-**N-22 refines the pass-1 `Lost . 89` finding.** Pass 1 concluded RC has no dungeon
-getting-lost material. Narrowed: RC states the **condition** in a dungeon here, at DM
-discretion; it supplies a **die-roll procedure** (`1d6`) only for wilderness travel, in the
-Game Day Checklist (p. 91). So: **no dungeon getting-lost *procedure***.
+**N-22 and the getting-lost conclusion — corrected in pass 3.** Pass 1 concluded RC has no
+dungeon getting-lost material. Pass 2 narrowed that to *"no dungeon getting-lost **procedure**;
+RC supplies a die-roll procedure only for wilderness travel."* **That is falsified by p. 83
+(§5.7). RC supplies a dungeon-side procedure, and it is keyed to exactly the flight case this
+card governs.**
+
+### 5.7 `Caving` (p. 83) — a governing object for checklist step 6
+
+**Pass 2 never inspected Chapter 5.** `Sample Skills Table . 82` is a named object in the p. 301
+Tables Index; the second independent review reached it by reading that index entry by entry.
+
+| # | Fact | Object | Confidence |
+|---|---|---|---|
+| **N-28** | **`Caving`**: *"an ability to always know where one is while exploring underground caves, cavern complexes, rivers, etc. … The Caving skill can also be used in a maze. Skill checks are necessary when the character has become disoriented. **If he is forced to flee for a long stretch, he must make a skill check to keep from being lost. (Characters without this skill automatically become lost in such a situation.)**"* | p. 83 | **DIRECT PRIMARY TEXT** |
+| N-29 | A skill check is **`1d20` ≤ the governing ability score**; `20` always fails. `Caving` is a **Wisdom** skill | pp. 82 | **DIRECT PRIMARY TEXT** |
+| N-30 | **The general-skills system is optional**: *"Using general skills is **optional**. If the DM doesn't want to use them in his or her campaign, they won't be used."* | p. 81 | **DIRECT PRIMARY TEXT** |
+| **N-31** | **`Endurance`**: a successful check lets a character *"**run** (or perform some demanding task) **for an hour** without collapsing"*, re-checked each hour at a cumulative `+1` penalty; on completion or failure he *"must rest for **three times** the amount of time he was performing that task"* | p. 83 | **DIRECT PRIMARY TEXT** |
+
+**N-28 is step 6.** Checklist step 6 reads *"Regain Bearings: Evaders rest and determine where
+they now are"*, and p. 100 says evasion may leave the party *"lost"* (N-22). p. 83 supplies the
+**determination**: *forced to flee for a long stretch* → a `Caving` check, or **automatic loss
+without the skill**. The trigger condition is the chase itself.
+
+**Corrected statement of the negative**, with the condition made explicit:
+
+```text
+WRONG (pass 2)   "RC supplies no dungeon getting-lost procedure."
+
+CORRECT          With the OPTIONAL general-skills system in use, RC supplies a
+                 dungeon-side procedure for becoming lost while fleeing: a Caving
+                 skill check, with automatic loss for characters lacking the skill
+                 (p. 83).  It is not a die-roll-against-a-table procedure like the
+                 wilderness Game Day step 2 (1d6, p. 91); it is a skill check.
+
+                 With the general-skills system NOT in use, RC supplies nothing for
+                 the dungeon case, and p. 100's "now the characters are lost" remains
+                 DM discretion.
+```
+
+Note that N-28's second sentence reaches **beyond skill-havers**: *"Characters without this
+skill **automatically** become lost in such a situation."* That is a rule about the party at
+large whenever the optional system is switched on.
+
+**Ownership: `CHAR-012` [UNRESEARCHED]** owns the skill. **`ENC-005` does not absorb the
+general-skills system** and claims no skill mechanic. `CHAR-012` is now named as a **step-6
+provider** in §7.1 rather than left as a footnote.
+
+**N-31 bears on Q4.** RC's own p. 88 text names `Endurance` as the exception to the 30-round
+running maximum (N-27a), and p. 83 gives its terms. This is recorded because Q4 asks whether
+chase rounds count against that maximum; it does **not** answer Q4, and `ENC-005` claims none
+of it.
+
+### 5.5a `Exhaustion` (p. 88) — the rules that collide with step 5, enumerated in pass 3
+
+Pass 2 did not enumerate the General Index entry `Exhaustion . 88`, and carried no evidence row
+for the p. 88 rules — although step 5 conducts the whole chase **at running speed**, which is
+what p. 88 limits. All of this is **landed `CHAR-005` §9's** and is **consumed, not re-derived**.
+
+| # | Fact | Object | Confidence |
+|---|---|---|---|
+| N-27a | Running is *"toward **or away from an enemy**"*, at normal speed in feet **per round**, i.e. three times encounter speed. *"A character can run at maximum speed for **30 rounds at most (5 minutes)** before becoming exhausted. (Characters with the optional **Endurance** skill can maintain this pace for longer periods of time.)"* | p. 88 | **DIRECT PRIMARY TEXT** |
+| N-27b | *"An exhausted character must **rest for at least three turns (30 minutes)** before running or fighting again."* | p. 88 | **DIRECT PRIMARY TEXT** |
+| **N-27c** | *"A character who becomes exhausted but is forced to continue running **cannot use his maximum running speed. He drops to encounter speed** and cannot move any faster until he has rested."* | p. 88 | **DIRECT PRIMARY TEXT** |
+| N-27d | Exhausted and forced to fight: monsters gain **`+2`** to hit him; he subtracts **`2`** from damage rolls (minimum 1) | p. 88 | **DIRECT PRIMARY TEXT** |
+
+**N-27c is mechanically significant inside the pursuit procedure and pass 2 missed it.** Step 5
+is a speed contest run in rounds. If a chase passes 30 rounds, RC drops the exhausted side
+**from running speed to encounter speed** — roughly a threefold reduction — which changes the
+outcome of the very comparison step 5b decides (*"caught … because of superior speed"*).
+Likewise N-27d and N-27b feed step 5b's exit into combat and step 6's rest.
+
+**This does not resolve Q4; it sharpens it further.** RC states the running maximum (N-27a), the
+chase's use of running speed (N-7, N-21), the consequence of exceeding it (N-27c) and the rest
+requirement (N-27b, N-20) — and **still never says whether chase rounds are counted against the
+30**. The objects are now all inspected, so the question is a genuine silence rather than an
+uninspected gap (§10.2.2 **case 3**).
+
+**Ownership: `CHAR-005` §9 [LANDED]** owns every row above; `CHAR-012` owns `Endurance`.
+**Nothing here is claimed by `ENC-005`.**
+
+One routed observation, reported not absorbed: RC p. 108's `Attack Roll Modifiers Table` prints
+`Attacker exhausted −2` as an **attack roll** modifier, while p. 88 (N-27d) puts the `−2` on
+**damage** rolls. Landed `CHAR-005` §9 records the p. 88 reading. **Not adjudicated, not
+absorbed** — flagged to the human owner; see `EXP-006`'s §8 Q13.
 
 ### 5.6 p. 104 — `Retreat` and `Fighting Withdrawal`, now **visually verified and complete**
 
@@ -355,7 +467,9 @@ lost  /  bearings  /  rest  /  exertions  /  drop  /  dropped goods
 - **RC states no mechanic for oil poured to delay pursuit.** Not located after inspecting
   pp. 69, 98–100 and the Evasion Table's full condition column.
 - **RC does not say whether chase rounds count against the 30-round running maximum.** Not
-  located after inspecting pp. 98–100 and `CHAR-005` §9's source pages (p. 88, p. 103).
+  located after inspecting pp. 98–100, **p. 88 in full (§5.5a)**, p. 83's `Endurance` entry, and
+  the General Index entries `Exhaustion . 88`, `Running speed . 88, 103` and `Skills . 82-85, 92`.
+  All governing objects are now inspected, so this is §10.2.2 **case 3**, not case 1.
 - **No marching-order or formation input appears anywhere in the section.** The procedure needs
   party **size** (N-9), not order. Confirms landed `EXP-003` case `D32`. **`EXP-010` not
   absorbed.**
@@ -373,17 +487,21 @@ procedure is not.**
 
 | Step | What it needs | Provider | Status | RC page |
 |---|---|---|---|---|
-| **1 Contact** | encounter occurrence; **encounter distance**; **surprise states** | `ENC-001` + `ENC-002` | **Unresearched** ×2 | 92–93 |
+| **1 Contact** | encounter occurrence; **encounter distance** (itself **gated on surprise**, N-4a); **surprise states** | `ENC-001` + `ENC-002` | **Unresearched** ×2 | 92–93 |
 | **2 Decision to Evade** | **surprise** states of both sides | `ENC-002` | **Unresearched** | 93 |
 | **3 Decision to Pursue** | **morale check** (monsters/NPCs) | `ENC-004` | **Unresearched** (`DEC-0008 REQUIRED`) | 103 |
 | **4 Attempt to Evade** | party size, monster count, `d100` | **`ENC-005` itself** | **owned here** | 99 |
 | **5 Pursuit Continues** | **`1d6` initiative**/round; **running speed**; **relative speed** | `COMBAT-006` + `CHAR-005` **[LANDED]** + `MON-003` | **Unresearched** ×2 | 99, 102, 88 |
 | **5a** | **morale** re-check every 5 rounds | `ENC-004` | **Unresearched** | 103 |
 | **5b** | **Combat Sequence Checklist** exit | `COMBAT-*` | **Unresearched** | 102 |
-| **6 Regain Bearings** | **rest**; position/lost determination | `CHAR-005` §9 **[LANDED]**; lost = **unowned in dungeons** | partial | 100, 91 |
+| **6 Regain Bearings** | **rest**; position/**lost determination** | `CHAR-005` §9 **[LANDED]** for rest; **`CHAR-012` for the `Caving` check** (N-28) | **Unresearched** ×1 | 83, 91, 100 |
 
-**Four of the six steps cannot be executed without a card that has not been researched.**
-Step 4 is the only step `ENC-005` fully owns. Step 6 is half-owned.
+**Five of the six steps cannot be executed without a card that has not been researched** —
+step 6 joins the list in pass 3, once `Caving` is enumerated. **Step 4 is the only step
+`ENC-005` fully owns.**
+
+The count of distinct unresearched counterparties rises from five to **six**:
+`ENC-001`, `ENC-002`, `ENC-004`, `COMBAT-006`, `MON-003`, `CHAR-012`.
 
 ### 7.2 The governance question this raises — **evidence presented, decision not taken**
 
@@ -391,9 +509,10 @@ The direction requires this to be put to the human owner rather than answered he
 
 ```text
 OPTION A -- Stage B now, as a partially specified procedure with routed dependencies.
-    ENC-005 would name encounter distance, surprise, morale, initiative and monster
-    speed as CALLER-SUPPLIED INPUTS and specify only step 4 plus the sequencing.
-    COST: a contract with FIVE unresearched counterparties.  This is the exact
+    ENC-005 would name encounter distance, surprise, morale, initiative, monster
+    speed and the Caving check as CALLER-SUPPLIED INPUTS and specify only step 4
+    plus the sequencing.
+    COST: a contract with SIX unresearched counterparties.  This is the exact
           concern that DEFERRED EXP-010 (BOUNDARY-CORRECTION §4), where THREE
           unresearched consumers were judged sufficient to defer.
 
@@ -418,10 +537,39 @@ about consistency, not a recommendation, and NOT a decision taken in Stage A.
 | Q5 | Scouts: prose `−10%` vs table `−15%` (N-14). | **RETAINED AS GENUINE SOURCE AMBIGUITY** (§10.2.2 **case 3** — all governing objects inspected, both values visually verified on the same page, nothing uninspected). `INTERNAL SOURCE CONFLICT REQUIRES REVIEW` |
 | Q6 | Checklist step 2's *"go to Step 2"* self-loop (N-5). | **RETAINED AS GENUINE SOURCE AMBIGUITY** (§10.2.2 case 3) |
 | Q7 | Does the `Retreat` / `Fighting Withdrawal` running-speed bridge (N-23) belong here or to `COMBAT-*`? | **CONFIRMED OUT OF SCOPE for Stage A** — a routing decision. Evidence complete on both sides (§5.6) |
-| Q8 | Does `CHAR-012`'s Caving skill modify step 6? | **BLOCKED — MORE PRIMARY-SOURCE RESEARCH REQUIRED** *for `CHAR-012`*, which is **[UNRESEARCHED]** and out of this cluster. **Not** a gap in `ENC-005`'s own coverage |
-| Q9 | Who owns "lost in a dungeon"? RC states the condition (N-22) and no procedure. | **CONFIRMED OUT OF SCOPE** — no Rule ID exists; recorded as an ownership gap, not claimed |
+| Q8 | Does `CHAR-012`'s `Caving` skill modify step 6? | **RESOLVED BY SOURCE INSPECTION — pass 3.** **Yes.** p. 83 states it in terms: *"If he is forced to flee for a long stretch, he must make a skill check to keep from being lost. (Characters without this skill automatically become lost in such a situation.)"* (N-28). `CHAR-012` is named as a **step-6 provider** in §7.1. Pass 2 classified this `BLOCKED` **over a single page it had not opened** — see §8.2 |
+| Q9 | Who owns "lost in a dungeon"? | **CONFIRMED OUT OF SCOPE**, ownership **`CHAR-012`** for the skill-check path (N-28) and **unowned** for the no-skill-system path, where RC leaves it to DM discretion (N-22). No Rule ID is invented |
 
-**Zero silent unresolved research tasks at this gate.**
+**Zero silent unresolved research tasks at this gate**, and — after pass 3 — **zero `BLOCKED`
+rows.**
+
+### 8.2 The §17 conflict pass 2 carried, and why it was a real defect
+
+Pass 2 recommended `EVIDENCE READY FOR HUMAN REVIEW` while its own closure gate carried a row
+classified `BLOCKED — MORE PRIMARY-SOURCE RESEARCH REQUIRED`. **Those cannot coexist.** §10.2
+exists to prevent exactly this, and §17 makes the block a stop.
+
+Worse, the block was not real. Pass 2 justified it as *"blocked on `CHAR-012`, which is
+unresearched and out of this cluster — not a gap in `ENC-005`'s own coverage."* But the question
+was not blocked on a card; **it was blocked on one page**, p. 83, which pass 2 never opened. The
+answer was one page away, and the `BLOCKED` label made an uninspected page look like somebody
+else's research backlog.
+
+```text
+That is the precise failure mode DEC-0010 §10.2 names:
+
+    "A packet may contain genuine rule ambiguities.  It may NOT contain
+     UNFINISHED SOURCE INSPECTION DISGUISED AS AN AMBIGUITY."
+
+A BLOCKED row is the strongest form of that disguise, because it reads as diligence.
+```
+
+Pass 3 opened the page. Q8 is `RESOLVED BY SOURCE INSPECTION`.
+
+**Rule this packet now holds itself to:** before classifying anything `BLOCKED`, open every page
+the source's own indices point at for it. `Caving` was reachable from `Sample Skills Table . 82`
+in the p. 301 index and from `Skills . 82-85, 92` in the General Index — both of which pass 2
+listed.
 
 ### 8.1 Reconciliation table (§10.2.1) — pass 1's open statements
 
@@ -445,9 +593,16 @@ about consistency, not a recommendation, and NOT a decision taken in Stage A.
 ### 9.1 Structural units inspected — all as page images
 
 ```text
-p. 88    Ch. 6   Character Movement Rates and Encumbrance; Terrain Effects
+p. 81    Ch. 5   General Skills -- "Using general skills is optional"   -- pass 3
+p. 82    Ch. 5   How Skills Are Used; SAMPLE SKILLS TABLE                -- pass 3
+p. 83    Ch. 5   CAVING; ENDURANCE (Blind Shooting/Fire-Building read,
+                 routed to EXP-006)                                      -- pass 3
+p. 88    Ch. 6   Character Movement Rates and Encumbrance; Terrain Effects;
+                 RUNNING + EXHAUSTION rules (§5.5a)                       -- pass 3
+p. 108   Ch. 8   Attack Roll Modifiers Table -- exhaustion rows only, routed
 p. 91    Ch. 7   Ch. 7 opening definition; Game Turn + Game Day Checklists
-p. 92    Ch. 7   Chance of Encounter Table
+p. 92    Ch. 7   Chance of Encounter Table; Encounter Distance section; surprise
+                 1d6 rule and its three outcomes (N-4a, N-4b, N-4c)
 p. 93    Ch. 7   Encounter Checklist; Encounter Distances Table; Monster Reactions
 p. 97    Ch. 7   wilderness/castle encounter subtables          (excluded, read to confirm)
 p. 98    Ch. 7   EVASION AND PURSUIT opening; Definitions; Contact; Decision to Evade
@@ -512,6 +667,11 @@ as ambiguity.**
 | "The card is underworld-specific in the source" | Searched the whole section + both index entries | **REJECTED.** One procedure, both settings (Q1) |
 | "`EXP-010` marching order is needed" | Searched the section for formation/order/rank | **NOT LOCATED.** Party **size** only |
 | "A generic terrain mechanic is required" | Enumerated every terrain object in both indices | **REJECTED.** Terrain adjusts a **percentage**, not a rate (N-15) |
+| *"RC supplies no dungeon getting-lost procedure"* (pass 2) | **Pass 3:** read the p. 301 Tables Index entry by entry; opened `Sample Skills Table . 82` and Ch. 5 | **REJECTED — falsified.** `Caving`, p. 83 (N-28) |
+| *"Q8 is `BLOCKED` on unresearched `CHAR-012`"* (pass 2) | **Pass 3:** opened the one page the question actually turned on | **REJECTED.** It was unfinished inspection, not a block (§8.2) |
+| "Step 5's speed contest is unaffected by chase length" | **Pass 3:** read p. 88 in full | **REJECTED.** An exhausted runner **drops to encounter speed** (N-27c), changing the comparison step 5b decides |
+| "The Evasion Table's five conditions are the closed adjustment set" | Re-read p. 99 col. 1 | **REJECTED.** *"and other factors"* — explicitly open-ended (N-34) |
+| "Step 5b's *caught* is a die roll" | Re-read p. 99 col. 3 | **REJECTED.** DM position-tracking plus an initiative win (N-32) |
 
 ---
 
@@ -543,8 +703,29 @@ as ambiguity.**
 EVIDENCE READY FOR HUMAN REVIEW
 ```
 
-subject to the mandatory §10.1.2 independent completeness review of this remediated packet,
-recorded in `docs/rules/evidence/CLUSTER-004-stage-a-completeness-review-2.md`.
+subject to the mandatory §10.1.2 **third independent completeness review**. Per §10.1.2 the
+original researcher may **not** restore a ready status on its own certification, so this
+recommendation is a submission, not a verdict.
+
+**Pass 3 remediation of the second review's findings:**
+
+```text
+ 8  Caving (p. 83) opened and recorded; §5.5/N-22 and §6.3's getting-lost
+    negative restated on the corrected premise; Q8 reclassified from BLOCKED
+    to RESOLVED BY SOURCE INSPECTION; CHAR-012 named as a step-6 provider   §5.7, §7.1
+ 9  Exhaustion . 88 enumerated; the 30-round maximum, the RC-named Endurance
+    exception, the 3-turn rest and "drops to encounter speed" all recorded;
+    Q4 re-attested under §10.2.2 case 3                                     §5.5a
+10  "Combat occurs;" restored to step 5b's verbatim block                   §5.2
+11  Evidence rows added for the catch-up determination, the obstacle branch,
+    the open-ended DM adjustment, area familiarity and step 2's one-round
+    run; N-19's gating condition restored                                   §5.3a
+12  (discharged mid-review -- p. 92 opened, N-4a/b/c added)                 §5.1
+13  Adversarial self-review re-run FROM the p. 301 index, entry by entry    §10
+17  N-19 gating condition restored                                         §5.5
+```
+
+**The §17 conflict is cleared: this packet now carries no `BLOCKED` row** (§8.2).
 
 **Stage B has not begun and is not authorized. No Rule Card is drafted. No production code is
 touched. Neither printed defect is adjudicated.**
@@ -553,6 +734,16 @@ Two things must be settled by the human owner before Stage B could begin:
 
 ```text
 Q1   Is ENC-005 underworld-only, or does it own RC's one general evasion procedure?
-§7.2 Does Stage B proceed with FIVE routed unresearched counterparties, or defer --
+§7.2 Does Stage B proceed with SIX routed unresearched counterparties, or defer --
      given that EXP-010 was deferred over THREE?
+```
+
+A third, surfaced by pass 3 and worth the human owner's attention:
+
+```text
+The general-skills system is OPTIONAL (N-30).  Caving therefore makes step 6's
+outcome depend on whether an optional RC subsystem is switched on -- and the
+simulator has no recorded decision on whether it is.  BOUNDARY-CORRECTION §6
+item 2 asked "whether any newly discovered RC optional system should be enabled"
+and recorded "none found."  One has now been found.
 ```
