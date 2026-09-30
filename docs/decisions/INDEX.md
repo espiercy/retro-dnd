@@ -15,6 +15,7 @@ Durable architectural and process decisions for the Retro D&D Simulator project.
 | [DEC-0009](DEC-0009-evidence-first-rule-research-protocol.md) | Evidence-First Rule Research Protocol | Approved | 2026-08-16 |
 | [DEC-0010](DEC-0010-primary-source-completeness-audit.md) | Primary-Source Completeness Audit Required for Rule Research | Approved | 2026-08-29 |
 | [DEC-0011](DEC-0011-alternate-source-lineage-completeness.md) | Alternate-Source Lineage Completeness Required for Gap Research | Approved | 2026-09-04 |
+| [DEC-0012](DEC-0012-stage-a-evidence-integrity-gates.md) | Stage-A Evidence-Integrity Gates, Packet Template, and Structural Linter | Proposed — awaiting human approval | 2026-09-30 |
 
 ## Adding a Decision Record
 

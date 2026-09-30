@@ -20,16 +20,22 @@ This protocol exists to make **stopping on inadequate evidence an expected, succ
 This replaces the prior single-pass pipeline (`Source → Research → Rule Card Draft → Human Review`) with:
 
 ```text
+RESEARCH-START GATE                                ◄── §5.1 (DEC-0012)
+        ↓
 PRIMARY-SOURCE ACQUISITION                         ◄── hard gate (§4)
         ↓
 EVIDENCE COLLECTION                                ◄── §5
         ↓
 SOURCE-STRUCTURE / FINDING-AID REVIEW              ◄── §9.1.1; TOC / Tables Index
         ↓
+INDEX-INSTRUMENT ENUMERATION                       ◄── §9.9 (DEC-0012)
+        ↓
+COVERAGE MANIFEST                                  ◄── §9.3.1 (DEC-0012)
+        ↓
 PRIMARY-SOURCE OBJECT / TABLE COMPLETENESS AUDIT   ◄── §9.1 (DEC-0010)
         ↓
 VISUAL INSPECTION OF MECHANICALLY
-SIGNIFICANT OBJECTS                                ◄── §9.2 (DEC-0010)
+SIGNIFICANT OBJECTS                                ◄── §9.2, §9.2.1
         ↓
 COMPLETE-ENTRY / DETAILED GOVERNING MATERIAL       ◄── §9.7 (DEC-0010)
         ↓
@@ -39,10 +45,18 @@ WHOLE-SOURCE CROSS-REFERENCE SEARCH                ◄── §9
         ↓
 FALSIFICATION / CHALLENGE PASS                     ◄── §10
         ↓
+NEGATIVE CLAIM LEDGER                              ◄── §10.4 (DEC-0012)
+        ↓
+REPOSITORY-FACT VERIFICATION PASS                  ◄── §10.5 (DEC-0012)
+        ↓
 OPEN-QUESTION CLOSURE GATE                         ◄── §10.2 (DEC-0010)
+        ↓
+PRE-REVIEW SELF-FALSIFICATION PASS                 ◄── §10.6 (DEC-0012)
         ↓
 ADVERSARIAL SELF-REVIEW                            ◄── §10.1.1 (DEC-0010)
         ↓
+RESEARCH-COMPLETION GATE                           ◄── §11.1 (DEC-0012);
+        ↓                                              the evidence linter passes
 INDEPENDENT COMPLETENESS REVIEW                    ◄── §10.1.2 hard gate;
         ↓                                              NOT by the original researcher
 HUMAN EVIDENCE REVIEW                              ◄── hard gate (§11)
@@ -60,7 +74,9 @@ RULE CARD DRAFT / REVALIDATION
 HUMAN RULE CARD APPROVAL
 ```
 
-**This is the project's single canonical Stage-A order.** §9.1.1 states the same sequence at finer granularity, with the structure-first rationale; `DEC-0010` item 13 restates it. There is no alternative or interchangeable ordering of these stages.
+**This is the project's single canonical Stage-A order.** §9.1.1 states the same sequence at finer granularity, with the structure-first rationale. There is no alternative or interchangeable ordering of these stages.
+
+> **Amended by `DEC-0012` (2026-09-30).** The gates marked `DEC-0012` above are additions. `DEC-0010` item 13 stated this sequence in its pre-`DEC-0012` form and is **superseded as to the sequence only**; that record's own text is preserved rather than rewritten (`DEVELOPMENT_WORKFLOW.md` §9.4), and `DEC-0012` Decision item 13 carries the amended sequence. Where `DEC-0010` item 13 and this section differ, **this section governs.**
 
 **Core principle: evidence must close before mechanical synthesis begins.** Everything above the "Human Evidence Review" gate is **Stage A — Evidence**. Everything from "Mechanical Synthesis" downward is **Stage B — Synthesis / Rule Card Draft**. A research agent must not produce a polished executable specification from incomplete primary evidence, and must not cross from Stage A into Stage B without explicit human authorization (§11).
 
@@ -114,6 +130,25 @@ Provenance classifications used in the evidence map (a subset of `GAME_CONSTITUT
 
 (Alternate-Source Compatible Completion and Simulator Ruling are not evidence-stage classifications — they are Stage B outcomes, reached only after the process in §15/§16 below, and only for gaps the evidence stage has already precisely documented as unresolved.)
 
+## 5.1 Research-Start Gate
+
+> Added by `DEC-0012`. Cheap to discharge, and it prevents the expensive discovery — made four times in `CLUSTER-004` — that the source cannot be completely inspected, or that the project boundary being researched is stale, *after* a full research pass has already been written.
+
+Before substantive Stage-A research begins, establish and record each of the following. "Establish" means *verified this pass*, not *recalled*:
+
+| Item | What must be established |
+|---|---|
+| **Exact card scope** | The card's currently registered scope, read from `docs/rules/INVENTORY.md` this pass — not from memory and not from a cluster document's summary of it |
+| **Known ownership seams** | The neighbouring Rule IDs and what each owns, so a consequence can be routed rather than absorbed |
+| **Authoritative primary source** | Edition, printing, and the exact access method for page images |
+| **Required structural / index instruments** | Which instruments this source provides — TOC, Tables/Checklists Index, General Index, specialist indexes (§9.9) |
+| **Current repository dependencies** | The card's incoming/outgoing dependencies and each one's actual status, verified under §10.5 |
+| **Primary-source visual-access availability** | That page images for the expected governing region actually render (§9.2.1) — spot-checked, not assumed from the access method having worked for another card |
+
+If visual access is already known to be unavailable for a region the card plainly needs, the correct outcome is `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED` at the start of the task, not after it.
+
+This gate is recorded as the packet's first section (§11.2). It is not a substitute for any later gate.
+
 ## 6. Confidence Vocabulary
 
 Every evidence-map row's Confidence column uses exactly one of:
@@ -123,8 +158,10 @@ Every evidence-map row's Confidence column uses exactly one of:
 - **NECESSARY CONSEQUENCE** — not itself stated by RC, but a logically forced arithmetic/mechanical consequence of two or more DIRECT PRIMARY TEXT facts, with the derivation shown.
 - **SECONDARY SOURCE LOCATOR ONLY** — found only via a secondary source; primary text has not (yet) been directly inspected for this specific fact. **May guide further research. Cannot authorize mechanics** — a row at this confidence level blocks Stage A from closing on that question.
 - **NOT YET VERIFIED** — a plausible reading not yet checked against primary text at all; a placeholder, not a finding.
+- **NOT YET ESTABLISHED** — *added by `DEC-0012`.* The correct classification for a **suspected absence** whose §10.4 enumeration is not complete. It says *"the enumeration required to claim the source is silent here has not been finished"* — never *"the source is silent."* A row at this level blocks Stage A from closing on that question, exactly as the two levels above it do.
+- **REPOSITORY FACT — NOT A SOURCE CLAIM** — *added by `DEC-0012`.* For a row asserting something about **this project** rather than about the source (ownership, landed status, inventory content). Such a row is verified under §10.5, not by source inspection, and none of the labels above describes it. Recorded because `CLUSTER-004` review 5 Finding 8 found four cells where a project fact had been forced into a source-confidence column, and observed that forcing one would be worse than the plain wording.
 
-A Stage A evidence report is not ready for human review while any consequential row still carries `SECONDARY SOURCE LOCATOR ONLY` or `NOT YET VERIFIED` — either the primary text must be located and inspected, or the row must be reported as an unresolved research question (§4, §11) rather than smoothed over.
+A Stage A evidence report is not ready for human review while any consequential row still carries `SECONDARY SOURCE LOCATOR ONLY`, `NOT YET VERIFIED` or `NOT YET ESTABLISHED` — either the primary text must be located and inspected, or the row must be reported as an unresolved research question (§4, §11) rather than smoothed over.
 
 ## 7. Facts and Consequences Must Be Separate
 
@@ -205,13 +242,19 @@ The point is not to shame prior research; it is to fix exactly which behaviors a
 ### 9.1.1 Structure-first order of operations
 
 ```text
+RESEARCH-START GATE                                ◄── §5.1
+        ↓
 SOURCE STRUCTURE FIRST
         ↓
 TOC / TABLES INDEX                                 ◄── §9.1 audit classes A, B
         ↓
+INDEX-INSTRUMENT ENUMERATION                       ◄── §9.9 (General Index,
+        ↓                                              specialist indexes)
+COVERAGE MANIFEST                                  ◄── §9.3.1; before conclusions
+        ↓
 GOVERNING SOURCE-OBJECT INVENTORY                  ◄── §9.1 audit classes C–I
         ↓
-VISUAL INSPECTION OF TABLES / STRUCTURED OBJECTS   ◄── §9.2
+VISUAL INSPECTION OF TABLES / STRUCTURED OBJECTS   ◄── §9.2, §9.2.1
         ↓
 COMPLETE-ENTRY / DETAILED GOVERNING MATERIAL       ◄── §9.7
         ↓
@@ -221,16 +264,24 @@ WHOLE-SOURCE CROSS-REFERENCE SEARCH                ◄── §9
         ↓
 FALSIFICATION / CHALLENGE PASS                     ◄── §10
         ↓
+NEGATIVE CLAIM LEDGER                              ◄── §10.4
+        ↓
+REPOSITORY-FACT VERIFICATION PASS                  ◄── §10.5
+        ↓
 OPEN-QUESTION CLOSURE GATE                         ◄── §10.2
         ↓
+PRE-REVIEW SELF-FALSIFICATION PASS                 ◄── §10.6
+        ↓
 ADVERSARIAL SELF-REVIEW                            ◄── §10.1.1
+        ↓
+RESEARCH-COMPLETION GATE                           ◄── §11.1; linter passes
         ↓
 INDEPENDENT COMPLETENESS REVIEW                    ◄── §10.1.2; NOT by the
         ↓                                              original researcher
 HUMAN EVIDENCE REVIEW                              ◄── §11
 ```
 
-**This is the same Stage-A sequence as §3, at finer granularity — not a second, competing one.** Every required gate appears in the same order.
+**This is the same Stage-A sequence as §3, at finer granularity — not a second, competing one.** Every required gate appears in the same order. The gates added by `DEC-0012` appear in both.
 
 **Exploratory search may occur opportunistically, whenever it is useful.** The **formal whole-source cross-reference search pass (§9)** shown here occurs *after* structural mapping and governing-object inspection, and **only the formal sequence governs evidence-completeness closure.** An incidental search that happens earlier is a research convenience; it is not this stage, and it never closes the evidence.
 
@@ -302,6 +353,40 @@ STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED
 
 Do not declare evidence complete. This is a hard gate on the same footing as §4's `STOP — PRIMARY SOURCE ACCESS REQUIRED`.
 
+## 9.2.1 Discharging the Visual-Access Gate — operational rules
+
+> Added by `DEC-0012`. §9.2's hard gate is unchanged; what follows is **how it is discharged**, because `CLUSTER-004` showed the gate being silently walked past rather than disputed.
+>
+> **The recorded defect this section exists to prohibit.** RC p. 84 renders columns 2 and 3 **blank** in the digitisation this project had been using — at every size tried, with HTTP 200 and payloads up to 1.05 MB, and with the OCR truncating at the same point mid-sentence. Two consecutive passes presented that page as inspected, cited it as the object for an evidence row, stated *"All pages cited were ultimately obtained as images"*, and recorded **no access limitation**. The page's content was eventually obtained from a second digitisation, and the region turned out to hold four general skills that bore on both cards' open questions.
+
+**HTTP success is not visual access.** A `200` response, a full-size payload, and a well-formed image prove that a *file* was served. They prove nothing about whether the page's body text is legible in it. Confirm the text, not the transfer.
+
+**Permitted attempts, in any order:**
+
+- an alternate rendering (different size, format, or derivative);
+- magnification or a region crop of the affected columns;
+- a local copy of the source already held by the project;
+- **another digitisation of the same edition/printing.**
+
+**A second digitisation of the same edition is still primary-source access.** It is the same edition, the same printing, the same primary source, obtained through a different scan. It does **not** engage `SOURCE_HIERARCHY.md`'s alternate-source ordering and does **not** trigger `DEC-0011`. Record which digitisation each affected page came from.
+
+**Prohibited:**
+
+- inferring **absence** from a failed render — an unrenderable region is unknown content, never empty content;
+- substituting OCR as proof for a mechanically significant object;
+- treating a successful HTTP response as evidence the contents were visible;
+- a blanket disposition (*"all remaining rows unrelated"*) covering a region that could not be read. This is the strongest form of the §9.1 error, because the research operation the claim describes was impossible.
+
+**Recording is mandatory whether or not a workaround succeeded** (§11 item 17). Every affected page is recorded with the defect, what was attempted, and how it resolved — in the packet's Visual Inspection Record (§11.2), including on the machine-readable `ACCESS-BLOCKED` line, which is empty only when nothing is blocked.
+
+If no attempt succeeds:
+
+```text
+STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED
+```
+
+and every evidence row depending on that region is reclassified — not carried forward.
+
 ## 9.3 Primary-Source Coverage Checklist (required packet section)
 
 Every Stage-A evidence packet must contain a section titled **Primary-Source Coverage Checklist** recording:
@@ -317,6 +402,53 @@ Every Stage-A evidence packet must contain a section titled **Primary-Source Cov
 - any potentially relevant object **deliberately excluded, with the reason**.
 
 The purpose is auditability: a future reviewer must be able to ask *"what primary-source objects could govern this mechanic, and did the researcher actually inspect each one?"* and get a checkable answer.
+
+## 9.3.1 Coverage Manifest — required before conclusions
+
+> Added by `DEC-0012`. §9.3's checklist says what a finished packet must *contain*. This section fixes **when** it is written, because in `CLUSTER-004` the checklist was repeatedly assembled *after* the conclusions it was supposed to license, and then disagreed with the packet's other two coverage lists across three consecutive passes.
+
+**The required order is fixed:**
+
+```text
+enumerate  →  inspect  →  disposition  →  falsify  →  conclude
+```
+
+**This is prohibited:**
+
+```text
+write conclusions
+then reconstruct coverage afterward
+```
+
+**Before any substantive mechanical conclusion may be written**, the packet must carry a completed **Coverage Manifest** enumerating, as applicable to the source and the responsibility:
+
+- source chapters / structural units;
+- Table of Contents entries;
+- Tables / Checklists Index entries;
+- General Index entries;
+- specialist indexes, such as a spell index (§9.9);
+- governing tables;
+- governing prose sections;
+- cross-references;
+- visually inspected pages;
+- source pages that could **not** yet be visually inspected (§9.2.1);
+- repository dependencies and ownership claims requiring verification (§10.5).
+
+**Every item receives an explicit disposition**, drawn from the vocabulary this repository already uses:
+
+```text
+OPENED
+VISUALLY INSPECTED
+DISPOSITIONED
+ROUTED TO <RULE-ID>
+EXCLUDED — <stated reason>
+ACCESS BLOCKED
+NOT YET ESTABLISHED
+```
+
+A manifest row may not be blank, and **a row may not be added after the conclusion it would have governed.** Adding one late is not a tidy-up; it is evidence that the conclusion was written without it, and the honest response is to re-derive the conclusion.
+
+**The manifest, the Visual Inspection Record and the Primary-Source Coverage Checklist must agree with each other.** Three lists that disagree are not three sources of assurance; they are proof that at least one is unmaintained. `scripts/lint_evidence.py` checks the machine-readable part of this agreement (§11.1), which is why the packet carries page lists in a fixed block rather than in prose.
 
 ## 9.4 Research-Risk Classification
 
@@ -416,6 +548,62 @@ A researcher may identify a **principal** governing object. A researcher may **n
 
 The existence of a summary table does not prove that detailed entity material adds no qualification. RC p. 7's class/ability table is the principal object for creation eligibility; it is **not** the whole of what RC says about class entry.
 
+## 9.9 Index Instruments Are Completeness Instruments
+
+> **Elevated from precedent `P-001` to binding protocol by `DEC-0012`.** `P-001` was recorded at `CLUSTER-003` closure and deliberately left `NOT YET ELEVATED`, so it bound nobody. `CLUSTER-004` pass 1 then *cited* the General Index and missed `Blindness . 150, 154` sitting in it — the entry that falsified the packet's headline conclusion. This is the **third** time in this project that the General Index has caught material three other instruments missed. It is now law, not precedent.
+
+Where the authoritative source provides an index instrument, that instrument is a **completeness instrument, not a citation aid.** Each applicable instrument must be **enumerated and dispositioned**, including:
+
+- the **General Index**;
+- the **Tables / Checklists Index**;
+- a **spell index**;
+- any other **specialist index** relevant to the responsibility.
+
+Each instrument reaches something the others cannot:
+
+```text
+TOC              -> chapters and major sections
+Tables Index     -> named tables and checklists
+General Index    -> SUBJECTS, wherever they appear, including plain prose
+                    subordinate to an unrelated procedure
+Specialist index -> the entity class it indexes, by name
+Keyword search   -> strings the researcher already thought to try
+```
+
+**Required operations:**
+
+1. Sweep each instrument for the mechanic's name **and its synonyms and variants**, not one canonical term.
+2. **Follow every plausible page reference to the governing text.** An index entry that is not followed has discharged nothing.
+3. **Record absent entries.** That a source's General Index has no entry for the mechanic's obvious name is itself a research fact, and it explains where the bridge to the governing pages actually runs.
+4. Where the source provides no such instrument, say so explicitly rather than leaving the class silently undischarged.
+
+**A packet may not state that an index was read in full unless its own ledger makes the enumeration auditable** (§9.10). The requirement is **not** to transcribe an entire index into every packet. It is to demonstrate that relevant entries were considered *systematically* rather than encountered opportunistically — which is exactly the difference between the pass that missed `Blindness . 150, 154` and the pass that used the same instrument to reach five governing pages.
+
+## 9.10 Prohibited Completeness Language
+
+> Added by `DEC-0012`. `CLUSTER-004` produced, across four passes, *"read ROW BY ROW"* over rows whose descriptions were unrenderable, *"all remaining rows inspected and EXCLUDED AS UNRELATED"*, and *"All pages cited were ultimately obtained as images"* — each false, and each a sentence rather than a defect in the research that could be pointed at.
+
+The following words and phrases are **completeness claims**:
+
+```text
+read in full          fully inspected        complete
+exhaustive            all relevant entries   every entry
+```
+
+A completeness claim may be used **only where a coverage instrument in this packet makes it auditable** — the Coverage Manifest (§9.3.1), an index-enumeration ledger (§9.9), or the Visual Inspection Record. The reader must be able to check the claim against a list, not take it on trust.
+
+Where no such instrument supports it, **use narrower wording that describes exactly what was inspected**:
+
+```text
+PERMITTED   "Entries A, B and C of the Tables Index were opened and dispositioned;
+             the remainder were read and judged unrelated on the stated grounds."
+PROHIBITED  "The Tables Index was read in full."     (with no ledger behind it)
+```
+
+This is §9.5 Guardrail B applied to the *research-operation* claim rather than to the source-property claim: just as *"RC contains no such rule"* requires enumeration, so does *"I inspected all of it."* Both are claims about the world, and both are checkable.
+
+Restate the claim as an **operation**, not a property: *"every entry on p. 301 was read, and each one relevant to this card is dispositioned above"* is auditable; *"nothing on p. 301 is undispositioned"* is a property claim that a reader cannot verify and that `CLUSTER-004` demonstrated was false when made.
+
 ## 10. Mandatory Falsification Pass
 
 Before proposing any mechanical conclusion of consequence, actively attempt to prove it wrong or incomplete. For every consequential tentative interpretation, record:
@@ -486,6 +674,34 @@ Must be performed by a **different reviewer context that did not conduct the evi
 
 **Permitted output of an original researcher:** `PREPARED FOR INDEPENDENT COMPLETENESS REVIEW`.
 **Prohibited output of an original researcher:** `SOURCE COMPLETENESS PASSED`, `SOURCE COMPLETENESS CERTIFIED`, `HUMAN EVIDENCE GATE CLEARED`.
+
+## 10.1.3 The Independent Reviewer's Role — restated, not weakened
+
+> Added by `DEC-0012`. **Nothing here reduces §10.1.2.** Independent review remains mandatory for every substantial Stage-A package, the original researcher still may not certify its own packet, and the reviewer remains free — and expected — to return `FAIL`.
+
+What changes is the **expected difficulty of the reviewer's job**:
+
+```text
+Observed failure mode (CLUSTER-004 reviews 1-3)
+    the independent reviewer discovers basic uninspected governing objects
+    -- a light-conditioned table, a page stating the consequence the packet
+       called absent, a whole chapter never opened
+
+Desired role
+    the independent reviewer adversarially challenges an already exhaustive packet
+```
+
+The gates added by `DEC-0012` exist to raise the **floor** of what reaches this reviewer, so that reviewer effort is spent on judgement rather than on bookkeeping. A reviewer who nevertheless finds an uninspected governing object should `FAIL` the packet and say so plainly — that outcome now indicates the earlier gates were not actually discharged, which is itself the finding.
+
+**§10.3's method is retained in full and is the instrument that worked.** The reviewer builds its own candidate-object list **from the source's own structure, before opening the packet.** `CLUSTER-004` reviews 3, 4 and 5 each did this, and it is how they found what the packets had missed. A reviewer that starts from the packet inherits the packet's blind spots and cannot discharge this gate.
+
+**The target process shape** after this remediation:
+
+```text
+research pass  →  self-falsification  →  ONE independent review  →  human evidence review
+```
+
+A second independent review should be **exceptional**, not routine. Five is a process failure, and it is recorded as one.
 
 ## 10.2 Open-Question Closure Gate
 
@@ -569,6 +785,114 @@ Record the result in the evidence packet's Coverage Checklist (§9.3) or in a de
 
 **Do not certify completeness merely because no new keyword hits appear.**
 
+## 10.4 Negative Claim Gate
+
+> Added by `DEC-0012`. This is §9.5 Guardrail B given a **required artifact** instead of a required attitude. Guardrail B was already explicit and already correct; `CLUSTER-004` pass 1 breached it twice, in its two headline conclusions, and both were false.
+>
+> **The recorded defect this section exists to prohibit.** Pass 1 asserted that RC *"states no consequence for having no light"* — calling it *"the single largest apparent gap in the card"* — and that RC has **no** light-conditioned table. RC states the consequence at p. 150 and prints the table at p. 93. Worse, the project's own landed `CHAR-005` §7 already cited p. 150 for those very movement rates, so the refutation was inside the repository when the claim was written.
+
+**An absence claim requires stronger evidence than a positive finding**, because a positive finding cites an object and an absence claim cites the whole source.
+
+The following are **material negative claims**:
+
+```text
+"RC has no ..."                    "no table exists ..."
+"no procedure exists ..."          "the source is silent ..."
+"there is no dungeon mechanic"     "no dependency exists ..."
+```
+
+Such a statement **may not appear as an established finding** unless a **Negative Claim Record** exists for it, recording at minimum:
+
+```text
+claim
+scope searched
+structural instruments checked
+indexes checked
+search terms used
+cross-references followed
+visual pages inspected
+falsification attempt
+confidence classification
+```
+
+**A failed keyword or OCR search is never sufficient evidence of absence.** Where the enumeration above has not been completed, the required classification is:
+
+```text
+NOT YET ESTABLISHED
+```
+
+— **not** source silence. `NOT YET ESTABLISHED` is an honest, non-blocking-to-write, blocking-to-close state (§6): it says the work required to make the claim has not been done. Converting it to silence without doing that work is the `DEC-0010` error repeated.
+
+**Before writing any negative claim, check the repository against it** (§10.5). A negative claim about the source that the project's own landed cards already contradict is the cheapest possible failure to avoid, and it has now occurred.
+
+**Where the ledger carries no material negative claim**, the packet says so explicitly in the ledger's stated `NONE` form rather than omitting the section.
+
+## 10.5 Repository Fact Gate
+
+> Added by `DEC-0012`. This is the one genuinely **missing rule** the `CLUSTER-004` analysis found: the protocol governs source research end to end and said nothing about claims concerning *this project*.
+>
+> **The recorded defect this section exists to prohibit.** A packet routed RC p. 150's generic conditions to `CHAR-011` — which `INVENTORY.md` defines as **Weapon Mastery**, a card that touches none of them. A second mis-routing followed in the sibling packet, and an earlier pass had called p. 147 *"unowned"* when the inventory assigns it. Each was asserted without opening the file that refutes it, in packets whose source research was otherwise sound.
+
+**Claims about this project require repository evidence.** The following are repository facts, not source facts:
+
+```text
+"CHAR-011 owns this"              "this card is landed"
+"there is no Rule ID"             "this dependency is unresearched"
+"this mechanic has no owner"      "this test already covers X"
+"the inventory says ..."          "the implementation contains ..."
+```
+
+Each must be **verified against the current repository during the active research pass.** **Model memory does not count as evidence**, and neither does a prior packet's assertion of the same fact — that is how a wrong owner ID propagates.
+
+Every repository-fact entry must **name the artifact actually inspected**, and where practical the relevant identifier or section:
+
+```text
+PERMITTED   CHAR-005 §7 owns the blindness movement column
+            -> docs/rules/character_creation/encumbrance_and_movement_rate.md §7, read this pass
+PROHIBITED  CHAR-011 owns the p. 150 conditions
+            -> (no artifact named; INVENTORY.md line 90 in fact says Weapon Mastery)
+```
+
+Where a repository fact has not been checked, it is marked:
+
+```text
+UNVERIFIED PROJECT FACT
+```
+
+rather than asserted. An `UNVERIFIED PROJECT FACT` blocks the Research-Completion Gate (§11.1) exactly as an undischarged source question does.
+
+**A distinct repository-fact verification pass** runs before independent review, separately verifying every concrete project assertion the packet makes. **This is not source-completeness review** — it is project-state verification, and it catches the class of error where the rules research is correct but the routing is wrong. Its results live in the packet's Repository-Fact Verification section (§11.2).
+
+## 10.6 Pre-Review Self-Falsification Pass
+
+> Added by `DEC-0012`. Distinct from §10's per-conclusion falsification (which happens *during* research) and from §10.1.1's adversarial self-review (which restarts from source structure). This is a **final sweep over the packet's conclusions as written**, immediately before requesting independent review.
+
+Before a packet may enter independent completeness review, the researcher must actively search for evidence that would make each of its major conclusions **false** — not merely re-read them for consistency.
+
+**Mandatory coverage.** The pass must cover, at minimum:
+
+- every **material negative claim** (§10.4);
+- every **ownership assignment** (§10.5);
+- every **source-silence finding**;
+- every **dependency conclusion**;
+- every **scope exclusion**.
+
+These five are not arbitrary: they are the categories that actually failed. `CLUSTER-004` produced a false negative claim, two wrong ownership assignments, a false source-silence finding, a dependency conclusion stated at the wrong count, and a blanket scope exclusion over a region that could not be read.
+
+**Required record, per conclusion:**
+
+```text
+Conclusion:
+What evidence would falsify it?
+Where was that evidence sought?
+Result:
+Disposition:
+```
+
+`Disposition` uses §10's vocabulary — `CONFIRMED` / `QUALIFIED` / `REJECTED`. A `REJECTED` conclusion triggers `STOP — MORE PRIMARY RESEARCH REQUIRED` and is **not** replaced with a second speculative model (§10).
+
+**A packet may not enter independent review until this pass is complete.** "Complete" means every listed category has been swept, and the sweep is recorded — not that the researcher is satisfied. Note the asymmetry this exploits: it is much easier to ask *"what would make this false, and did I look there?"* than to notice an absence in one's own work, which is precisely why §10.1.2 exists and why this pass does not replace it.
+
 ## 11. Required Stage-A Evidence Report Contents
 
 Every Stage A task must stop and produce a report containing, at minimum:
@@ -601,6 +925,81 @@ Every Stage A task must stop and produce a report containing, at minimum:
     ```
 
 **This report is committed to the repository as the durable evidence artifact defined in §12 — it does not stop at a chat response.** Then stop. Do not continue into Stage B on the same task.
+
+## 11.1 Research-Completion Gate
+
+> Added by `DEC-0012`. The gate a packet must clear **before independent completeness review may be requested.** Its purpose is to stop a reviewer's time being spent on defects the researcher could have found deterministically.
+
+Independent review may be requested only once **every** line below is confirmed:
+
+```text
+[ ] every Coverage Manifest row is dispositioned            §9.3.1
+[ ] no unresolved visual-access blocker remains             §9.2, §9.2.1
+[ ] every material negative claim has a Negative Claim Record  §10.4
+[ ] every repository fact has been verified this pass        §10.5
+[ ] the pre-review self-falsification pass is complete       §10.6
+[ ] open questions are explicitly listed and classified      §10.2
+[ ] required §6 and §10.2 vocabulary is used verbatim        §6, §10.2
+[ ] the evidence linter passes                               below
+```
+
+**"Confirmed" means checked, not assumed.** A checklist filled in from memory reproduces the failure this gate exists to prevent.
+
+### The evidence linter
+
+```text
+uv run python scripts/lint_evidence.py
+```
+
+`scripts/lint_evidence.py` is a **structural** checker, and its limits are part of its definition:
+
+```text
+IT DOES        verify that required instruments are present
+               verify that the packet's own ledgers agree with each other
+               verify controlled vocabulary in the columns that have one
+               verify that a blocker or a BLOCKED item forbids a ready recommendation
+
+IT DOES NOT    read the primary source
+               judge whether the research is correct
+               judge interpretation, ownership, or mechanical synthesis
+```
+
+**A green linter is a floor, never a certification.** It cannot see a governing object nobody enumerated, and it is not evidence of completeness — §10.1.2's independent review remains the only thing that certifies that, and only a human project owner accepts the evidence (§11).
+
+The linter runs as a gate in the project's canonical verification operation (`docs/technical/TOOLCHAIN_AND_CI.md` §8), so a non-conforming packet fails verification in the same run as a failing test.
+
+**Grandfathering.** Stage-A packets that existed when `DEC-0012` was adopted are exempt by name, listed in the linter's `GRANDFATHERED` set and pinned by a test. Retro-fitting new ledgers to accepted evidence would rewrite it rather than improve it. **The list is closed** — a packet written after `DEC-0012` is never added to it. Reviewer artifacts (completeness reviews, audits, gap-research records) are not Stage-A packets and are not linted.
+
+## 11.2 Required Stage-A Packet Template
+
+Every new Stage-A packet is started from:
+
+```text
+docs/rules/evidence/_TEMPLATE.md
+```
+
+The template structurally requires this protocol's instruments, in the §9.3.1 order, so that conformance is the default rather than something a researcher must remember to supply. Its sections are:
+
+```text
+ 1. Research-Start Gate                  §5.1
+ 2. Primary Source Accessed              §4, §11 item 17
+ 3. Source Structure                     §9.1.1
+ 4. Coverage Manifest                    §9.3.1
+ 5. Index Enumeration                    §9.9
+ 6. Governing Objects                    §9.1, §9.8
+ 7. Visual Inspection Record             §9.2, §9.2.1
+ 8. Cross-Reference Ledger                §9, §9.1 class G
+ 9. Repository-Fact Verification         §10.5
+10. Evidence Map                         §5, §6
+11. Negative Claim Ledger                §10.4
+12. Ownership and Dependency Routing     §10.5
+13. Falsification Pass                   §10, §10.6
+14. Open-Question Closure                §10.2
+15. Primary-Source Coverage Checklist    §9.3
+16. Independent Review Status            §10.1.2, §11.1
+```
+
+The template's own section numbering may be adapted to a responsibility's shape, but **each instrument must be present and identifiable** — the linter matches on the section names above. §11's required report contents are unchanged by this section; the template is where they live.
 
 ## 12. Evidence Artifacts — Location and Lifecycle
 
@@ -848,6 +1247,8 @@ An agent performing rules research under this protocol must stop under each of t
 | Adversarial self-review (§10.1.1) finds a packet claiming completeness while a declared unfinished source region remains uninspected | `FAIL COMPLETENESS PREPARATION` |
 | An alternate-source completion candidate's compatibility with RC cannot be established with confidence | `STOP — COMPLETION COMPATIBILITY NOT ESTABLISHED` |
 | Substantial simulator-level behavior remains undefined after §14–§16 | `STOP — HUMAN RULING REQUIRED` |
+| A Coverage Manifest row remains undispositioned at the completion gate (§9.3.1, §11.1) | `STOP — COVERAGE MANIFEST INCOMPLETE` |
+| A claim about this project remains unverified against the repository at the completion gate (§10.5, §11.1) | `STOP — UNVERIFIED PROJECT FACT` |
 
 **`STOP — INTERNAL SOURCE CONFLICT REQUIRES REVIEW` prevents an agent silently resolving a conflict. It does not mean a fully mapped conflict can never pass source completeness** — see §10.2.2. A contradiction whose governing objects have all been inspected and accurately recorded is `RETAINED AS GENUINE SOURCE AMBIGUITY` and is a Stage-B problem, not a Stage-A failure.
 
@@ -869,4 +1270,8 @@ Adopted `docs/decisions/DEC-0009-evidence-first-rule-research-protocol.md`, `APP
 
 **`DEC-0010` is `Approved` and those sections are in force.** `DEC-0009` is not superseded and its protections are unchanged; `DEC-0010` strengthens Stage A only.
 
-**Amendment adopted by `docs/decisions/DEC-0011-alternate-source-lineage-completeness.md`, `Approved` 2026-09-04 (drafted 2026-08-29)** — **§15.1** (multi-unit lineage corpus completeness: **hierarchical** corpus inventory down to core source units, level-range and subject exclusions, duplicate presentations, conflict-precedence scope, lineage-level negative findings, and independent alternate-source completeness review), plus the cross-reference note in §10.1.2. **`DEC-0011` is `Approved` and §15.1 is IN FORCE.** It extends `DEC-0010`'s completeness discipline from the primary source to the alternate-source layer; it supersedes neither `DEC-0009` nor `DEC-0010`, and grants alternate sources no additional authority — RC remains primary (`DEC-0007`). This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full — expected to produce a committed `docs/rules/evidence/EXP-001-evidence.md` Stage-A artifact, not a rewritten Rule Card, as its first deliverable.
+**Amendment adopted by `docs/decisions/DEC-0011-alternate-source-lineage-completeness.md`, `Approved` 2026-09-04 (drafted 2026-08-29)** — **§15.1** (multi-unit lineage corpus completeness: **hierarchical** corpus inventory down to core source units, level-range and subject exclusions, duplicate presentations, conflict-precedence scope, lineage-level negative findings, and independent alternate-source completeness review), plus the cross-reference note in §10.1.2. **Amendment drafted by `docs/decisions/DEC-0012-stage-a-evidence-integrity-gates.md`, `Proposed — awaiting human approval`, 2026-09-30** — §5.1 (Research-Start Gate), §9.2.1 (discharging the visual-access gate), §9.3.1 (Coverage Manifest and the required `enumerate → inspect → disposition → falsify → conclude` order), §9.9 (index instruments are completeness instruments — **elevating precedent `P-001`**), §9.10 (prohibited completeness language), §10.1.3 (the independent reviewer's restated role), §10.4 (Negative Claim Gate and the `NOT YET ESTABLISHED` classification), §10.5 (Repository Fact Gate and `UNVERIFIED PROJECT FACT`), §10.6 (pre-review self-falsification pass), §11.1 (Research-Completion Gate and the evidence linter), §11.2 (required Stage-A packet template), two added §6 confidence labels, two added §17 hard stops, and the amended Stage-A sequence in §3 and §9.1.1.
+
+**`DEC-0012` is `Proposed` and has not been approved.** Those sections are drafted and in the repository; they become binding when the human project owner approves that record. It was drafted after `CLUSTER-004` Stage A required **five** independent completeness reviews, four of them `FAIL`, for defects that were overwhelmingly evidentiary-closure and bookkeeping failures rather than rules-interpretation failures. It **supersedes `DEC-0010` item 13's Stage-A sequence as amended** and weakens nothing: `DEC-0009`'s protections, `DEC-0010`'s completeness discipline, `DEC-0011`'s lineage discipline, and §10.1.2's independent-review requirement are all unchanged. `DEC-0010`'s and `DEC-0011`'s historical text is not rewritten.
+
+**`DEC-0011` is `Approved` and §15.1 is IN FORCE.** It extends `DEC-0010`'s completeness discipline from the primary source to the alternate-source layer; it supersedes neither `DEC-0009` nor `DEC-0010`, and grants alternate sources no additional authority — RC remains primary (`DEC-0007`). This is the default workflow for substantial historical Rule Cards and revalidations going forward. `EXP-001`'s revalidation is the first Rule Card research task expected to follow it in full — expected to produce a committed `docs/rules/evidence/EXP-001-evidence.md` Stage-A artifact, not a rewritten Rule Card, as its first deliverable.

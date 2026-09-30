@@ -169,4 +169,4 @@ None. This record **amends** `DEC-0009`'s Stage-A process by adding required ste
 
 ## Superseded By
 
-None.
+None as a whole record. **Item 13's Stage-A sequence is superseded *as amended* by `DEC-0012-stage-a-evidence-integrity-gates.md` (drafted 2026-09-30), Decision item 13**, which inserts the Research-Start Gate, index-instrument enumeration, the Coverage Manifest, the Negative Claim Ledger, the repository-fact verification pass, the pre-review self-falsification pass and the Research-Completion Gate into the same canonical order. Every step this record established remains in the sequence, in the same relative order. This record's own text is preserved rather than rewritten (`DEVELOPMENT_WORKFLOW.md` §9.4); the current canonical sequence lives at `RULE_CARD_RESEARCH_PROTOCOL.md` §3 and §9.1.1. Items 1–12 and 14–18 are unchanged and remain in force.

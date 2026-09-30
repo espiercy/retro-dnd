@@ -10,8 +10,23 @@
 
 | # | Precedent | Established by | Status |
 |---|---|---|---|
-| **P-001** | **When a primary source provides a General Index, General Index inspection is a required source-structure completeness instrument for `DEC-0010` research, alongside the Table of Contents and the Tables Index.** | `CLUSTER-003` Stage-A remediation pass 1, 2026-09-13 | **Precedent recorded.** Not yet elevated into `DEC-0010` or the research protocol. |
-| **P-002** | **A `DEC-0011` mandatory source object — a conflict-precedence statement — must be sought by opening the front matter of every core source unit. A keyword sweep cannot establish that none exists.** | `CLUSTER-003` `DEC-0011` BECMI remediation 1, 2026-09-24 | **Precedent recorded.** Not yet elevated into `DEC-0011` or the research protocol. |
+| **P-001** | **When a primary source provides a General Index, General Index inspection is a required source-structure completeness instrument for `DEC-0010` research, alongside the Table of Contents and the Tables Index.** | `CLUSTER-003` Stage-A remediation pass 1, 2026-09-13 | **ELEVATED** into `RULE_CARD_RESEARCH_PROTOCOL.md` §9.9 by `DEC-0012` (drafted 2026-09-30; binding on that record's approval). See "Elevation" below. |
+| **P-002** | **A `DEC-0011` mandatory source object — a conflict-precedence statement — must be sought by opening the front matter of every core source unit. A keyword sweep cannot establish that none exists.** | `CLUSTER-003` `DEC-0011` BECMI remediation 1, 2026-09-24 | **Precedent recorded; PARTIALLY covered, not elevated.** Its general lesson now binds for primary-source claims through `DEC-0012` §10.4; its alternate-source front-matter requirement is **not** elevated. See "Elevation" below. |
+
+## Elevation record (added 2026-09-30)
+
+`DEC-0012` was drafted after `CLUSTER-004` Stage A required five independent completeness reviews. Its root-cause analysis found that **`P-001`'s failure mode recurred**: `CLUSTER-004` pass 1 *cited* the RC General Index and missed `Blindness . 150, 154` sitting in it — the entry that falsified the packet's own headline conclusion. That made the cost of leaving the precedent unelevated concrete:
+
+```text
+P-001 recorded at CLUSTER-003 closure     cost: 1 independent-review FAIL, 1 remediation pass
+P-001 still not binding at CLUSTER-004    cost: recurred, contributing to 4 more FAIL cycles
+```
+
+**`P-001` is therefore elevated** into `RULE_CARD_RESEARCH_PROTOCOL.md` §9.9 as binding protocol, with its four required operations (sweep synonyms, follow every plausible reference, record absent entries, state explicitly when a source provides no such instrument) carried across substantially as this register stated them, and extended to specialist indexes such as a spell index.
+
+**`P-002` is deliberately not elevated here.** Its general half — that a negative finding must rest on structural inspection rather than a keyword sweep — is now binding for **primary-source** claims through §10.4's Negative Claim Gate, which requires structural instruments and indexes checked before any absence may be asserted. Its specific half — that a conflict-precedence statement must be sought by opening the **front matter of every core alternate-source unit** — remains precedent only, because **alternate-source research was outside the authorization of the task that drafted `DEC-0012`**, and elevating a `DEC-0011` obligation is a change to alternate-source governance rather than to Stage-A primary research.
+
+**That remains a human decision**, and it is worth taking: `P-002`'s second-order lesson — that a falsification pass offering itself only the readings it already has in mind can reject the wrong one and still reach a false conclusion — is a general defect that §10.6 does not fully close.
 
 ---
 
@@ -86,6 +101,8 @@ PRECEDENT RECORDED -- NOT YET ELEVATED
 
 Elevating `P-002` into `DEC-0011` item 6 or into `RULE_CARD_RESEARCH_PROTOCOL.md` would make it binding. **Neither was modified by this pass** — the assigning task directed a bounded remediation, not a governance change. **That elevation is a human decision.**
 
+> **Partially covered 2026-09-30, still not elevated.** `DEC-0012` §10.4 makes this precedent's *general* half binding for **primary-source** negative claims: an absence may not be asserted without recording the structural instruments and indexes checked, and a failed keyword sweep is never sufficient. Its **alternate-source** half — open the front matter of every core source unit — is **unchanged and still not binding**, because alternate-source research was outside that task's authorization. The register's "Elevation record" section states why, and recommends the remaining elevation to the human project owner.
+
 ---
 
 ## P-001 — The General Index is a required completeness instrument
@@ -150,3 +167,5 @@ PRECEDENT RECORDED -- NOT YET ELEVATED
 ```
 
 Elevating P-001 into `DEC-0010` or into `RULE_CARD_RESEARCH_PROTOCOL.md` §9.1's audit-class table would make it binding. Both are protected/authority documents, and neither was modified by this pass. **That elevation is a human decision.** It was not taken here because the assigning task directed a process note in preference to a constitutional rewrite.
+
+> **Superseded 2026-09-30.** The status above records the state at `CLUSTER-003` closure and is preserved as written. **`P-001` was subsequently ELEVATED** into `RULE_CARD_RESEARCH_PROTOCOL.md` §9.9 by `DEC-0012` (drafted 2026-09-30, `Proposed — awaiting human approval`), under a human-assigned process-remediation task, after the same failure mode recurred in `CLUSTER-004`. See the register's "Elevation record" section above.
