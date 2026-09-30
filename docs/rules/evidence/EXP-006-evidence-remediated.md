@@ -3,7 +3,7 @@
 ```text
 RULE CARD          EXP-006   Light & Exploration Resources
 STAGE              A (EVIDENCE).  Stage B NOT begun, NOT authorized.
-PASS               4 -- remediates the THIRD independent review's findings: the rest
+PASS               5 -- remediates the FOURTH independent review's findings: the rest
                    of Chapter 5 (pp. 84-86), the DEC-0008 error, and p. 92's
                    terrain-keyed pointer.
 SUPERSEDES         docs/rules/evidence/EXP-006-evidence.md  (pass 1, committed e33c4e0)
@@ -12,7 +12,8 @@ SUPERSEDES         docs/rules/evidence/EXP-006-evidence.md  (pass 1, committed e
 REVIEW HISTORY     pass 1  FAIL   CLUSTER-004-stage-a-completeness-review.md
                    pass 2  FAIL   CLUSTER-004-stage-a-completeness-review-2.md
                    pass 3  FAIL   CLUSTER-004-stage-a-completeness-review-3.md
-                   pass 4  pending fourth independent review
+                   pass 4  FAIL   CLUSTER-004-stage-a-completeness-review-4.md
+                   pass 5  pending fifth independent review
 PRIMARY SOURCE     D&D Rules Cyclopedia (TSR 1071)
 RECOMMENDATION     see section 19
 ```
@@ -59,6 +60,33 @@ one of the defects remediated here.
 **Qualification, added in pass 3.** Pass 2's blanket phrasing — *"every page cited … was read as
 a page image"* — overstated the record, because §3.2 and §3.3 also mark pages `OPENED` that were
 reached only far enough to establish **ownership or exclusion**, without an image:
+
+### 2.2 RC p. 84 — a defective derivative, and the second scan that resolved it
+
+**This is recorded because passes 3 and 4 claimed p. 84 was inspected and it was not.**
+
+```text
+DEFECT   In the scan this project has used throughout
+         (archive.org item TSR1071TheDDRulesCyclopedia, leaf 83),
+         printed p. 84 renders COLUMNS 2 AND 3 BLANK.  Header and footer
+         decoration are present; the body text of those columns is not.
+
+VERIFIED as a stable property of that derivative, not a transient 504:
+         /full/1400,/   /full/max/   /pct:50,0,50,100/   /full/2000,/gray
+         default.png -- all HTTP 200, full payloads up to 1.05 MB, all blank.
+         The archive.org OCR truncates at the SAME point, mid-sentence:
+         "In areas not normally rich in game he must make a " -> jumps to p. 85.
+
+RESOLVED by a SECOND, INDEPENDENT SCAN:
+         archive.org item  rules-cyclopedia,  leaf 83  (same leaf offset).
+         Printed p. 84 renders complete.  Its content is at §5.8b.
+```
+
+This is **not** an alternate *source* under `DEC-0011` — it is the same edition, the same
+printing, the same primary source, obtained through a different digitisation. No
+`SOURCE_HIERARCHY` question arises. Had the second scan also failed, the required response was
+§9.2's `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED`, and this packet could not have been
+declared complete.
 
 ```text
 IMAGE-VERIFIED, carries evidence rows
@@ -172,7 +200,7 @@ printed index pages and its target **opened**.
 | `Mapping` | 5, 148, 256, 257 | yes | Player-facing advice + DM prep. **No executable mechanic**; no light input |
 | `Record keeping` | 148, 149 | yes | **GOVERNING for §5.5's disposition.** DM bookkeeping |
 | `Oil of darkness` / `Oil of moonlight` / `Oil of sunlight` | 146 | yes | **Magical** light items, Ch. 12. **Routed → `MAGIC-*`.** Explicitly *not* absorbed (§10) |
-| `Invisibility` / `Sleep` / `Stunning` / `Paralysis` / `Prone character` | 150 | yes | Same p. 150 section as Blindness. **Routed → `COMBAT-*`/`CHAR-011`.** §7.2 |
+| `Invisibility` / `Sleep` / `Stunning` / `Paralysis` / `Prone character` | 150 | yes | Same p. 150 section as Blindness. **Routed → `COMBAT-*`** for the combat penalties; the **general status-condition responsibility has no Rule ID** in `INVENTORY.md`, exactly as `CLUSTER-003`'s open question 8 records, and none is invented here. *(Pass 4 routed these to `CHAR-011`, which is **Weapon Mastery**. Wrong ID, corrected in pass 5.)* |
 | `Wandering monsters check` | 91 | yes | `EXP-005`. **Light is not an input** — clean negative, §6.3 |
 
 **Enumerated negatives — entries that do not exist.** The RC General Index has **no `Light`
@@ -616,6 +644,39 @@ honest answer is *"in a wilderness skill this card does not own"* — not *"nowh
 `Tracking` (E-43) is routed to `ENC-005` as bearing on its N-17 (*"the pursuers fail to follow
 their tracks"*), and to `CHAR-012` for ownership.
 
+### 5.8b RC p. 84 — the columns nobody had read, now inspected (pass 5)
+
+Obtained from the second scan (§2.2). Four `Sample Skills Table` rows that passes 3–4 swept into
+a blanket *"excluded as unrelated"* actually live here, and one of them is light-conditioned.
+
+| # | Fact | Confidence |
+|---|---|---|
+| **E-44** | **`Lip Reading`**: *"The distance to the target and **the available light** should be taken into account—the DM should apply skill roll penalties for difficult situations."* | **DIRECT PRIMARY TEXT** |
+| **E-45** | **`Hunting`**, in full: automatic food supply *"if he is in a fairly fertile area and has a missile weapon, spear, or javelin. **In areas not normally rich in game he must make a skill roll and receive penalties to that roll (penalties determined by the DM)**"*; supplying others costs *"a **- 1** penalty for each additional person after the first"*; *"He must roll **each day**"* | **DIRECT PRIMARY TEXT** |
+| **E-46** | **`Mapping (Cartography)`**: *"**A character does not have to have this skill in order to map a dungeon as the characters explore it.**"* | **DIRECT PRIMARY TEXT** |
+| **E-47** | **`Navigation`**: works *"By taking directions from the position of **the sun and the stars**"* — outdoor determination of position | **DIRECT PRIMARY TEXT** |
+| **E-48** | **`Nature Lore`**: per-terrain (desert, forest, jungle, mountain/hill, open sea, plains, arctic) knowledge including *"edible and poisonous plants"*; `−2` in home territory, up to `+4` penalty far from it | **DIRECT PRIMARY TEXT** |
+| E-49 | **`Mountaineering`**: rope-and-piton climbing; *"does not replace a thief's special climbing ability"* | **DIRECT PRIMARY TEXT** |
+
+**E-44 is a fourth light-conditioned mechanic in RC**, after the p. 93 Encounter Distances Table,
+the p. 69 mirror (E-31) and the p. 86 *"not being able to see"* modifier (E-41). Like E-31 it is
+an item/skill whose use RC gates on illumination. **Owner `CHAR-012`; not claimed.**
+
+**E-45 completes the sentence the OCR cut in half** and confirms `Hunting` is the same
+shape as `Survival` — per-day, per-person, DM-penalised, wilderness-facing. Same disposition:
+**`CONFIRMED OUT OF SCOPE`, owner `CHAR-012`**, gated on Wilderness reachability.
+
+**E-46 is a clean negative and it matters to `ENC-005`.** That card's N-22 branches on whether the
+party had *"already knew or **had mapped**"* the area. RC says mapping a dungeon **requires no
+skill**, so N-22's condition creates **no `CHAR-012` dependency**. Routed to `ENC-005`.
+
+**E-47 pairs with `Caving`**: `Navigation` is the *outdoor* "where am I" skill and `Caving` the
+*underground* one (`ENC-005` N-28). This confirms `ENC-005`'s step-6 routing rather than
+complicating it.
+
+E-48 and E-49 are **excluded**: terrain knowledge and climbing, neither a light source, a
+carried consumable, nor a duration.
+
 ### 5.9 `Attack Roll Modifiers Table` (p. 108) — a named table carrying a second sightlessness penalty
 
 **Pass 2 never opened p. 108**, although its own §6.2 followed a p. 104 cross-reference *to*
@@ -905,6 +966,9 @@ VISUALLY INSPECTED (page images)
     p. 82    Ch. 5   How Skills Are Used; SAMPLE SKILLS TABLE
     p. 83    Ch. 5   Fire-Building; Blind Shooting; Food Tasting; (Caving, Endurance
                      -- read here, routed to ENC-005/CHAR-012)
+    p. 84    Ch. 5   Hunting (full); Lip Reading; Mapping/Cartography; Navigation;
+                     Nature Lore; Mountaineering; Military Tactics; Knowledge; Labor
+                     -- SECOND SCAN, see §2.2                           -- pass 5
     p. 85    Ch. 5   Survival; Tracking; Stealth; Piloting Skill: Types of
                      Vessels Table                                      -- pass 4
     p. 86    Ch. 5   Positive and Negative Modifiers (E-41); natural-1 rule;
@@ -966,8 +1030,10 @@ Magical light items (146) + spells       MAGIC-*; opened only to confirm chapter
 Room Contents / Unguarded Treasure (261) EXP-008 / TREAS-001 knot -- untouched by direction.
 City / Castle encounter subtables (97-98) EXP-008 / MON-001 -- excluded by name.
 Ship Evasion Table (100)                 Naval; ENC-005-adjacent, not EXP-006.
-p. 150 Deafness/Invisibility/Paralysis/  Same section as Blindness; COMBAT-*/CHAR-011.
-  Prone/Sleep/Stunning                   Read, not claimed.
+p. 150 Deafness/Invisibility/Paralysis/  Same section as Blindness.  Combat penalties
+  Prone/Sleep/Stunning                   -> COMBAT-*.  The general status-condition
+                                         responsibility has NO Rule ID; none invented.
+                                         Read, not claimed.
 General skills system (81-86)            OPTIONAL system owned by CHAR-012.  Opened and
                                          dispositioned (§5.8); Fire-Building and Blind
                                          Shooting recorded as evidence bearing on this
@@ -1019,10 +1085,15 @@ inspection disguised as ambiguity.**
   research, which is neither authorized nor performed.
 - **(16) `REVALIDATION_REQUIRED` legacy-card withholding** — **not applicable.** `EXP-006`
   carries no approved legacy card; no legacy specification was consulted.
-- **(17) Access limitations** — earlier in this session the IIIF endpoint returned intermittent
-  `504`s; p. 88 required four attempts this pass. **All pages cited were ultimately obtained
-  as images.** No finding in this packet rests on OCR. (See §2.1 for pass 1's false claim
-  about this.)
+- **(17) Access limitations** — two, both stated rather than smoothed over:
+  1. The IIIF endpoint returns intermittent `504`s; p. 88 needed four attempts, p. 104 about
+     twenty. All eventually succeeded. (See §2.1 for pass 1's **false** claim about this.)
+  2. **RC p. 84's derivative in the primary scan renders columns 2–3 blank, and the OCR
+     truncates at the same point.** Passes 3 and 4 asserted the page was inspected; it was not.
+     **Resolved in pass 5 from a second, independent scan of the same edition** — see §2.2 and
+     §5.8b. Had it not resolved, §9.2's `STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED` applied.
+
+  **No finding in this packet rests on OCR.**
 - **(18) Overall confidence** — **High** for §5.1, §5.2, §5.4, §5.5, §5.7, §5.8 and §5.9 (all
   `DIRECT PRIMARY TEXT` from page images, several cross-reference-confirmed). **Lower for
   §5.3's E-13a**, which pass 3 downgraded from `NECESSARY CONSEQUENCE` to a qualified reading

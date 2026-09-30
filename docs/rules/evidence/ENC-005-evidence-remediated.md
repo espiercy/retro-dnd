@@ -3,7 +3,7 @@
 ```text
 RULE CARD          ENC-005   Retreat, Pursuit & Evasion (underworld)
 STAGE              A (EVIDENCE).  Stage B NOT begun, NOT authorized.
-PASS               4 -- remediates the THIRD independent review's findings: the rest
+PASS               5 -- remediates the FOURTH independent review's findings: the rest
                    of Chapter 5 (pp. 84-86), the DEC-0008 error, and two elided
                    quotations.
 SUPERSEDES         docs/rules/evidence/ENC-005-evidence.md  (pass 1, committed e33c4e0)
@@ -12,7 +12,8 @@ SUPERSEDES         docs/rules/evidence/ENC-005-evidence.md  (pass 1, committed e
 REVIEW HISTORY     pass 1  FAIL   CLUSTER-004-stage-a-completeness-review.md
                    pass 2  FAIL   CLUSTER-004-stage-a-completeness-review-2.md
                    pass 3  FAIL   CLUSTER-004-stage-a-completeness-review-3.md
-                   pass 4  pending fourth independent review
+                   pass 4  FAIL   CLUSTER-004-stage-a-completeness-review-4.md
+                   pass 5  pending fifth independent review
 PRIMARY SOURCE     D&D Rules Cyclopedia (TSR 1071)
 RECOMMENDATION     see section 19
 ```
@@ -110,7 +111,7 @@ Pursuit` (pp. 98–100), entered from the checklists on pp. 91 and 93.
 | `Lost` | 89 | yes | **Wilderness, per-day.** Refined by p. 100 (§5.4) |
 | `Terrain` | 119, 153 | yes | p. 119 War Machine, p. 153 monster habitat. **Neither is the Evasion Table's terrain.** Excluded |
 | `Charge` | 154 | yes | *"A monster cannot charge in certain types of terrain: broken, heavy forest, jungle, mountain, swamp"* — **monster combat, `MON-*`. Explicitly NOT imported as a generic terrain mechanic** |
-| `Move silently` | 22 | yes | Thief skill, `CHAR-012`. Excluded |
+| `Move silently` | 22 | yes | Thief skill — **`CHAR-010`** (Thief Skills), **not** `CHAR-012`. Excluded. *(Pass 4 gave the wrong ID; corrected in pass 5.)* |
 | `Skills` / `Skill check` | 82-85, 92 | **yes — pass 3, visually** | **GOVERNING for step 6.** `Sample Skills Table` (82); `Caving`, `Endurance` (83). §5.7, §5.5a. Skill **ownership** is `CHAR-012` **[UNRESEARCHED]**; the step-6 trigger is recorded here. *Pass 2 listed this entry and did not open it* |
 | `Exhaustion` | **88** | **yes — pass 3** | **GOVERNING for step 5.** §5.5a. `CHAR-005` §9 **[LANDED]** owns it. *Not enumerated by pass 2* |
 | `Endurance` (via `Skills`) | 83, 88 | **yes — pass 3** | The RC-named exception to the 30-round running maximum. `CHAR-012`. Bears on Q4 |
@@ -257,7 +258,15 @@ choose**, and the immediately following prose supplies unlisted adjustments anyw
 woods example and the `+/-25%` double-speed rule (N-13) — which is evidence but not a resolution.
 Recorded at §8 Q3 as part of the terrain question rather than settled here.
 
-**N-14 remains unadjudicated.** `INTERNAL SOURCE CONFLICT REQUIRES REVIEW`.
+**N-14 remains unadjudicated**, and is dispositioned at §8 Q5 as
+`RETAINED AS GENUINE SOURCE AMBIGUITY` (§10.2.2 case 3 — every governing object inspected, both
+values visually verified on the same page). It is **a conflict for the human owner or Stage B to
+resolve**, and this packet does not resolve it.
+
+*(Pass 4 printed §17's `INTERNAL SOURCE CONFLICT REQUIRES REVIEW` here as an inline label while
+also recommending `EVIDENCE READY`. A §17 hard stop is a recommendation, not a tag; using it as a
+tag is the same category error as pass 2's `BLOCKED` row. Corrected in pass 5 — the same fix was
+applied to `EXP-006` in pass 4 and missed here.)*
 
 ### 5.4 Terrain — the distinction pass 1 drew, confirmed and held
 
@@ -295,6 +304,24 @@ into areas they already knew or had mapped, **they're fine**."* Becoming lost is
 automatic consequence of a chase — it is conditioned on the flight having crossed into unmapped
 territory, at DM discretion. A specification built on pass 3's truncated quote would have got
 this wrong.
+
+| # | Fact | Object | Confidence |
+|---|---|---|---|
+| **N-38** | **`Mapping (Cartography)`**: *"**A character does not have to have this skill in order to map a dungeon as the characters explore it.**"* | p. 84 | **DIRECT PRIMARY TEXT** |
+| **N-39** | **`Navigation`** determines position *"By taking directions from the position of **the sun and the stars**"* — outdoors | p. 84 | **DIRECT PRIMARY TEXT** |
+
+**N-38 closes a dependency that would otherwise have been open.** N-22's *"had mapped"* condition
+does **not** require `CHAR-012`'s `Mapping` skill — RC says explicitly that mapping a dungeon
+needs no skill. So step 6's *"they're fine"* branch is available to any party, and **`ENC-005`
+gains no `CHAR-012` dependency from it.** The card's only `CHAR-012` dependency remains `Caving`
+(N-28).
+
+**N-39 confirms the step-6 routing rather than complicating it**: `Navigation` is the *outdoor*
+"where am I" skill, `Caving` the *underground* one. Step 6 in a dungeon reaches `Caving`.
+
+**Both come from RC p. 84, which passes 3 and 4 claimed to have inspected and had not** — the
+primary scan renders that page's columns 2–3 blank and the OCR truncates at the same point.
+Resolved in pass 5 from a second, independent scan of the same edition (`EXP-006` §2.2).
 
 **Correct classification of p. 100:**
 
@@ -567,7 +594,7 @@ about consistency, not a recommendation, and NOT a decision taken in Stage A.
 | Q2 | Can the card be specified before its five unresearched providers? | **CONFIRMED OUT OF SCOPE** — governance decision. Evidence at §7 |
 | Q3 | *"Difficult terrain"* has no criterion (N-16). | **RETAINED AS GENUINE SOURCE AMBIGUITY** — the second-roll escape (N-17) is not executable without a DM-input flag or a terrain mechanic RC does not supply |
 | Q4 | Do chase rounds count against `CHAR-005` §9's 30-round running limit? | **RETAINED AS GENUINE SOURCE AMBIGUITY** — **sharpened** by N-21: RC states full running speed for every chase round *and* a rest requirement, but never links them to the 30-round maximum |
-| Q5 | Scouts: prose `−10%` vs table `−15%` (N-14). | **RETAINED AS GENUINE SOURCE AMBIGUITY** (§10.2.2 **case 3** — all governing objects inspected, both values visually verified on the same page, nothing uninspected). `INTERNAL SOURCE CONFLICT REQUIRES REVIEW` |
+| Q5 | Scouts: prose `−10%` vs table `−15%` (N-14). | **RETAINED AS GENUINE SOURCE AMBIGUITY** (§10.2.2 **case 3** — all governing objects inspected, both values visually verified on the same page, nothing uninspected). A conflict for the human owner or Stage B; **not resolved here** |
 | Q6 | Checklist step 2's *"go to Step 2"* self-loop (N-5). | **RETAINED AS GENUINE SOURCE AMBIGUITY** (§10.2.2 case 3) |
 | Q7 | Does the `Retreat` / `Fighting Withdrawal` running-speed bridge (N-23) belong here or to `COMBAT-*`? | **CONFIRMED OUT OF SCOPE for Stage A** — a routing decision. Evidence complete on both sides (§5.6) |
 | Q8 | Does `CHAR-012`'s `Caving` skill modify step 6? | **RESOLVED BY SOURCE INSPECTION — pass 3.** **Yes.** p. 83 states it in terms: *"If he is forced to flee for a long stretch, he must make a skill check to keep from being lost. (Characters without this skill automatically become lost in such a situation.)"* (N-28). `CHAR-012` is named as a **step-6 provider** in §7.1. Pass 2 classified this `BLOCKED` **over a single page it had not opened** — see §8.2 |
@@ -630,8 +657,13 @@ p. 81    Ch. 5   General Skills -- "Using general skills is optional"   -- pass 
 p. 82    Ch. 5   How Skills Are Used; SAMPLE SKILLS TABLE                -- pass 3
 p. 83    Ch. 5   CAVING; ENDURANCE (Blind Shooting/Fire-Building read,
                  routed to EXP-006)                                      -- pass 3
-p. 84-85 Ch. 5   Sample Skills Table read ROW BY ROW; TRACKING, Stealth,
-                 Survival, Hunting inspected and routed                  -- pass 4
+p. 84    Ch. 5   MAPPING/CARTOGRAPHY (N-38); NAVIGATION (N-39); Hunting;
+                 Lip Reading; Nature Lore; Mountaineering
+                 -- SECOND SCAN; the primary scan renders cols. 2-3 blank
+                    and its OCR truncates at the same point.  See
+                    EXP-006 §2.2.                                        -- pass 5
+p. 85    Ch. 5   Sample Skills Table read ROW BY ROW; TRACKING, Stealth,
+                 Survival inspected and routed                           -- pass 4
 p. 86    Ch. 5   Positive and Negative Modifiers; Using Skills Together
                  (the Tracking failure example, N-37)                    -- pass 4
 p. 88    Ch. 6   Character Movement Rates and Encumbrance; Terrain Effects;
@@ -725,8 +757,12 @@ as ambiguity.**
 - **(15) Simulator Ruling areas** — Q5 and Q6 are **named** as candidates if lineage research
   is declined. **None drafted, none proposed.** Protocol §16 places rulings last.
 - **(16) `REVALIDATION_REQUIRED` withholding** — **not applicable**; no approved legacy card.
-- **(17) Access limitations** — p. 104 defeated ~20 IIIF attempts during pass 1 and was
-  obtained first attempt in pass 2; p. 88 needed four attempts. **All pages cited are images.**
+- **(17) Access limitations** — p. 104 defeated ~20 IIIF attempts during pass 1 and was obtained
+  first attempt in pass 2; p. 88 needed four attempts. **RC p. 84's derivative in the primary
+  scan renders columns 2–3 blank and its OCR truncates at the same point**; passes 3 and 4
+  claimed that page was inspected and it was not. **Resolved in pass 5 from a second,
+  independent scan of the same edition** (`EXP-006` §2.2). **All pages cited are images, and no
+  finding rests on OCR.**
 - **(18) Overall confidence** — **High** for the transcribed procedure, table, checklist,
   entry conditions and the p. 104 maneuvers: all `DIRECT PRIMARY TEXT` from page images, two
   of them magnification-confirmed. The card's uncertainty is **not** coverage — it is (a) two
