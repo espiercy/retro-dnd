@@ -29,23 +29,26 @@ analysis.
 ```text
 BOUNDARY                    APPROVED  2026-09-27
 
-STAGE A (EVIDENCE) -- PASS 1      FAILED independent completeness review
-    EXP-006                       docs/rules/evidence/EXP-006-evidence.md    SUPERSEDED
-    ENC-005                       docs/rules/evidence/ENC-005-evidence.md    SUPERSEDED
-    REVIEW 1                      docs/rules/evidence/
-                                      CLUSTER-004-stage-a-completeness-review.md
-                                  EXP-006  FAIL
-                                  ENC-005  FAIL
-    Committed UNALTERED at e33c4e0, before remediation, deliberately.
+STAGE A (EVIDENCE)          COMPLETE -- INDEPENDENT COMPLETENESS REVIEW PASSED
 
-STAGE A (EVIDENCE) -- PASS 2      REMEDIATED
-    EXP-006                       docs/rules/evidence/EXP-006-evidence-remediated.md
-                                  full DEC-0010 structure-first re-run
-    ENC-005                       docs/rules/evidence/ENC-005-evidence-remediated.md
-                                  bounded remediation
-    REVIEW 2                      docs/rules/evidence/
-                                      CLUSTER-004-stage-a-completeness-review-2.md
-    Committed at f474005.
+    EXP-006   PRIMARY-SOURCE COMPLETENESS: PASS   (review 5)
+    ENC-005   PRIMARY-SOURCE COMPLETENESS: PASS   (review 5)
+
+    CURRENT PACKETS
+        docs/rules/evidence/EXP-006-evidence-remediated.md
+        docs/rules/evidence/ENC-005-evidence-remediated.md
+
+    FIRST-PASS PACKETS, preserved unaltered as the failure record
+        docs/rules/evidence/EXP-006-evidence.md          SUPERSEDED
+        docs/rules/evidence/ENC-005-evidence.md          SUPERSEDED
+        Committed UNALTERED at e33c4e0, BEFORE remediation, deliberately.
+
+    REVIEW HISTORY -- five independent reviews, none retroactively relabelled
+        review 1   e33c4e0   FAIL / FAIL   ...completeness-review.md
+        review 2   f0d2925   FAIL / FAIL   ...completeness-review-2.md
+        review 3   1b61c39   FAIL / FAIL   ...completeness-review-3.md
+        review 4   e3115ff   FAIL / FAIL   ...completeness-review-4.md
+        review 5             PASS / PASS   ...completeness-review-5.md
 
 HUMAN EVIDENCE REVIEW       NOT GIVEN  -- hard gate, DEC-0009 §6
 STAGE B (SYNTHESIS)         NOT STARTED, NOT AUTHORIZED

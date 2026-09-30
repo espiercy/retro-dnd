@@ -118,9 +118,11 @@ standing as the record.
 Ch. 4   Equipment                    pp. 62-74    item catalog + item descriptions
 Ch. 6   The Adventure (land travel)  pp. 87-90    time, scale, movement, travel
 Ch. 7   Encounters and Evasion       pp. 91-101   game turn, encounter distance, evasion
-Ch. 13  Dungeon Master Procedures    pp. 144-155  timekeeping, special conditions
+Ch. 13  Dungeon Master Procedures    pp. 143-151  timekeeping, special conditions
 Ch. 14  Monsters                     pp. 152-...  special attacks (blindness)
-App. 4  Indices                      pp. 301-304  Tables/Checklists index; General Index
+App. 4  Indices                      pp. 300-304  Index to Spells (300);
+                                                  Index to Tables and Checklists (301);
+                                                  General Index (302-304)
 ```
 
 ### 3.2 `Index to Tables and Checklists` (p. 301) — read visually, in full
@@ -167,6 +169,37 @@ source-property claim, and it was false**: `Attack Roll Modifiers Table . 108` a
 read and each one relevant to light, exploration resources, time or condition consequences is
 dispositioned above or in §9.2.*
 
+### 3.2a `Index to Spells` (p. 300) — enumerated in pass 6
+
+**Three passes missed this instrument**, including one that named `Appendix 4` as starting at
+p. 301. It is the finding aid that lists `light` and `darkness` **by name**, in a card called
+*Light & Exploration Resources*, so its absence was a real gap in the coverage record even
+though it changes no conclusion.
+
+Read visually, in full. Every light-, vision- or sustenance-related entry:
+
+| Entry | Notation | Disposition |
+|---|---|---|
+| `light` | `C 1, MU 1` | **`MAGIC-*`** |
+| `darkness: light (reversed)` | `C 1, MU 1` | **`MAGIC-*`** |
+| `continual light` | `C 3, MU 2` | **`MAGIC-*`** |
+| `continual darkness: continual light (reversed)` | `C 3, MU 2` | **`MAGIC-*`** |
+| `infravision` | `MU 3` | **`MAGIC-*`**; the *innate* ability is `CHAR-009`'s |
+| `cure blindness` | `C 3` | **`MAGIC-*`** |
+| `faerie fire` / `produce fire` / `obscure` | `Dr 1 / Dr 2 / Dr 2` | **`MAGIC-*`** |
+| `truesight` / `wizard eye` / `detect invisible` | `C 5 / MU 4 / MU 2` | **`MAGIC-*`** |
+| `create food` / `create water` / `purify food and water` / `survival` | `C 5 / C 4 / C 1 / C 7, MU 9` | **`MAGIC-*`** |
+
+```text
+RESULT: a clean, complete negative.
+
+EVERY light-, darkness-, vision- and food/water-related entry in RC's spell index is
+a SPELL.  Not one is Chapter 4 equipment, and not one bears on a purchased, carried
+light source or consumable.  EXP-006's boundary against magical light (§6.6) is
+therefore confirmed by the source's own spell-finding instrument rather than merely
+asserted -- which is exactly what this instrument was needed for.
+```
+
 ### 3.3 `General Index` (pp. 302–304) — used as an **enumeration** instrument, not a citation source
 
 Precedent `P-001` applies: this instrument has now caught material **three times** in this
@@ -199,7 +232,7 @@ printed index pages and its target **opened**.
 | `Drowning` / `Swimming` | 89 | yes | Wilderness/water hazard. **Excluded** |
 | `Mapping` | 5, 148, 256, 257 | yes | Player-facing advice + DM prep. **No executable mechanic**; no light input |
 | `Record keeping` | 148, 149 | yes | **GOVERNING for §5.5's disposition.** DM bookkeeping |
-| `Oil of darkness` / `Oil of moonlight` / `Oil of sunlight` | 146 | yes | **Magical** light items, Ch. 12. **Routed → `MAGIC-*`.** Explicitly *not* absorbed (§10) |
+| `Oil of darkness` / `Oil of moonlight` / `Oil of sunlight` / **`Dwarven lens`** | 146 | yes | **Magical** light items, **Ch. 13** (`Demihuman Clan Relics`, p. 145 ff.). **Routed → `MAGIC-*`.** Explicitly *not* absorbed (§10) |
 | `Invisibility` / `Sleep` / `Stunning` / `Paralysis` / `Prone character` | 150 | yes | Same p. 150 section as Blindness. **Routed → `COMBAT-*`** for the combat penalties; the **general status-condition responsibility has no Rule ID** in `INVENTORY.md`, exactly as `CLUSTER-003`'s open question 8 records, and none is invented here. *(Pass 4 routed these to `CHAR-011`, which is **Weapon Mastery**. Wrong ID, corrected in pass 5.)* |
 | `Wandering monsters check` | 91 | yes | `EXP-005`. **Light is not an input** — clean negative, §6.3 |
 
@@ -653,7 +686,7 @@ a blanket *"excluded as unrelated"* actually live here, and one of them is light
 |---|---|---|
 | **E-44** | **`Lip Reading`**: *"The distance to the target and **the available light** should be taken into account—the DM should apply skill roll penalties for difficult situations."* | **DIRECT PRIMARY TEXT** |
 | **E-45** | **`Hunting`**, in full: automatic food supply *"if he is in a fairly fertile area and has a missile weapon, spear, or javelin. **In areas not normally rich in game he must make a skill roll and receive penalties to that roll (penalties determined by the DM)**"*; supplying others costs *"a **- 1** penalty for each additional person after the first"*; *"He must roll **each day**"* | **DIRECT PRIMARY TEXT** |
-| **E-46** | **`Mapping (Cartography)`**: *"**A character does not have to have this skill in order to map a dungeon as the characters explore it.**"* | **DIRECT PRIMARY TEXT** |
+| **E-46** | **`Mapping (Cartography)`**, complete entry: *"If a character has this skill, he can understand and make maps even if he cannot read and write. **The skill allows the character to comprehend simple maps without a skill roll; the character should make skill rolls to interpret or draft complicated layouts or to map an area by memory.** A character does **not** have to have this skill in order to map a dungeon as the characters explore it. A character who can map but not read obviously cannot understand the words on a map."* | **DIRECT PRIMARY TEXT** |
 | **E-47** | **`Navigation`**: works *"By taking directions from the position of **the sun and the stars**"* — outdoor determination of position | **DIRECT PRIMARY TEXT** |
 | **E-48** | **`Nature Lore`**: per-terrain (desert, forest, jungle, mountain/hill, open sea, plains, arctic) knowledge including *"edible and poisonous plants"*; `−2` in home territory, up to `+4` penalty far from it | **DIRECT PRIMARY TEXT** |
 | E-49 | **`Mountaineering`**: rope-and-piton climbing; *"does not replace a thief's special climbing ability"* | **DIRECT PRIMARY TEXT** |
@@ -669,6 +702,26 @@ shape as `Survival` — per-day, per-person, DM-penalised, wilderness-facing. Sa
 **E-46 is a clean negative and it matters to `ENC-005`.** That card's N-22 branches on whether the
 party had *"already knew or **had mapped**"* the area. RC says mapping a dungeon **requires no
 skill**, so N-22's condition creates **no `CHAR-012` dependency**. Routed to `ENC-005`.
+
+**E-46a — a class-I parallel presentation against a landed card, REPORTED not adjudicated.**
+
+```text
+LANDED, APPROVED  EXP-003 states: "No separate mapping mechanic, time cost, roll, or
+                  failure state exists or is to be created."  (INVENTORY.md, EXP-003 row)
+
+RC p. 84          "the character should make skill rolls to interpret or draft
+                  complicated layouts or to map an area by memory."
+```
+
+**These are not in direct conflict, and `EXP-006` does not assert one.** RC exempts the
+as-you-explore dungeon case from any roll — which is exactly `EXP-003`'s scope — and attaches
+rolls only to *interpreting complicated layouts* and *mapping from memory*, which `EXP-003` does
+not cover. But a Stage-B agent reading only E-46's fourth sentence would carry forward a
+**stronger negative than RC supports**, so the full entry is quoted above and the parallel is put
+on the record.
+
+**Ownership `CHAR-012` [UNRESEARCHED]. Nothing is claimed, nothing is adjudicated, and no change
+to landed `EXP-003` is proposed.**
 
 **E-47 pairs with `Caving`**: `Navigation` is the *outdoor* "where am I" skill and `Caving` the
 *underground* one (`ENC-005` N-28). This confirms `ENC-005`'s step-6 routing rather than
@@ -837,7 +890,7 @@ and cost/encumbrance **only** in the table is confirmed.
 
 `Oil of darkness`, `Oil of moonlight`, `Oil of sunlight` (p. 146), and the `light` /
 `continual light` spells named at p. 150. All **routed to `MAGIC-*`**. Opened only far enough
-to confirm they are Chapter 12 magical items and Chapter 3 spells, i.e. that they are not
+to confirm they are Chapter 13 magical items and Chapter 3 spells, i.e. that they are not
 Chapter 4 equipment. **No magical light mechanic is transcribed into this packet.**
 
 ---
@@ -962,6 +1015,9 @@ pages below carry evidence rows.**
 
 ```text
 VISUALLY INSPECTED (page images)
+    p. 84    Ch. 5   (second scan -- see §2.2; detail below)
+    p. 85    Ch. 5   (detail below)
+    p. 86    Ch. 5   (detail below)
     p. 81    Ch. 5   General Skills -- "Using general skills is optional"
     p. 82    Ch. 5   How Skills Are Used; SAMPLE SKILLS TABLE
     p. 83    Ch. 5   Fire-Building; Blind Shooting; Food Tasting; (Caving, Endurance
