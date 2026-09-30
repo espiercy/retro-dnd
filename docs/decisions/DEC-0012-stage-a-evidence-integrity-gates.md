@@ -196,6 +196,29 @@ consistency only** — never factual correctness of research. Eighteen checks, e
 traceable to a recorded `CLUSTER-004` failure (see the check-to-failure map below). No
 NLP, no truth checking, no document framework.
 
+**12.1 The gate must not be structurally inert.** Every Stage-A packet in the repository
+today is grandfathered (consequence 7), so a linter that governed only real packets would
+lint **zero files and pass vacuously** — a green check that inspected nothing, which is
+worse than no check because it is mistaken for enforcement. Two requirements follow, and
+they are part of this decision rather than implementation detail:
+
+- **The canonical template is linted as a reference packet on every run.** It is a real,
+  committed artifact, it is what every future packet is copied from, and a defect in it
+  propagates into every packet started from it. Its *absence* is itself a finding, because
+  §11.2 requires it to exist.
+- **A conforming new packet and malformed new packets are proven by fixtures**, held under
+  `tests/tooling/fixtures/` — never in `docs/rules/evidence/`, so that a fabricated packet
+  can never be mistaken for real research or reached by the gate's own directory scan. The
+  fixtures prove what a repository of only grandfathered packets cannot: that a conforming
+  post-`DEC-0012` packet passes and that malformed ones fail.
+- **The enforcement path is tested by exit code**, by running the script as a subprocess
+  against prepared directories — not only by calling its functions in-process. A gate is
+  proven by the exit code it actually returns.
+
+The gate additionally reports, in plain terms, when it has checked only the reference
+packet, so that "`Evidence: PASS`" is never read as a claim that a real packet was
+verified.
+
 **13. The canonical Stage-A sequence is amended** to include the new gates. `DEC-0010`
 item 13's sequence is superseded *as amended* by the sequence below; `DEC-0010`'s own text
 is not rewritten (`DEVELOPMENT_WORKFLOW.md` §9.4), and a forward-pointer note is added to
@@ -326,8 +349,15 @@ four, the diagnosis was wrong and should be revisited rather than reinforced.
 4. `scripts/lint_evidence.py` is created and added to `scripts/verify.py` as an
    independently reported gate; `docs/technical/TOOLCHAIN_AND_CI.md` §8–§9 is updated so
    the documented gate list matches the implemented one.
-5. `tests/tooling/test_lint_evidence.py` tests the linter itself. `pyproject.toml` adds
-   `scripts` to pytest's `pythonpath` so the tool is importable under test.
+5. `tests/tooling/test_lint_evidence.py` tests the linter itself, with fixtures under
+   `tests/tooling/fixtures/` (one conforming new packet, three malformed ones, and a README
+   stating plainly that none of it is evidence). `pyproject.toml` adds `scripts` to pytest's
+   `pythonpath` so the tool is importable under test.
+5a. `DEVELOPMENT_WORKFLOW.md` §9.4's supersession illustration previously used `DEC-0012`
+   as an invented placeholder ID. Now that a real `DEC-0012` exists and supersedes nothing,
+   that example asserted something false about real records, so it was corrected in place to
+   this repository's own real supersession (`DEC-0004` → `DEC-0005`) as the clerical fix §9.4
+   itself permits. No substantive change to that document.
 6. `docs/rules/RESEARCH_PROCESS_PRECEDENTS.md` records `P-001` as **ELEVATED** by this
    record. `P-002` remains recorded and un-elevated; its general lesson — that a negative
    finding must rest on structural inspection rather than a keyword sweep — is now binding

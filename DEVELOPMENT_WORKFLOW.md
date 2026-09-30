@@ -182,13 +182,15 @@ Approved decision records are historical. Do not rewrite an accepted record mere
 ```text
 DEC-0004 — original decision
 Status: Superseded
-Superseded By: DEC-0012
+Superseded By: DEC-0005
 ```
 
 ```text
-DEC-0012 — replacement decision
+DEC-0005 — replacement decision
 Supersedes: DEC-0004
 ```
+
+This example is this repository's own real supersession, not a hypothetical pair: `DEC-0004`'s full-corpus-before-implementation requirement was replaced by `DEC-0005`'s dependency-complete cluster workflow. *(It previously used `DEC-0012` as an invented placeholder ID. A real `DEC-0012` was created on 2026-09-30 and supersedes nothing, so the illustration was corrected in place as the clerical fix the paragraph below permits.)*
 
 This preserves architectural history. Minor clerical corrections (typos, broken links) may be handled sensibly in place; substantive changes must use supersession, not historical rewriting.
 

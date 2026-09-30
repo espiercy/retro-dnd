@@ -20,6 +20,8 @@ Two tests deliberately pin project state rather than behaviour:
 
 from __future__ import annotations
 
+import subprocess
+import sys
 from pathlib import Path
 
 import lint_evidence as linter
@@ -28,6 +30,7 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[2]
 EVIDENCE_DIR = REPO_ROOT / "docs" / "rules" / "evidence"
 TEMPLATE = EVIDENCE_DIR / "_TEMPLATE.md"
+FIXTURES = Path(__file__).resolve().parent / "fixtures"
 
 
 # --- A minimal conforming packet, used as the baseline for every mutation -
@@ -542,6 +545,148 @@ def test_repository_evidence_directory_currently_passes() -> None:
     # clean tree, or the gate is noise.
     findings, _ = linter.lint_directory(EVIDENCE_DIR)
     assert findings == [], f"repository evidence packets have findings: {findings}"
+
+
+# --- The gate must not be structurally inert -----------------------------
+
+
+def test_repository_run_actually_lints_the_reference_packet() -> None:
+    # Every real packet is grandfathered, so without the reference packet
+    # this gate would lint zero files and pass vacuously. A green check that
+    # inspected nothing is worse than no check, because it is mistaken for
+    # enforcement.
+    _, linted = linter.lint_directory(EVIDENCE_DIR)
+    assert linter.REFERENCE_PACKET in {path.name for path in linted}
+    assert linted, "the gate must lint at least one artifact"
+
+
+def test_missing_reference_packet_fails_the_gate(tmp_path: Path) -> None:
+    # §11.2 requires the template to exist. Its absence is a finding, not a
+    # silent zero-packet pass.
+    findings, linted = linter.lint_directory(tmp_path)
+    assert linted == []
+    assert "E000" in {finding.check for finding in findings}
+
+
+# --- Fixtures: a NEW packet passes, malformed NEW packets fail -----------
+
+
+def test_compliant_new_packet_fixture_passes() -> None:
+    # The claim the repository cannot make on its own: a conforming
+    # post-DEC-0012 packet lints clean.
+    path = FIXTURES / "TEST-900-evidence-compliant.md"
+    findings = linter.lint_packet(path.read_text(encoding="utf-8"), path.name)
+    assert findings == [], f"the compliant fixture must lint clean, got: {findings}"
+
+
+@pytest.mark.parametrize(
+    ("fixture", "expected_checks"),
+    [
+        ("TEST-900-evidence-malformed-absence.md", {"E010", "E011"}),
+        ("TEST-900-evidence-malformed-coverage.md", {"E006", "E009"}),
+        ("TEST-900-evidence-malformed-skeletal.md", {"E001", "E002", "E005", "E017"}),
+    ],
+)
+def test_malformed_new_packet_fixtures_fail(fixture: str, expected_checks: set[str]) -> None:
+    path = FIXTURES / fixture
+    findings = linter.lint_packet(path.read_text(encoding="utf-8"), path.name)
+    checks = {finding.check for finding in findings}
+    assert expected_checks <= checks, f"{fixture}: expected {expected_checks}, got {checks}"
+
+
+def test_fixtures_are_not_in_the_evidence_directory() -> None:
+    # A fabricated packet must never be reachable as real research, and must
+    # never be picked up by the gate's own directory scan.
+    assert FIXTURES.resolve() != EVIDENCE_DIR.resolve()
+    assert not list(EVIDENCE_DIR.glob("TEST-900*"))
+
+
+# --- Grandfathering cannot silently expand ------------------------------
+
+
+def test_a_new_packet_is_linted_even_beside_grandfathered_ones(tmp_path: Path) -> None:
+    # The exemption is by exact name. A new packet dropped into a directory
+    # full of exempt ones is still governed.
+    (tmp_path / linter.REFERENCE_PACKET).write_text(
+        TEMPLATE.read_text(encoding="utf-8"), encoding="utf-8"
+    )
+    for exempt in sorted(linter.GRANDFATHERED)[:3]:
+        (tmp_path / exempt).write_text("# not conformant at all", encoding="utf-8")
+    (tmp_path / "NEW-001-evidence.md").write_text("# not conformant either", encoding="utf-8")
+
+    findings, linted = linter.lint_directory(tmp_path)
+    linted_names = {path.name for path in linted}
+    assert "NEW-001-evidence.md" in linted_names
+    assert not (linted_names & linter.GRANDFATHERED)
+    assert any(finding.packet == "NEW-001-evidence.md" for finding in findings)
+
+
+def test_a_name_resembling_a_grandfathered_packet_is_still_linted(tmp_path: Path) -> None:
+    # "EXP-006-evidence-remediated.md" is exempt; a new pass of the same card
+    # is not, and must not inherit the exemption by resemblance.
+    (tmp_path / linter.REFERENCE_PACKET).write_text(
+        TEMPLATE.read_text(encoding="utf-8"), encoding="utf-8"
+    )
+    lookalike = "EXP-006-evidence-remediated-pass-6.md"
+    (tmp_path / lookalike).write_text("# not conformant", encoding="utf-8")
+
+    findings, linted = linter.lint_directory(tmp_path)
+    assert lookalike in {path.name for path in linted}
+    assert any(finding.packet == lookalike for finding in findings)
+
+
+# --- End-to-end: the gate's exit code, not just its function ------------
+
+
+def _run_linter(directory: Path) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "lint_evidence.py"), str(directory)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+
+def test_gate_exits_zero_for_a_conforming_directory(tmp_path: Path) -> None:
+    (tmp_path / linter.REFERENCE_PACKET).write_text(
+        TEMPLATE.read_text(encoding="utf-8"), encoding="utf-8"
+    )
+    (tmp_path / "TEST-900-evidence.md").write_text(
+        (FIXTURES / "TEST-900-evidence-compliant.md").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    result = _run_linter(tmp_path)
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "Stage-A packets linted:   1" in result.stdout
+
+
+def test_gate_exits_nonzero_for_a_malformed_new_packet(tmp_path: Path) -> None:
+    # This is what actually fails the build. Without it, the checks are
+    # proven only in-process and the integration is untested.
+    (tmp_path / linter.REFERENCE_PACKET).write_text(
+        TEMPLATE.read_text(encoding="utf-8"), encoding="utf-8"
+    )
+    (tmp_path / "TEST-900-evidence.md").write_text(
+        (FIXTURES / "TEST-900-evidence-malformed-coverage.md").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    result = _run_linter(tmp_path)
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert "E006" in result.stdout
+
+
+def test_gate_exits_zero_on_the_repository_itself() -> None:
+    result = _run_linter(EVIDENCE_DIR)
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert f"reference packet linted:  1  ({linter.REFERENCE_PACKET})" in result.stdout
+
+
+def test_canonical_verification_invokes_the_evidence_gate() -> None:
+    # The integration point itself: verify.py must run this script and
+    # report it as a named gate.
+    verify_source = (REPO_ROOT / "scripts" / "verify.py").read_text(encoding="utf-8")
+    assert "lint_evidence.py" in verify_source
+    assert '"Evidence"' in verify_source
 
 
 def test_directory_walk_reports_findings_for_a_non_conforming_packet(

@@ -42,7 +42,10 @@ path**, which is behaviour a future developer needs the durable record of.
   new gates, and the check-to-failure map.
 - `docs/rules/evidence/_TEMPLATE.md` — canonical Stage-A evidence-packet template.
 - `scripts/lint_evidence.py` — structural linter (research tooling, not simulator code).
-- `tests/tooling/test_lint_evidence.py` — 58 tests for the linter.
+- `tests/tooling/test_lint_evidence.py` — 71 tests for the linter.
+- `tests/tooling/fixtures/` — `README.md` (stating plainly that none of it is evidence),
+  one conforming new packet (`TEST-900-evidence-compliant.md`) and three malformed ones
+  (`-absence`, `-coverage`, `-skeletal`).
 
 **Modified**
 
@@ -62,6 +65,12 @@ path**, which is behaviour a future developer needs the durable record of.
 - `scripts/verify.py` — `Evidence` gate added, reporting independently.
 - `pyproject.toml` — pytest `pythonpath` gains `scripts` so the tool is importable under
   test. Coverage `source` is unchanged (`src` only).
+- `DEVELOPMENT_WORKFLOW.md` — §9.4's supersession illustration used `DEC-0012` as an
+  invented placeholder ID. A real `DEC-0012` now exists and supersedes nothing, so that
+  example asserted something false about real records; corrected in place to this
+  repository's own real supersession (`DEC-0004` → `DEC-0005`), which §9.4 permits as a
+  clerical fix. **A defect introduced by this work, found by checking references rather
+  than assuming them.**
 
 **Deleted** — none.
 
@@ -84,6 +93,22 @@ passes and at least one independent review:
   `EVIDENCE READY` recommendation.
 - `E011` — absence asserted in prose with no Negative Claim Record behind it.
 - `E016` — repository-fact rows must exist, and an `UNVERIFIED PROJECT FACT` blocks the gate.
+
+**The gate is live, not inert.** Every real packet is grandfathered, so a linter governing
+only real packets would lint zero files and pass vacuously — a green check that inspected
+nothing, which is worse than no check because it is read as enforcement. Therefore:
+
+- the **canonical template is linted as a reference packet on every run** (a real committed
+  artifact, and the thing every future packet is copied from); its absence is itself a
+  finding, since §11.2 requires it;
+- the gate **states explicitly** when it has checked only the reference packet, so
+  `Evidence: PASS` is never mistaken for *"a real packet was verified"*;
+- a **conforming new packet and three malformed ones** are proven by fixtures under
+  `tests/tooling/fixtures/` — deliberately **not** in `docs/rules/evidence/`, so a
+  fabricated packet can never be mistaken for real research or reached by the directory
+  scan;
+- the script takes an optional directory argument so **the enforcement path is tested by
+  exit code**, as a subprocess, not only in-process.
 
 **What the linter deliberately does not do:** read the primary source, judge whether
 research is correct, or judge interpretation, ownership or synthesis. It checks arithmetic,
@@ -121,6 +146,20 @@ case, the failing case built from the recorded defect wherever it reproduces in 
   exemption list, so adding a packet requires changing a test and is visible in review.
 - **`test_repository_evidence_directory_currently_passes`** — the gate must be green on a
   clean tree, or it is noise.
+- **Liveness** — `test_repository_run_actually_lints_the_reference_packet` (the gate must
+  inspect at least one artifact) and `test_missing_reference_packet_fails_the_gate`.
+- **New-packet fixtures** — the conforming fixture must lint clean; the three malformed
+  fixtures must fail their designed checks (`E010`/`E011`, `E006`/`E009`, and `E001`/`E002`/
+  `E005`/`E017`).
+- **Grandfathering cannot expand silently** — a new packet beside exempt ones is still
+  linted, and a name *resembling* an exempt packet
+  (`EXP-006-evidence-remediated-pass-6.md`) does not inherit the exemption.
+- **End-to-end exit codes** — the script is run as a subprocess against prepared
+  directories: exit 0 for a conforming one, **exit 1** for a malformed new packet, exit 0 on
+  the repository itself. Plus `test_canonical_verification_invokes_the_evidence_gate`,
+  which pins the integration point in `verify.py`.
+- **Fixtures are not evidence** — `test_fixtures_are_not_in_the_evidence_directory`
+  asserts no `TEST-900*` file exists under `docs/rules/evidence/`.
 
 No existing test was modified.
 
@@ -143,18 +182,33 @@ ruff 0.16.3, coverage 7.15.4.
 Canonical verification — `.\.venv\Scripts\python.exe scripts/verify.py`:
 
 ```text
-Tests:     PASS      1050 passed in 0.79s  (992 pre-existing + 58 new)
+Tests:     PASS      1063 passed  (992 pre-existing + 71 new)
 Coverage:  PASS
 Ruff:      PASS
 mypy:      PASS      no issues in 49 source files
-Evidence:  PASS      0 packets linted, 12 grandfathered
+Evidence:  PASS      reference packet 1, Stage-A packets 0, grandfathered 12
 Overall:   PASS
 ```
 
-`Evidence: PASS` with zero packets linted is the expected and correct state: the twelve
-existing packets are grandfathered, and no post-`DEC-0012` packet exists yet. The gate is
-proven live by `test_directory_walk_reports_findings_for_a_non_conforming_packet` and the
-per-check failing cases, not by the repository currently having a packet to fail on.
+The `Evidence` gate's own output:
+
+```text
+reference packet linted:  1  (_TEMPLATE.md)
+Stage-A packets linted:   0
+Stage-A grandfathered:    12
+  _TEMPLATE.md (reference)                     PASS
+
+Every linted Stage-A packet carries its required instruments.
+No post-DEC-0012 Stage-A packet exists yet, so only the reference
+packet was checked. This gate is live but has not yet governed a
+real packet -- see DEC-0012 consequence 7 on grandfathering.
+```
+
+**An earlier iteration of this work reported `0 packets linted`, which was a real defect:
+the gate passed without inspecting anything.** It now lints a real committed artifact on
+every run, and says plainly that no post-`DEC-0012` packet exists yet rather than letting a
+green check imply one was verified. That a conforming new packet passes, and malformed ones
+fail with a non-zero exit code, is proven by fixtures and subprocess tests.
 
 ## 9. Coverage Results
 
@@ -206,7 +260,18 @@ rather than treated as settled:
    `CLUSTER-005` to one independent review is unknown until a cluster runs under it.
    `DEC-0012`'s rationale states the falsification condition: if the next cluster still needs
    four `FAIL` cycles, the diagnosis was wrong and should be revisited rather than reinforced.
-6. **Pre-existing working-tree state from a concurrent session was left untouched** — a
+6. **A worktree-coordination collision occurred and was contained.** Two parallel Claude
+   tasks shared this worktree; a branch checkout by this task changed the branch under the
+   parallel `EXP-006` Stage-B task, so its commit `6ee30b8` landed on
+   `stage-a-research-process-remediation`. I moved this branch back to `main`'s tip with
+   `git reset --mixed e7651af`, which left `6ee30b8` reachable only from
+   `cluster-004-exp-006-stage-b`. **Nothing was lost**, and `6ee30b8` is now a **sibling**
+   of this branch (merge-base `e7651af`, neither an ancestor of the other). The parallel
+   task has since been given its own worktree at
+   `C:/Users/evanp/source/repos/OD_N_D-cluster-004-exp-006-stage-b`. **Integrating
+   `6ee30b8` is explicitly not this task's work**, and no CLUSTER-004 Stage-B artifact was
+   modified to repair the collision.
+7. **Pre-existing working-tree state from a concurrent session was left untouched** — a
    modified `docs/rules/INVENTORY.md` and an untracked
    `docs/rules/exploration/light_and_exploration_resources.md` (the authorized `EXP-006`
    Stage-B card). Neither was staged, committed or edited by this work.

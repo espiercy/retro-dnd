@@ -31,7 +31,10 @@ predate DEC-0012 are grandfathered by explicit name (§"Grandfathering").
 
 Usage:
 
-    uv run python scripts/lint_evidence.py
+    uv run python scripts/lint_evidence.py [<evidence-directory>]
+
+With no argument it lints the repository's own `docs/rules/evidence/`. A
+directory argument is used by the tests to exercise this gate end to end.
 
 Exits 0 if every linted packet passes, 1 otherwise, printing the exact
 packet, check ID and reason for each failure.
@@ -51,6 +54,22 @@ EVIDENCE_DIR = REPO_ROOT / "docs" / "rules" / "evidence"
 # A Stage-A packet, per RULE_CARD_RESEARCH_PROTOCOL.md §12's naming
 # convention. Reviewer artifacts do not match this shape by design.
 PACKET_GLOB = "*-evidence*.md"
+
+# The canonical Stage-A packet template (§11.2) is linted as a **reference
+# packet** on every run. Two reasons, both load-bearing:
+#
+#   1. It keeps this gate LIVE. Every real packet in the repository today is
+#      grandfathered, so without the reference packet the gate would lint
+#      zero files and pass vacuously -- a green check proving nothing. A
+#      structurally inert gate is worse than no gate, because it is
+#      mistaken for enforcement.
+#   2. The template is the artifact every future packet is copied from. If
+#      an edit makes it non-conformant, every packet started from it
+#      inherits that defect, so the template is exactly what a continuous
+#      check should protect.
+#
+# Its absence is itself a failure: §11.2 requires it to exist.
+REFERENCE_PACKET = "_TEMPLATE.md"
 
 # Grandfathering (DEC-0012 consequence 7). Every Stage-A packet that
 # existed when DEC-0012 was adopted is exempt: those packets were
@@ -642,37 +661,79 @@ def packet_paths(directory: Path) -> list[Path]:
 
 
 def lint_directory(directory: Path) -> tuple[list[Finding], list[Path]]:
+    """Lint the reference packet and every governed Stage-A packet.
+
+    The reference packet comes first so that a template defect is reported
+    before any packet derived from it.
+    """
     findings: list[Finding] = []
-    linted = packet_paths(directory)
-    for path in linted:
+    linted: list[Path] = []
+
+    reference = directory / REFERENCE_PACKET
+    if reference.is_file():
+        linted.append(reference)
+        findings.extend(lint_packet(reference.read_text(encoding="utf-8"), reference.name))
+    else:
+        findings.append(
+            Finding(
+                packet=REFERENCE_PACKET,
+                check="E000",
+                detail=(
+                    f"the canonical Stage-A packet template is missing from {directory} — "
+                    "§11.2 requires it, and without it this gate has nothing to verify"
+                ),
+            )
+        )
+
+    for path in packet_paths(directory):
+        linted.append(path)
         findings.extend(lint_packet(path.read_text(encoding="utf-8"), path.name))
     return findings, linted
 
 
 def _report(findings: Sequence[Finding], linted: Sequence[Path], skipped: int) -> None:
+    reference_count = sum(1 for path in linted if path.name == REFERENCE_PACKET)
     print("Stage-A evidence-packet structural linter (DEC-0012)")
     print("-" * 60)
-    print(f"packets linted:       {len(linted)}")
-    print(f"packets grandfathered: {skipped}")
+    print(f"reference packet linted:  {reference_count}  ({REFERENCE_PACKET})")
+    print(f"Stage-A packets linted:   {len(linted) - reference_count}")
+    print(f"Stage-A grandfathered:    {skipped}")
     for path in linted:
         packet_findings = [finding for finding in findings if finding.packet == path.name]
         verdict = "PASS" if not packet_findings else f"FAIL ({len(packet_findings)})"
-        print(f"  {path.name:<44} {verdict}")
+        label = " (reference)" if path.name == REFERENCE_PACKET else ""
+        print(f"  {path.name + label:<44} {verdict}")
     if findings:
         print("\nFAILED:")
         for finding in findings:
             print(f"  - {finding}")
     else:
         print("\nEvery linted Stage-A packet carries its required instruments.")
+        if len(linted) == reference_count:
+            print(
+                "No post-DEC-0012 Stage-A packet exists yet, so only the reference\n"
+                "packet was checked. This gate is live but has not yet governed a\n"
+                "real packet -- see DEC-0012 consequence 7 on grandfathering."
+            )
 
 
-def main() -> int:
-    if not EVIDENCE_DIR.is_dir():
-        print(f"error: {EVIDENCE_DIR} not found", file=sys.stderr)
+def main(argv: Sequence[str] | None = None) -> int:
+    """Lint an evidence directory. Defaults to the repository's own.
+
+    The optional directory argument exists so the enforcement path itself can
+    be exercised end to end -- running this script as a subprocess against a
+    prepared directory and asserting the exit code, rather than only calling
+    lint_packet() in-process. A gate is only proven by the exit code it
+    actually returns.
+    """
+    arguments = list(sys.argv[1:] if argv is None else argv)
+    directory = Path(arguments[0]).resolve() if arguments else EVIDENCE_DIR
+    if not directory.is_dir():
+        print(f"error: {directory} not found", file=sys.stderr)
         return 1
-    findings, linted = lint_directory(EVIDENCE_DIR)
+    findings, linted = lint_directory(directory)
     grandfathered_present = sum(
-        1 for path in EVIDENCE_DIR.glob(PACKET_GLOB) if path.name in GRANDFATHERED
+        1 for path in directory.glob(PACKET_GLOB) if path.name in GRANDFATHERED
     )
     _report(findings, linted, grandfathered_present)
     return 1 if findings else 0

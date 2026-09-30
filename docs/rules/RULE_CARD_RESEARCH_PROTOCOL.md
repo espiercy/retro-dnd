@@ -970,6 +970,8 @@ The linter runs as a gate in the project's canonical verification operation (`do
 
 **Grandfathering.** Stage-A packets that existed when `DEC-0012` was adopted are exempt by name, listed in the linter's `GRANDFATHERED` set and pinned by a test. Retro-fitting new ledgers to accepted evidence would rewrite it rather than improve it. **The list is closed** — a packet written after `DEC-0012` is never added to it. Reviewer artifacts (completeness reviews, audits, gap-research records) are not Stage-A packets and are not linted.
 
+**The template is linted as a reference packet on every run**, so this gate is never structurally inert. Because every packet in the repository today is grandfathered, a linter governing only real packets would check nothing and pass vacuously — and a green gate that inspected nothing is worse than no gate, because it is read as enforcement. The template is a real committed artifact, it is what every future packet is copied from, and its absence is itself a finding (§11.2). The gate says explicitly when it has checked only the reference packet, so `Evidence: PASS` is never mistaken for *"a real packet was verified."*
+
 ## 11.2 Required Stage-A Packet Template
 
 Every new Stage-A packet is started from:
