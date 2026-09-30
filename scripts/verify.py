@@ -3,7 +3,8 @@
 Runs, in this order, and reports every applicable gate's outcome
 independently (docs/technical/TOOLCHAIN_AND_CI.md §8):
 
-    Tests -> Coverage Gates -> Lint -> Static Type Checking -> PASS/FAIL
+    Tests -> Coverage Gates -> Lint -> Static Type Checking
+          -> Stage-A Evidence -> PASS/FAIL
 
 Both local development and CI invoke exactly this script -- there is no
 separate CI-only check list (docs/technical/TOOLCHAIN_AND_CI.md §9). Ruff
@@ -27,6 +28,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CHECK_COVERAGE_SCRIPT = Path(__file__).resolve().parent / "check_coverage.py"
+LINT_EVIDENCE_SCRIPT = Path(__file__).resolve().parent / "lint_evidence.py"
 COVERAGE_JSON = REPO_ROOT / "coverage.json"
 
 SRC_AND_TEST_PATHS = ["src", "tests", "scripts"]
@@ -68,6 +70,12 @@ def main() -> int:
 
     mypy_exit = _run(sys.executable, "-m", "mypy")
     results["mypy"] = "PASS" if mypy_exit == 0 else "FAIL"
+
+    # Stage-A evidence-packet structural gate (DEC-0012; research-process
+    # tooling, not simulator code). Like Ruff and mypy it does not depend
+    # on the test run, so it reports independently.
+    evidence_exit = _run(sys.executable, str(LINT_EVIDENCE_SCRIPT))
+    results["Evidence"] = "PASS" if evidence_exit == 0 else "FAIL"
 
     overall_pass = all(status == "PASS" for status in results.values())
 

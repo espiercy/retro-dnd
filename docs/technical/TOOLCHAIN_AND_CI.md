@@ -85,8 +85,19 @@ Lint             (`ruff check`)
         ↓
 Static Type Checking   (`mypy --strict`)
         ↓
+Stage-A Evidence (`scripts/lint_evidence.py` — structural gate, DEC-0012)
+        ↓
 PASS / FAIL
 ```
+
+The **Stage-A Evidence** gate checks that Stage-A evidence packets under
+`docs/rules/evidence/` carry the research instruments
+`RULE_CARD_RESEARCH_PROTOCOL.md` §11.1 requires, and that each packet's own
+coverage ledgers agree with each other. It is **research-process tooling, not
+simulator code**: it verifies document structure only and never judges whether
+rules research is correct. Packets predating `DEC-0012` are grandfathered by
+explicit name in the script, and reviewer artifacts are not linted. Like Ruff and
+mypy, it does not depend on the test run and reports independently.
 
 **All applicable gates run and report independently**, to give the developer as much useful failure information as possible in one pass. A test failure must not, by itself, prevent Ruff or mypy from reporting their own independent findings in the same run — neither depends on the test run succeeding.
 
@@ -105,6 +116,7 @@ Tests:    FAIL
 Coverage: UNAVAILABLE / FAIL
 Ruff:     PASS
 mypy:     FAIL
+Evidence: PASS
 
 Overall:  FAIL
 ```

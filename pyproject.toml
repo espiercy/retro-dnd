@@ -20,7 +20,11 @@ dev = [
 package = false
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+# "scripts" is on the path so the repository's verification tooling
+# (scripts/lint_evidence.py) is importable under test. It is tooling, not
+# simulator code: coverage's source stays "src" only, per
+# TESTING_STRATEGY.md §8 ("not presentation or peripheral tooling").
+pythonpath = ["src", "scripts"]
 testpaths = ["tests"]
 
 [tool.coverage.run]
