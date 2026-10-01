@@ -16,8 +16,28 @@ Light & Exploration Resources
 
 ## Status
 
-`READY FOR HUMAN RULE-CARD REVIEW`
+`READY FOR HUMAN RULE-CARD REVIEW` *(resubmitted after bounded remediation)*
 
+> **Bounded Rule Card remediation applied 2026-10-01 on human adjudication.** Human review did
+> **not** approve the first submission; it found three related Stage-B synthesis defects at the
+> boundary between *mundane light-resource state* and *world/encounter visibility and darkness
+> consequences*. All three are corrected here, and **nothing else was reopened**:
+>
+> - **Finding A** — the card derived `DIM_LIGHT` from the phrase *"normal dungeon conditions"*.
+>   The accepted evidence classified that inference `QUALIFIED, not forced`. **Withdrawn
+>   entirely**; both source facts are preserved separately as routed evidence (§Undefined 2, §7).
+> - **Finding B** — the card treated absence of its **own** mundane sources as complete darkness,
+>   produced a `Visibility` category, asserted a blindness predicate, and required a surprise
+>   state to be queried. **All four withdrawn.** The card now outputs mundane illumination facts
+>   only (§6); `ENC-001` owns classification (§7); the blindness predicate is not asserted (§8);
+>   surprise is not an input (L34).
+> - **Finding C** — an `EXPENDED` source contributes no illumination. **Added as a Necessary
+>   Mechanical Consequence**, scoped to the source and explicitly **not** to the party or world
+>   (§4, L15a, L15b).
+>
+> **Still no Simulator Ruling, no Alternate-Source Compatible Completion, no Human-Approved
+> Variant.** These were adjudications of synthesis and provenance boundaries, not variants.
+>
 > **Stage A accepted by the human project owner, 2026-09-29.** Evidence:
 > `docs/rules/evidence/EXP-006-evidence-remediated.md`, which passed independent `DEC-0010`
 > completeness review at the fifth attempt. **The four prior `FAIL` reviews stand unaltered and
@@ -91,9 +111,30 @@ accepted Stage-A packet's closure gate.
 
 1. **What happens at the moment a light source's duration reaches zero.** RC gives durations and a
    tally instrument and stops. No expiry step, no partial-turn rule, no "gutters out" state.
-2. **How a party's carried light maps to a `Visibility` category.** RC gives the default
-   (*"normal dungeon conditions"* = `2d6×10'`) and the infravision case (`**` → dim light), and
-   nothing between. One torch and six torches are not distinguished.
+2. **How a party's carried light maps to a `Visibility` category.** RC supplies **no rule at all**
+   connecting carried mundane light to the p. 93 `Visibility` column. One torch and six torches
+   are not distinguished, and no quantity of torches is stated to reach any named category.
+
+   Two separate source facts exist and **must not be merged** (human adjudication 2026-10-01,
+   Finding A):
+
+   ```text
+   RC p. 91  Game Turn step 1: wandering monsters appear 2d6 x 10' away
+             "under normal dungeon conditions".  Stated UNCONDITIONALLY, with no
+             reference to a Visibility category and no surprise condition.
+
+   RC p. 93  The Encounter Distances Table has a Dim light row whose Dungeon value
+             is also 2d6 x 10'.
+   ```
+
+   **The identical dice expression does not establish semantic identity.** The accepted Stage-A
+   evidence classified that inference as **`QUALIFIED, not forced`** (`E-13a`) and withdrew the
+   earlier `NECESSARY CONSEQUENCE` treatment, because p. 91 may be a standing default that
+   **bypasses** the table rather than an application of its `Dim light` row — p. 92 gates the
+   table on neither party being surprised, and p. 91 imposes no surprise condition.
+
+   **This card therefore derives nothing from the phrase *"normal dungeon conditions"*.** Both
+   facts are preserved above, separately, as routed evidence for `ENC-001`.
 3. **Ignition in adverse conditions for a character without `Fire-Building`.** The p. 70 tinderbox
    rule is expressly qualified to *"normal (comparatively dry) circumstances"*.
 4. **Deliberate extinguishing.** RC states that lanterns are *"shuttered or enclosed against
@@ -177,10 +218,29 @@ remaining_turns := remaining_turns - n        (floor 0)
 `EXP-002` is the **sole** authority for how many turns elapsed. This card **never** counts turns,
 advances a clock, or maintains a parallel turn accounting.
 
-**At `remaining_turns == 0` this card reports the source as `EXPENDED` and stops.** RC states no
-expiry semantics (§Undefined 1), so **no burn-out event, no partial-turn proration and no
-automatic darkness transition is synthesized.** A lantern reaching zero consumes its flask; a
-further flask may be supplied, which resets `remaining_turns` to `24`.
+**At `remaining_turns == 0` the source is `EXPENDED`, and that source contributes no
+illumination.** It leaves `lit_sources` and stops contributing to `max_mundane_radius_feet`.
+
+This much is a **Necessary Mechanical Consequence** of RC's own finite, stated durations: a torch
+that *"burns for one hour (six turns)"* is not burning in the seventh turn, so it is not casting
+its `30'` radius then. Nothing else would be a coherent reading of a stated duration.
+
+**It is scoped to the source, and stops there** (human adjudication 2026-10-01, Finding C):
+
+```text
+source exhausted  ->  THAT SOURCE provides no light          <- Necessary Consequence
+
+NOT:
+
+source exhausted  ->  the party or the world is dark         <- NOT a consequence;
+                      other illumination may exist, and this
+                      card does not know about it (§6)
+```
+
+RC states **no expiry semantics** (§Undefined 1), so this card still synthesizes **no burn-out
+event, no partial-turn proration, no extra action or cost, no automatic party darkness, no
+`NO_LIGHT`, and no blindness**. A lantern reaching zero consumes its flask; a further flask may
+be supplied, which resets `remaining_turns` to `24`.
 
 ### 5. Ignition
 
@@ -200,52 +260,93 @@ reimplemented**; this card supplies only the branch condition.
 The `UNDEFINED BY RC` branch **refuses with an explanatory error**. It does not default to the
 `1d6`, because RC expressly qualifies that roll to ordinary circumstances.
 
-### 6. Light state produced
+### 6. Output — mundane illumination facts only
 
-This card's **output**:
+This card's **entire output**. Every field is scoped to the mundane sources this card owns, and
+the field names say so, so that no consumer can mistake them for a statement about the world:
 
 ```text
-party_light_state = {
-    any_lit:            bool
-    max_radius_feet:    int        (30 while any mundane source is lit)
-    sources:            [LightSource]
+mundane_light_contribution = {
+    lit_sources:                 [LightSource]   # kind, radius_feet, remaining_turns
+    any_mundane_source_lit:      bool            # THIS CARD'S OWN SOURCES ONLY
+    max_mundane_radius_feet:     int | None      # 30 while any owned source is lit, else None
 }
 ```
 
-### 7. Visibility category — exposed, with its governing condition attached
+**What `any_mundane_source_lit == false` means, exactly** (human adjudication 2026-10-01,
+Finding B):
 
 ```text
-NO_LIGHT        no lit source and no infravision in use
-DIM_LIGHT       normal dungeon conditions (RC's default), OR
-                full darkness with infravision used     (RC p. 93 footnote **)
-VERY_GOOD_LIGHT NOT DERIVABLE from RC -- see §Undefined 2
+MEANS:         EXP-006 knows of no active mundane light source that it owns.
+
+DOES NOT MEAN: complete darkness
+               NO_LIGHT
+               any Visibility category
+               blindness
+               that the party or the location is dark
 ```
 
-**This card exposes a category. It does not resolve an encounter distance.**
+The card owns **only mundane exploration-light resources**. It does not own environmental or
+ambient illumination, and §B explicitly excludes `MAGIC-*`. **Absence of its own sources is
+therefore an absence of knowledge, not a fact about the world**, and this card never converts the
+one into the other.
 
-The category is **only meaningful when neither party is surprised** (RC p. 92). Any consumer
-requesting a visibility-conditioned distance **must** supply the surprise state, and this card's
-contract carries that condition rather than dropping it:
+### 7. Encounter visibility — **routed evidence, not an executable output**
+
+**This card produces no `Visibility` category.** It does not classify, resolve or query the
+Encounter Distances Table, and **surprise is not an input to it** — a consumer may ask this card
+for its mundane-light facts without supplying any encounter circumstance at all.
+
+The following RC facts are recorded **for `ENC-001`**, which owns the classification and the
+resolution:
 
 ```text
-neither party surprised  ->  ENC-001 consults the Encounter Distances Table
-either party surprised   ->  ENC-001 uses a flat 1d4 x 10', and LIGHT DOES NOT APPLY
+p. 93  The Encounter Distances Table is keyed on a Visibility column with three
+       named categories:  VERY GOOD LIGHT  /  DIM LIGHT  /  NO LIGHT.
+       Dungeon values: 4d6 x 10'  /  2d6 x 10'  /  1d4 x 10'.
+
+p. 93  Footnote **:  full darkness with infravision used is treated as DIM LIGHT.
+
+p. 92  The table is consulted ONLY when NEITHER party is surprised.
+
+p. 92  When EITHER party is surprised, the encounter-distance path is a flat
+       1d4 x 10', and light does not enter the calculation.
 ```
 
-`VERY_GOOD_LIGHT` is **never produced** by this card, because RC supplies no rule that reaches it
-from mundane equipment. It is named so a consumer knows the category exists and that this card
-cannot supply it.
+**None of the above is executed here.** `ENC-001` is `[UNRESEARCHED]`; whatever aggregation it
+needs — mundane light, environmental illumination, magical light, infravision, encounter
+circumstances — is **its** rule to write, and **this card does not invent that aggregation**.
 
-### 8. No-light consequence — routed
+### 8. Darkness and blindness — **not established by this card**
 
-When `any_lit == false` and the character has no infravision, RC Ch. 13 p. 150 makes that
-character **blind**. This card **reports that predicate** and owns **none** of its consequences:
+The RC fact and its routing are preserved; what is withdrawn is this card's claim to be able to
+trigger them.
 
 ```text
-movement multipliers (1/3 unguided, 2/3 guided)   ->  CHAR-005 §7   [LANDED]
--4 saves / -6 attacks / +4 AC                     ->  COMBAT-*      [UNRESEARCHED]
-infravision possession                            ->  CHAR-009      [UNRESEARCHED]
+RC p. 150 (corroborated p. 154):
+    complete darkness + no infravision  ->  blindness consequences
+        -4 saves, -6 attacks, +4 AC
+        1/3 normal speed unguided, 2/3 guided
 ```
+
+**`EXP-006` cannot establish `complete darkness`**, because it owns only its own mundane sources
+(§6). It therefore **does not evaluate, assert or report the blindness predicate**, and supplies
+no input that a consumer could mistake for it.
+
+```text
+blindness consequences -- movement       ->  CHAR-005 §7   [LANDED]
+blindness consequences -- save/attack/AC ->  COMBAT-*      [UNRESEARCHED]
+infravision possession                   ->  CHAR-009      [UNRESEARCHED]
+
+the COMPLETE-DARKNESS world-state predicate itself
+    ->  OWNER NOT SETTLED.  No Rule ID in INVENTORY.md establishes global or
+        environmental illumination state.  This is recorded as an open
+        governance issue (Open Questions 7) and NO OWNER IS INVENTED HERE.
+```
+
+A downstream owner that has established complete darkness by authoritative means may then apply
+the p. 150 consequences through the routes above. **This card is one input to that determination,
+never the determination itself.**
 
 ---
 
@@ -253,14 +354,21 @@ infravision possession                            ->  CHAR-009      [UNRESEARCHE
 
 ### A. What this card owns
 
-Mundane light and exploration-resource **state and its evolution**: whether a source is lit, its
-radius, its remaining duration, whether it can be ignited, and depletion against authoritative
-elapsed turns.
+Mundane light and exploration-resource **state and its evolution**: whether a source it owns is
+lit, that source's radius, its remaining duration, whether it can be ignited, depletion against
+authoritative elapsed turns, and whether an exhausted source still contributes illumination.
+
+**The card reports facts about its own sources. It makes no claim about the world's
+illumination**, and every field in §6 is named to keep that distinction visible to consumers.
 
 ### B. What this card does **not** own
 
 ```text
-Encounter distance resolution      ENC-001   -- §7 exposes a category only
+Encounter distance resolution AND
+  Visibility classification        ENC-001   -- §7 records routed evidence only;
+                                              this card produces NO category
+Complete-darkness / environmental
+  illumination world state         OWNER NOT SETTLED -- §8, Open Question 7
 Blindness/darkness movement        CHAR-005 §7 [LANDED]
 Attack / save / AC consequences    COMBAT-*
 Skill resolution procedure         CHAR-012
@@ -329,13 +437,15 @@ Case IDs use the `L` series (Light), distinct from `CHAR-004`'s `E`, `CHAR-005`'
 | L6 | Fresh torch | `6` turns |
 | L7 | Lantern with one flask | `24` turns |
 | L8 | Lit torch, `EXP-002` reports `1` elapsed turn | `5` remaining |
-| L9 | Lit torch, `6` elapsed turns | `0` remaining; **`EXPENDED`** |
+| L9 | Lit torch, `6` elapsed turns | `0` remaining; **`EXPENDED`**; **that source contributes no illumination** and leaves `lit_sources` |
 | L10 | Lit torch, `9` elapsed turns | `0`, **floored — not negative** |
 | L11 | **Unlit** torch, `3` elapsed turns | `6` remaining — unlit sources do not deplete |
-| L12 | Lantern `EXPENDED`, new flask supplied | `24` remaining |
+| L12 | Lantern `EXPENDED`, new flask supplied | `24` remaining; contributes illumination again |
 | L13 | **This card advancing or counting turns itself** | **MUST NOT OCCUR** — guard test; `EXP-002` is sole authority |
 | L14 | **Any second turn counter, clock or elapsed-time field owned here** | **MUST NOT EXIST** — guard test |
-| L15 | **A burn-out event, partial-turn proration, or automatic darkness transition at zero** | **MUST NOT EXIST** — guard test; RC states no expiry semantics |
+| L15 | **A burn-out event, partial-turn proration, or any extra action/cost at zero** | **MUST NOT EXIST** — guard test; RC states no expiry semantics |
+| L15a | Two lit torches, one reaches `0` | the expended one contributes nothing; **the other still contributes**; `any_mundane_source_lit` **remains `true`** |
+| L15b | **An exhausted source producing party/world darkness, `NO_LIGHT`, or blindness** | **MUST NOT OCCUR** — guard test; Finding C is scoped to the source |
 | L16 | **Hour-to-turn conversion performed by this card** | **MUST NOT OCCUR** — RC states turns itself |
 
 ### Ignition
@@ -353,26 +463,27 @@ Case IDs use the `L` series (Light), distinct from `CHAR-004`'s `E`, `CHAR-005`'
 | L25 | **This card resolving a skill check itself** | **MUST NOT OCCUR** — guard test; `CHAR-012` owns `1d20` ≤ ability |
 | L26 | **Adverse-condition ignition defaulting to the `1d6`** | **MUST NOT OCCUR** — guard test; RC qualifies that roll to ordinary circumstances |
 
-### Light state and visibility
+### Mundane light state
 
 | # | Input | Expected |
 |---|---|---|
-| L27 | Any lit source | `any_lit = true`, `max_radius_feet = 30` |
-| L28 | No lit source | `any_lit = false` |
-| L29 | No lit source, no infravision | visibility **`NO_LIGHT`** |
-| L30 | Normal dungeon conditions, party lit | visibility **`DIM_LIGHT`** |
-| L31 | Full darkness, infravision in use | visibility **`DIM_LIGHT`** — RC p. 93 footnote `**` |
-| L32 | **`VERY_GOOD_LIGHT` produced from mundane equipment** | **MUST NOT OCCUR** — guard test; not derivable from RC |
+| L27 | Any owned source lit | `any_mundane_source_lit = true`, `max_mundane_radius_feet = 30` |
+| L28 | No owned source lit | `any_mundane_source_lit = false`, `max_mundane_radius_feet = None` — **and nothing further is asserted** |
+| L29 | **`any_mundane_source_lit = false` producing `NO_LIGHT`, complete darkness, or any world-state claim** | **MUST NOT OCCUR** — guard test; absence of this card's sources is absence of knowledge, not a fact about the world |
+| L30 | **The phrase *"normal dungeon conditions"* producing `DIM_LIGHT` or any category** | **MUST NOT OCCUR** — guard test; the accepted evidence classified this `QUALIFIED, not forced` (`E-13a`). Identical `2d6×10'` does not establish semantic identity |
+| L31 | **Any `Visibility` category (`VERY_GOOD_LIGHT` / `DIM_LIGHT` / `NO_LIGHT`) produced, classified or returned by this card** | **MUST NOT OCCUR** — guard test; `ENC-001` owns classification |
+| L32 | **Infravision folded into a visibility classification here** | **MUST NOT OCCUR** — guard test; the p. 93 `**` footnote is `ENC-001`-facing evidence |
 | L33 | **This card rolling `4d6×10'`, `2d6×10'` or `1d4×10'`** | **MUST NOT OCCUR** — guard test; `ENC-001` owns the roll |
-| L34 | Visibility requested **without** a surprise state | **ERROR** — the governing condition must be supplied |
-| L35 | Either party surprised | this card reports **light does not apply**; `ENC-001` uses a flat `1d4×10'` |
-| L36 | **A `light state → encounter distance` path with no surprise gate** | **MUST NOT EXIST** — guard test |
+| L34 | Mundane light state queried **with no surprise state supplied** | **SUCCEEDS** — surprise is not an input to this card |
+| L35 | **Surprise, or any encounter circumstance, required to query mundane light state** | **MUST NOT OCCUR** — guard test |
+| L36 | **Any `light state → encounter distance` path resolved inside this card** | **MUST NOT EXIST** — guard test; gated or ungated alike |
 
 ### Routed consequences
 
 | # | Input | Expected |
 |---|---|---|
-| L37 | `any_lit = false`, character without infravision | predicate **reported**; no penalty applied here |
+| L37 | `any_mundane_source_lit = false`, character without infravision | **no blindness predicate asserted, evaluated or reported.** This card supplies illumination facts only |
+| L37a | **Complete darkness established by this card from its own state** | **MUST NOT OCCUR** — guard test; owner of that predicate is **not settled** |
 | L38 | **Any movement multiplier applied by this card** | **MUST NOT OCCUR** — `CHAR-005` §7 |
 | L39 | **Any `−4` / `−6` / `+4` applied by this card** | **MUST NOT OCCUR** — `COMBAT-*` |
 | L40 | **Infravision possession decided by this card** | **MUST NOT OCCUR** — `CHAR-009` |
@@ -387,7 +498,7 @@ Case IDs use the `L` series (Light), distinct from `CHAR-004`'s `E`, `CHAR-005`'
 | L44 | **Any starvation mechanic or causation** | **MUST NOT EXIST** — guard test |
 | L45 | **Torch resolved as a weapon** | **ERROR** — `COMBAT-*`/`CHAR-004` |
 | L46 | **Oil resolved as a thrown missile, or a pursuit-delay value** | **ERROR** — RC states **no** delay mechanic; none exists to call |
-| L47 | Mirror or lip-reading use requiring a lit area | this card reports `any_lit`; **the item/skill mechanic is not owned here** |
+| L47 | Mirror or lip-reading use requiring a lit area | this card reports `any_mundane_source_lit` and the radii of its own sources; **whether the area counts as "lit" is not this card's call, and the item/skill mechanic is not owned here** |
 
 ---
 
@@ -395,12 +506,16 @@ Case IDs use the `L` series (Light), distinct from `CHAR-004`'s `E`, `CHAR-005`'
 
 | Element | Classification |
 |---|---|
-| §2 radii; §3 durations; §5 tinderbox `1d6` on `1–2` and once-per-round; §5 `Fire-Building` branches; §7's two producible categories and the surprise gate; §8's blindness predicate | **Rules Cyclopedia Explicit** |
+| §2 radii; §3 durations; §5 tinderbox `1d6` on `1–2` and once-per-round; §5 `Fire-Building` branches | **Rules Cyclopedia Explicit** |
+| §7's recorded p. 92/p. 93 facts; §8's statement of RC's `complete darkness + no infravision → blindness` rule | **Rules Cyclopedia Explicit — recorded as ROUTED EVIDENCE, not executed here** |
 | §4 depletion arithmetic against elapsed turns | **Necessary Mechanical Consequence** of RC's turn-denominated durations and `EXP-002`'s authoritative turn |
+| **§4 an `EXPENDED` source contributes no illumination** | **Necessary Mechanical Consequence.** Premises, both RC Explicit: a torch *"burns for one hour (six turns)"* and a lantern *"[burns] one flask of oil in four hours (24 turns)"* (pp. 69–70), and each casts its `30'` radius **by burning**. A stated finite duration that has elapsed is a duration that is over; a source not burning is not casting its radius. No alternative reading of a finite printed duration exists, so **no Simulator Ruling is required**. **Scoped to the source** — it says nothing about the party or the world (guard L15b) |
 | §3 "no conversion performed" | **Necessary Consequence** — RC states both hours **and** turns itself |
 | §5's `REFUSE` branches (L23, L24) | **Necessary Consequence of a stated qualification** — RC expressly limits the `1d6` to ordinary circumstances; refusing is the only reading that does not extend it |
-| §7 `VERY_GOOD_LIGHT` never produced | **Explicitly undefined by RC** — named, not synthesized |
-| §4's silence at zero | **Explicitly undefined by RC** — guard test L15 |
+| **`normal dungeon conditions` → `DIM_LIGHT`** | **NOT CLASSIFIED — WITHDRAWN.** Not `Rules Cyclopedia Explicit`, not a `Necessary Consequence`, and not present anywhere in the specification. The accepted evidence classified the inference `QUALIFIED, not forced` (`E-13a`); human adjudication 2026-10-01 (Finding A) withdrew it from the card entirely. Guard test L30 |
+| §6 `any_mundane_source_lit = false` asserting nothing further | **Scope limitation, not a rule** — the card owns only its own sources (Finding B). Guards L29, L37, L37a |
+| §7 no `Visibility` category produced | **Ownership boundary** — `ENC-001` owns classification (Finding B / §4 direction). Guards L31–L33, L36 |
+| §4's silence at zero *beyond* the source ceasing to burn | **Explicitly undefined by RC** — guard tests L15, L15b |
 | §B, §C routing | **Not rules** — repository responsibility boundaries, set by accepted Stage-A evidence and governance |
 | §D rations, §E starvation | **Evidenced, ownership deliberately unassigned by governance** |
 
@@ -416,10 +531,10 @@ direction.
 
 | # | Challenge | Result |
 |---|---|---|
-| 1 | **Accidental ownership of downstream light consequences** | **Clean.** §8 reports a predicate only. Guards L37–L41. No penalty, multiplier or roll for any consequence appears |
+| 1 | **Accidental ownership of downstream light consequences** | **Clean — and tightened 2026-10-01.** The pre-remediation card reported a **blindness predicate** derived from its own `any_lit == false`. Human review found that unsupported: this card cannot establish complete darkness (Finding B). §8 now asserts **no predicate at all**; it supplies illumination facts only. Guards L37, L37a, L38–L41 |
 | 2 | **Duplicate dungeon-time authority** | **Clean.** §4 consumes `EXP-002`'s elapsed turns and owns no counter. Guards L13–L14. The Timetrack is recorded as a tally instrument, not adopted |
 | 3 | **Duplicate equipment/catalog authority** | **Clean.** No price, price form, `Coin` or encumbrance value appears anywhere in the specification. Guard L42 |
-| 4 | **Hidden assumptions about encounter distance** | **Clean, and this was the sharpest risk.** §7 carries the surprise gate into the contract rather than reducing the rule to `light → distance`; L34 makes an ungated request an error and L36 guards the path itself. No distance die appears (L33) |
+| 4 | **Hidden assumptions about encounter distance** | **Clean — and corrected 2026-10-01.** The pre-remediation card produced a `Visibility` category and demanded a surprise state to query it. **Human review found that over-reached**: classification is `ENC-001`'s, and surprise is not an input to this card's own light state. §7 is now **routed evidence only**; no category is produced (L31), no die is rolled (L33), no path is resolved (L36), and querying light state without surprise **succeeds** (L34) |
 | 5 | **Implicit magical-light behavior** | **Clean.** Only `TORCH` and `LANTERN` exist. Guard L41. The `Index to Spells` (p. 300) was enumerated in Stage A and every light/darkness entry on it is a spell |
 | 6 | **Unsupported ration ownership** | **Clean.** §D records the evidence and assigns nothing. Guard L43. No ration appears in §1–§8 |
 | 7 | **Starvation ownership leakage** | **Clean.** §E. Guard L44. `SR-10` is referenced as `CHAR-005`'s and not extended |
@@ -435,12 +550,18 @@ accepted Stage-A evidence.
 
 1. **What happens when a light source's duration reaches zero.** RC states nothing; guard L15
    prevents invention.
-2. **How carried light maps to `VERY_GOOD_LIGHT`.** Not derivable; guard L32.
+2. **How carried mundane light maps to any `Visibility` category.** RC supplies no rule.
+   `ENC-001` owns the classification; guards L30–L33.
 3. **Adverse-condition ignition without `Fire-Building`.** Refused, not defaulted; guards L23, L26.
 4. **Deliberate extinguishing.** RC gives the lantern's shuttering as a property, not a procedure.
 5. **Rations — ownership open** (§D), by express direction.
 6. **Starvation causation has no Rule ID** (§E) — a standing open governance issue, confirmed
    still true against the restored registry.
+7. **The complete-darkness / environmental-illumination world-state predicate has no owner.**
+   RC states the consequence (p. 150) and this card can supply one input to it, but **no Rule ID
+   in `INVENTORY.md` owns global or ambient illumination state.** Raised by human review
+   2026-10-01 (Finding B). **No owner is invented here**, and nothing in this card depends on one
+   existing.
 
 **Explicitly closed, recorded so they are not re-raised:** whether RC states a no-light
 consequence (**yes** — p. 150, corroborated p. 154; the first-pass denial is withdrawn); whether a
@@ -448,6 +569,13 @@ light-conditioned table exists (**yes** — p. 93, gated by p. 92); whether RC s
 duration-tracking procedure (**a manual tally method, not an executable procedure** — p. 149);
 whether `EXP-006` owns encounter distance (**no**); whether the Timetrack creates a second time
 authority (**no**).
+
+**Explicitly withdrawn by human review 2026-10-01, recorded so they are not reintroduced:** that
+*"normal dungeon conditions"* yields `DIM_LIGHT` (**Finding A** — withdrawn; the shared `2d6×10'`
+proves nothing); that this card may produce a `Visibility` category (**Finding B** —
+withdrawn; `ENC-001` owns it); that `any_lit == false` establishes darkness or blindness
+(**Finding B** — withdrawn); and that surprise is an input to querying this card's light state
+(**withdrawn**).
 
 ## Approval
 
