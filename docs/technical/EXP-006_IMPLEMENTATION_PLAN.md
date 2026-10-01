@@ -44,13 +44,17 @@ see §14 Slice A — it requires none, and introduces none.
 ### 1.2 Implementation authorization
 
 ```text
-SLICE A   AUTHORIZED   2026-10-01   -- light-source value/state model only
-SLICE B   NOT authorized
-SLICE C   NOT authorized
+SLICE A   ACCEPTED     2026-10-01   -- light-source value/state model
+SLICE B   ACCEPTED     2026-10-01   -- depletion + mundane-light contribution,
+                                      including the bounded refuel correction
+                                      and the Rule Card consistency correction
+SLICE C   NOT authorized -- BLOCKED, see §19
 SLICE D   NOT authorized
 ```
 
-Stop for human review after Slice A.
+**Slice B's accepted semantics** include `expended lantern + new flask → remaining_turns = 24,
+lit = False, no illumination until separately ignited`, and `partial refill → REFUSE, with no
+top-up or additive arithmetic`.
 
 ## 2. Authoritative inputs
 
@@ -365,7 +369,13 @@ value `EXP-006` produces (`L25`).
 would be a second clock); the plan's position is that the *caller* makes at most one call per
 round, and `L19` is a contract test on that protocol.
 
-## 12. Deterministic-case mapping — all 50
+## 12. Deterministic-case mapping — all 51
+
+> **Count corrected 2026-10-01: 50 → 51.** `L12a` (refuelling a lantern that has not reached zero
+> is **REFUSED**) was added to the approved Rule Card by the bounded consistency correction at
+> `5594907`, under human adjudication, **after** this plan was approved. It is a post-plan
+> addition and is classified **internal invariant guard**, taking that column from 11 to 12.
+> Future slice accounting must use **51**. No other case mapping is changed.
 
 Counts re-derived from the approved card for this plan, **not assumed from the gate**; they
 match: **18 / 18 / 11 / 3**.
@@ -374,7 +384,7 @@ match: **18 / 18 / 11 / 3**.
 |---|---|---|
 | **Unit behavior** | **18** | `L1`, `L2`, `L3`, `L6`, `L7`, `L8`, `L9`, `L10`, `L11`, `L12`, `L15a`, `L17`, `L18`, `L20`, `L21`, `L27`, `L28`, `L34` |
 | **Ownership/boundary guard** | **18** | `L29`, `L30`, `L31`, `L32`, `L33`, `L37a`, `L38`, `L39`, `L40`, `L41`, `L42`, `L43`, `L44`, `L45`, `L46`, plus `L13`, `L14`, `L36` |
-| **Internal invariant guard** | **11** | `L4`, `L5`, `L15`, `L15b`, `L16`, `L19`, `L23`, `L24`, `L25`, `L26`, `L35` |
+| **Internal invariant guard** | **12** | `L4`, `L5`, `L12a`, `L15`, `L15b`, `L16`, `L19`, `L23`, `L24`, `L25`, `L26`, `L35` |
 | **Routed dependency behavior** | **3** | `L22`, `L37`, `L47` |
 
 **Documentation-only assertions: none.** Every case becomes an executable obligation.
@@ -532,6 +542,50 @@ Two items are **flagged for the reviewer's judgement** and neither blocks:
    without duplication; the cleaner fix needs separate authorization for a landed module.
 2. **Elapsed-turn provenance** (§8.2) — a bare `int` carries no authoritative-origin guarantee.
    That responsibility belongs to the unowned turn orchestrator, which this plan does not invent.
+
+## 19. Slice-C blockers — **two plan defects, recorded 2026-10-01**
+
+```text
+SLICE C BLOCKED -- HUMAN ADJUDICATION REQUIRED
+```
+
+Found by a pre-Slice-C audit. **Both are defects in this plan**, not in the approved Rule Card's
+evidence, and neither may be resolved by an implementer choosing a precedence.
+
+### 19.1 Defect 1 — §11's ignition matrix is internally contradictory
+
+```text
+| ✓ | ✗ | any     | ROLL_1D6_IGNITE_1_2 | L21 |
+| ✓ | — | ADVERSE | ROUTED_SKILL_CHECK  | L22 |
+```
+
+Row 2's `any` **includes** `ADVERSE`; row 3's `—` **includes** no-tinderbox. At
+`(has_skill=True, has_tinderbox=False, ADVERSE)` the matrix therefore prescribes **two
+incompatible outcomes**. The approved Rule Card §5 carries the same overlap in its own two rows.
+
+**The accepted evidence does not resolve it.** `E-36` quotes two parallel conditionals —
+*"If the character is trying to build a fire **without** a tinderbox… `1d6`…"* and *"If the
+character is trying to build a fire **in adverse conditions**… skill check…"* — with **no stated
+precedence**. The evidence packet's own §5.8 synthesis block does not contain a
+skill-plus-no-tinderbox branch at all; that row entered at Stage B from E-36's raw quote and was
+never reconciled against the adverse branch.
+
+**Disposition: `NOT ESTABLISHED BY CURRENT APPROVED EVIDENCE`.**
+
+### 19.2 Defect 2 — `L19` requires state §11 forbids
+
+§11 states that one-attempt-per-round *"is a caller-protocol constraint. `EXP-006` holds no round
+state… the caller makes at most one call per round, and `L19` is a contract test on that
+protocol."*
+
+But `L19` is **`Two ignition attempts in one round → ERROR`**. Detecting a *second* attempt
+requires knowing an attempt already happened this round — round state, which §11 correctly
+forbids as a second clock. **The plan names no caller-supplied parameter that would carry it**, so
+as written `L19` is not implementable without either a hidden counter or a contract the plan does
+not specify.
+
+**Disposition: `NOT ESTABLISHED BY CURRENT APPROVED PLAN`.** Resolving it is a design decision
+(an explicit caller-supplied precondition, or a restatement of `L19`), not an implementer's call.
 
 ## 18. Gate state
 
