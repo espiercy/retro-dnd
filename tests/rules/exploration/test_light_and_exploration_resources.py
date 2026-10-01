@@ -263,12 +263,46 @@ def test_depletion_refuses_a_non_light_source() -> None:
 
 
 def test_an_expended_lantern_takes_a_fresh_flask() -> None:
-    """L12 — 24 remaining, and it contributes illumination again."""
+    """L12 — 24 remaining, and **unlit**.
+
+    Implementation interpretation, recorded rather than read back into the
+    card: L12's own wording is *"contributes illumination again"*, and that
+    wording is not rewritten. Under the approved separation of fuel state
+    from ignition state (human adjudication 2026-10-01), a further flask
+    restores the lantern's *fuel*; it does not light it. The lantern is
+    *able* to contribute again, once some separately authorized ignition
+    operation changes ``lit``.
+    """
     expended = LightSource(kind=LANTERN, remaining_turns=0, lit=False)
     refuelled = refuel_lantern(expended)
     assert refuelled.remaining_turns == 24
-    assert refuelled.lit is True
-    assert refuelled.illumination_radius_feet == 30
+    assert refuelled.lit is False
+
+
+def test_refuelling_alone_cannot_make_the_lantern_contribute_illumination() -> None:
+    """The proof of the fuel/ignition separation.
+
+    A refuelled lantern contributes nothing — not through its own radius,
+    and not through the aggregate. Only an ignition operation, which Slice B
+    does not implement, could change that.
+    """
+    refuelled = refuel_lantern(LightSource(kind=LANTERN, remaining_turns=0, lit=False))
+
+    assert refuelled.illumination_radius_feet is None
+
+    contribution = mundane_light_contribution([refuelled])
+    assert contribution.lit_sources == ()
+    assert contribution.any_mundane_source_lit is False
+    assert contribution.max_mundane_radius_feet is None
+
+
+def test_a_refuelled_lantern_still_does_not_deplete_while_unlit() -> None:
+    """Fuel and ignition stay independent in both directions: a refuelled
+    but unlit lantern keeps its 24 turns (L11's rule, applied to L12)."""
+    refuelled = refuel_lantern(LightSource(kind=LANTERN, remaining_turns=0, lit=False))
+    (after,) = deplete([refuelled], 5)
+    assert after.remaining_turns == 24
+    assert after.lit is False
 
 
 def test_a_torch_cannot_be_refuelled() -> None:
@@ -278,13 +312,25 @@ def test_a_torch_cannot_be_refuelled() -> None:
 
 
 def test_refuelling_a_lantern_that_has_not_reached_zero_is_refused() -> None:
-    """The approved card states refuelling for a lantern *reaching zero*.
+    """An API precondition derived from the approved scope, not a new rules
+    mechanic (human adjudication 2026-10-01).
 
-    Topping up a partly-full lantern is not established, and inventing an
-    answer would be implementation policy. Flagged for adjudication.
+    The card establishes supplying a further flask only after the current
+    one is exhausted. **No arithmetic is assigned to the unsupported
+    operation** — no topping up to 24, no adding 24, no partial-flask
+    arithmetic. It is rejected deterministically.
     """
     with pytest.raises(ValueError, match="only for a lantern that has reached zero"):
         refuel_lantern(LightSource.fresh(LANTERN, lit=True))
+
+
+def test_refuelling_a_partly_spent_lantern_is_refused_whether_lit_or_not() -> None:
+    """The precondition is about remaining fuel, not about burning."""
+    partly_spent_lit = LightSource(kind=LANTERN, remaining_turns=7, lit=True)
+    partly_spent_unlit = LightSource(kind=LANTERN, remaining_turns=7, lit=False)
+    for source in (partly_spent_lit, partly_spent_unlit):
+        with pytest.raises(ValueError, match="only for a lantern that has reached zero"):
+            refuel_lantern(source)
 
 
 def test_refuel_refuses_a_non_light_source() -> None:

@@ -255,22 +255,41 @@ def refuel_lantern(source: LightSource) -> LightSource:
     """Supply a fresh flask of oil to an **expended** lantern.
 
     Rule Card §4: *"A lantern reaching zero consumes its flask; a further
-    flask may be supplied, which resets ``remaining_turns`` to 24."* The
-    refuelled lantern contributes illumination again (approved case
-    **L12**).
+    flask may be supplied, which resets ``remaining_turns`` to 24."*
+
+    **Refuelling restores fuel. It does not ignite** (human adjudication
+    2026-10-01). The approved card establishes that a further flask
+    restores the lantern's fuel duration; it establishes **no** automatic
+    ignition or relighting. Fuel availability and ignition state are
+    independent, and ignition belongs to the later ignition slice::
+
+        expended lantern + new flask  ->  remaining_turns = 24
+                                      ->  lit = False
+
+    A refuelled lantern therefore contributes **no** illumination until
+    some separately authorized ignition operation changes its ``lit``
+    state. No tinderbox or ``Fire-Building`` behaviour is invoked or
+    implemented here.
+
+    On approved case **L12**: the card's own wording for that case reads
+    *"contributes illumination again"*, and that wording is **not
+    rewritten here**. It is read, under the approved separation above, as
+    *able* to contribute again once lit — the lantern has fuel once more,
+    which is the condition the card's §4 sentence actually establishes.
+    Nothing in the card states that supplying a flask lights it.
 
     The card states this operation for a lantern that has **reached
     zero**, and this function honours that stated precondition rather
-    than extending it. Two requests are therefore refused:
+    than extending it. Two requests are refused:
 
     - a **torch**, which has no fuel. RC gives the flask to the lantern;
       a fresh torch is a new source, not a refuelled one;
-    - a lantern that is **not yet expended**. The approved card does not
-      state what supplying a flask to a partly-full lantern does, and
-      inventing an answer — topping up to 24, or adding 24 — would be
-      implementation policy the rules contract does not establish. See
-      the Slice-B review note: this is **flagged for adjudication, not
-      decided here**.
+    - a lantern that is **not yet expended**. The card does not state
+      what supplying a flask to a partly-full lantern does, and no
+      arithmetic is assigned to that unsupported operation — no topping
+      up to 24, no adding 24, no partial-flask arithmetic. This is an
+      **API precondition derived from the approved scope**, not a new
+      rules mechanic (human adjudication 2026-10-01).
     """
     if not isinstance(source, LightSource):
         raise ValueError(f"source must be a LightSource, got {source!r}")
@@ -284,7 +303,7 @@ def refuel_lantern(source: LightSource) -> LightSource:
     return LightSource(
         kind=LightSourceKind.LANTERN,
         remaining_turns=LANTERN_TURNS_PER_FLASK,
-        lit=True,
+        lit=False,
     )
 
 
