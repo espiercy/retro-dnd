@@ -39,7 +39,7 @@ from enum import Enum, auto
 from types import MappingProxyType
 from typing import Final
 
-from rules.exploration.errors import IgnitionNotDefinedError
+from rules.exploration.errors import IgnitionAttemptLimitError, IgnitionNotDefinedError
 
 __all__ = [
     "FRESH_DURATION_TURNS",
@@ -467,11 +467,17 @@ def ignition_outcome(
     `L19a`, `L19b`).
 
     Raises:
-        ValueError: a non-``bool`` flag, or a ``conditions`` that is not an
-            :class:`IgnitionConditions`; or a second attempt this round,
-            which is a caller-protocol violation rather than a rules gap.
-        IgnitionNotDefinedError: RC defines no procedure for this
+        ValueError: a **structural** violation — a non-``bool`` flag, or a
+            ``conditions`` that is not an :class:`IgnitionConditions`.
+        IgnitionAttemptLimitError: a second attempt this round. A **rules**
+            rejection: RC defines the procedure and limits it to once per
+            round (approved case `L19`). Raised **before** the matrix is
+            consulted.
+        IgnitionNotDefinedError: RC defines **no** procedure for this
             combination (approved cases `L23`, `L24`).
+
+    The last two are deliberately distinct: one says the rule does not
+    exist, the other says it exists and has already been used.
     """
     for name, value in (
         ("has_fire_building", has_fire_building),
@@ -484,11 +490,13 @@ def ignition_outcome(
     if not isinstance(conditions, IgnitionConditions):
         raise ValueError(f"conditions must be an IgnitionConditions, got {conditions!r}")
 
-    # The same-round guard precedes branch resolution (Rule Card §5.1).
+    # The same-round guard precedes branch resolution (Rule Card §5.1), so a
+    # second attempt at an RC-silent combination reports the attempt limit
+    # rather than the source silence.
     if attempt_already_made_this_round:
-        raise ValueError(
+        raise IgnitionAttemptLimitError(
             "another ignition attempt is not permitted this round: "
-            "attempt_already_made_this_round is True"
+            'RC allows a tinderbox to be tried "once per round" (p. 70)'
         )
 
     try:

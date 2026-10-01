@@ -21,7 +21,7 @@ from itertools import product
 import pytest
 
 from rules.exploration import light_and_exploration_resources as light
-from rules.exploration.errors import IgnitionNotDefinedError
+from rules.exploration.errors import IgnitionAttemptLimitError, IgnitionNotDefinedError
 from rules.exploration.light_and_exploration_resources import (
     FRESH_DURATION_TURNS,
     LANTERN_TURNS_PER_FLASK,
@@ -573,9 +573,13 @@ def test_a_refusal_is_never_answered_by_a_default() -> None:
 # --- L19 / L19a / L19b: the same-round guard --------------------------------
 
 
-def test_a_second_attempt_this_round_is_refused() -> None:
-    """L19 — driven by caller-supplied state, not by the card discovering it."""
-    with pytest.raises(ValueError, match="not permitted this round"):
+def test_a_second_attempt_this_round_raises_the_attempt_limit_error() -> None:
+    """L19 — driven by caller-supplied state, not by the card discovering it.
+
+    A **rules** rejection, not a structural one: RC defines the procedure
+    and limits it to once per round.
+    """
+    with pytest.raises(IgnitionAttemptLimitError, match="once per round"):
         ignition_outcome(
             has_fire_building=True,
             has_tinderbox=True,
@@ -584,16 +588,54 @@ def test_a_second_attempt_this_round_is_refused() -> None:
         )
 
 
+def test_the_two_refusals_are_different_types() -> None:
+    """The semantic distinction, asserted directly.
+
+    One says RC supplies no procedure; the other says RC supplies one and
+    forbids using it twice. A same-round violation must never claim the rule
+    is undefined.
+    """
+    with pytest.raises(IgnitionNotDefinedError):
+        _ignite(False, False, ORDINARY)
+    with pytest.raises(IgnitionAttemptLimitError):
+        ignition_outcome(
+            has_fire_building=True,
+            has_tinderbox=True,
+            conditions=ORDINARY,
+            attempt_already_made_this_round=True,
+        )
+    assert not issubclass(IgnitionAttemptLimitError, IgnitionNotDefinedError)
+    assert not issubclass(IgnitionNotDefinedError, IgnitionAttemptLimitError)
+
+
 def test_the_same_round_guard_precedes_branch_resolution() -> None:
-    """Even a combination RC does not define is rejected for the round first:
-    the guard is evaluated before the matrix is consulted."""
-    with pytest.raises(ValueError, match="not permitted this round"):
+    """An RC-silent combination with the flag set fails for the ATTEMPT LIMIT,
+    not for source silence — proving the guard runs before the matrix.
+
+    This is the case that would expose a conflation: if the two refusals
+    shared a type, or if the matrix were consulted first, this would report
+    the wrong reason.
+    """
+    with pytest.raises(IgnitionAttemptLimitError, match="once per round"):
         ignition_outcome(
             has_fire_building=False,
             has_tinderbox=False,
             conditions=ADVERSE,
             attempt_already_made_this_round=True,
         )
+
+
+def test_a_malformed_attempt_flag_remains_a_structural_error() -> None:
+    """The flag being a non-``bool`` is a malformed input, not a rule being
+    broken, and stays a plain ``ValueError``."""
+    with pytest.raises(ValueError, match="must be a bool") as excinfo:
+        ignition_outcome(
+            has_fire_building=True,
+            has_tinderbox=True,
+            conditions=ORDINARY,
+            attempt_already_made_this_round=1,  # type: ignore[arg-type]
+        )
+    assert not isinstance(excinfo.value, IgnitionAttemptLimitError)
 
 
 def test_a_first_attempt_evaluates_normally_and_records_nothing() -> None:
