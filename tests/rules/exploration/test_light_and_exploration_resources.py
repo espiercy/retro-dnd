@@ -15,6 +15,8 @@ from __future__ import annotations
 
 import ast
 import inspect
+import pathlib
+import re
 from enum import Enum
 from itertools import product
 
@@ -32,10 +34,13 @@ from rules.exploration.light_and_exploration_resources import (
     LightSource,
     LightSourceKind,
     MundaneLightContribution,
+    catalog_identity,
     deplete,
     ignition_outcome,
     mundane_light_contribution,
+    oil_flask_identity,
     refuel_lantern,
+    tinderbox_identity,
 )
 
 TORCH = LightSourceKind.TORCH
@@ -716,6 +721,244 @@ def test_the_1d6_branch_is_selected_not_rolled() -> None:
     assert _ignite(False, True, ORDINARY) is IgnitionOutcome.ROLL_1D6_IGNITE_1_2
 
 
+# =========================================================================
+# Slice D — CHAR-004 identity binding + final architectural guards
+# =========================================================================
+
+CATALOG_ECONOMIC_FIELDS = frozenset(
+    {
+        "price",
+        "encumbrance_cn",
+        "capacity_cn",
+        "dimension_feet",
+        "size",
+        "traits",
+        "material",
+        "made_for_race",
+    }
+)
+"""`Item` fields EXP-006 must never consume. `name` and `category` are
+identity; everything else is CHAR-004's economics or combat data."""
+
+
+def test_each_light_source_binds_to_its_char_004_row() -> None:
+    assert catalog_identity(TORCH).name == "Torch"
+    assert catalog_identity(LANTERN).name == "Lantern"
+
+
+def test_the_torch_uses_char_004s_exported_identity() -> None:
+    """Human adjudication: TORCH has an export because it is the one
+    commodity in both catalogs; the other three do not and are looked up."""
+    from rules.character_creation import equipment
+
+    assert catalog_identity(TORCH) is equipment.TORCH
+
+
+def test_catalog_identity_refuses_an_unsupported_kind() -> None:
+    with pytest.raises(ValueError, match="must be a LightSourceKind"):
+        catalog_identity("torch")  # type: ignore[arg-type]
+
+
+def test_oil_and_tinderbox_bind_to_their_rows() -> None:
+    assert oil_flask_identity().name == "Oil"
+    assert tinderbox_identity().name == "Tinder box"
+
+
+def test_the_oil_identity_is_the_gear_row_not_the_weapon_row() -> None:
+    """`Oil, Burning` is the Weapons row and belongs to COMBAT-* (L46)."""
+    assert oil_flask_identity().name != "Oil, Burning"
+
+
+def test_catalog_names_live_in_exactly_one_private_location() -> None:
+    """String coupling is centralized, not scattered (plan §9.2).
+
+    Parsed, not grepped: a literal in a docstring must not count. Every
+    string constant in the module body outside `_CATALOG_NAMES` is checked
+    against the canonical names.
+    """
+    tree = ast.parse(inspect.getsource(light))
+    canonical = {"Lantern", "Oil", "Tinder box"}
+
+    def _is_catalog_names(node: ast.AST) -> bool:
+        # The constant is annotated (`_CATALOG_NAMES: Final = ...`), so it
+        # parses as AnnAssign, not Assign. Both are matched so the guard does
+        # not silently pass by finding nothing.
+        if isinstance(node, ast.AnnAssign):
+            return isinstance(node.target, ast.Name) and node.target.id == "_CATALOG_NAMES"
+        if isinstance(node, ast.Assign):
+            return any(isinstance(t, ast.Name) and t.id == "_CATALOG_NAMES" for t in node.targets)
+        return False
+
+    assignments = {node for node in ast.walk(tree) if _is_catalog_names(node)}
+    assert assignments, "guard found no _CATALOG_NAMES definition to anchor on"
+    inside = {
+        n
+        for a in assignments
+        for n in ast.walk(a)
+        if isinstance(n, ast.Constant) and isinstance(n.value, str)
+    }
+    stray = [
+        node.value
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Constant)
+        and isinstance(node.value, str)
+        and node.value in canonical
+        and node not in inside
+    ]
+    assert stray == [], f"catalog name used outside _CATALOG_NAMES: {stray}"
+
+
+def test_no_catalog_economic_field_is_ever_accessed() -> None:
+    """Guard G-4 — the CHAR-004 seam, asserted structurally.
+
+    Every attribute access in the parsed module is inspected. A field named
+    in prose, a docstring or a comment cannot fail this, because comments and
+    docstring text are not `ast.Attribute` nodes — which is exactly why this
+    is an AST check and not a text search.
+    """
+    tree = ast.parse(inspect.getsource(light))
+    accessed = {
+        node.attr for node in ast.walk(tree) if isinstance(node, ast.Attribute)
+    }
+    leaked = accessed & CATALOG_ECONOMIC_FIELDS
+    assert leaked == set(), f"EXP-006 reads CHAR-004 economic field(s): {leaked}"
+
+
+def test_no_currency_or_pricing_machinery_is_imported() -> None:
+    """L42 — this card emits no price and owns no money type."""
+    tree = ast.parse(inspect.getsource(light))
+    imported: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module is not None:
+            imported.add(node.module)
+            imported.update(f"{node.module}.{a.name}" for a in node.names)
+        elif isinstance(node, ast.Import):
+            imported.update(a.name for a in node.names)
+    forbidden = {"currency", "coin", "purchase", "starting_gold", "selection_cost"}
+    offending = {
+        m for m in imported if forbidden & {p.lower() for p in m.replace(".", "_").split("_")}
+    }
+    assert offending == set(), f"pricing machinery imported: {offending}"
+
+
+def test_the_complete_production_dependency_surface() -> None:
+    """The final guard: EXP-006's whole import graph, stated positively.
+
+    Proves in one assertion that there is no production dependency on
+    TurnCredit, EXP-001 time machinery, the CHAR-012 skill resolver, RNG,
+    encounter resolution, combat resolution, magic resolution, or any
+    world-darkness state — because nothing of the kind is imported at all.
+    """
+    tree = ast.parse(inspect.getsource(light))
+    imported: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module is not None:
+            imported.add(node.module)
+        elif isinstance(node, ast.Import):
+            imported.update(a.name for a in node.names)
+
+    assert imported == {
+        "__future__",
+        "collections.abc",
+        "dataclasses",
+        "enum",
+        "types",
+        "typing",
+        "rules.character_creation.equipment",  # identity only -- guarded above
+        "rules.exploration.errors",
+    }
+
+
+# --- §13 ledger reconciliation ---------------------------------------------
+
+CASE_DISCHARGE: dict[str, str] = {
+    # --- implemented behavior -------------------------------------------
+    "L1": "behavior: lit torch radius 30",
+    "L2": "behavior: lit lantern radius 30",
+    "L3": "behavior: unlit illuminates nothing",
+    "L6": "behavior: fresh torch 6 turns",
+    "L7": "behavior: fresh lantern 24 turns",
+    "L8": "behavior: 1 elapsed turn -> 5 remaining",
+    "L9": "behavior: 6 elapsed turns -> EXPENDED",
+    "L10": "behavior: floors at 0",
+    "L11": "behavior: unlit does not deplete",
+    "L12": "behavior: refuel -> 24 turns, unlit",
+    "L15a": "behavior: one source expires, the other still contributes",
+    "L17": "behavior: tinderbox 1d6 branch selected",
+    "L20": "behavior: skill + tinderbox + ordinary -> AUTOMATIC",
+    "L21": "behavior: skill, no tinderbox, ordinary -> 1d6",
+    "L22": "behavior: adverse -> ROUTED_SKILL_CHECK (incl. SR-11 row)",
+    "L19a": "behavior: first attempt evaluates, records nothing",
+    "L27": "behavior: aggregate reports lit source",
+    "L28": "behavior: aggregate empty when none lit",
+    "L34": "behavior: query succeeds with no surprise state",
+    "L12a_": "placeholder-never-used",
+    # --- implemented invariants (refusals) -------------------------------
+    "L12a": "invariant: partial refill refused",
+    "L19": "invariant: IgnitionAttemptLimitError on second attempt",
+    "L23": "invariant: IgnitionNotDefinedError, no-skill adverse",
+    "L24": "invariant: IgnitionNotDefinedError, no skill no tinderbox",
+    "L18": "invariant: a failed 1d6 may retry -- the roll is the caller's, "
+    "so this card only guarantees the branch stays selectable",
+    "L26": "invariant: adverse never defaults to the 1d6",
+    # --- architectural guards ---------------------------------------------
+    "L4": "guard: torch/lantern radii cannot differ (one constant)",
+    "L5": "guard: no illumination-quality distinction exists",
+    "L13": "guard: import graph -- no time machinery",
+    "L14": "guard: import graph -- no second counter/clock",
+    "L15": "guard: no burn-out event/proration (absent from the API)",
+    "L15b": "guard: exhaustion produces no world state (deplete returns sources)",
+    "L16": "guard: no hour->turn arithmetic in the parsed module",
+    "L19b": "guard: no round state, no flag mutation",
+    "L25": "guard: no skill check resolved here (import graph)",
+    "L29": "guard: no NO_LIGHT/world claim from absence",
+    "L30": "guard: no DIM_LIGHT from 'normal dungeon conditions' -- no "
+    "Visibility type exists to express it",
+    "L31": "guard: no Visibility category produced (API shape)",
+    "L32": "guard: no infravision parameter exists",
+    "L33": "guard: no distance dice (no RNG imported)",
+    "L35": "guard: surprise is not a parameter of any function",
+    "L36": "guard: no light->distance path (no distance operation exists)",
+    "L37a": "guard: complete darkness never established here",
+    "L38": "guard: no movement multiplier (import graph)",
+    "L39": "guard: no save/attack/AC values (import graph)",
+    "L40": "guard: infravision never decided (no parameter)",
+    "L41": "guard: no magical light (LightSourceKind closed at two)",
+    "L42": "guard: no CHAR-004 economic field accessed (AST)",
+    "L43": "guard: no ration name or operation",
+    "L44": "guard: no starvation name or operation",
+    "L45": "guard: torch-as-weapon -- no weapon operation exists",
+    "L46": "guard: oil-as-missile/pursuit -- no such operation exists",
+    # --- routed / non-owned ------------------------------------------------
+    "L37": "routed: blindness predicate not asserted; illumination facts only",
+    "L47": "routed: reports any_mundane_source_lit; item/skill mechanic not owned",
+}
+
+
+def test_every_approved_case_is_accounted_for() -> None:
+    """§13 — the complete ledger, reconciled against the finished card.
+
+    Many cases are discharged by **absence** — no such type, parameter or
+    operation exists — which is a stronger guarantee than a runtime
+    assertion but leaves no case ID in a test name. This map is the audit
+    trail for those, so no case is accidentally unaccounted for.
+
+    **No code was written to turn a non-owned assertion into executable
+    behavior**; the two routed entries stay routed.
+    """
+    card = (
+        pathlib.Path(__file__).resolve().parents[3]
+        / "docs/rules/exploration/light_and_exploration_resources.md"
+    ).read_text(encoding="utf-8")
+    approved = set(re.findall(r"^\| (L\d+[a-z]?) \|", card, re.M))
+
+    mapped = {k for k in CASE_DISCHARGE if not k.endswith("_")}
+
+    assert approved - mapped == set(), f"approved case not accounted for: {approved - mapped}"
+    assert mapped - approved == set(), f"mapped case not in the card: {mapped - approved}"
+    assert len(approved) == 53
+
+
 # --- Architectural guard: no second clock ----------------------------------
 
 
@@ -767,7 +1010,6 @@ def test_this_module_imports_no_rng_skill_encounter_combat_or_magic_machinery() 
         "encounter",
         "combat",
         "magic",
-        "equipment",
     }
     offending = {
         module
@@ -775,34 +1017,24 @@ def test_this_module_imports_no_rng_skill_encounter_combat_or_magic_machinery() 
         if forbidden_tokens & {part.lower() for part in module.replace(".", "_").split("_")}
     }
     assert offending == set(), f"forbidden dependency: {offending}"
-    # Positively: the module's whole dependency surface, stated.
-    assert imported == {
-        "__future__",
-        "collections.abc",
-        "dataclasses",
-        "enum",
-        "types",
-        "typing",
-        "rules.exploration.errors",
-    }
+    # `equipment` is NOT forbidden here: Slice D consumes CHAR-004 identities
+    # legitimately. That it reads no economic field is a separate, stronger
+    # guard -- test_no_catalog_economic_field_is_ever_accessed. The complete
+    # import surface is asserted by test_the_complete_production_dependency_surface.
 
 
 def test_no_unauthorized_slice_behaviour_is_exposed() -> None:
-    """Slices A, B and C are authorized; D is not.
+    """All four slices are now authorized, so this guard protects only the
+    card's **permanently excluded** responsibilities (§B, implementation
+    plan §4) — the ones no slice may ever add.
 
-    ``ignition_outcome`` is Slice C and is expected. What must not appear is
-    CHAR-004 catalog integration (Slice D) or any of the card's permanently
-    excluded responsibilities (implementation plan §4, §14).
-
-    Note that ``skill`` is NOT forbidden as a token: ``ROUTED_SKILL_CHECK``
-    legitimately *names* the owner it routes to. That the resolver is not
-    imported is proved by the import-graph guard, which is the authoritative
-    check — a name test could not establish it either way.
+    ``catalog_identity`` and friends are Slice D and are expected; that they
+    consume identity only is proved by the economic-field guard. ``skill`` is
+    likewise not forbidden: ``ROUTED_SKILL_CHECK`` legitimately *names* the
+    owner it routes to, and a name test could not establish whether the
+    resolver is imported — the import graph does that.
     """
     forbidden = {
-        "catalog",
-        "item",
-        "equipment",
         "rng",
         "random",
         "visibility",
@@ -814,6 +1046,10 @@ def test_no_unauthorized_slice_behaviour_is_exposed() -> None:
         "starvation",
         "weapon",
         "missile",
+        "price",
+        "cost",
+        "coin",
+        "encumbrance",
     }
     # Matched on whole underscore-separated tokens, never as substrings:
     # "FRESH_DURATION_TURNS" contains the letters of "ration", and a naive

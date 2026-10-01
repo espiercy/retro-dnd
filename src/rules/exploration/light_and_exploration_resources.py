@@ -39,6 +39,8 @@ from enum import Enum, auto
 from types import MappingProxyType
 from typing import Final
 
+from rules.character_creation.equipment import TORCH as _TORCH_ITEM
+from rules.character_creation.equipment import Item, catalog_item
 from rules.exploration.errors import IgnitionAttemptLimitError, IgnitionNotDefinedError
 
 __all__ = [
@@ -51,10 +53,13 @@ __all__ = [
     "LightSource",
     "LightSourceKind",
     "MundaneLightContribution",
+    "catalog_identity",
     "deplete",
     "ignition_outcome",
     "mundane_light_contribution",
+    "oil_flask_identity",
     "refuel_lantern",
+    "tinderbox_identity",
 ]
 
 
@@ -374,6 +379,70 @@ class MundaneLightContribution:
         distinction is representable (approved cases **L4**, **L5**).
         """
         return MUNDANE_LIGHT_RADIUS_FEET if self.lit_sources else None
+
+
+_CATALOG_NAMES: Final = MappingProxyType(
+    {
+        "LANTERN": "Lantern",
+        "OIL_FLASK": "Oil",
+        "TINDERBOX": "Tinder box",
+    }
+)
+"""**The one place** canonical `CHAR-004` catalog names appear in this card.
+
+String coupling is confined here rather than scattered across call sites
+(implementation plan §9.2). The spellings are `CHAR-004`'s own and are
+case-sensitive: *"Tinder box"* is two words, and ``"Oil"`` is the
+Adventuring-Gear row — **not** ``"Oil, Burning"``, which is the Weapons row
+and belongs to `COMBAT-*`.
+
+The torch is absent deliberately: `CHAR-004` **exports** it as
+:data:`~rules.character_creation.equipment.TORCH`, because it is the one
+commodity appearing in both catalogs and needed disambiguating. The
+exported identity is used directly, per the human adjudication of
+2026-10-01, and `CHAR-004` is **not** modified to add convenience exports
+for the other three.
+"""
+
+_LIGHT_SOURCE_IDENTITIES: Final = MappingProxyType(
+    {
+        LightSourceKind.TORCH: _TORCH_ITEM,
+        LightSourceKind.LANTERN: catalog_item(_CATALOG_NAMES["LANTERN"]),
+    }
+)
+
+
+def catalog_identity(kind: LightSourceKind) -> Item:
+    """The `CHAR-004` catalog row this light source **is**.
+
+    **Identity consumption only.** This card reads an item's identity so a
+    caller can reconcile a light source against inventory; it reads no
+    economic field and derives nothing from one. Price, encumbrance, price
+    form, capacity, size, traits, material and legality are all `CHAR-004`'s
+    and are never consulted here (Rule Card §C; guard `L42`, which asserts
+    this structurally over the parsed module rather than by text search).
+
+    This card is **not** a second equipment catalog: it holds no row, no
+    name beyond :data:`_CATALOG_NAMES`, and no value copied from one.
+    """
+    if not isinstance(kind, LightSourceKind):
+        raise ValueError(f"kind must be a LightSourceKind, got {kind!r}")
+    return _LIGHT_SOURCE_IDENTITIES[kind]
+
+
+def oil_flask_identity() -> Item:
+    """The `CHAR-004` row for a flask of lamp oil — the lantern's fuel.
+
+    The Adventuring-Gear ``"Oil"`` row. **Not** ``"Oil, Burning"``: that is
+    the Weapons row, and oil thrown as a missile is `COMBAT-*`'s (Rule Card
+    §B; approved case `L46`).
+    """
+    return catalog_item(_CATALOG_NAMES["OIL_FLASK"])
+
+
+def tinderbox_identity() -> Item:
+    """The `CHAR-004` row for a tinderbox — the ignition implement of §5."""
+    return catalog_item(_CATALOG_NAMES["TINDERBOX"])
 
 
 class IgnitionConditions(Enum):
