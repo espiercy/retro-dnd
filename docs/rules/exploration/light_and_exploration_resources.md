@@ -36,6 +36,19 @@ Light & Exploration Resources
 > `ARCHITECTURE.md` §15.2 step 4. The `EXP-006` Pre-Code Gate assessment is recorded at
 > `docs/technical/EXP-006_PRE_CODE_GATE.md`.
 
+> **Bounded synthesis correction, 2026-10-01 — refuelling does not ignite.** Under explicit human
+> adjudication during Slice-B review, §4 and case `L12` are corrected: supplying a further flask
+> to an expended lantern restores `remaining_turns` to `24` and **leaves it unlit**. The earlier
+> `L12` wording — *"contributes illumination again"* — asserted an ignition this card never
+> establishes, and is **withdrawn**. Fuel availability and ignition state are independent;
+> ignition is §5's, and is reached only by a separately authorized operation.
+>
+> **This is a correction of Stage-B synthesis wording to match the adjudicated fuel/ignition
+> separation. It is NOT a Simulator Ruling, NOT a Human-Approved Variant, NOT alternate-source
+> completion, and NOT new source research.** No Stage-A evidence is touched, and the card's
+> provenance totals are unchanged: **Simulator Ruling NONE, Alternate-Source Compatible Completion
+> NONE, Human-Approved Variant NONE.**
+
 > **Bounded Rule Card remediation applied 2026-10-01 on human adjudication.** Human review did
 > **not** approve the first submission; it found three related Stage-B synthesis defects at the
 > boundary between *mundane light-resource state* and *world/encounter visibility and darkness
@@ -257,8 +270,29 @@ source exhausted  ->  the party or the world is dark         <- NOT a consequenc
 
 RC states **no expiry semantics** (§Undefined 1), so this card still synthesizes **no burn-out
 event, no partial-turn proration, no extra action or cost, no automatic party darkness, no
-`NO_LIGHT`, and no blindness**. A lantern reaching zero consumes its flask; a further flask may
-be supplied, which resets `remaining_turns` to `24`.
+`NO_LIGHT`, and no blindness**.
+
+**Refuelling restores fuel; it does not ignite** (human adjudication 2026-10-01). A lantern
+reaching zero consumes its flask, and a further flask may be supplied, which **restores
+`remaining_turns` to `24` and leaves the lantern unlit**:
+
+```text
+expended lantern + new flask  ->  remaining_turns = 24
+                              ->  lit = False
+                              ->  contributes NO illumination
+```
+
+**Fuel availability and ignition state are independent.** RC's §4 sentence establishes that a
+further flask restores the lantern's *fuel duration*; it establishes **no** automatic ignition or
+relighting. A refuelled lantern becomes *capable* of contributing illumination only after a
+separately authorized **ignition** operation (§5) changes its `lit` state. Supplying a flask is
+not that operation.
+
+The card states this only for a lantern that has **reached zero**. What supplying a flask to a
+partly-full lantern does is **not established**, and no arithmetic is assigned to it — no topping
+up to `24`, no adding `24`, no partial-flask arithmetic. The operation is **refused
+deterministically**, an API precondition derived from this stated scope rather than a new
+mechanic.
 
 ### 5. Ignition
 
@@ -458,7 +492,8 @@ Case IDs use the `L` series (Light), distinct from `CHAR-004`'s `E`, `CHAR-005`'
 | L9 | Lit torch, `6` elapsed turns | `0` remaining; **`EXPENDED`**; **that source contributes no illumination** and leaves `lit_sources` |
 | L10 | Lit torch, `9` elapsed turns | `0`, **floored — not negative** |
 | L11 | **Unlit** torch, `3` elapsed turns | `6` remaining — unlit sources do not deplete |
-| L12 | Lantern `EXPENDED`, new flask supplied | `24` remaining; contributes illumination again |
+| L12 | Lantern `EXPENDED`, new flask supplied | `24` remaining; **`lit = False`** — **no illumination contribution until separately ignited** (§5). Refuelling restores fuel, not ignition |
+| L12a | **Refuelling a lantern that has not reached zero** | **REFUSED** — the card states a further flask only for a lantern *reaching zero*; no top-up or additive arithmetic is assigned |
 | L13 | **This card advancing or counting turns itself** | **MUST NOT OCCUR** — guard test; `EXP-002` is sole authority |
 | L14 | **Any second turn counter, clock or elapsed-time field owned here** | **MUST NOT EXIST** — guard test |
 | L15 | **A burn-out event, partial-turn proration, or any extra action/cost at zero** | **MUST NOT EXIST** — guard test; RC states no expiry semantics |
