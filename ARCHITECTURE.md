@@ -509,6 +509,17 @@ This does not authorize or select another cluster; subsequent historical-rules w
 
 **`CLUSTER-003` HISTORICAL-RULES IMPLEMENTATION: `NOT AUTHORIZED`.** Step (4) above is outstanding and is a human act. The governance distinction recorded for `CLUSTER-001` and `CLUSTER-002` applies unchanged: clearing steps for one cluster states nothing about any other, and §16's general Pre-Code Development Gate — already `CLEARED` project-wide — is neither re-performed nor weakened by this entry.
 
+**Status update (2026-10-01) — `CLUSTER-004` step (3) satisfied for `EXP-006` only; steps (2)–(4) otherwise outstanding.**
+
+- **Step 1 — Rules Cyclopedia V1 inventory:** `COMPLETE / APPROVED` (unchanged from 2026-08-16, above).
+- **Step 2 — `CLUSTER-004` boundary:** `APPROVED` 2026-09-27 — `EXP-006` + `ENC-005`; see `docs/rules/clusters/CLUSTER-004-BOUNDARY-CORRECTION.md`. `EXP-004` and `EXP-010` are explicitly **outside** it. **`ENC-005` Stage B is `DEFERRED`** — five of its six executable checklist steps depend on unresearched provider cards, materially the reason `EXP-010` was deferred — so the cluster's card set is **not** complete.
+- **Step 3 — required Rule Cards:** **PARTIAL.** `EXP-006` `APPROVED` 2026-10-01, after a bounded Stage-B remediation of three synthesis defects at the mundane-light / world-illumination boundary. **The card carries no Simulator Ruling, no `Alternate-Source Compatible Completion` and no `Human-Approved Variant`.** `ENC-005` has `ACCEPTED` Stage-A evidence but **no Rule Card**.
+- **Step 4 — implementation readiness:** **NOT (RE-)APPROVED.** No implementation plan exists for `EXP-006` or for `CLUSTER-004`, and none was drafted.
+
+**`EXP-006` PRE-CODE GATE: `PASS` — 2026-10-01.** The per-card readiness assessment against §15.1's five criteria is recorded at `docs/technical/EXP-006_PRE_CODE_GATE.md`: **no blocking defects**, three non-blocking implementation cautions. The card consumes only **landed** cards (`EXP-002`, `CHAR-004`); every unresearched dependency is **downstream-only** and is never called by `EXP-006`. **This `PASS` is a readiness finding, not an authorization**, and it is scoped to `EXP-006` alone — it states nothing about `ENC-005` or about `CLUSTER-004` as a whole.
+
+**`CLUSTER-004` HISTORICAL-RULES IMPLEMENTATION: `NOT AUTHORIZED`.** Steps (2)–(4) are outstanding and step (4) is a human act. The governance distinction recorded for `CLUSTER-001`, `CLUSTER-002` and `CLUSTER-003` applies unchanged, and §16's general Pre-Code Development Gate — already `CLEARED` project-wide — is neither re-performed nor weakened by this entry.
+
 ## 16. Pre-Code Development Gate
 
 Production code must not begin — including Issue 1 (§15) — until a human has reviewed and approved each of the following foundational items:

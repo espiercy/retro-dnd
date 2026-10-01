@@ -16,7 +16,25 @@ Light & Exploration Resources
 
 ## Status
 
-`READY FOR HUMAN RULE-CARD REVIEW` *(resubmitted after bounded remediation)*
+`APPROVED`
+
+> **Approved by the human project owner, 2026-10-01**, as remediated at `b9af227`. Stage A:
+> `ACCEPTED`. The approved card carries **no Simulator Ruling, no `Alternate-Source Compatible
+> Completion` and no `Human-Approved Variant`**.
+>
+> **Ratified as approved, without further change to the submitted contract:** the §1–§8 mechanical
+> specification and §A–§E boundaries, and all eight bounded-remediation findings —
+> `normal dungeon conditions → DIM_LIGHT` **withdrawn**; `EXP-006` owns **mundane-light
+> contribution, not global/world illumination**; absence of its own light **does not establish
+> complete darkness**; it **does not produce** encounter `Visibility`; it **does not establish**
+> blindness; **surprise is not an input** to mundane-light-state reporting; an exhausted source
+> **ceases contributing its own illumination** as a Necessary Mechanical Consequence; and
+> exhaustion of one source **does not imply** party/world darkness.
+>
+> **Approval of this card does not authorize implementation.** `CLUSTER-004` historical-rules
+> implementation is **NOT AUTHORIZED** and requires separate explicit human authorization under
+> `ARCHITECTURE.md` §15.2 step 4. The `EXP-006` Pre-Code Gate assessment is recorded at
+> `docs/technical/EXP-006_PRE_CODE_GATE.md`.
 
 > **Bounded Rule Card remediation applied 2026-10-01 on human adjudication.** Human review did
 > **not** approve the first submission; it found three related Stage-B synthesis defects at the
@@ -579,8 +597,15 @@ withdrawn; `ENC-001` owns it); that `any_lit == false` establishes darkness or b
 
 ## Approval
 
-- Approved by: *(pending human project owner)*
-- Date: *(pending)*
+- Approved by: **Human project owner**
+- Date: **2026-10-01**
+- Approved at: **`b9af2270f80d67def24b913c264f5f133628452e`**
+- Notes: Ratifies the §1–§8 mechanical contract and the §A–§E boundaries. **This card owns no
+  Simulator Ruling** — every clause is `Rules Cyclopedia Explicit` or a necessary consequence of
+  one. The eight bounded-remediation findings are accepted as listed in §Status. Six RC silences,
+  plus the unowned complete-darkness world-state predicate (Open Question 7), **remain named and
+  guarded rather than filled, by express approval**. Rations and starvation causation **remain
+  deliberately unassigned**. Implementation is **not** authorized by this approval.
 
 **Submitted contract:** the §1–§8 mechanical specification and §A–§E boundaries, carrying **no
 Simulator Ruling**, **no `Alternate-Source Compatible Completion`** and **no `Human-Approved

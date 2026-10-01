@@ -1,0 +1,296 @@
+# `EXP-006` — Pre-Code Gate Assessment
+
+## 0. Outcome
+
+```text
+PRE-CODE GATE: PASS
+
+Card:        EXP-006 -- Light & Exploration Resources
+Approved:    2026-10-01, human project owner, at b9af227
+Assessed:    2026-10-01
+Blocking defects:      NONE
+Non-blocking cautions: 3
+```
+
+**This `PASS` is a readiness finding, not an authorization.** It states that the approved Rule
+Card is complete, deterministic, bounded and dependency-safe enough to permit **drafting an
+implementation plan**. It does not authorize an implementation plan, production code, production
+tests, or `CLUSTER-004` implementation, all of which remain separate human acts under
+`ARCHITECTURE.md` §15.2 step 4.
+
+---
+
+## 1. Procedure used
+
+### 1.1 Which gate this is
+
+This is the **per-card readiness assessment** modelled on `docs/technical/CLUSTER-003_PRE_CODE_GATE.md`
+and evaluated against `ARCHITECTURE.md` §15.1's five criteria. `ARCHITECTURE.md` §16's
+project-wide Pre-Code Development Gate is already `CLEARED` (2026-08-15) and is **neither
+re-performed nor weakened** by this document.
+
+### 1.2 Why no implementation plan was drafted
+
+Drafting one is **not a required artifact of this gate** — the `CLUSTER-003` precedent (§1.2 of
+that record) establishes that explicitly — and the authorizing direction for this task prohibits
+it. None exists and none was begun.
+
+### 1.3 Sources used
+
+The approved Rule Card, the accepted Stage-A evidence packet, current approved governance, and
+the landed source tree. **No new RC source research was performed.**
+
+---
+
+## 2. `ARCHITECTURE.md` §15.1 — the five readiness criteria
+
+| # | Criterion | Finding |
+|---|---|---|
+| 1 | **Intended behavioral scope clearly defined** | **MET.** §A states what the card owns; §B lists fourteen exclusions by name; §6 fixes the entire output surface at three fields |
+| 2 | **All historical rules required to execute that scope identified** | **MET.** Stage A passed independent `DEC-0010` completeness review (review 5, after four `FAIL`s). Every executable clause traces to a cited, visually verified RC page |
+| 3 | **All Rule Cards required by that scope are `APPROVED`** | **MET.** `EXP-006` `APPROVED` 2026-10-01. Its two *required* dependencies — `EXP-002`, `CHAR-004` — are `APPROVED` **and implemented** (§4) |
+| 4 | **External dependencies not implemented in the cluster have a stable approved contract sufficient for integration** | **MET.** The only consumed externals are landed. Every unresearched card is **downstream-only** and is reached, if at all, by the consumer — never called by `EXP-006` (§4) |
+| 5 | **No unresolved rules ambiguity the implementation agent would need to adjudicate** | **MET.** Seven silences are named; **each has a deterministic disposition** — refuse, floor, or do-not-produce — so the implementer decides nothing (§5) |
+
+---
+
+## 3. Owned mechanics — confirmed against the approved card
+
+**Executable ownership is limited to exactly these ten**, and the card contains nothing else
+executable:
+
+```text
+torch mundane illumination state           §2, §6      L1, L3, L27
+lantern mundane illumination state         §2, §6      L2, L27
+finite source duration                     §3          L6, L7
+depletion vs authoritative EXP-002 turns   §4          L8, L10, L11
+oil as lantern fuel, as specified          §3, §4      L7, L12
+tinderbox ordinary-condition ignition      §5          L17, L18, L19
+Fire-Building branch selection             §5          L20, L21, L22
+refusal of source-undefined ignition       §5          L23, L24
+mundane-light contribution output          §6          L27, L28, L34
+source-local exhaustion                    §4          L9, L12, L15a
+```
+
+**Confirmed NOT owned.** Each is excluded in §B and carries at least one guard test:
+
+| Not owned | Guard |
+|---|---|
+| global / environmental darkness | L29, L37a |
+| encounter `Visibility` | L30, L31, L32 |
+| encounter distance | L33, L36 |
+| surprise | L34, L35 |
+| blindness determination | L37, L37a |
+| blindness consequences | L38, L39 |
+| magical illumination | L41 |
+| infravision possession | L40 |
+| skill-check resolution | L25 |
+| dungeon-time advancement | L13, L14 |
+| equipment pricing / encumbrance | L42 |
+| rations | L43 |
+| starvation causation | L44 |
+| torch-as-weapon | L45 |
+| oil-as-missile / pursuit | L46 |
+
+**Verified mechanically**: `infravision` does not appear anywhere in §1–§5 of the specification.
+The pre-remediation card consumed it to classify visibility; the remediation removed that
+coupling, and the absence is now a checkable property rather than a claim.
+
+---
+
+## 4. Dependency classification
+
+The distinction that decides this gate is **consumed** versus **routed**. A card `EXP-006` calls
+must be implementable. A card that calls `EXP-006`, or that a *consumer* later calls, need not be.
+
+### 4.1 Required to implement `EXP-006` — both landed
+
+| Card | Status | What is consumed | Evidence |
+|---|---|---|---|
+| **`EXP-002`** | `APPROVED`, **implemented** | `elapsed_turns` only | `src/rules/exploration/turn_credit.py` (`TurnCredit`, `TurnCreditOrigin`), `dungeon_turn_time_accounting.py` (`DungeonTimeAccounting`) |
+| **`CHAR-004`** | `APPROVED`, **implemented** | item **identity only** — never price or encumbrance | `src/rules/character_creation/equipment.py` carries `"TORCH"`, `Lantern`, `Oil`, `Tinder box` |
+
+### 4.2 Routed / downstream only — **not required to implement `EXP-006`**
+
+| Card | Status | Why not required |
+|---|---|---|
+| `CHAR-012` | Unresearched | `has_skill: bool` is a **caller-supplied input** (§1). The adverse branch emits a **routed request**; `EXP-006` resolves no check (L25) |
+| `CHAR-009` | Unresearched | Infravision is **not an input** to any clause. Appears only as a routing destination in §8 |
+| `CHAR-005` | `APPROVED`, implemented | Pure downstream. `EXP-006` applies no multiplier (L38) |
+| `ENC-001` | Unresearched | Pure downstream. `EXP-006` produces no category and rolls no die (L31, L33) |
+| `COMBAT-*` | Unresearched | Pure downstream (L39, L45, L46) |
+| `MAGIC-*` | Unresearched | Excluded entirely (L41) |
+
+**None of the six was reopened or researched for this gate.**
+
+**Finding:** `EXP-006`'s unusual property is that **its unresearched dependencies are all on the
+output side**. It consumes two landed cards and nothing else. The post-remediation contract is
+what makes this true — the pre-remediation card consumed infravision and surprise, which would
+have coupled it to two unresearched cards.
+
+---
+
+## 5. Particular Pre-Code questions
+
+### A. Time dependency — **YES, without a second clock**
+
+`EXP-002` is sole authority. `EXP-006` receives `elapsed_turns` and performs one subtraction
+(§4). It holds no counter, no clock and no elapsed-time field; L13 and L14 are guard tests over
+exactly that. RC states both durations **in turns itself** (`six turns`, `24 turns`), so no
+conversion exists to get wrong (L16).
+
+### B. Equipment dependency — **YES, without reproducing catalog facts**
+
+`EXP-006` consumes identity only; `OilFlask` and `Tinderbox` are annotated
+`(identity/cost/enc: CHAR-004)` in §1. No price, price form, `Coin` or encumbrance value appears
+anywhere in §1–§8, and L42 guards emission. Legality is not referenced at all.
+
+### C. Skill dependency — **YES, with `CHAR-012` unimplemented**
+
+Branch selection is a pure function of three booleans (`has_skill`, `has_tinderbox`,
+`conditions`) producing one of four dispositions:
+
+```text
+AUTOMATIC              no roll
+ROLL_1d6_IGNITE_1_2    this card's own roll
+ROUTED_SKILL_CHECK     emit a request; CHAR-012 resolves
+REFUSE                 explanatory error
+```
+
+Only `ROUTED_SKILL_CHECK` touches `CHAR-012`, and it is **emitted, not resolved** — the DM-assigned
+penalty is an input to that check, not a value `EXP-006` must produce. **`EXP-006` is implementable
+today with `CHAR-012` entirely absent.**
+
+### D. Source exhaustion — **YES, precise enough**
+
+The card states the positive consequence and the three forbidden over-extensions separately:
+
+```text
+remaining_turns == 0  ->  THAT SOURCE contributes no illumination   (§4, Necessary Consequence)
+                      ->  NOT global darkness                       (L15b, L29, L37a)
+                      ->  NOT blindness                             (L37, L37a)
+                      ->  NOT encounter Visibility                  (L30, L31)
+```
+
+`L15a` is the decisive case: two lit torches, one expires, `any_mundane_source_lit` **remains
+`true`**. An implementation that conflated source-exhaustion with party-darkness fails it.
+
+### E. Output contract — **YES, deterministic and ownership-safe — with one caution**
+
+The three fields are fully determined, and §4 fixes the membership rule: an `EXPENDED` source
+**leaves `lit_sources`** and stops contributing to `max_mundane_radius_feet`. So:
+
+```text
+lit_sources             = sources that are lit AND remaining_turns > 0
+any_mundane_source_lit  = lit_sources is non-empty
+max_mundane_radius_feet = 30 if lit_sources else None
+```
+
+**The inconsistent state the gate asks about cannot arise in the output**: an exhausted source
+cannot appear as illumination-producing, because membership is conditioned on
+`remaining_turns > 0`.
+
+**Caution 1 (non-blocking)** — the card does not state whether `LightSource.lit` is itself set
+`false` at exhaustion, or remains `true` while the source is excluded by the duration condition.
+**No output depends on the answer**; both representations yield identical `lit_sources`,
+`any_mundane_source_lit` and `max_mundane_radius_feet`. This is an internal modelling choice for
+the implementation plan, **not an unresolved rules ambiguity**, and the implementer is not
+adjudicating a rule by picking one. Flagged rather than resolved here.
+
+### F. Ignition state transitions — **YES, with one intentional refusal**
+
+| Transition | Established? |
+|---|---|
+| `unlit → ignition attempted` | **Yes** — §5, all six branches |
+| `ignition attempted → lit` | **Yes** — automatic, or on `1–2` of `1d6`, one attempt per round |
+| `ignition attempted → still unlit` | **Yes** — L18, retry next round |
+| `lit → expended` | **Yes** — §4, at `remaining_turns == 0` |
+| `expended → refuelled` (lantern) | **Yes** — §4, a further flask resets to `24`; L12 confirms it contributes again |
+| `expended → refuelled` (torch) | **Not applicable** — a torch has no fuel; a fresh torch is a new source |
+| `lit → unlit` (deliberate extinguish) | **INTENTIONALLY UNAVAILABLE** — RC is silent (§Undefined 4). The implementation must **refuse deterministically**; no extinguish, relight or refill-timing procedure is invented |
+
+**No transition is silently invented.** The one unavailable transition is unavailable because RC
+does not state it, which the authorizing direction accepts provided refusal is deterministic — and
+it is.
+
+---
+
+## 6. Deterministic-case readiness — all 50 translate
+
+| Obligation type | Count | Examples |
+|---|---|---|
+| **Implementation test** | 18 | L1, L2, L6–L12, L17, L18, L20, L21, L27, L28, L34 |
+| **Boundary / guard — ownership** | 18 | L29, L31, L33, L37a, L38–L46 |
+| **Boundary / guard — internal** | 11 | L4, L5, L13–L16, L15b, L19, L23–L26, L30, L35, L36 |
+| **Routed dependency** | 3 | L22, L37, L47 |
+
+**No case fails to translate, and no case requires exceeding `EXP-006` ownership to test.**
+
+The guard-heavy profile (**29 of 50**) is a direct product of the bounded remediation: four cases
+that previously *asserted* behaviour now *forbid* it. `L34` inverted outright — from an `ERROR`
+when a surprise state was missing, to a **success** case, because surprise is no longer an input.
+
+**Caution 2 (non-blocking)** — the 29 guards are mostly **negative/architectural** assertions
+("this module must not import `ENC-001`", "no price value is emitted"). The `CLUSTER-003`
+precedent is directly relevant: guard tests written as substring checks over source text produced
+false positives, and the project moved to **AST/import-graph assertions**. The implementation plan
+should adopt that technique rather than rediscover it.
+
+**Caution 3 (non-blocking)** — `L22` and `L37` assert what the card **does not do** while also
+describing a routed outcome. They are testable as "returns a routed request / returns no
+predicate", but their *consumers* cannot be tested until `CHAR-012` and the complete-darkness
+owner exist. They are **routed-dependency tests, not integration tests**, and should be scoped as
+such.
+
+---
+
+## 7. Blockers
+
+```text
+NONE.
+```
+
+No `PRE-CODE BLOCKER — NOT ESTABLISHED BY APPROVED RULE CARD` condition was reached. Every
+question in §5 is answered from the approved card alone; nothing required inference or outside
+research.
+
+Seven RC silences remain, **by express approval**, each with a deterministic disposition:
+
+| Silence | Disposition | Blocks implementation? |
+|---|---|---|
+| Behaviour at zero beyond the source ceasing to burn | nothing synthesized | **No** — L15 |
+| Carried light → any `Visibility` category | not produced | **No** — `ENC-001` owns it |
+| Adverse ignition without `Fire-Building` | **refuse** | **No** — deterministic |
+| Deliberate extinguishing | transition unavailable, refuse | **No** |
+| Timetrack scope for light durations | not adopted | **No** — §4 uses `EXP-002` |
+| Water consumption rate | out of owned scope | **No** |
+| Complete-darkness world-state predicate owner | **not settled**, no owner invented | **No** — `EXP-006` never needs it |
+
+The last is the one worth the project owner's eye: it is an **open governance question**, not a
+rules gap, and `EXP-006` is deliberately implementable without it being answered.
+
+---
+
+## 8. Readiness statement
+
+```text
+PRE-CODE GATE: PASS -- 2026-10-01
+
+EXP-006 is ready for an IMPLEMENTATION PLAN to be drafted.
+
+This is NOT:
+    an implementation plan
+    authorization to draft one
+    authorization to write production code or production tests
+    CLUSTER-004 implementation authorization (ARCHITECTURE.md §15.2 step 4)
+```
+
+`CLUSTER-004` historical-rules implementation remains **NOT AUTHORIZED**. `ENC-005` Stage B
+remains **DEFERRED** and is untouched by this assessment.
+
+## 9. Provenance
+
+Assessed against the approved Rule Card at `b9af227`, the accepted Stage-A packet, `ARCHITECTURE.md`
+§15.1/§15.2/§16, and the landed source tree. **No new RC research. No production code, production
+test, or implementation plan was created.** Three non-blocking cautions are recorded above for the
+implementation plan to absorb.
