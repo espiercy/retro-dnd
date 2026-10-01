@@ -19,9 +19,10 @@ path**, which is behaviour a future developer needs the durable record of.
 
 - **Rule Card(s): none.** No Rule Card was researched, drafted, implemented or modified.
 - **Decision record produced by this work:**
-  `docs/decisions/DEC-0012-stage-a-evidence-integrity-gates.md`, `Proposed — awaiting human
-  approval`. An agent may not approve a project-wide process decision (`AGENTS.md` §12,
-  `DEVELOPMENT_WORKFLOW.md` §9).
+  `docs/decisions/DEC-0012-stage-a-evidence-integrity-gates.md`. Drafted `Proposed —
+  awaiting human approval`, because an agent may not approve a project-wide process decision
+  (`AGENTS.md` §12, `DEVELOPMENT_WORKFLOW.md` §9); **`Approved` by the human project owner
+  2026-10-01** and now in force.
 - **Governing inputs inspected directly, not from memory:** `DEC-0009`, `DEC-0010`,
   `DEC-0011`, `AGENTS.md`, `DEVELOPMENT_WORKFLOW.md`, `TESTING_STRATEGY.md`,
   `SOURCE_HIERARCHY.md`, `docs/rules/RULE_CARD_RESEARCH_PROTOCOL.md`,
@@ -66,8 +67,8 @@ path**, which is behaviour a future developer needs the durable record of.
 - `pyproject.toml` — pytest `pythonpath` gains `scripts` so the tool is importable under
   test. Coverage `source` is unchanged (`src` only).
 - `DEVELOPMENT_WORKFLOW.md` — §9.4's supersession illustration used `DEC-0012` as an
-  invented placeholder ID. A real `DEC-0012` now exists and supersedes nothing, so that
-  example asserted something false about real records; corrected in place to this
+  invented placeholder ID. A real `DEC-0012` now exists and does not supersede `DEC-0004`,
+  so that example asserted something false about real records; corrected in place to this
   repository's own real supersession (`DEC-0004` → `DEC-0005`), which §9.4 permits as a
   clerical fix. **A defect introduced by this work, found by checking references rather
   than assuming them.**
@@ -242,9 +243,13 @@ rather than treated as settled:
 
 ## 11. Known Limitations/Unresolved Issues
 
-1. **`DEC-0012` is `Proposed`, not `Approved`.** The protocol sections are in the repository
-   and the linter gate is live, but the governance record binding them is awaiting human
-   approval. The Stage-A research freeze it records remains in force until then.
+1. ~~**`DEC-0012` is `Proposed`, not `Approved`.**~~ → **Closed 2026-10-01.** `DEC-0012` is
+   `Approved` and its protocol amendments are in force. The blanket Stage-A freeze is
+   replaced by a controlled pilot authorization: one human-selected pilot card, and no second
+   Stage-A card until the pilot completes independent review and human evaluation
+   (`DEC-0012` item 15). **The pilot's four success criteria are fixed in advance and may not
+   be softened afterwards** — notably, if independent review #1 finds a governing object the
+   researcher should have enumerated, that counts against the remediation.
 2. **Four `CLUSTER-004` failure classes remain outside mechanical checking**, stated rather
    than glossed: stale self-description, an elision inside a verbatim quotation, a governing
    object nobody enumerated, and any judgement about whether research is *correct*. These
@@ -256,8 +261,10 @@ rather than treated as settled:
    (*"nothing in the source addresses…"*) will not be caught. Broadening the patterns trades
    false negatives for false positives; the list was kept narrow deliberately and can be
    extended when a real miss is observed.
-5. **The efficiency claim is a prediction, not a measurement.** Whether this reduces
-   `CLUSTER-005` to one independent review is unknown until a cluster runs under it.
+5. **The efficiency claim is a prediction, not a measurement, and the pilot is the test.**
+   Whether this reduces a cluster to one independent review is unknown until one runs under
+   it. The gate is live but **has still never governed a real Stage-A packet** — the first
+   post-`DEC-0012` packet is the real trial.
    `DEC-0012`'s rationale states the falsification condition: if the next cluster still needs
    four `FAIL` cycles, the diagnosis was wrong and should be revisited rather than reinforced.
 6. **A worktree-coordination collision occurred and was contained.** Two parallel Claude

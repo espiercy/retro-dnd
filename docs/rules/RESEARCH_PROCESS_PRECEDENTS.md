@@ -10,7 +10,7 @@
 
 | # | Precedent | Established by | Status |
 |---|---|---|---|
-| **P-001** | **When a primary source provides a General Index, General Index inspection is a required source-structure completeness instrument for `DEC-0010` research, alongside the Table of Contents and the Tables Index.** | `CLUSTER-003` Stage-A remediation pass 1, 2026-09-13 | **ELEVATED** into `RULE_CARD_RESEARCH_PROTOCOL.md` §9.9 by `DEC-0012` (drafted 2026-09-30; binding on that record's approval). See "Elevation" below. |
+| **P-001** | **When a primary source provides a General Index, General Index inspection is a required source-structure completeness instrument for `DEC-0010` research, alongside the Table of Contents and the Tables Index.** | `CLUSTER-003` Stage-A remediation pass 1, 2026-09-13 | **ELEVATED** into `RULE_CARD_RESEARCH_PROTOCOL.md` §9.9 by `DEC-0012`, `Approved` 2026-10-01 — **binding**. See "Elevation" below. |
 | **P-002** | **A `DEC-0011` mandatory source object — a conflict-precedence statement — must be sought by opening the front matter of every core source unit. A keyword sweep cannot establish that none exists.** | `CLUSTER-003` `DEC-0011` BECMI remediation 1, 2026-09-24 | **Precedent recorded; PARTIALLY covered, not elevated.** Its general lesson now binds for primary-source claims through `DEC-0012` §10.4; its alternate-source front-matter requirement is **not** elevated. See "Elevation" below. |
 
 ## Elevation record (added 2026-09-30)
@@ -168,4 +168,4 @@ PRECEDENT RECORDED -- NOT YET ELEVATED
 
 Elevating P-001 into `DEC-0010` or into `RULE_CARD_RESEARCH_PROTOCOL.md` §9.1's audit-class table would make it binding. Both are protected/authority documents, and neither was modified by this pass. **That elevation is a human decision.** It was not taken here because the assigning task directed a process note in preference to a constitutional rewrite.
 
-> **Superseded 2026-09-30.** The status above records the state at `CLUSTER-003` closure and is preserved as written. **`P-001` was subsequently ELEVATED** into `RULE_CARD_RESEARCH_PROTOCOL.md` §9.9 by `DEC-0012` (drafted 2026-09-30, `Proposed — awaiting human approval`), under a human-assigned process-remediation task, after the same failure mode recurred in `CLUSTER-004`. See the register's "Elevation record" section above.
+> **Superseded 2026-09-30.** The status above records the state at `CLUSTER-003` closure and is preserved as written. **`P-001` was subsequently ELEVATED** into `RULE_CARD_RESEARCH_PROTOCOL.md` §9.9 by `DEC-0012` (drafted 2026-09-30, **`Approved` 2026-10-01**), under a human-assigned process-remediation task, after the same failure mode recurred in `CLUSTER-004`. See the register's "Elevation record" section above.

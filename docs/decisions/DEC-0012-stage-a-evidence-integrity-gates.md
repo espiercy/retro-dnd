@@ -7,21 +7,44 @@ DEC-0012
 Stage-A Evidence-Integrity Gates, Packet Template, and Structural Linter
 
 ## Status
-Proposed — awaiting human approval
+Approved
 
 ## Date
-2026-09-30
+2026-10-01
 
-> **Lifecycle note.** Drafted 2026-09-30 under a human-assigned research-process
-> remediation task. It is recorded as `Proposed — awaiting human approval` because an
-> agent has no authority to approve a project-wide process decision
-> (`DEVELOPMENT_WORKFLOW.md` §9, `AGENTS.md` §12) — the same correction `DEC-0010`
-> records having had to make about itself. The status term matches the one `DEC-0010`
-> adopted for that state.
+> **Lifecycle history.** Drafted 2026-09-30 under a human-assigned research-process
+> remediation task; **approved by the human project owner 2026-10-01.** The `Date` field
+> above carries the approval date, per this repository's decision-record convention
+> (`DEC-0010`, `DEC-0011`). How this record reached approval is preserved rather than
+> erased:
 >
-> The assigning task authorized the governance edits, the template, the linter and its
-> tests; it did not authorize approving this record, lifting the Stage-A research freeze,
-> or any rules research.
+> - It was drafted `Proposed — awaiting human approval`, because an agent has no authority
+>   to approve a project-wide process decision (`DEVELOPMENT_WORKFLOW.md` §9,
+>   `AGENTS.md` §12) — the same correction `DEC-0010` records having had to make about
+>   itself. The status term matches the one `DEC-0010` adopted for that state.
+> - While proposed, human review identified that the linter was **structurally inert**:
+>   every Stage-A packet in the repository is grandfathered, so the gate linted zero files
+>   and passed vacuously. That is recorded as Decision item 12.1 and was remediated before
+>   approval — the canonical template is now linted as a reference packet, new-packet
+>   fixtures prove both the passing and failing paths, and the enforcement path is tested
+>   by exit code.
+> - Final human approval: **2026-10-01**, together with the specific approval of each gate
+>   enumerated in the Decision below, the template, the linter, the closed grandfather list,
+>   the anti-expansion tests, the fixtures, the `verify.py` integration, and the explicit
+>   direction that **independent completeness review remains mandatory and is not weakened.**
+>
+> **This record is now active authority, and the `RULE_CARD_RESEARCH_PROTOCOL.md`
+> amendments it makes are in force.** `DEC-0009`, `DEC-0010` and `DEC-0011` remain
+> `Approved` and are not superseded; this record amends their Stage-A process by adding
+> required steps.
+>
+> **Research-freeze disposition, recorded by the same human decision.** The blanket freeze
+> in Decision item 14 is **replaced by a controlled pilot authorization**: exactly **one**
+> new Stage-A Rule Card may run as the `DEC-0012` pilot, after repository
+> cleanup/integration is separately verified, and **no second Stage-A card may begin until
+> the pilot has completed its independent-review cycle and received human evaluation.** The
+> pilot's success criteria are fixed in advance at item 15 below and may not be softened or
+> reinterpreted afterwards.
 
 ## Context
 
@@ -272,6 +295,41 @@ remediation is accepted by the human project owner. Already-certified evidence c
 through later governance stages; in particular the authorized `EXP-006` Stage B is **not**
 invalidated by this record.
 
+> **Discharged 2026-10-01 on approval.** The blanket freeze is **replaced by a controlled
+> pilot authorization** (item 15). It is recorded here rather than deleted, because the
+> freeze is what the remediation was performed under.
+
+**15. Controlled pilot authorization and fixed success criteria.** Exactly **one** new
+Stage-A Rule Card runs as this record's pilot. It may begin only after repository
+cleanup/integration is separately verified, and the pilot card is **selected by the human
+project owner**, not by an agent. **No second Stage-A card may begin** until the pilot has
+completed its independent-review cycle and received human evaluation.
+
+The experiment succeeds only if the real pilot demonstrates all four of:
+
+```text
+1. the evidence linter runs on the real packet;
+2. the packet reaches independent review with all structural gates satisfied;
+3. independent review #1 finds NO previously uninspected governing object;
+4. no more than TWO independent completeness reviews are required to reach PASS.
+```
+
+**If review #1 uncovers a governing object the researcher should have enumerated under this
+record, that is evidence the remediation is not yet sufficient.** These criteria are fixed
+in advance and **must not be softened or reinterpreted after the fact** — which is the whole
+point of writing them down before the pilot runs. `DEC-0012`'s Rationale already states the
+falsification condition in the same spirit.
+
+**16. One active task, one Git worktree.** Concurrent repository-mutating work must not
+share a worktree. Before any task writes, it establishes `WORKTREE`, `BRANCH`, `HEAD`,
+`MAIN`, `ORIGIN/MAIN` and `STATUS`, and an unexpected branch or `HEAD` change is a **hard
+stop**. The pilot must not run in parallel with another repository-mutating research task.
+
+*Motivating defect: during this remediation two parallel tasks shared one worktree, a branch
+checkout by one changed the branch under the other, and a Stage-B commit landed on the
+remediation branch. Nothing was lost, but the collision cost a cleanup cycle and is exactly
+the class of error a worktree-per-task rule removes.*
+
 ### Check-to-failure map
 
 Every linter check answers *"would this have prevented or cheaply detected an actual
@@ -354,7 +412,8 @@ four, the diagnosis was wrong and should be revisited rather than reinforced.
    stating plainly that none of it is evidence). `pyproject.toml` adds `scripts` to pytest's
    `pythonpath` so the tool is importable under test.
 5a. `DEVELOPMENT_WORKFLOW.md` §9.4's supersession illustration previously used `DEC-0012`
-   as an invented placeholder ID. Now that a real `DEC-0012` exists and supersedes nothing,
+   as an invented placeholder ID. Now that a real `DEC-0012` exists and does not supersede
+   `DEC-0004`,
    that example asserted something false about real records, so it was corrected in place to
    this repository's own real supersession (`DEC-0004` → `DEC-0005`) as the clerical fix §9.4
    itself permits. No substantive change to that document.
@@ -379,8 +438,18 @@ four, the diagnosis was wrong and should be revisited rather than reinforced.
    evidence. No prior `FAIL` is retroactively relabelled.
 10. No production simulator code, Rule Card, or rules test is created or modified by this
     record. It changes the research process and its tooling only.
-11. The Stage-A research freeze in Decision item 14 remains in force until a human project
-    owner accepts this remediation.
+11. The Stage-A research freeze in Decision item 14 was in force until the human project
+    owner accepted this remediation. **Accepted 2026-10-01**, and the blanket freeze is now
+    replaced by the controlled pilot authorization in Decision item 15: one pilot card,
+    human-selected, after cleanup/integration is separately verified, with no second Stage-A
+    card until the pilot has completed independent review and human evaluation.
+12. **Independent completeness review is explicitly unweakened by this approval.** The human
+    decision approving this record named that requirement specifically. §10.1.2 stands in
+    full: it is mandatory for every substantial Stage-A package, the original researcher may
+    never certify its own packet, and the reviewer remains free to return `FAIL`. §10.1.3
+    restates the reviewer's *expected difficulty*, never its authority — and the pilot
+    criteria at item 15 treat a `FAIL` that finds an uninspected governing object as evidence
+    against the remediation, not against the reviewer.
 
 ## Supersedes
 
