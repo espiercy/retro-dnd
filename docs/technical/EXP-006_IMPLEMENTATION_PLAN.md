@@ -1,0 +1,512 @@
+# `EXP-006` — Implementation Plan
+
+## 1. Status / Purpose
+
+```text
+STATUS:     DRAFT -- awaiting human implementation-plan review
+CARD:       EXP-006 Light & Exploration Resources, APPROVED 2026-10-01
+GATE:       EXP-006 PRE-CODE GATE: PASS, 2026-10-01
+SCOPE:      SINGLE-CARD slice.  ENC-005 is Stage-B DEFERRED and is NOT in this plan.
+AUTHORIZES: nothing.  This document is a plan; implementation remains a separate human act
+            under ARCHITECTURE.md §15.2 step 4.
+```
+
+`EXP-006` is planned as a single-card slice on the Pre-Code Gate's finding that **its only
+consumed dependencies are landed and implemented** (`EXP-002`, `CHAR-004`), and that every
+unresearched dependency is a **downstream consumer** that need not exist for `EXP-006` to be
+implemented.
+
+**No new Rules Cyclopedia research was performed for this plan, and the approved Rule Card is not
+reinterpreted anywhere in it.**
+
+## 2. Authoritative inputs
+
+| Input | Role |
+|---|---|
+| `docs/rules/exploration/light_and_exploration_resources.md` (`APPROVED`) | The sole rules authority. Every behavior below cites a §/case |
+| `docs/technical/EXP-006_PRE_CODE_GATE.md` (`PASS`) | Readiness findings and three cautions this plan absorbs |
+| `docs/technical/CLUSTER-003_IMPLEMENTATION_PLAN.md` | Structural precedent; the AST-guard lesson |
+| `src/rules/character_creation/equipment.py` (`CHAR-004`, landed) | Item identity |
+| `src/rules/exploration/dungeon_turn_time_accounting.py`, `turn_credit.py` (`EXP-002`, landed) | Elapsed-turn authority |
+| `ARCHITECTURE.md`, `TESTING_STRATEGY.md`, `DEVELOPMENT_WORKFLOW.md` | Conventions |
+
+## 3. Binding implementation scope
+
+Exactly the thirteen approved mechanics, and nothing else:
+
+```text
+mundane light-source state                 §2, §6
+torch 30' contribution                     §2         L1, L3
+lantern 30' contribution                   §2         L2
+torch six-turn duration                    §3         L6
+lantern 24-turn-per-flask duration         §3         L7
+depletion using EXP-002 elapsed turns      §4         L8, L10, L11
+exhausted source ceases contributing       §4         L9, L12, L15a
+oil as lantern fuel, as approved           §3, §4     L7, L12
+tinderbox ordinary-condition ignition      §5         L17, L18, L19
+Fire-Building branch selection             §5         L20, L21
+routed skill-check request (adverse)       §5         L22
+deterministic refusal of undefined paths   §5         L23, L24
+mundane-light contribution output          §6         L27, L28, L34
+```
+
+## 4. Hard non-goals — **no placeholder implementation for any of these**
+
+```text
+global/world darkness          encounter Visibility        encounter distance
+surprise                       blindness determination     blindness penalties
+infravision possession         magical light/darkness      CHAR-012 skill resolution
+dungeon-time advancement       equipment pricing           equipment encumbrance
+equipment legality             rations                     starvation causation
+torch weapon behavior          oil missile behavior        pursuit-delay mechanics
+```
+
+Not stubbed, not `NotImplementedError`, not a parameter reserved "for later". **Absent.** §13's
+guard strategy makes several of these mechanically checkable rather than merely asserted.
+
+## 5. Architecture placement
+
+| Question | Recommendation |
+|---|---|
+| **Module path** | **`src/rules/exploration/light_and_exploration_resources.py`** — one new module |
+| **Extend an existing module instead?** | **No.** `dungeon_movement.py` (`EXP-003`) and `dungeon_turn_time_accounting.py` (`EXP-002`) are single-card modules; the package convention is **one module per Rule Card, named after the card's document**. Extending either would couple two cards' lifecycles and blur the §4 non-goals |
+| **Type placement** | All public types in that one module. **No new package, no `types.py`, no shared abstraction** |
+| **Import direction** | `exploration.light_and_exploration_resources` → `character_creation.equipment` (identity only). **Nothing imports it** in this slice: its consumers are unresearched |
+| **New error module** | **`src/rules/exploration/errors.py`** — see §10 |
+
+**Deliberately not created:** no illumination interface/protocol, no light-source registry, no
+"environment" or "world state" type, no plugin seam for magical light. `ENC-001`, `COMBAT-*` and
+`MAGIC-*` are unresearched; an abstraction shaped for them now would be speculation, and the
+approved card's §B forbids the behavior such an abstraction would exist to host.
+
+## 6. State model — recommendation
+
+### 6.1 The gate's open modelling question, answered
+
+> Does exhaustion set `lit = false`, or can `lit` remain historical state while illumination
+> contribution also requires `remaining_turns > 0`?
+
+**Recommendation: exhaustion sets `lit = False`, *and* the pair `(lit=True, remaining_turns=0)` is
+rejected by a construction invariant.** The two halves together are what make this safe — the
+first makes the transition explicit, the second makes the bad state **unconstructible by anyone**,
+including a future caller this plan cannot see.
+
+```python
+@dataclass(frozen=True, slots=True)
+class LightSource:
+    kind: LightSourceKind
+    remaining_turns: int
+    lit: bool
+
+    def __post_init__(self) -> None:
+        # structural: ValueError, per the exploration convention (§10)
+        # INVARIANT: an exhausted source is never lit.
+        if self.lit and self.remaining_turns == 0:
+            raise ValueError(...)
+```
+
+**Why this representation over the alternatives:**
+
+| Criterion | Finding |
+|---|---|
+| **Impossible-state reduction** | The one state the approved card forbids — an exhausted source contributing light — **cannot be constructed**. This is the strongest available form of §6's requirement, which accepts "impossible **or** explicitly rejected"; this is both |
+| **Clarity** | `lit` answers "is it burning?", `remaining_turns` answers "for how much longer?". Neither silently encodes the other |
+| **Type/API simplicity** | One frozen value object, two fields plus a kind. No wrapper, no result union for state |
+| **Testability** | `L15a` (two torches, one expires) and `L9` are direct constructions; the invariant itself is a one-line `pytest.raises` |
+| **Repository consistency** | Matches `TurnCredit` and `MovementRate` exactly: frozen, slotted, `__post_init__` validation, `bool`-excluded ints |
+
+**Why an unlit source must remain representable** (and so why the simpler "a `LightSource` is
+always lit" model is rejected): approved case **`L11`** — *"**Unlit** torch, `3` elapsed turns →
+`6` remaining — unlit sources do not deplete"* — requires an unlit source that **carries duration
+state**. A model that only represented lit sources could not express `L11` at all.
+
+**`bool` exclusion.** `remaining_turns` rejects `bool` explicitly, following
+`turn_credit.py`/`rng.py`/`equipment.py`: `bool` is a subtype of `int`, so static typing permits
+`True` and it would read as `1`.
+
+### 6.2 Kinds
+
+```python
+class LightSourceKind(Enum):
+    TORCH = auto()
+    LANTERN = auto()
+```
+
+Closed, two-valued. **No `MAGICAL` member, no `OTHER`, no extension point** — §B excludes magical
+light, and `L41` guards it.
+
+## 7. Public API
+
+```python
+__all__ = [
+    "LANTERN_TURNS_PER_FLASK",       # 24
+    "MUNDANE_LIGHT_RADIUS_FEET",     # 30   -- one constant; RC states no torch/lantern difference
+    "TORCH_TURNS",                   # 6
+    "IgnitionConditions",
+    "IgnitionOutcome",
+    "LightSource",
+    "LightSourceKind",
+    "MundaneLightContribution",
+    "deplete",
+    "ignition_outcome",
+    "mundane_light_contribution",
+    "refuel_lantern",
+]
+```
+
+### 7.1 The contribution contract — naming is the safety mechanism
+
+```python
+@dataclass(frozen=True, slots=True)
+class MundaneLightContribution:
+    """What EXP-006's OWN sources contribute. NOT a statement about the world."""
+    lit_sources: tuple[LightSource, ...]
+    any_mundane_source_lit: bool
+    max_mundane_radius_feet: int | None
+```
+
+Every name carries the word **`mundane`** or **`source`**. A consumer cannot write
+`if not contribution.any_mundane_source_lit: → darkness` without the identifier itself
+contradicting them. The type name is `MundaneLightContribution`, **not** `LightState`,
+`Illumination`, `Visibility` or `WorldLight` — each of which would invite exactly the
+misreading the card's Finding B withdrew.
+
+`max_mundane_radius_feet` is `None` — **not `0`** — when nothing is lit. `0` reads as "a radius of
+zero", which is a claim about illumination; `None` reads as "this card contributes no radius",
+which is the truth.
+
+**A single radius constant.** `MUNDANE_LIGHT_RADIUS_FEET = 30` serves both kinds. Two constants
+would permit them to drift, and `L4`/`L5` exist precisely to forbid a torch/lantern distinction
+RC does not state.
+
+## 8. `EXP-002` integration
+
+### 8.1 Recommended: consume a plain whole-turn count
+
+```python
+def deplete(sources: Iterable[LightSource], elapsed_turns: int) -> tuple[LightSource, ...]
+```
+
+`EXP-006` holds no `DungeonTimeAccounting`, calls no `complete_ordinary_turn()`, and
+**imports nothing from `turn_credit.py` or `dungeon_turn_time_accounting.py`**.
+
+### 8.2 Why not `TurnCredit` — an architectural finding
+
+`turn_credit.py`'s own module docstring states:
+
+> *"No production module beyond EXP-002 and EXP-001 needs to import this module."*
+
+That is a deliberate scoping of a **two-party interface**, and `EXP-006` is not a party to it.
+Three further reasons agree:
+
+1. **`EXP-006` needs the count, not the identity.** A turn is a turn for burning; `turn_number`
+   and `origin` are meaningless here.
+2. **`origin` is a trap.** `ORDINARY` vs `ENCOUNTER_DERIVED` is `EXP-001`'s discriminator. A
+   module holding `TurnCredit` would be one line away from branching on something that is not its
+   business.
+3. **Import-graph provability.** Taking an `int` lets `L13`/`L14` be proven by an import-graph
+   assertion — *this module imports no time machinery* — rather than by reasoning about use.
+
+**The consequence, stated honestly.** A bare `int` carries no provenance guarantee: a caller could
+pass any number. That responsibility lands on **whatever orchestrates the dungeon turn**, which is
+a **known unowned frontier item** (carried forward from `CLUSTER-003`). This plan does **not**
+invent that orchestrator. `EXP-006`'s contract is "subtract the authoritative count you are
+given"; it is not positioned to audit its caller, and the approved card does not ask it to.
+
+## 9. `CHAR-004` integration
+
+### 9.1 Identities to reuse — exactly these
+
+| Item | Reachable as | Notes |
+|---|---|---|
+| **Torch** | `equipment.TORCH` | A module-level `Item`, exported in `__all__` |
+| **Lantern** | `equipment.catalog_item("Lantern")` | `ADVENTURING_GEAR` row |
+| **Oil** | `equipment.catalog_item("Oil")` | `ADVENTURING_GEAR` row. **Not** `"Oil, Burning"`, which is the `WEAPONS` row and is `COMBAT-*`'s |
+| **Tinderbox** | `equipment.catalog_item("Tinder box")` | Note RC's spelling: **two words** |
+
+**No duplicate constants are created.** `EXP-006` defines no item names, prices, encumbrances or
+catalog rows of its own.
+
+### 9.2 The ergonomic asymmetry — identified, not papered over
+
+`TORCH` has a named export; `Lantern`, `Oil` and `Tinder box` do not, so three of the four
+identities must be fetched by **string literal**. `TORCH` is exported only because it is the one
+commodity appearing in **both** `WEAPONS` and `ADVENTURING_GEAR` and needed disambiguation — not
+because of a general convention.
+
+**Recommended handling:** confine the three strings to **one private module-level mapping** in
+`EXP-006`, so they appear exactly once:
+
+```python
+_CATALOG_NAMES: Final = {LightSourceKind.LANTERN: "Lantern", ...}
+```
+
+**Flagged, not actioned:** exporting `LANTERN`, `OIL` and `TINDERBOX` constants from
+`equipment.py` would be the cleaner long-term fix. That is **production code in a landed,
+approved card's module** and is **outside this plan's authorization**. It is recorded as a
+candidate `CHAR-004` ergonomic amendment requiring its own authorization — **not** done here, and
+**not** worked around by duplicating the data.
+
+### 9.3 What `EXP-006` must never read from an `Item`
+
+Consuming `Item` exposes `.price` and `.encumbrance_cn`, which §C forbids this card to emit.
+**Guard G-4 (§13) asserts by AST that this module accesses neither attribute.** This is the
+concrete mechanism behind `L42`, and it is stronger than a value check: it fails even if the value
+is read and discarded.
+
+## 10. Error and refusal representation
+
+### 10.1 The repository already has the pattern; `src/rules/exploration/` has not yet needed it
+
+| Convention | Where established |
+|---|---|
+| **Plain `ValueError`** for *structural* violations — non-`int`, `bool`, negative | `turn_credit.py`, `dungeon_movement.py`, `rng.py`. **Every current exploration rejection is of this kind** |
+| **A domain base + specific subclasses** for *rules* rejections | `character_creation/errors.py`, whose docstring states the distinction explicitly |
+
+**`EXP-006` is the first exploration card with genuine *rules* refusals.** `L23` and `L24` reject
+because **RC defines no procedure**, which is a domain rejection, not a malformed input.
+
+**Recommendation: add `src/rules/exploration/errors.py` with**
+
+```python
+class ExplorationError(Exception):           # domain base, mirrors CharacterCreationError
+class IgnitionNotDefinedError(ExplorationError):
+```
+
+This **instantiates the established pattern at the correct scope**. It is explicitly **not** a new
+global error framework: `CharacterCreationError` is scoped by name to character creation, and
+reusing it from an exploration module would cross a domain boundary the existing docstring draws.
+One base plus one subclass — no hierarchy is built ahead of need.
+
+### 10.2 Mapping
+
+| Case | Condition | Representation |
+|---|---|---|
+| **`L23`** | no skill + tinderbox + **adverse** | `IgnitionNotDefinedError`, message naming *"RC qualifies the 1d6 to normal (comparatively dry) circumstances"* |
+| **`L24`** | no skill + no tinderbox | `IgnitionNotDefinedError`, message naming *"no procedure stated"* |
+| **`L45`** | torch resolved as a weapon | **No API exists to call.** `EXP-006` exposes no weapon operation; `COMBAT-*`/`CHAR-004` own it. Proven by API shape + guard G-5, not by an exception |
+| **`L46`** | oil as missile / pursuit delay | **No API exists to call.** Same mechanism |
+| `L19` | second ignition attempt in one round | `ValueError` — a caller-protocol violation, not a rules gap |
+| `L34` | light state queried with no surprise state | **Not an error — succeeds.** There is no surprise parameter to omit |
+| Structural | non-`int`, `bool`, negative `remaining_turns`/`elapsed_turns` | plain `ValueError` |
+
+**`L45` and `L46` are deliberately *not* exceptions.** An exception would require an entry point
+that accepts the request, and the approved card's position is that no such entry point exists.
+Absence is the stronger guarantee.
+
+## 11. Ignition model
+
+```python
+class IgnitionConditions(Enum):
+    ORDINARY = auto()
+    ADVERSE  = auto()          # DM-supplied; the card states RC gives no test
+
+class IgnitionOutcome(Enum):
+    AUTOMATIC            = auto()   # skill + tinderbox + ordinary
+    ROLL_1D6_IGNITE_1_2  = auto()   # the 1d6 branch
+    ROUTED_SKILL_CHECK   = auto()   # emit a request; CHAR-012 resolves
+
+def ignition_outcome(
+    *, has_fire_building: bool, has_tinderbox: bool, conditions: IgnitionConditions
+) -> IgnitionOutcome: ...
+```
+
+Typed outcomes, **no magic strings** — consistent with `CheckOutcome` in
+`dungeon_wandering_monster_check.py`.
+
+| `has_skill` | `has_tinderbox` | conditions | Outcome | Case |
+|---|---|---|---|---|
+| ✓ | ✓ | `ORDINARY` | `AUTOMATIC` | `L20` |
+| ✓ | ✗ | any | `ROLL_1D6_IGNITE_1_2` | `L21` |
+| ✓ | — | `ADVERSE` | `ROUTED_SKILL_CHECK` | `L22` |
+| ✗ | ✓ | `ORDINARY` | `ROLL_1D6_IGNITE_1_2` | `L17`, `L18` |
+| ✗ | ✓ | `ADVERSE` | **`IgnitionNotDefinedError`** | `L23` |
+| ✗ | ✗ | any | **`IgnitionNotDefinedError`** | `L24` |
+
+**`ignition_outcome` is a pure branch selector. It performs no roll and consumes no RNG.** The
+`1d6` is executed by the caller against the project RNG once the branch is known; `ROUTED_SKILL_CHECK`
+is **emitted, not resolved** — the DM-assigned penalty is an input to `CHAR-012`'s check, never a
+value `EXP-006` produces (`L25`).
+
+**One attempt per round** is a caller-protocol constraint. `EXP-006` holds no round state (that
+would be a second clock); the plan's position is that the *caller* makes at most one call per
+round, and `L19` is a contract test on that protocol.
+
+## 12. Deterministic-case mapping — all 50
+
+Counts re-derived from the approved card for this plan, **not assumed from the gate**; they
+match: **18 / 18 / 11 / 3**.
+
+| Classification | Count | Cases |
+|---|---|---|
+| **Unit behavior** | **18** | `L1`, `L2`, `L3`, `L6`, `L7`, `L8`, `L9`, `L10`, `L11`, `L12`, `L15a`, `L17`, `L18`, `L20`, `L21`, `L27`, `L28`, `L34` |
+| **Ownership/boundary guard** | **18** | `L29`, `L30`, `L31`, `L32`, `L33`, `L37a`, `L38`, `L39`, `L40`, `L41`, `L42`, `L43`, `L44`, `L45`, `L46`, plus `L13`, `L14`, `L36` |
+| **Internal invariant guard** | **11** | `L4`, `L5`, `L15`, `L15b`, `L16`, `L19`, `L23`, `L24`, `L25`, `L26`, `L35` |
+| **Routed dependency behavior** | **3** | `L22`, `L37`, `L47` |
+
+**Documentation-only assertions: none.** Every case becomes an executable obligation.
+
+### 12.1 Provable by API shape rather than by test
+
+These need **no** runtime assertion, because the API offers nothing to violate:
+
+```text
+L31  no Visibility category    -- no such type or return value exists
+L32  no infravision folding    -- no infravision parameter exists
+L33  no distance dice          -- no distance operation exists
+L34  no surprise required      -- no surprise parameter exists
+L40  infravision not decided   -- no infravision parameter exists
+L45  torch-as-weapon           -- no weapon operation exists
+L46  oil-as-missile            -- no missile operation exists
+L43  no ration mechanic        -- no ration type or operation exists
+L44  no starvation mechanic    -- no starvation type or operation exists
+```
+
+They are still **recorded as tests** (asserting the names are absent from `__all__` / the module
+namespace), because API shape can regress silently and a test is what makes the regression loud.
+
+### 12.2 Genuinely requiring automated architecture tests
+
+See §13. `L13`, `L14`, `L36`, `L38`, `L39`, `L41`, `L42` cannot be proven by shape alone — they
+forbid *behavior inside* functions that legitimately exist.
+
+## 13. Architectural guard strategy
+
+**Absorbing the `CLUSTER-003` lesson directly** (gate Caution 2): that cluster's guard tests were
+first written as substring checks over source text and produced false positives — `"round("`
+matched `may_attack_in_the_same_round`, `"dungeon"` matched docstring prose. The project moved to
+**AST and import-graph assertions over the parsed module**. This plan adopts that from the start.
+
+| Guard | Technique | Enforces |
+|---|---|---|
+| **G-1** | **Import graph** — the module's resolved imports contain no `turn_credit`, no `dungeon_turn_time_accounting` | `L13`, `L14` — no second clock |
+| **G-2** | **Import graph** — no import from any `enc_*`/encounter, combat, magic or infravision module | `L36`, `L39`, `L41` |
+| **G-3** | **AST** — no numeric literal `4`/`2`/`1` paired with `d6`/`d4` dice construction; no RNG import at all | `L33` — no distance dice, and no RNG in this module |
+| **G-4** | **AST** — no `Attribute` access named `price` or `encumbrance_cn` anywhere in the module | `L42` — the `CHAR-004` seam |
+| **G-5** | **Namespace** — `__all__` and the module namespace contain no name matching `visibility|darkness|blind|surprise|ration|starvation|weapon|missile` | `L29`–`L32`, `L37a`, `L43`–`L46` |
+| **G-6** | **AST** — `MundaneLightContribution` construction sites are reachable only where `lit_sources` was filtered on `remaining_turns > 0` | `L15b`, `L26` |
+
+**G-6 is the only guard whose AST form is non-trivial.** If it proves brittle in implementation,
+the fallback is the §6 construction invariant, which already makes the state unconstructible —
+the guard is defence in depth, not the primary mechanism, and **must not be allowed to become a
+reason to weaken the invariant**.
+
+## 14. Implementation slices
+
+Four slices. **No slice may silently begin the next**, and each ends at a human review checkpoint.
+
+### Slice A — value model and illumination constants
+
+```text
+FILES     src/rules/exploration/light_and_exploration_resources.py   (new)
+          tests/rules/exploration/test_light_and_exploration_resources.py (new)
+BEHAVIOR  LightSourceKind, LightSource (+ the exhausted-never-lit invariant),
+          MUNDANE_LIGHT_RADIUS_FEET, TORCH_TURNS, LANTERN_TURNS_PER_FLASK
+CASES     L1, L2, L3, L4, L5, L6, L7, L16
+CONSUMES  nothing
+CHECKPOINT  Is the invariant right, and is the radius genuinely one constant?
+INDEPENDENT  Yes -- a pure value module, readable without any other slice
+```
+
+### Slice B — depletion and the contribution output
+
+```text
+FILES     same two files
+BEHAVIOR  deplete(), refuel_lantern(), MundaneLightContribution,
+          mundane_light_contribution()
+CASES     L8, L9, L10, L11, L12, L15, L15a, L15b, L27, L28, L34, L37
+CONSUMES  an int elapsed-turn count (§8).  NO EXP-002 import
+CHECKPOINT  Does L15a pass -- two torches, one expires, any_mundane_source_lit
+            still True?  Is max_mundane_radius_feet None rather than 0?
+INDEPENDENT  Yes -- depends only on Slice A
+```
+
+### Slice C — ignition
+
+```text
+FILES     same two files; src/rules/exploration/errors.py (new)
+BEHAVIOR  IgnitionConditions, IgnitionOutcome, ignition_outcome(),
+          ExplorationError, IgnitionNotDefinedError
+CASES     L17, L18, L19, L20, L21, L22, L23, L24, L25, L26
+CONSUMES  nothing
+CHECKPOINT  Are both refusals genuinely unreachable-by-default rather than
+            defaulted?  Is ROUTED_SKILL_CHECK emitted, never resolved?
+INDEPENDENT  Yes -- orthogonal to A and B; could in principle land first
+```
+
+### Slice D — `CHAR-004` identity binding and architectural guards
+
+```text
+FILES     same module; tests/rules/exploration/test_light_guards.py (new)
+BEHAVIOR  the private _CATALOG_NAMES mapping; no new rules behavior
+CASES     L13, L14, L29-L33, L35, L36, L38-L47   (guards G-1..G-6)
+CONSUMES  CHAR-004 identity only
+CHECKPOINT  Do the AST/import-graph guards pass, and does G-4 actually fail
+            when a .price access is introduced deliberately?
+INDEPENDENT  Yes -- guards are reviewable separately from the behavior they protect
+```
+
+**Deliberately absent: an integration slice.** `CLUSTER-003` ended with a cross-card integration
+fixture because three cards had to compose. `EXP-006` composes with **no researched consumer** —
+an integration fixture would have to invent one, which §4 forbids. Slice D's identity binding is
+the whole of its outward integration.
+
+## 15. Governance frontier — recorded, not solved
+
+```text
+GLOBAL COMPLETE-DARKNESS WORLD-STATE PREDICATE
+    Owner:    UNRESOLVED
+    Rule ID:  none currently settled
+    Status:   NOT an EXP-006 implementation dependency
+```
+
+`EXP-006` is implementable with this unanswered, and this plan depends on it nowhere. It becomes
+binding before work begins on consumers that need to know whether a location is dark — **`ENC-001`**
+(encounter `Visibility`) and **darkness-related `COMBAT-*`** (the p. 150 penalties).
+
+**No Rule Card is created and no owner is assigned here.** It is already recorded in the approved
+card's Open Question 7 and in the `EXP-006` Pre-Code Gate §7, which is the existing governance
+place for unresolved frontier items; this plan adds a third pointer rather than a fourth artifact.
+
+## 16. Plan falsification
+
+| # | Challenge | Result |
+|---|---|---|
+| 1 | **Duplicate time authority** | **PASS.** `deplete()` takes an `int`; the module imports no time machinery (G-1); holds no counter, clock or accumulator |
+| 2 | **Duplicate equipment/catalog facts** | **PASS.** Four identities reached through `CHAR-004`'s own API; **zero** item names, prices or encumbrances defined here. The ergonomic asymmetry is **flagged, not worked around** (§9.2) |
+| 3 | **Hidden world-darkness state** | **PASS.** No field, type or return value represents world illumination. G-5 forbids the vocabulary |
+| 4 | **Hidden Visibility state** | **PASS.** No `Visibility` type, no category, no classification function. Not expressible in the API |
+| 5 | **Hidden blindness logic** | **PASS.** No blindness predicate, parameter or return. `L37` is satisfied by **absence** |
+| 6 | **Hidden `CHAR-012` implementation** | **PASS.** `ROUTED_SKILL_CHECK` is an enum member. No `1d20`, no ability score, no penalty arithmetic |
+| 7 | **Magical-light scope creep** | **PASS.** `LightSourceKind` is closed at two members with no extension point (G-5) |
+| 8 | **Ration/starvation scope creep** | **PASS.** No type, operation or constant. G-5 forbids the names |
+| 9 | **Exhausted source still contributing light** | **PASS** — and this is the strongest result. The state is **unconstructible** (§6.1 invariant), not merely untested; `L15a` proves the scoping is source-local, not party-wide |
+| 10 | **Speculative abstractions for future cards** | **PASS.** No interface, protocol, registry, plugin seam or "environment" type. One module, one error base plus one subclass, four public functions. §5 records what was deliberately not created |
+
+## 17. Blockers
+
+```text
+NONE.
+
+No "IMPLEMENTATION-PLAN BLOCKER -- NOT ESTABLISHED" condition was reached.
+Every decision above is either fixed by the approved Rule Card, or an ordinary
+implementation-representation choice explicitly permitted by the Pre-Code Gate.
+```
+
+Two items are **flagged for the reviewer's judgement** and neither blocks:
+
+1. **`CHAR-004` ergonomic asymmetry** (§9.2) — three identities fetched by string. Handled
+   without duplication; the cleaner fix needs separate authorization for a landed module.
+2. **Elapsed-turn provenance** (§8.2) — a bare `int` carries no authoritative-origin guarantee.
+   That responsibility belongs to the unowned turn orchestrator, which this plan does not invent.
+
+## 18. Gate state
+
+```text
+EXP-006 Rule Card              APPROVED        2026-10-01
+EXP-006 PRE-CODE GATE          PASS            2026-10-01
+EXP-006 IMPLEMENTATION PLAN    DRAFT -- awaiting human review
+IMPLEMENTATION                 NOT AUTHORIZED  (ARCHITECTURE.md §15.2 step 4)
+CLUSTER-004                    NOT AUTHORIZED
+ENC-005 Stage B                DEFERRED -- not in this plan
+```
