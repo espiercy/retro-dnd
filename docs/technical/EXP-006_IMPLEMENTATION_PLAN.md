@@ -3,7 +3,7 @@
 ## 1. Status / Purpose
 
 ```text
-STATUS:     DRAFT -- awaiting human implementation-plan review
+STATUS:     APPROVED -- human project owner, 2026-10-01
 CARD:       EXP-006 Light & Exploration Resources, APPROVED 2026-10-01
 GATE:       EXP-006 PRE-CODE GATE: PASS, 2026-10-01
 SCOPE:      SINGLE-CARD slice.  ENC-005 is Stage-B DEFERRED and is NOT in this plan.
@@ -18,6 +18,39 @@ implemented.
 
 **No new Rules Cyclopedia research was performed for this plan, and the approved Rule Card is not
 reinterpreted anywhere in it.**
+
+### 1.1 Human implementation-plan review — `APPROVED` 2026-10-01
+
+Approved subject to two architectural adjudications, both of which **confirm** the plan's
+recommendation and close the two items §17 flagged for judgement:
+
+> **`CHAR-004` identity access.** `CHAR-004` is **not** to be modified to export `Lantern`, `Oil`
+> or `Tinder box` constants. `TORCH`'s export rationale is its cross-catalog ambiguity and does
+> not generalize. Use `catalog_item(...)`, with the canonical names centralized in **one** private
+> `EXP-006` location. **No landed `CHAR-004` production code changes in this slice.** §9.2's
+> flagged candidate amendment is therefore **declined**, and the plan's handling stands as written.
+
+> **`EXP-002` elapsed-turn input.** Do **not** import `turn_credit.py` or `TurnCredit`. `EXP-006`
+> consumes `elapsed_turns: int` from its caller, documented as authoritative. **`EXP-006` owns the
+> numeric domain, not provenance** — integer required, `bool` rejected, negative rejected. **No
+> fake provenance wrapper** whose type cannot actually prove origin. The orchestration question
+> (§8.2) is a frontier concern and is **not** solved in this slice.
+
+**Error-hierarchy constraint added by the same review:** a domain-local refusal type may be
+introduced **only if a slice actually requires it**. No exploration-wide exception framework is to
+be built, and nothing is generalized for hypothetical future cards. **Consequence for Slice A:**
+see §14 Slice A — it requires none, and introduces none.
+
+### 1.2 Implementation authorization
+
+```text
+SLICE A   AUTHORIZED   2026-10-01   -- light-source value/state model only
+SLICE B   NOT authorized
+SLICE C   NOT authorized
+SLICE D   NOT authorized
+```
+
+Stop for human review after Slice A.
 
 ## 2. Authoritative inputs
 
