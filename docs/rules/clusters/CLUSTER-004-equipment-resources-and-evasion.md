@@ -289,8 +289,51 @@ MAGICAL LIGHT   Oil of darkness / moonlight / sunlight (146) and the light /
 
 ## 10. Simulator Rulings
 
-**None proposed.** Protocol §16 and `AGENTS.md` §10.7 place rulings last, after gap-directed
-alternate-source research, and no such research has been authorized or performed.
+### `SR-11` — adverse-condition `Fire-Building` governs regardless of a tinderbox
+
+**Owner: `EXP-006`. Human project owner, 2026-10-01.** The cluster's first and only ruling.
+
+```text
+If a character has Fire-Building and conditions are ADVERSE, the
+adverse-condition Fire-Building procedure governs regardless of whether
+the character possesses a tinderbox.
+
+    skill=True, tinderbox=False, conditions=ADVERSE  ->  ROUTED_SKILL_CHECK
+
+The ordinary no-tinderbox 1d6 procedure does not override the
+adverse-condition branch.
+```
+
+**The ambiguity it resolves.** Accepted Stage-A evidence `E-36` (RC p. 83) establishes two
+conditionals **in parallel, with no precedence**: *"If the character is trying to build a fire
+**without** a tinderbox… `1d6` roll each round, and on a `1` or `2` he ignites"* and *"If the
+character is trying to build a fire **in adverse conditions**… he must make a skill check with
+penalties assigned by the DM."* The input `(skill, no tinderbox, ADVERSE)` satisfies **both**
+antecedents and RC supplies nothing that chooses between them.
+
+**Scope — narrow by construction.** It resolves **only** that intersection. The two RC-explicit
+ordinary branches, the RC-explicit adverse-with-tinderbox branch, and all three RC-silence
+refusals are unchanged.
+
+**Provenance.** `Simulator Ruling` — explicitly **not** `Rules Cyclopedia Explicit` (RC states no
+precedence), **not** a `Necessary Mechanical Consequence` (neither outcome is forced; the
+competing branch is equally well attested), **not** a `Human-Approved Variant` and **not**
+`Alternate-Source Compatible Completion` (no source was preferred over RC; no alternate edition
+was consulted).
+
+**ID allocation.** `SR-1`–`SR-10` are allocated by `CLUSTER-002` and `CLUSTER-003`. The registry
+was inspected rather than assumed: the only prior textual occurrences of `SR-11` were
+`CHAR-005`'s two explicit statements that **no `SR-11` exists** — denials, not allocations.
+
+**Recorded on:** this cluster record; the `EXP-006` Rule Card §Simulator Ruling; `INVENTORY.md`'s
+`EXP-006` row; `docs/technical/EXP-006_IMPLEMENTATION_PLAN.md` §11.
+
+---
+
+**No other ruling is proposed by this cluster.** Protocol §16 and `AGENTS.md` §10.7 place rulings
+last, after gap-directed alternate-source research; none has been authorized or performed, and
+`SR-11` arises not from a gap in RC's coverage but from an **internal ambiguity** the accepted
+evidence exposed — two RC statements that overlap without a precedence rule.
 
 Two of `ENC-005`'s open questions (§6 Q5, Q6) are **ruling candidates** if lineage research is
 declined — recorded so, and no further.

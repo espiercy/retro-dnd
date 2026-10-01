@@ -343,13 +343,20 @@ class IgnitionOutcome(Enum):
     ROLL_1D6_IGNITE_1_2  = auto()   # the 1d6 branch
     ROUTED_SKILL_CHECK   = auto()   # emit a request; CHAR-012 resolves
 
-def ignition_outcome(
-    *, has_fire_building: bool, has_tinderbox: bool, conditions: IgnitionConditions
-) -> IgnitionOutcome: ...
+def ignition_outcome(...) -> IgnitionOutcome: ...   # full signature at §11's matrix below
 ```
 
 Typed outcomes, **no magic strings** — consistent with `CheckOutcome` in
-`dungeon_wandering_monster_check.py`.
+`dungeon_wandering_monster_check.py`. **Returns an outcome, never a `LightSource`:** selecting a
+branch is not the same as lighting a source, and applying a successful ignition to a source is
+**not authorized by this plan** in any slice.
+
+> **Error type, narrowed 2026-10-01 by human adjudication.** This section originally called for
+> `ExplorationError` (a domain base) **plus** `IgnitionNotDefinedError`. The adjudication directs
+> that a single concrete type be preferred where it suffices, and no speculative exploration-wide
+> hierarchy be built. Exploration has exactly **one** domain rejection, so the base is dropped:
+> **`IgnitionNotDefinedError` only.** Recorded as a deliberate departure from the approved plan
+> sketch rather than an unnoticed one.
 
 > **Matrix corrected 2026-10-01.** The original used `any`/`—` wildcards in two rows that
 > overlapped at `(✓, ✗, ADVERSE)` and prescribed two incompatible outcomes — a plan defect, recorded

@@ -39,15 +39,20 @@ from enum import Enum, auto
 from types import MappingProxyType
 from typing import Final
 
+from rules.exploration.errors import IgnitionNotDefinedError
+
 __all__ = [
     "FRESH_DURATION_TURNS",
     "LANTERN_TURNS_PER_FLASK",
     "MUNDANE_LIGHT_RADIUS_FEET",
     "TORCH_TURNS",
+    "IgnitionConditions",
+    "IgnitionOutcome",
     "LightSource",
     "LightSourceKind",
     "MundaneLightContribution",
     "deplete",
+    "ignition_outcome",
     "mundane_light_contribution",
     "refuel_lantern",
 ]
@@ -369,6 +374,138 @@ class MundaneLightContribution:
         distinction is representable (approved cases **L4**, **L5**).
         """
         return MUNDANE_LIGHT_RADIUS_FEET if self.lit_sources else None
+
+
+class IgnitionConditions(Enum):
+    """The circumstances an ignition attempt is made in.
+
+    RC names the adverse case by example — *"during high winds or using
+    wet wood"* (p. 83) — and gives **no test** for deciding which applies.
+    The distinction is therefore DM-supplied, exactly as the Rule Card §1
+    records; this card classifies nothing.
+    """
+
+    ORDINARY = auto()
+    ADVERSE = auto()
+
+
+class IgnitionOutcome(Enum):
+    """Which RC procedure governs an ignition attempt.
+
+    A **branch selection**, not a result: nothing here says the fire was
+    lit. :func:`ignition_outcome` tells a caller *which rule applies*, and
+    the caller resolves it.
+    """
+
+    AUTOMATIC = auto()
+    """Ignition succeeds with no roll (RC p. 83, skill + tinderbox,
+    ordinary conditions)."""
+
+    ROLL_1D6_IGNITE_1_2 = auto()
+    """The caller rolls `1d6` against the project RNG; `1` or `2` ignites.
+    **This module rolls nothing and imports no RNG.**"""
+
+    ROUTED_SKILL_CHECK = auto()
+    """A `CHAR-012` `Fire-Building` skill check governs. **Emitted, not
+    resolved** — the `1d20`, the Intelligence score and the DM-assigned
+    penalty are all `CHAR-012`'s, and none appears in this module."""
+
+
+_IGNITION_MATRIX: Final = MappingProxyType(
+    {
+        # (has_fire_building, has_tinderbox, conditions): outcome
+        (True, True, IgnitionConditions.ORDINARY): IgnitionOutcome.AUTOMATIC,
+        (True, True, IgnitionConditions.ADVERSE): IgnitionOutcome.ROUTED_SKILL_CHECK,
+        (True, False, IgnitionConditions.ORDINARY): IgnitionOutcome.ROLL_1D6_IGNITE_1_2,
+        # SR-11 -- the ruling. RC states the no-tinderbox 1d6 and the
+        # adverse-condition skill check as parallel conditionals with no
+        # precedence; this intersection satisfies both. The human project
+        # owner ruled 2026-10-01 that the adverse branch governs.
+        (True, False, IgnitionConditions.ADVERSE): IgnitionOutcome.ROUTED_SKILL_CHECK,
+        (False, True, IgnitionConditions.ORDINARY): IgnitionOutcome.ROLL_1D6_IGNITE_1_2,
+        # The three RC silences are absent from this table deliberately:
+        #   (False, True,  ADVERSE)
+        #   (False, False, ORDINARY)
+        #   (False, False, ADVERSE)
+        # A missing key is refused, so a silence can never be answered by a
+        # default -- there is no default to reach.
+    }
+)
+"""The complete ignition matrix as an explicit lookup.
+
+**A mapping, not a chain of conditionals**, so no row can shadow another
+and evaluation order cannot create precedence. Five of the eight
+combinations resolve; the other three are RC silences and are refused by
+their **absence** (Rule Card §5).
+"""
+
+
+def ignition_outcome(
+    *,
+    has_fire_building: bool,
+    has_tinderbox: bool,
+    conditions: IgnitionConditions,
+    attempt_already_made_this_round: bool,
+) -> IgnitionOutcome:
+    """Which RC ignition procedure governs this attempt.
+
+    A **stateless branch selector**. It performs no roll, consumes no
+    RNG, resolves no skill check, and returns an :class:`IgnitionOutcome`
+    — never a :class:`LightSource`. **Selecting a branch is not lighting
+    a source**, and applying a successful ignition to a source is not
+    authorized by the implementation plan in any slice.
+
+    ``attempt_already_made_this_round`` is **caller-supplied authoritative
+    state** (Rule Card §5.1). RC allows *"once per round"*; the rule is
+    this card's, knowledge of the round is not. This is the same API
+    boundary as ``elapsed_turns`` in :func:`deplete`: the card **enforces**
+    a rule from state it is **given**, and does not become the authority
+    that **tracks** it. It holds no round counter, no round number and no
+    cross-call state, it never mutates the flag, and it returns no
+    round-tracking object. Recording that an attempt occurred is the
+    caller's, and no orchestrator is created here (approved cases `L19`,
+    `L19a`, `L19b`).
+
+    Raises:
+        ValueError: a non-``bool`` flag, or a ``conditions`` that is not an
+            :class:`IgnitionConditions`; or a second attempt this round,
+            which is a caller-protocol violation rather than a rules gap.
+        IgnitionNotDefinedError: RC defines no procedure for this
+            combination (approved cases `L23`, `L24`).
+    """
+    for name, value in (
+        ("has_fire_building", has_fire_building),
+        ("has_tinderbox", has_tinderbox),
+        ("attempt_already_made_this_round", attempt_already_made_this_round),
+    ):
+        # bool is a subtype of int; 1 and 0 would otherwise pass silently.
+        if not isinstance(value, bool):
+            raise ValueError(f"{name} must be a bool, got {value!r}")
+    if not isinstance(conditions, IgnitionConditions):
+        raise ValueError(f"conditions must be an IgnitionConditions, got {conditions!r}")
+
+    # The same-round guard precedes branch resolution (Rule Card §5.1).
+    if attempt_already_made_this_round:
+        raise ValueError(
+            "another ignition attempt is not permitted this round: "
+            "attempt_already_made_this_round is True"
+        )
+
+    try:
+        return _IGNITION_MATRIX[(has_fire_building, has_tinderbox, conditions)]
+    except KeyError:
+        raise IgnitionNotDefinedError(
+            "RC defines no ignition procedure for "
+            f"has_fire_building={has_fire_building!r}, has_tinderbox={has_tinderbox!r}, "
+            f"conditions={conditions.name}: "
+            + (
+                "the tinderbox 1d6 is qualified to normal (comparatively dry) circumstances, "
+                "and the adverse-condition procedure belongs to the Fire-Building skill"
+                if has_tinderbox
+                else "no procedure is stated for starting a fire without the skill "
+                "and without a tinderbox"
+            )
+        ) from None
 
 
 def mundane_light_contribution(sources: Iterable[LightSource]) -> MundaneLightContribution:

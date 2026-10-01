@@ -15,19 +15,25 @@ from __future__ import annotations
 
 import ast
 import inspect
+from enum import Enum
+from itertools import product
 
 import pytest
 
 from rules.exploration import light_and_exploration_resources as light
+from rules.exploration.errors import IgnitionNotDefinedError
 from rules.exploration.light_and_exploration_resources import (
     FRESH_DURATION_TURNS,
     LANTERN_TURNS_PER_FLASK,
     MUNDANE_LIGHT_RADIUS_FEET,
     TORCH_TURNS,
+    IgnitionConditions,
+    IgnitionOutcome,
     LightSource,
     LightSourceKind,
     MundaneLightContribution,
     deplete,
+    ignition_outcome,
     mundane_light_contribution,
     refuel_lantern,
 )
@@ -467,6 +473,207 @@ def test_no_world_state_vocabulary_exists_on_the_aggregate() -> None:
     }
 
 
+# =========================================================================
+# Slice C — ignition branch / outcome model
+# =========================================================================
+
+ORDINARY = IgnitionConditions.ORDINARY
+ADVERSE = IgnitionConditions.ADVERSE
+
+# The approved eight-row matrix. ``None`` means RC defines no procedure.
+APPROVED_MATRIX: dict[tuple[bool, bool, IgnitionConditions], IgnitionOutcome | None] = {
+    (True, True, ORDINARY): IgnitionOutcome.AUTOMATIC,
+    (True, True, ADVERSE): IgnitionOutcome.ROUTED_SKILL_CHECK,
+    (True, False, ORDINARY): IgnitionOutcome.ROLL_1D6_IGNITE_1_2,
+    (True, False, ADVERSE): IgnitionOutcome.ROUTED_SKILL_CHECK,  # SR-11
+    (False, True, ORDINARY): IgnitionOutcome.ROLL_1D6_IGNITE_1_2,
+    (False, True, ADVERSE): None,
+    (False, False, ORDINARY): None,
+    (False, False, ADVERSE): None,
+}
+
+
+def _ignite(skill: bool, tinderbox: bool, conditions: IgnitionConditions) -> IgnitionOutcome:
+    return ignition_outcome(
+        has_fire_building=skill,
+        has_tinderbox=tinderbox,
+        conditions=conditions,
+        attempt_already_made_this_round=False,
+    )
+
+
+@pytest.mark.parametrize(("key", "expected"), list(APPROVED_MATRIX.items()))
+def test_every_matrix_combination_resolves_as_approved(
+    key: tuple[bool, bool, IgnitionConditions], expected: IgnitionOutcome | None
+) -> None:
+    """L20, L21, L22, L17, L23, L24 and the SR-11 intersection — all eight."""
+    skill, tinderbox, conditions = key
+    if expected is None:
+        with pytest.raises(IgnitionNotDefinedError):
+            _ignite(skill, tinderbox, conditions)
+    else:
+        assert _ignite(skill, tinderbox, conditions) is expected
+
+
+def test_all_eight_combinations_are_covered_and_none_overlaps() -> None:
+    """Exhaustiveness and non-overlap, proved over the product rather than
+    row by row: a mapping cannot have two entries for one key, so coverage
+    is the only thing left to establish."""
+    combos = list(product([True, False], [True, False], list(IgnitionConditions)))
+    assert len(combos) == 8
+    assert set(APPROVED_MATRIX) == set(combos)
+
+    resolved = 0
+    refused = 0
+    for skill, tinderbox, conditions in combos:
+        try:
+            _ignite(skill, tinderbox, conditions)
+            resolved += 1
+        except IgnitionNotDefinedError:
+            refused += 1
+    assert resolved == 5
+    assert refused == 3
+
+
+def test_the_sr11_intersection_routes_to_the_skill_check() -> None:
+    """SR-11. Both RC conditionals match this input; the ruling settles it.
+
+    The sibling row proves the ruling actually bites: with the SAME skill
+    and the SAME absent tinderbox, ORDINARY conditions still give the 1d6.
+    """
+    assert _ignite(True, False, ADVERSE) is IgnitionOutcome.ROUTED_SKILL_CHECK
+    assert _ignite(True, False, ORDINARY) is IgnitionOutcome.ROLL_1D6_IGNITE_1_2
+
+
+def test_no_skill_adverse_with_tinderbox_is_refused() -> None:
+    """L23 — the 1d6 is qualified to ordinary circumstances and is not
+    stretched to cover this."""
+    with pytest.raises(IgnitionNotDefinedError, match="comparatively dry"):
+        _ignite(False, True, ADVERSE)
+
+
+@pytest.mark.parametrize("conditions", [ORDINARY, ADVERSE])
+def test_no_skill_no_tinderbox_is_refused(conditions: IgnitionConditions) -> None:
+    """L24 — RC states no procedure at all."""
+    with pytest.raises(IgnitionNotDefinedError, match="no procedure is stated"):
+        _ignite(False, False, conditions)
+
+
+def test_a_refusal_is_never_answered_by_a_default() -> None:
+    """The three silences are absent from the lookup, so there is no default
+    to reach — refusal is structural, not a fallback branch."""
+    from rules.exploration.light_and_exploration_resources import _IGNITION_MATRIX
+
+    assert len(_IGNITION_MATRIX) == 5
+    assert (False, True, ADVERSE) not in _IGNITION_MATRIX
+    assert (False, False, ORDINARY) not in _IGNITION_MATRIX
+    assert (False, False, ADVERSE) not in _IGNITION_MATRIX
+
+
+# --- L19 / L19a / L19b: the same-round guard --------------------------------
+
+
+def test_a_second_attempt_this_round_is_refused() -> None:
+    """L19 — driven by caller-supplied state, not by the card discovering it."""
+    with pytest.raises(ValueError, match="not permitted this round"):
+        ignition_outcome(
+            has_fire_building=True,
+            has_tinderbox=True,
+            conditions=ORDINARY,
+            attempt_already_made_this_round=True,
+        )
+
+
+def test_the_same_round_guard_precedes_branch_resolution() -> None:
+    """Even a combination RC does not define is rejected for the round first:
+    the guard is evaluated before the matrix is consulted."""
+    with pytest.raises(ValueError, match="not permitted this round"):
+        ignition_outcome(
+            has_fire_building=False,
+            has_tinderbox=False,
+            conditions=ADVERSE,
+            attempt_already_made_this_round=True,
+        )
+
+
+def test_a_first_attempt_evaluates_normally_and_records_nothing() -> None:
+    """L19a — and the card is stateless: the identical call repeats forever,
+    because nothing was recorded."""
+    for _ in range(3):
+        assert _ignite(True, True, ORDINARY) is IgnitionOutcome.AUTOMATIC
+
+
+def test_the_selector_stores_no_round_state() -> None:
+    """L19b — guard. No module-level mutable state, and no attribute on the
+    function, could carry an attempt between calls."""
+    assert not hasattr(ignition_outcome, "__dict__") or not [
+        k for k in vars(ignition_outcome) if not k.startswith("__")
+    ]
+    module_mutables = [
+        name
+        for name, value in vars(light).items()
+        if not name.startswith("__")
+        and isinstance(value, (list, dict, set))
+        and not isinstance(value, type)
+    ]
+    assert module_mutables == [], f"mutable module state could track rounds: {module_mutables}"
+
+
+@pytest.mark.parametrize(
+    "bad_kwargs",
+    [
+        {"has_fire_building": 1},
+        {"has_tinderbox": 0},
+        {"attempt_already_made_this_round": 1},
+    ],
+)
+def test_integers_are_not_accepted_as_booleans(bad_kwargs: dict[str, object]) -> None:
+    """bool is an int subclass; 1 and 0 must not pass silently."""
+    kwargs: dict[str, object] = {
+        "has_fire_building": True,
+        "has_tinderbox": True,
+        "conditions": ORDINARY,
+        "attempt_already_made_this_round": False,
+    }
+    kwargs.update(bad_kwargs)
+    with pytest.raises(ValueError, match="must be a bool"):
+        ignition_outcome(**kwargs)  # type: ignore[arg-type]
+
+
+def test_conditions_must_be_the_enum() -> None:
+    with pytest.raises(ValueError, match="must be an IgnitionConditions"):
+        ignition_outcome(
+            has_fire_building=True,
+            has_tinderbox=True,
+            conditions="ordinary",  # type: ignore[arg-type]
+            attempt_already_made_this_round=False,
+        )
+
+
+# --- Slice-C boundaries -----------------------------------------------------
+
+
+def test_ignition_returns_an_outcome_never_a_light_source() -> None:
+    """L25 and the Slice-B boundary: selecting a branch is not lighting a
+    source. AUTOMATIC means the procedure succeeds under the rule, not that
+    this slice applies it."""
+    result = _ignite(True, True, ORDINARY)
+    assert isinstance(result, IgnitionOutcome)
+    assert not isinstance(result, LightSource)
+
+
+def test_the_routed_skill_check_is_emitted_not_resolved() -> None:
+    """L25 — no 1d20, no ability score, no penalty arithmetic is produced."""
+    result = _ignite(True, False, ADVERSE)
+    assert result is IgnitionOutcome.ROUTED_SKILL_CHECK
+    assert isinstance(result, Enum)  # a bare signal, carrying no computed value
+
+
+def test_the_1d6_branch_is_selected_not_rolled() -> None:
+    """L26 — the outcome names the procedure; the caller rolls it."""
+    assert _ignite(False, True, ORDINARY) is IgnitionOutcome.ROLL_1D6_IGNITE_1_2
+
+
 # --- Architectural guard: no second clock ----------------------------------
 
 
@@ -491,25 +698,71 @@ def test_this_module_imports_no_time_machinery() -> None:
     assert not {m for m in imported if any(f in m for f in forbidden)}
 
 
-def test_no_unauthorized_slice_behaviour_is_exposed() -> None:
-    """Slices A and B are authorized; C and D are not.
+def test_this_module_imports_no_rng_skill_encounter_combat_or_magic_machinery() -> None:
+    """Guard G-2/G-3 — Slice C's architectural guarantee.
 
-    ``deplete`` and ``mundane_light_contribution`` are Slice B and are
-    expected. What must not appear is ignition (Slice C), CHAR-004 catalog
-    integration (Slice D), or any of the card's permanently excluded
-    responsibilities (implementation plan §4, §14).
+    Selecting an ignition branch must not pull in the things the branch
+    merely *names*: no RNG for the `1d6`, no `CHAR-012` resolver for the
+    skill check, and no encounter, combat or magic module. Asserted over
+    the resolved import graph, since a text search would match the
+    docstrings that legitimately discuss all of them.
     """
-    forbidden = {
-        "ignite",
-        "ignition",
-        "tinderbox",
-        "fire",
-        "skill",
+    tree = ast.parse(inspect.getsource(light))
+    imported: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module is not None:
+            imported.add(node.module)
+        elif isinstance(node, ast.Import):
+            imported.update(alias.name for alias in node.names)
+
+    forbidden_tokens = {
         "rng",
         "random",
-        "roll",
+        "dice",
+        "skill",
+        "char_012",
+        "ability",
+        "encounter",
+        "combat",
+        "magic",
+        "equipment",
+    }
+    offending = {
+        module
+        for module in imported
+        if forbidden_tokens & {part.lower() for part in module.replace(".", "_").split("_")}
+    }
+    assert offending == set(), f"forbidden dependency: {offending}"
+    # Positively: the module's whole dependency surface, stated.
+    assert imported == {
+        "__future__",
+        "collections.abc",
+        "dataclasses",
+        "enum",
+        "types",
+        "typing",
+        "rules.exploration.errors",
+    }
+
+
+def test_no_unauthorized_slice_behaviour_is_exposed() -> None:
+    """Slices A, B and C are authorized; D is not.
+
+    ``ignition_outcome`` is Slice C and is expected. What must not appear is
+    CHAR-004 catalog integration (Slice D) or any of the card's permanently
+    excluded responsibilities (implementation plan §4, §14).
+
+    Note that ``skill`` is NOT forbidden as a token: ``ROUTED_SKILL_CHECK``
+    legitimately *names* the owner it routes to. That the resolver is not
+    imported is proved by the import-graph guard, which is the authoritative
+    check — a name test could not establish it either way.
+    """
+    forbidden = {
         "catalog",
         "item",
+        "equipment",
+        "rng",
+        "random",
         "visibility",
         "darkness",
         "blind",
