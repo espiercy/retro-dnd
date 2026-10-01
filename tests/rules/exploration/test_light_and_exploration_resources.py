@@ -1,11 +1,13 @@
-"""EXP-006 Slice A — the light-source value/state model.
+"""EXP-006 Slices A and B.
 
-Covers the approved deterministic cases the implementation plan assigns to
-Slice A: L1, L2, L3, L4, L5, L6, L7 and L16, plus the construction
-invariants the human adjudication of 2026-10-01 §8 requires.
+Slice A — the light-source value/state model: L1, L2, L3, L4, L5, L6, L7
+and L16, plus the construction invariants the human adjudication of
+2026-10-01 §8 requires.
 
-Depletion (L8-L12, L15*), contribution aggregation (L27-L28, L34),
-ignition (L17-L26) and CHAR-004 catalog integration are Slices B, C and D
+Slice B — depletion and mundane-light contribution: L8, L9, L10, L11,
+L12, L15, L15a, L15b, L27, L28 and L34.
+
+Ignition (L17-L26) and CHAR-004 catalog integration are Slices C and D
 and are deliberately absent.
 """
 
@@ -24,7 +26,14 @@ from rules.exploration.light_and_exploration_resources import (
     TORCH_TURNS,
     LightSource,
     LightSourceKind,
+    MundaneLightContribution,
+    deplete,
+    mundane_light_contribution,
+    refuel_lantern,
 )
+
+TORCH = LightSourceKind.TORCH
+LANTERN = LightSourceKind.LANTERN
 
 # --- Kinds -----------------------------------------------------------------
 
@@ -184,6 +193,234 @@ def test_the_value_object_carries_no_extra_state() -> None:
         source.lit = True  # type: ignore[misc]
 
 
+# =========================================================================
+# Slice B — depletion
+# =========================================================================
+
+
+def test_one_elapsed_turn_spends_one_turn_of_fuel() -> None:
+    """L8 — lit torch, EXP-002 reports 1 elapsed turn, 5 remaining."""
+    (spent,) = deplete([LightSource.fresh(TORCH, lit=True)], 1)
+    assert spent.remaining_turns == 5
+    assert spent.lit is True
+
+
+def test_a_torch_is_expended_after_its_six_turns() -> None:
+    """L9 — 6 elapsed turns: 0 remaining, EXPENDED, contributing nothing."""
+    (spent,) = deplete([LightSource.fresh(TORCH, lit=True)], 6)
+    assert spent.remaining_turns == 0
+    assert spent.lit is False
+    assert spent.illumination_radius_feet is None
+
+
+def test_remaining_turns_floor_at_zero_and_never_go_negative() -> None:
+    """L10 — 9 elapsed turns against a 6-turn torch floors at 0."""
+    (spent,) = deplete([LightSource.fresh(TORCH, lit=True)], 9)
+    assert spent.remaining_turns == 0
+
+
+def test_an_unlit_source_does_not_deplete() -> None:
+    """L11 — an unlit torch is not burning, so it spends no fuel."""
+    (spent,) = deplete([LightSource.fresh(TORCH)], 3)
+    assert spent.remaining_turns == 6
+    assert spent.lit is False
+
+
+def test_zero_elapsed_turns_changes_nothing() -> None:
+    source = LightSource.fresh(LANTERN, lit=True)
+    (spent,) = deplete([source], 0)
+    assert spent == source
+
+
+def test_depletion_returns_new_values_and_mutates_nothing() -> None:
+    source = LightSource.fresh(TORCH, lit=True)
+    deplete([source], 4)
+    assert source.remaining_turns == 6, "the input value object was mutated"
+
+
+def test_depleting_no_sources_is_valid() -> None:
+    assert deplete([], 3) == ()
+
+
+@pytest.mark.parametrize("bad", [True, "1", 1.5, None])
+def test_elapsed_turns_domain_is_validated(bad: object) -> None:
+    """EXP-006 owns the numeric domain of elapsed_turns, not its provenance."""
+    with pytest.raises(ValueError, match="elapsed_turns must be an int"):
+        deplete([LightSource.fresh(TORCH, lit=True)], bad)  # type: ignore[arg-type]
+
+
+def test_negative_elapsed_turns_is_refused() -> None:
+    with pytest.raises(ValueError, match="must not be negative"):
+        deplete([LightSource.fresh(TORCH, lit=True)], -1)
+
+
+def test_depletion_refuses_a_non_light_source() -> None:
+    with pytest.raises(ValueError, match="must contain LightSource values"):
+        deplete(["torch"], 1)  # type: ignore[list-item]
+
+
+# --- L12: refuelling -------------------------------------------------------
+
+
+def test_an_expended_lantern_takes_a_fresh_flask() -> None:
+    """L12 — 24 remaining, and it contributes illumination again."""
+    expended = LightSource(kind=LANTERN, remaining_turns=0, lit=False)
+    refuelled = refuel_lantern(expended)
+    assert refuelled.remaining_turns == 24
+    assert refuelled.lit is True
+    assert refuelled.illumination_radius_feet == 30
+
+
+def test_a_torch_cannot_be_refuelled() -> None:
+    """RC gives the flask to the lantern; a fresh torch is a new source."""
+    with pytest.raises(ValueError, match="only a lantern burns a flask"):
+        refuel_lantern(LightSource(kind=TORCH, remaining_turns=0, lit=False))
+
+
+def test_refuelling_a_lantern_that_has_not_reached_zero_is_refused() -> None:
+    """The approved card states refuelling for a lantern *reaching zero*.
+
+    Topping up a partly-full lantern is not established, and inventing an
+    answer would be implementation policy. Flagged for adjudication.
+    """
+    with pytest.raises(ValueError, match="only for a lantern that has reached zero"):
+        refuel_lantern(LightSource.fresh(LANTERN, lit=True))
+
+
+def test_refuel_refuses_a_non_light_source() -> None:
+    with pytest.raises(ValueError, match="must be a LightSource"):
+        refuel_lantern("lantern")  # type: ignore[arg-type]
+
+
+# =========================================================================
+# Slice B — mundane-light contribution
+# =========================================================================
+
+
+def test_no_sources_contribute_nothing() -> None:
+    """L28 — and nothing further is asserted."""
+    contribution = mundane_light_contribution([])
+    assert contribution.lit_sources == ()
+    assert contribution.any_mundane_source_lit is False
+    assert contribution.max_mundane_radius_feet is None
+
+
+def test_a_lit_source_contributes_thirty_feet() -> None:
+    """L27."""
+    contribution = mundane_light_contribution([LightSource.fresh(TORCH, lit=True)])
+    assert contribution.any_mundane_source_lit is True
+    assert contribution.max_mundane_radius_feet == 30
+
+
+def test_unlit_sources_are_filtered_out_by_the_aggregate_not_the_caller() -> None:
+    """A caller cannot accidentally include a spent torch by forgetting to
+    filter, because filtering is not the caller's job."""
+    contribution = mundane_light_contribution(
+        [
+            LightSource.fresh(TORCH),  # unlit
+            LightSource(kind=TORCH, remaining_turns=0, lit=False),  # expended
+            LightSource.fresh(LANTERN, lit=True),  # lit
+        ]
+    )
+    assert contribution.lit_sources == (LightSource.fresh(LANTERN, lit=True),)
+    assert contribution.any_mundane_source_lit is True
+
+
+def test_the_aggregate_cannot_be_constructed_with_an_unlit_source() -> None:
+    """The second barrier: even direct construction refuses a non-lit member.
+
+    Together with Slice A's exhausted-never-lit invariant, this makes an
+    exhausted source in the aggregate unreachable by two independent
+    routes rather than by trusting the caller.
+    """
+    with pytest.raises(ValueError, match="only lit sources"):
+        MundaneLightContribution(lit_sources=(LightSource.fresh(TORCH),))
+
+
+def test_an_exhausted_source_can_never_reach_the_aggregate() -> None:
+    """The property the two barriers exist to guarantee, stated directly."""
+    with pytest.raises(ValueError, match="exhausted source is never lit"):
+        # barrier 1: the only source that could carry 0 turns into the
+        # aggregate would have to be lit, and that is unconstructible.
+        MundaneLightContribution(
+            lit_sources=(LightSource(kind=TORCH, remaining_turns=0, lit=True),)
+        )
+
+
+def test_the_derived_figures_cannot_disagree_with_the_sources() -> None:
+    """They are computed properties, not stored fields, so there is no
+    state to get out of step."""
+    assert not hasattr(MundaneLightContribution, "__dataclass_fields__") or set(
+        MundaneLightContribution.__dataclass_fields__
+    ) == {"lit_sources"}
+
+
+def test_the_aggregate_refuses_a_non_tuple_and_non_source() -> None:
+    with pytest.raises(ValueError, match="must be a tuple"):
+        MundaneLightContribution(lit_sources=[])  # type: ignore[arg-type]
+    with pytest.raises(ValueError, match="must contain LightSource values"):
+        MundaneLightContribution(lit_sources=("torch",))  # type: ignore[arg-type]
+
+
+def test_querying_light_state_needs_no_surprise_or_encounter_state() -> None:
+    """L34 — surprise is not an input to this card."""
+    signature = inspect.signature(mundane_light_contribution)
+    assert list(signature.parameters) == ["sources"]
+
+
+# --- L15a / L15b: the multiple-source distinction --------------------------
+
+
+def test_one_source_expiring_does_not_darken_the_party() -> None:
+    """L15a — the decisive case. Two lit torches, one expires after its six
+    turns; the other was lit later and still burns. The aggregate still
+    reports mundane illumination."""
+    older = LightSource(kind=TORCH, remaining_turns=6, lit=True)
+    newer = LightSource(kind=LANTERN, remaining_turns=24, lit=True)
+
+    spent = deplete([older, newer], 6)
+
+    expired, still_burning = spent
+    assert expired.remaining_turns == 0 and expired.lit is False
+    assert still_burning.remaining_turns == 18 and still_burning.lit is True
+
+    contribution = mundane_light_contribution(spent)
+    assert contribution.any_mundane_source_lit is True, "one source expiring darkened the party"
+    assert contribution.lit_sources == (still_burning,)
+    assert contribution.max_mundane_radius_feet == 30
+
+
+def test_exhaustion_produces_no_world_state_at_all() -> None:
+    """L15b — guard. Depletion returns sources and nothing else: there is no
+    darkness, NO_LIGHT, blindness or Visibility value for it to produce."""
+    result = deplete([LightSource.fresh(TORCH, lit=True)], 6)
+    assert isinstance(result, tuple)
+    assert all(isinstance(source, LightSource) for source in result)
+
+
+def test_no_world_state_vocabulary_exists_on_the_aggregate() -> None:
+    """L15b / L29 / L31 — guard. The result type exposes no name a consumer
+    could read as a claim about the world."""
+    forbidden = {
+        "darkness",
+        "dark",
+        "no_light",
+        "visibility",
+        "blind",
+        "blindness",
+        "surprise",
+        "world",
+        "global",
+        "illumination",
+    }
+    names = {
+        name for name in dir(MundaneLightContribution) if not name.startswith("_")
+    }
+    assert not {
+        name for name in names if forbidden & {part.lower() for part in name.split("_")}
+    }
+
+
 # --- Architectural guard: no second clock ----------------------------------
 
 
@@ -208,19 +445,25 @@ def test_this_module_imports_no_time_machinery() -> None:
     assert not {m for m in imported if any(f in m for f in forbidden)}
 
 
-def test_slice_a_exposes_no_later_slice_behaviour() -> None:
-    """Slice A is the value model only: no depletion, aggregation, ignition,
-    RNG, catalog lookup, visibility, darkness, blindness, ration or
-    starvation surface exists yet (implementation plan §14, §10)."""
+def test_no_unauthorized_slice_behaviour_is_exposed() -> None:
+    """Slices A and B are authorized; C and D are not.
+
+    ``deplete`` and ``mundane_light_contribution`` are Slice B and are
+    expected. What must not appear is ignition (Slice C), CHAR-004 catalog
+    integration (Slice D), or any of the card's permanently excluded
+    responsibilities (implementation plan §4, §14).
+    """
     forbidden = {
-        "deplete",
-        "depletion",
-        "contribution",
         "ignite",
         "ignition",
+        "tinderbox",
+        "fire",
+        "skill",
         "rng",
         "random",
+        "roll",
         "catalog",
+        "item",
         "visibility",
         "darkness",
         "blind",

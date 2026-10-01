@@ -8,7 +8,9 @@ contains **Slice A only** — the light-source value/state model.
 
 This module owns the *mundane* light-resource state this project's own
 sources contribute: whether a source it owns is lit, that source's
-radius, and its remaining duration. It owns nothing about the world.
+radius, its remaining duration, how that duration is spent against
+authoritative elapsed turns, and what those sources together
+contribute. It owns nothing about the world.
 
 It does not, and must not:
 
@@ -25,13 +27,13 @@ It does not, and must not:
   (CHAR-009), torch-as-weapon or oil-as-missile behaviour (COMBAT-*),
   rations, or starvation causation.
 
-Slice A deliberately contains no depletion, no contribution
-aggregation, no ignition, and no CHAR-004 catalog lookup: those are
-Slices B, C and D of the approved plan and are not authorized yet.
+Slices A and B are implemented. Ignition (Slice C) and CHAR-004 catalog
+lookup (Slice D) are not authorized yet and are deliberately absent.
 """
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum, auto
 from types import MappingProxyType
@@ -44,6 +46,10 @@ __all__ = [
     "TORCH_TURNS",
     "LightSource",
     "LightSourceKind",
+    "MundaneLightContribution",
+    "deplete",
+    "mundane_light_contribution",
+    "refuel_lantern",
 ]
 
 
@@ -179,3 +185,190 @@ class LightSource:
         :data:`MUNDANE_LIGHT_RADIUS_FEET`.
         """
         return MUNDANE_LIGHT_RADIUS_FEET if self.lit else None
+
+
+def _require_elapsed_turns(elapsed_turns: int) -> int:
+    """Validate the caller-supplied elapsed-turn count's numeric domain.
+
+    EXP-006 owns the **numeric domain** of this value and deliberately
+    **not its provenance** (human adjudication 2026-10-01 §3). The count
+    represents authoritative elapsed turns produced by EXP-002 and handed
+    over by the caller; this module imports no time machinery, holds no
+    counter, and has no way to prove where an integer came from. Which
+    future orchestrator guarantees that origin is a frontier concern and
+    is not solved here.
+
+    No fake provenance wrapper is introduced: a type that cannot actually
+    prove origin would assert a guarantee this module does not have.
+    """
+    if not isinstance(elapsed_turns, int) or isinstance(elapsed_turns, bool):
+        raise ValueError(f"elapsed_turns must be an int, got {elapsed_turns!r}")
+    if elapsed_turns < 0:
+        raise ValueError(f"elapsed_turns must not be negative, got {elapsed_turns!r}")
+    return elapsed_turns
+
+
+def deplete(sources: Iterable[LightSource], elapsed_turns: int) -> tuple[LightSource, ...]:
+    """Spend ``elapsed_turns`` against each lit source, source by source.
+
+    For a **lit** source (Rule Card §4)::
+
+        new_remaining = max(0, remaining_turns - elapsed_turns)
+
+    and if that reaches zero the source becomes unlit and **contributes no
+    illumination** — the Necessary Mechanical Consequence of RC's finite
+    stated durations (approved cases **L8**, **L9**, **L10**).
+
+    For an **unlit** source, elapsed turns change nothing: an unlit torch
+    is not burning, so it spends no fuel (approved case **L11**).
+
+    ``elapsed_turns == 0`` is valid and changes no state.
+
+    **The consequence is strictly source-local.** One source reaching zero
+    says nothing about any other source, about the party, or about the
+    world: no party darkness, no world darkness, no ``NO_LIGHT``, no
+    blindness, no encounter ``Visibility``, no burn-out event and no
+    partial-turn proration is synthesized here (Rule Card §4, §6, §8;
+    approved cases **L15**, **L15a**, **L15b**). :func:`deplete` returns
+    sources and nothing else, which is what makes that guarantee
+    structural rather than merely documented.
+
+    Returns a new tuple; inputs are never mutated, consistent with the
+    frozen value semantics Slice A established.
+    """
+    spent = _require_elapsed_turns(elapsed_turns)
+    depleted: list[LightSource] = []
+    for source in sources:
+        if not isinstance(source, LightSource):
+            raise ValueError(f"sources must contain LightSource values, got {source!r}")
+        if not source.lit:
+            depleted.append(source)
+            continue
+        remaining = max(0, source.remaining_turns - spent)
+        depleted.append(
+            LightSource(kind=source.kind, remaining_turns=remaining, lit=remaining > 0)
+        )
+    return tuple(depleted)
+
+
+def refuel_lantern(source: LightSource) -> LightSource:
+    """Supply a fresh flask of oil to an **expended** lantern.
+
+    Rule Card §4: *"A lantern reaching zero consumes its flask; a further
+    flask may be supplied, which resets ``remaining_turns`` to 24."* The
+    refuelled lantern contributes illumination again (approved case
+    **L12**).
+
+    The card states this operation for a lantern that has **reached
+    zero**, and this function honours that stated precondition rather
+    than extending it. Two requests are therefore refused:
+
+    - a **torch**, which has no fuel. RC gives the flask to the lantern;
+      a fresh torch is a new source, not a refuelled one;
+    - a lantern that is **not yet expended**. The approved card does not
+      state what supplying a flask to a partly-full lantern does, and
+      inventing an answer — topping up to 24, or adding 24 — would be
+      implementation policy the rules contract does not establish. See
+      the Slice-B review note: this is **flagged for adjudication, not
+      decided here**.
+    """
+    if not isinstance(source, LightSource):
+        raise ValueError(f"source must be a LightSource, got {source!r}")
+    if source.kind is not LightSourceKind.LANTERN:
+        raise ValueError(f"only a lantern burns a flask of oil, got {source.kind!r}")
+    if source.remaining_turns != 0:
+        raise ValueError(
+            "the approved card states refuelling only for a lantern that has reached zero; "
+            f"got remaining_turns={source.remaining_turns!r}"
+        )
+    return LightSource(
+        kind=LightSourceKind.LANTERN,
+        remaining_turns=LANTERN_TURNS_PER_FLASK,
+        lit=True,
+    )
+
+
+@dataclass(frozen=True, slots=True)
+class MundaneLightContribution:
+    """What EXP-006's **own** sources contribute. **Not** a statement about
+    the world.
+
+    Every name here carries ``mundane`` or ``source``, deliberately: a
+    consumer cannot write ``if not contribution.any_mundane_source_lit``
+    and mean *"it is dark"* without the identifier itself contradicting
+    them. The type is **not** called ``LightState``, ``Illumination``,
+    ``Visibility`` or ``WorldLight`` — each of which would invite exactly
+    the misreading the Rule Card's Finding B withdrew (Rule Card §6, §7;
+    implementation plan §7.1).
+
+    **An exhausted source cannot appear here**, and that is enforced by
+    two independent barriers rather than by trusting callers:
+
+    1. ``lit_sources`` may contain only **lit** sources, checked below;
+    2. Slice A's own invariant makes ``lit=True`` with
+       ``remaining_turns == 0`` **unconstructible**, so a lit source is
+       necessarily a non-exhausted one.
+
+    The two derived figures are **computed properties, not stored
+    fields**, so they cannot disagree with ``lit_sources`` — there is no
+    state to get out of step.
+    """
+
+    lit_sources: tuple[LightSource, ...]
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.lit_sources, tuple):
+            raise ValueError(f"lit_sources must be a tuple, got {self.lit_sources!r}")
+        for source in self.lit_sources:
+            if not isinstance(source, LightSource):
+                raise ValueError(f"lit_sources must contain LightSource values, got {source!r}")
+            if not source.lit:
+                raise ValueError(f"lit_sources must contain only lit sources, got {source!r}")
+
+    @property
+    def any_mundane_source_lit(self) -> bool:
+        """Whether **this card's own** sources include a lit one.
+
+        ``False`` means only that EXP-006 knows of no active mundane
+        source it owns. It does **not** mean complete darkness,
+        ``NO_LIGHT``, any ``Visibility`` category, blindness, or that the
+        party or location is dark (Rule Card §6, human adjudication
+        Finding B).
+        """
+        return bool(self.lit_sources)
+
+    @property
+    def max_mundane_radius_feet(self) -> int | None:
+        """The largest radius this card's own lit sources contribute.
+
+        ``None`` — **not** ``0`` — when nothing is lit. ``0`` reads as "a
+        radius of zero", which is a claim about illumination; ``None``
+        reads as "this card contributes no radius", which is the truth
+        (implementation plan §7.1).
+
+        Both approved kinds share one radius, so no brightness or quality
+        distinction is representable (approved cases **L4**, **L5**).
+        """
+        return MUNDANE_LIGHT_RADIUS_FEET if self.lit_sources else None
+
+
+def mundane_light_contribution(sources: Iterable[LightSource]) -> MundaneLightContribution:
+    """What ``sources`` together contribute, mundane sources only.
+
+    **The filtering is done here, not by the caller.** Unlit sources — and
+    therefore, by Slice A's invariant, every exhausted source — are
+    excluded. A caller cannot accidentally include a spent torch by
+    forgetting to filter, because filtering is not the caller's job and
+    the result type would reject it anyway (approved cases **L27**,
+    **L28**, **L15a**).
+
+    Takes no surprise state and no encounter circumstance: querying this
+    card's own light state requires neither (approved case **L34**).
+    """
+    return MundaneLightContribution(
+        lit_sources=tuple(
+            source
+            for source in sources
+            if isinstance(source, LightSource) and source.lit
+        )
+    )
