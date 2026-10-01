@@ -288,6 +288,82 @@ This is NOT:
 `CLUSTER-004` historical-rules implementation remains **NOT AUTHORIZED**. `ENC-005` Stage B
 remains **DEFERRED** and is untouched by this assessment.
 
+## 8a. Bounded remediation — 2026-10-01, ignition portion only
+
+> **The original `PASS` in §0 and the assessment in §1–§8 are preserved unaltered.** They were
+> made on 2026-10-01 and **missed two defects in the ignition portion**. This section records what
+> was missed, the human adjudications that resolve it, and a reassessment of **only** that portion.
+> Every other finding above stands and is not re-performed.
+
+### 8a.1 What the original gate missed
+
+**Missed defect 1 — an overlapping ignition branch.** §5.C concluded that *"Branch selection is a
+pure function of three booleans… producing one of four dispositions"* and declared it
+deterministic. **It never tested `(has_skill=True, has_tinderbox=False, conditions=ADVERSE)`.**
+That input satisfied two approved branches at once — `1d6` and `ROUTED_SKILL_CHECK` — which are
+incompatible. §7's silence table listed *"Adverse ignition without `Fire-Building` → refuse"*,
+which is the **lacks-skill** case, not this intersection; the gate mistook one for the other.
+
+**Missed defect 2 — no implementation contract for one-attempt-per-round.** §5.F judged the
+ignition transitions implementable without noticing that approved case `L19`
+(*"Two ignition attempts in one round → ERROR"*) requires knowing an attempt already happened —
+round state the plan correctly forbids `EXP-006` from holding. The gate's §5.A *"no second clock"*
+finding and its §5.F transition finding were each true in isolation and **jointly unsatisfiable**,
+and the gate did not notice.
+
+**Both were found by a later pre-Slice-C audit, not by this gate.** Recorded as a gate miss rather
+than presented as something the gate had resolved.
+
+### 8a.2 The adjudications that resolve them
+
+**`SR-11`** (human project owner, 2026-10-01) — where a character has `Fire-Building` and
+conditions are `ADVERSE`, the adverse-condition procedure governs **regardless of a tinderbox**,
+so `(skill, no tinderbox, ADVERSE) → ROUTED_SKILL_CHECK`. The accepted evidence establishes both
+RC conditionals and **no precedence between them**; the ruling resolves only that intersection.
+
+**Caller-supplied attempt state** (same date) — the future ignition API consumes
+`attempt_already_made_this_round: bool`. `EXP-006` **enforces** the one-attempt rule from
+authoritative state it is **given** and does not become the authority that **tracks** it — the
+same boundary already established for `elapsed_turns`. No round counter, no clock, no mutable
+cross-call state, and no orchestrator or action-economy framework is created.
+
+### 8a.3 The resulting matrix — reassessed
+
+```text
+skill  tinderbox  conditions   disposition                     provenance
+ yes      yes      ORDINARY    AUTOMATIC                       RC Explicit
+ yes      yes      ADVERSE     ROUTED_SKILL_CHECK              RC Explicit
+ yes      no       ORDINARY    ROLL_1D6_IGNITE_1_2             RC Explicit
+ yes      no       ADVERSE     ROUTED_SKILL_CHECK              SR-11
+ no       yes      ORDINARY    ROLL_1D6_IGNITE_1_2             RC Explicit
+ no       yes      ADVERSE     REFUSE                          RC silence
+ no       no       ORDINARY    REFUSE                          RC silence
+ no       no       ADVERSE     REFUSE                          RC silence
+```
+
+**Eight combinations, eight rows, no wildcard.** Mechanically verified: every
+`(skill, tinderbox, conditions)` triple matches **exactly one** row, and
+`(True, False, ADVERSE)` appears once and resolves to `ROUTED_SKILL_CHECK`.
+
+### 8a.4 Reassessment of the ignition portion only
+
+| Question | Finding |
+|---|---|
+| Branch selection deterministic? | **Yes**, now by enumeration rather than by assertion |
+| `(True, False, ADVERSE)` resolved? | **Yes** — `ROUTED_SKILL_CHECK`, by `SR-11` |
+| Any wildcard/overlap remaining? | **No** |
+| `L19` implementable? | **Yes** — from `attempt_already_made_this_round`, a caller input |
+| Does `EXP-006` gain round state? | **No** — guard `L19b` |
+| Implementer adjudicates anything? | **No** — the one ambiguity is settled by ruling, not by the implementer |
+
+```text
+EXP-006 PRE-CODE GATE: REVALIDATED -- 2026-10-01 (ignition portion)
+
+The original PASS stands as recorded, with its two misses documented above
+rather than erased.  The ignition portion is deterministic after remediation.
+This remains a readiness finding, not an authorization.
+```
+
 ## 9. Provenance
 
 Assessed against the approved Rule Card at `b9af227`, the accepted Stage-A packet, `ARCHITECTURE.md`

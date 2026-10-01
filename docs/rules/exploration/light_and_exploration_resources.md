@@ -19,8 +19,10 @@ Light & Exploration Resources
 `APPROVED`
 
 > **Approved by the human project owner, 2026-10-01**, as remediated at `b9af227`. Stage A:
-> `ACCEPTED`. The approved card carries **no Simulator Ruling, no `Alternate-Source Compatible
-> Completion` and no `Human-Approved Variant`**.
+> `ACCEPTED`. The approved card carried **no Simulator Ruling** at approval; **`SR-11` was
+> added 2026-10-01** by human adjudication of an ignition ambiguity the accepted evidence had
+> exposed. It still carries **no `Alternate-Source Compatible Completion` and no
+> `Human-Approved Variant`**.
 >
 > **Ratified as approved, without further change to the submitted contract:** the §1–§8 mechanical
 > specification and §A–§E boundaries, and all eight bounded-remediation findings —
@@ -45,9 +47,9 @@ Light & Exploration Resources
 >
 > **This is a correction of Stage-B synthesis wording to match the adjudicated fuel/ignition
 > separation. It is NOT a Simulator Ruling, NOT a Human-Approved Variant, NOT alternate-source
-> completion, and NOT new source research.** No Stage-A evidence is touched, and the card's
-> provenance totals are unchanged: **Simulator Ruling NONE, Alternate-Source Compatible Completion
-> NONE, Human-Approved Variant NONE.**
+> completion, and NOT new source research.** No Stage-A evidence is touched, and **this
+> correction added no ruling of any kind**. (The card's totals later changed for an unrelated
+> question: `SR-11`, 2026-10-01 — see §Simulator Ruling.)
 
 > **Bounded Rule Card remediation applied 2026-10-01 on human adjudication.** Human review did
 > **not** approve the first submission; it found three related Stage-B synthesis defects at the
@@ -66,8 +68,10 @@ Light & Exploration Resources
 >   Mechanical Consequence**, scoped to the source and explicitly **not** to the party or world
 >   (§4, L15a, L15b).
 >
-> **Still no Simulator Ruling, no Alternate-Source Compatible Completion, no Human-Approved
-> Variant.** These were adjudications of synthesis and provenance boundaries, not variants.
+> **No Simulator Ruling, no Alternate-Source Compatible Completion, no Human-Approved Variant
+> arose from Findings A-C.** Those were adjudications of synthesis and provenance boundaries.
+> (`SR-11` was added later, 2026-10-01, for a different and genuinely ambiguous question --
+> see §Simulator Ruling.)
 >
 > **Stage A accepted by the human project owner, 2026-09-29.** Evidence:
 > `docs/rules/evidence/EXP-006-evidence-remediated.md`, which passed independent `DEC-0010`
@@ -78,9 +82,10 @@ Light & Exploration Resources
 > first-pass packet** (`EXP-006-evidence.md`), whose two headline conclusions were falsified by
 > the source. See §Synthesis Falsification, item 9.
 >
-> **This card carries no Simulator Ruling**, no `Alternate-Source Compatible Completion` and no
-> `Human-Approved Variant`. Every clause is `Rules Cyclopedia Explicit` or a necessary
-> consequence of one.
+> **This card carries exactly one Simulator Ruling, `SR-11`** (§5's precedence at
+> `skill + no tinderbox + ADVERSE`), and no `Alternate-Source Compatible Completion` and no
+> `Human-Approved Variant`. Every other clause is `Rules Cyclopedia Explicit`, a necessary
+> consequence of one, or an RC silence refused rather than filled.
 >
 > **Approval of this card would not authorize implementation.** No Pre-Code Gate has been begun
 > for `CLUSTER-004`, and no implementation plan exists.
@@ -194,10 +199,54 @@ lineage disambiguation.
 
 ## Simulator Ruling
 
-**Not applicable. This card proposes none, and none is required.**
+### `SR-11` — the adverse-condition `Fire-Building` branch governs regardless of a tinderbox
+
+**Ruling, human project owner, 2026-10-01:**
+
+```text
+If a character has Fire-Building and conditions are ADVERSE, the
+adverse-condition Fire-Building procedure governs, regardless of whether
+the character possesses a tinderbox.
+
+Therefore:
+    skill = True, tinderbox = False, conditions = ADVERSE
+        ->  ROUTED_SKILL_CHECK
+
+The ordinary no-tinderbox 1d6 procedure does NOT override the
+adverse-condition branch.
+```
+
+**The ambiguity this resolves.** The accepted Stage-A evidence (`E-36`, p. 83) establishes two
+conditionals that RC states **in parallel, with no precedence**:
+
+```text
+RC Explicit:  "If the character is trying to build a fire WITHOUT a tinderbox,
+               he will eventually succeed; he must make a 1d6 roll each round,
+               and on a 1 or 2 he ignites the fire."
+
+RC Explicit:  "If the character is trying to build a fire IN ADVERSE CONDITIONS
+               (during high winds or using wet wood), he must make a skill check
+               with penalties assigned by the DM."
+```
+
+**Both source statements are preserved above, separately and unchanged.** The input
+`(skill, no tinderbox, ADVERSE)` satisfies both antecedents, and **RC supplies nothing that
+chooses between them** — not an ordering rule, not a general-versus-specific principle, not a
+restatement elsewhere. The ruling resolves **only that intersection**.
+
+**ID allocation.** `SR-11` is the next available identifier. The registry was inspected rather
+than assumed: `SR-1`–`SR-10` are allocated (`CLUSTER-002` and `CLUSTER-003`), and the only two
+textual occurrences of `SR-11` in the repository are `CHAR-005`'s explicit statements that
+**no `SR-11` exists** — denials, not allocations.
+
+**Scope — deliberately narrow.** `SR-11` changes **no other row** of §5's matrix. The two
+RC-explicit ordinary branches, the RC-explicit adverse-with-tinderbox branch, and all three
+RC-silence refusals stand exactly as they were.
+
+---
 
 `SR-10` (starvation movement progression) is pre-existing, belongs to `CHAR-005` §7, and is
-neither reopened nor extended here.
+neither reopened, extended nor renumbered here.
 
 ## Human-Approved Variant
 
@@ -296,14 +345,45 @@ mechanic.
 
 ### 5. Ignition
 
+**All eight combinations, each appearing exactly once. No wildcard, no `any`, no overlap.**
+
 ```text
-has Fire-Building skill AND has tinderbox AND ORDINARY   -> AUTOMATIC, no roll
-has Fire-Building skill AND no tinderbox                 -> 1d6 per round, ignite on 1-2
-has Fire-Building skill AND ADVERSE                      -> skill check (CHAR-012), DM penalty
-no Fire-Building skill  AND has tinderbox AND ORDINARY   -> 1d6 per round, ignite on 1-2
-no Fire-Building skill  AND has tinderbox AND ADVERSE    -> UNDEFINED BY RC -- refuse
-no Fire-Building skill  AND no tinderbox                 -> no procedure stated -- refuse
+skill  tinderbox  conditions   disposition                     provenance
+-----  ---------  ----------   -----------------------------   -------------------------
+ yes      yes      ORDINARY    AUTOMATIC, no roll              RC Explicit
+ yes      yes      ADVERSE     skill check (CHAR-012)          RC Explicit
+ yes      no       ORDINARY    1d6 per round, ignite on 1-2    RC Explicit
+ yes      no       ADVERSE     skill check (CHAR-012)          SR-11  <- the ruling
+ no       yes      ORDINARY    1d6 per round, ignite on 1-2    RC Explicit
+ no       yes      ADVERSE     REFUSE -- undefined by RC       RC silence
+ no       no       ORDINARY    REFUSE -- no procedure stated   RC silence
+ no       no       ADVERSE     REFUSE -- no procedure stated   RC silence
 ```
+
+**The fourth row is `SR-11` and nothing else is.** RC states two parallel conditionals —
+*"If the character is trying to build a fire **without** a tinderbox… `1d6`…"* and *"If the
+character is trying to build a fire **in adverse conditions**… skill check…"* — and supplies **no
+precedence** between them. Their intersection is a genuine RC ambiguity, resolved by ruling, not
+by reading. See §Simulator Ruling.
+
+### 5.1 One attempt per round — enforced from caller-supplied state
+
+RC: *"Someone with a tinderbox may try to use it **once per round**."* The rule is this card's;
+**knowledge of the current round is not.**
+
+```text
+attempt_already_made_this_round: bool        supplied by the caller
+
+    False  ->  one ignition attempt may be evaluated
+    True   ->  ERROR -- another attempt is not permitted this round
+```
+
+**This is the same API boundary as `elapsed_turns`** (§1, §4): `EXP-006` **enforces** a rule from
+authoritative state it is **given**, and does not become the authority that **tracks** that state.
+It holds no round counter, no round number, no clock and no mutable state across calls, and it
+never mutates the flag. The caller or orchestrator is responsible for supplying a truthful value;
+which component does so is a frontier concern, and **no orchestrator and no action-economy
+framework is created by this card** (approved case `L19`).
 
 At most **one attempt per round**. The skill-check resolution itself (`1d20` ≤ Intelligence,
 natural `1` succeeds, `20` fails, DM penalty added) is **`CHAR-012`'s** and is **consumed, not
@@ -507,7 +587,9 @@ Case IDs use the `L` series (Light), distinct from `CHAR-004`'s `E`, `CHAR-005`'
 |---|---|---|
 | L17 | Tinderbox, no skill, ordinary | `1d6`; ignites on **`1` or `2`** |
 | L18 | Tinderbox, no skill, ordinary, roll `3` | fails; may retry next round |
-| L19 | **Two ignition attempts in one round** | **ERROR** — at most one per round |
+| L19 | Ignition requested with `attempt_already_made_this_round = True` | **ERROR** — another attempt is not permitted this round (§5.1) |
+| L19a | Ignition requested with `attempt_already_made_this_round = False` | evaluated normally; the card **does not record** that an attempt occurred |
+| L19b | **This card tracking rounds, or mutating the attempt flag across calls** | **MUST NOT OCCUR** — guard test; it enforces the rule from supplied state, it is not the authority that tracks it |
 | L20 | Tinderbox **and** `Fire-Building`, ordinary | **AUTOMATIC**, no roll |
 | L21 | `Fire-Building`, **no** tinderbox | `1d6` per round, ignites on `1` or `2` |
 | L22 | `Fire-Building`, adverse conditions | routes to a **`CHAR-012` skill check**; this card supplies no roll |
@@ -559,7 +641,9 @@ Case IDs use the `L` series (Light), distinct from `CHAR-004`'s `E`, `CHAR-005`'
 
 | Element | Classification |
 |---|---|
-| §2 radii; §3 durations; §5 tinderbox `1d6` on `1–2` and once-per-round; §5 `Fire-Building` branches | **Rules Cyclopedia Explicit** |
+| §2 radii; §3 durations; §5 tinderbox `1d6` on `1–2`; §5's once-per-round **rule**; §5's three RC-explicit `Fire-Building` branches and its three RC-silence refusals | **Rules Cyclopedia Explicit** (the refusals being RC silence, refused rather than filled) |
+| **§5 precedence at `(skill, no tinderbox, ADVERSE)` → `ROUTED_SKILL_CHECK`** | **`SR-11` — Simulator Ruling.** **Not** `Rules Cyclopedia Explicit`: RC states two parallel conditionals and no precedence. **Not** a `Necessary Mechanical Consequence`: neither outcome is forced, and the competing branch is equally well attested. **Not** a `Human-Approved Variant` and **not** `Alternate-Source Compatible Completion`: no source is preferred over RC and no alternate edition was consulted. It resolves an intersection RC leaves genuinely ambiguous |
+| §5.1 `attempt_already_made_this_round` as a **caller-supplied input** | **Not a rule** — an API boundary, identical in kind to `elapsed_turns`. The *rule* (one attempt per round) is RC Explicit; only the question of who tracks the round is answered here, and it is answered by **not** answering it inside this card |
 | §7's recorded p. 92/p. 93 facts; §8's statement of RC's `complete darkness + no infravision → blindness` rule | **Rules Cyclopedia Explicit — recorded as ROUTED EVIDENCE, not executed here** |
 | §4 depletion arithmetic against elapsed turns | **Necessary Mechanical Consequence** of RC's turn-denominated durations and `EXP-002`'s authoritative turn |
 | **§4 an `EXPENDED` source contributes no illumination** | **Necessary Mechanical Consequence.** Premises, both RC Explicit: a torch *"burns for one hour (six turns)"* and a lantern *"[burns] one flask of oil in four hours (24 turns)"* (pp. 69–70), and each casts its `30'` radius **by burning**. A stated finite duration that has elapsed is a duration that is over; a source not burning is not casting its radius. No alternative reading of a finite printed duration exists, so **no Simulator Ruling is required**. **Scoped to the source** — it says nothing about the party or the world (guard L15b) |
@@ -572,8 +656,8 @@ Case IDs use the `L` series (Light), distinct from `CHAR-004`'s `E`, `CHAR-005`'
 | §B, §C routing | **Not rules** — repository responsibility boundaries, set by accepted Stage-A evidence and governance |
 | §D rations, §E starvation | **Evidenced, ownership deliberately unassigned by governance** |
 
-**This card contains no `Simulator Ruling`, no `Alternate-Source Compatible Completion` and no
-`Human-Approved Variant`.**
+**This card contains exactly one `Simulator Ruling` — `SR-11` — and no
+`Alternate-Source Compatible Completion` and no `Human-Approved Variant`.**
 
 ---
 
@@ -635,14 +719,15 @@ withdrawn; `ENC-001` owns it); that `any_lit == false` establishes darkness or b
 - Approved by: **Human project owner**
 - Date: **2026-10-01**
 - Approved at: **`b9af2270f80d67def24b913c264f5f133628452e`**
-- Notes: Ratifies the §1–§8 mechanical contract and the §A–§E boundaries. **This card owns no
-  Simulator Ruling** — every clause is `Rules Cyclopedia Explicit` or a necessary consequence of
-  one. The eight bounded-remediation findings are accepted as listed in §Status. Six RC silences,
+- Notes: Ratifies the §1–§8 mechanical contract and the §A–§E boundaries. At approval the card
+  owned **no** Simulator Ruling; **`SR-11` was added 2026-10-01** by separate human adjudication
+  (§Simulator Ruling). Every other clause is `Rules Cyclopedia Explicit` or a necessary
+  consequence of one. The eight bounded-remediation findings are accepted as listed in §Status. Six RC silences,
   plus the unowned complete-darkness world-state predicate (Open Question 7), **remain named and
   guarded rather than filled, by express approval**. Rations and starvation causation **remain
   deliberately unassigned**. Implementation is **not** authorized by this approval.
 
-**Submitted contract:** the §1–§8 mechanical specification and §A–§E boundaries, carrying **no
-Simulator Ruling**, **no `Alternate-Source Compatible Completion`** and **no `Human-Approved
-Variant`** — every clause `Rules Cyclopedia Explicit` or a necessary consequence of one, with
-six source silences named and guarded rather than filled.
+**Submitted contract:** the §1–§8 mechanical specification and §A–§E boundaries, carrying
+**exactly one Simulator Ruling (`SR-11`)**, **no `Alternate-Source Compatible Completion`** and
+**no `Human-Approved Variant`** — every other clause `Rules Cyclopedia Explicit` or a necessary
+consequence of one, with seven source silences named and guarded rather than filled.

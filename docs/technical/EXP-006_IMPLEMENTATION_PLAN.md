@@ -351,31 +351,71 @@ def ignition_outcome(
 Typed outcomes, **no magic strings** — consistent with `CheckOutcome` in
 `dungeon_wandering_monster_check.py`.
 
-| `has_skill` | `has_tinderbox` | conditions | Outcome | Case |
-|---|---|---|---|---|
-| ✓ | ✓ | `ORDINARY` | `AUTOMATIC` | `L20` |
-| ✓ | ✗ | any | `ROLL_1D6_IGNITE_1_2` | `L21` |
-| ✓ | — | `ADVERSE` | `ROUTED_SKILL_CHECK` | `L22` |
-| ✗ | ✓ | `ORDINARY` | `ROLL_1D6_IGNITE_1_2` | `L17`, `L18` |
-| ✗ | ✓ | `ADVERSE` | **`IgnitionNotDefinedError`** | `L23` |
-| ✗ | ✗ | any | **`IgnitionNotDefinedError`** | `L24` |
+> **Matrix corrected 2026-10-01.** The original used `any`/`—` wildcards in two rows that
+> overlapped at `(✓, ✗, ADVERSE)` and prescribed two incompatible outcomes — a plan defect, recorded
+> at §19.1. **All eight combinations are now enumerated explicitly; no wildcard remains.**
+
+```python
+def ignition_outcome(
+    *,
+    has_fire_building: bool,
+    has_tinderbox: bool,
+    conditions: IgnitionConditions,
+    attempt_already_made_this_round: bool,
+) -> IgnitionOutcome: ...
+```
+
+| `has_skill` | `has_tinderbox` | conditions | Outcome | Provenance | Case |
+|---|---|---|---|---|---|
+| ✓ | ✓ | `ORDINARY` | `AUTOMATIC` | RC Explicit | `L20` |
+| ✓ | ✓ | `ADVERSE` | `ROUTED_SKILL_CHECK` | RC Explicit | `L22` |
+| ✓ | ✗ | `ORDINARY` | `ROLL_1D6_IGNITE_1_2` | RC Explicit | `L21` |
+| ✓ | ✗ | `ADVERSE` | `ROUTED_SKILL_CHECK` | **`SR-11`** | `L22` |
+| ✗ | ✓ | `ORDINARY` | `ROLL_1D6_IGNITE_1_2` | RC Explicit | `L17`, `L18` |
+| ✗ | ✓ | `ADVERSE` | **`IgnitionNotDefinedError`** | RC silence | `L23` |
+| ✗ | ✗ | `ORDINARY` | **`IgnitionNotDefinedError`** | RC silence | `L24` |
+| ✗ | ✗ | `ADVERSE` | **`IgnitionNotDefinedError`** | RC silence | `L24` |
 
 **`ignition_outcome` is a pure branch selector. It performs no roll and consumes no RNG.** The
 `1d6` is executed by the caller against the project RNG once the branch is known; `ROUTED_SKILL_CHECK`
 is **emitted, not resolved** — the DM-assigned penalty is an input to `CHAR-012`'s check, never a
 value `EXP-006` produces (`L25`).
 
-**One attempt per round** is a caller-protocol constraint. `EXP-006` holds no round state (that
-would be a second clock); the plan's position is that the *caller* makes at most one call per
-round, and `L19` is a contract test on that protocol.
+### 11.1 One attempt per round — a caller-supplied precondition
 
-## 12. Deterministic-case mapping — all 51
+> **Corrected 2026-10-01.** The original text called this *"a caller-protocol constraint"* with
+> `L19` as *"a contract test on that protocol"* — but `L19` requires **detecting** a second
+> attempt, which needs round state the plan forbids. The plan named no parameter carrying it. Plan
+> defect, recorded at §19.2.
 
-> **Count corrected 2026-10-01: 50 → 51.** `L12a` (refuelling a lantern that has not reached zero
-> is **REFUSED**) was added to the approved Rule Card by the bounded consistency correction at
-> `5594907`, under human adjudication, **after** this plan was approved. It is a post-plan
-> addition and is classified **internal invariant guard**, taking that column from 11 to 12.
-> Future slice accounting must use **51**. No other case mapping is changed.
+```text
+attempt_already_made_this_round: bool        caller-supplied, authoritative
+
+    False  ->  evaluate the branch normally; the card records nothing
+    True   ->  ERROR -- another attempt is not permitted this round
+```
+
+**The same API boundary as `elapsed_turns`** (§8): `EXP-006` **enforces** the rule from
+authoritative state it is **given**; it does not become the authority that **tracks** that state.
+It holds no round counter, no clock, no mutable cross-call state, and never mutates the flag.
+Guard `L19b` asserts this. **No orchestrator and no action-economy framework is created** — which
+component supplies the truthful value is a frontier concern, deliberately unanswered here.
+
+## 12. Deterministic-case mapping — all 53
+
+> **Count corrected twice on 2026-10-01: 50 → 51 → 53**, both times by post-plan human
+> adjudication, and both verified by enumerating the card's IDs rather than by arithmetic.
+>
+> - **`L12a`** — refuelling a lantern that has not reached zero is **REFUSED** (consistency
+>   correction, `5594907`). Classified **internal invariant guard**.
+> - **`L19a`** — ignition with `attempt_already_made_this_round = False` evaluates normally and
+>   records nothing. Classified **unit behavior**.
+> - **`L19b`** — this card tracking rounds or mutating the attempt flag **MUST NOT OCCUR**.
+>   Classified **ownership/boundary guard**.
+>
+> Running totals: unit behavior **19**, ownership guard **19**, internal invariant guard **12**,
+> routed dependency **3**. Future slice accounting must use **53**. `L19` itself is restated, not
+> added. No other case mapping is changed.
 
 Counts re-derived from the approved card for this plan, **not assumed from the gate**; they
 match: **18 / 18 / 11 / 3**.
@@ -543,11 +583,25 @@ Two items are **flagged for the reviewer's judgement** and neither blocks:
 2. **Elapsed-turn provenance** (§8.2) — a bare `int` carries no authoritative-origin guarantee.
    That responsibility belongs to the unowned turn orchestrator, which this plan does not invent.
 
-## 19. Slice-C blockers — **two plan defects, recorded 2026-10-01**
+## 19. Slice-C blockers — **recorded 2026-10-01, RESOLVED 2026-10-01**
 
 ```text
-SLICE C BLOCKED -- HUMAN ADJUDICATION REQUIRED
+SLICE C READY  -- both blockers resolved by human adjudication.
+                  The defects below are retained as the record of what was wrong
+                  and how it was settled; they are NOT erased.
 ```
+
+**Resolutions**, applied to §11 and to the Rule Card:
+
+- **19.1 →** `SR-11`. Where a character has `Fire-Building` and conditions are `ADVERSE`, the
+  adverse-condition procedure governs **regardless of a tinderbox**. The wildcard rows are gone;
+  all eight combinations are enumerated, and `(✓, ✗, ADVERSE)` appears once → `ROUTED_SKILL_CHECK`.
+- **19.2 →** `attempt_already_made_this_round: bool`, caller-supplied. `L19` is restated against
+  it; `L19a` and `L19b` added. `EXP-006` gains no round state.
+
+Both are **human adjudications**, not implementer choices, and the Pre-Code Gate is revalidated
+for the ignition portion at `EXP-006_PRE_CODE_GATE.md` §8a — with its original misses recorded
+rather than erased.
 
 Found by a pre-Slice-C audit. **Both are defects in this plan**, not in the approved Rule Card's
 evidence, and neither may be resolved by an implementer choosing a precedence.
