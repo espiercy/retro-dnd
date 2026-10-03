@@ -419,29 +419,64 @@ def test_a_refuelled_lantern_still_does_not_deplete_while_unlit() -> None:
     assert after.lit is False
 
 
-def test_a_torch_cannot_be_refuelled() -> None:
-    """RC gives the flask to the lantern; a fresh torch is a new source.
+def test_a_torch_passed_to_refuel_lantern_is_an_invalid_argument() -> None:
+    """A non-lantern is a **structural** rejection, not a source silence.
 
-    A **rules-domain** source silence, not a structural error (human
-    adjudication 2026-10-01).
+    Human adjudication 2026-10-03, on review-#2 finding `LOW-9`.
+    ``refuel_lantern`` is specifically a lantern operation, so any other
+    source kind is an invalid argument to it. This previously raised
+    `LanternRefuelNotDefinedError`, which asserted something false: that
+    **RC had failed to define** how to refuel a torch. RC has no such gap
+    — the operation simply does not apply to that source kind, and there
+    is no silence to report.
     """
-    with pytest.raises(LanternRefuelNotDefinedError, match="only a lantern burns a flask"):
+    with pytest.raises(ValueError, match="refuel_lantern is a lantern operation"):
         refuel_lantern(LightSource(kind=TORCH, remaining_turns=0, lit=False))
 
 
-def test_refuelling_a_lantern_that_has_not_reached_zero_is_refused() -> None:
-    """An API precondition derived from the approved scope, not a new rules
-    mechanic (human adjudication 2026-10-01).
+def test_a_torch_refusal_is_not_reported_as_a_source_silence() -> None:
+    """The other half of `LOW-9`: the two categories must not be conflated.
 
-    The card establishes supplying a further flask only after the current
-    one is exhausted. **No arithmetic is assigned to the unsupported
-    operation** — no topping up to 24, no adding 24, no partial-flask
-    arithmetic. It is rejected deterministically.
+    Asserting the **negative** is coherent here because the three domain
+    types are concrete siblings of ``Exception`` and are **not** subclasses
+    of ``ValueError`` — verified by
+    `test_the_domain_errors_are_not_subclasses_of_value_error`. Were they
+    subclasses, this assertion would contradict the taxonomy rather than
+    protect it.
+    """
+    with pytest.raises(ValueError) as caught:
+        refuel_lantern(LightSource(kind=TORCH, remaining_turns=0, lit=False))
+    assert not isinstance(caught.value, LanternRefuelNotDefinedError)
+
+
+def test_refuelling_a_lantern_that_has_not_reached_zero_is_refused() -> None:
+    """A **valid lantern state**, and here the source genuinely is silent.
+
+    The card establishes replacing the flask after exhaustion and
+    establishes nothing for a partly-fuelled lantern: **no topping up to
+    24, no adding 24, no partial-flask arithmetic.** None is invented; the
+    request is refused deterministically, in the rules domain.
     """
     with pytest.raises(
         LanternRefuelNotDefinedError, match="only for a lantern that has reached zero"
     ):
         refuel_lantern(LightSource.fresh(LANTERN, lit=True))
+
+
+def test_a_partial_refill_refusal_is_not_reported_as_an_invalid_argument() -> None:
+    """A partly-fuelled lantern is a legitimate lantern state.
+
+    So the refusal must carry the rules-domain category, never the
+    structural one (human adjudication 2026-10-03, `LOW-9`).
+    """
+    partly_fuelled = LightSource(kind=LANTERN, remaining_turns=7, lit=False)
+    with pytest.raises(LanternRefuelNotDefinedError):
+        refuel_lantern(partly_fuelled)
+    # And it is not a ValueError at all, so a caller filtering structural
+    # input errors cannot swallow a source silence.
+    with pytest.raises(Exception) as caught:
+        refuel_lantern(partly_fuelled)
+    assert not isinstance(caught.value, ValueError)
 
 
 def test_refuelling_a_partly_spent_lantern_is_refused_whether_lit_or_not() -> None:
@@ -458,6 +493,24 @@ def test_refuelling_a_partly_spent_lantern_is_refused_whether_lit_or_not() -> No
 def test_refuel_refuses_a_non_light_source() -> None:
     with pytest.raises(ValueError, match="must be a LightSource"):
         refuel_lantern("lantern")  # type: ignore[arg-type]
+
+
+def test_the_domain_errors_are_not_subclasses_of_value_error() -> None:
+    """The taxonomy is real, not nominal.
+
+    Three concrete siblings of ``Exception``. If any were a ``ValueError``
+    subclass, the structural/rules-domain split would collapse at the
+    catch site: a caller filtering malformed input would silently absorb a
+    source silence. This is what makes the ``NOT ValueError`` assertions
+    above coherent, and it is checked rather than assumed.
+    """
+    for error_type in (
+        IgnitionNotDefinedError,
+        IgnitionAttemptLimitError,
+        LanternRefuelNotDefinedError,
+    ):
+        assert not issubclass(error_type, ValueError), f"{error_type.__name__} is a ValueError"
+        assert error_type.__mro__ == (error_type, Exception, BaseException, object)
 
 
 # =========================================================================
@@ -1539,7 +1592,7 @@ CASE_DISCHARGE: dict[str, str] = {
     "L34": "behavior: query succeeds with no surprise state supplied",
     "L46": "behavior: the oil binding resolves the GEAR row, not Oil, Burning",
     # --- machine-proved refusals (claim B) ---------------------------------
-    "L12a": "invariant: LanternRefuelNotDefinedError on partial refill",
+    "L12a": "invariant: LanternRefuelNotDefinedError on a VALID lantern's partial refill",
     "L19": "invariant: IgnitionAttemptLimitError on a second same-round attempt",
     "L23": "invariant: IgnitionNotDefinedError, no skill + tinderbox + adverse",
     "L24": "invariant: IgnitionNotDefinedError, no skill and no tinderbox",

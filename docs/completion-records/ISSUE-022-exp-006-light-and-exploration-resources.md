@@ -100,8 +100,10 @@ Given a number of elapsed turns supplied by `EXP-002`, the system spends that fu
 lose that many turns, floor at zero, and a source reaching zero becomes unlit and contributes
 nothing further. Unlit sources do not burn. An expended lantern can be given a further flask,
 which restores it to 24 turns and **leaves it unlit** — fuel and ignition are independent. Asking
-to refuel a torch, or a lantern that has not reached zero, is refused: the card states no
-procedure for either.
+to refuel a lantern that has not reached zero is refused in the **rules domain**: it is a valid
+lantern state, and the card states no partial-refill arithmetic. Asking to refuel a **torch** is
+refused as an **invalid argument** — `refuel_lantern` is a lantern operation, and the refusal
+asserts nothing about RC.
 
 Asked what a collection of sources together contributes, the system reports the lit ones, whether
 any mundane source is lit, and the greatest radius among them — `None`, never `0`, when nothing is
@@ -140,7 +142,7 @@ Seven RC silences are **named and guarded rather than filled**, by express appro
 
 ## 6. Tests Added or Modified
 
-**108 tests**, all in `tests/rules/exploration/test_light_and_exploration_resources.py`. What the
+**111 tests**, all in `tests/rules/exploration/test_light_and_exploration_resources.py`. What the
 important ones protect:
 
 | Test | Protects |
@@ -151,6 +153,10 @@ important ones protect:
 | `test_an_unlit_source_does_not_deplete` | Fuel burns only while lit (`L11`) |
 | `test_refuelling_alone_cannot_make_the_lantern_contribute_illumination` | The fuel/ignition separation — the 2026-10-01 adjudication, in both directions (`L12`) |
 | `test_refuelling_a_partly_spent_lantern_is_refused_whether_lit_or_not` | A card silence is refused, not interpolated (`L12a`) |
+| `test_a_torch_passed_to_refuel_lantern_is_an_invalid_argument` | A non-lantern is a structural rejection; the refusal asserts nothing about RC |
+| `test_a_torch_refusal_is_not_reported_as_a_source_silence` | The two refusal categories are not conflated at the catch site |
+| `test_a_partial_refill_refusal_is_not_reported_as_an_invalid_argument` | The converse: a valid lantern's silence keeps the rules-domain category |
+| `test_the_domain_errors_are_not_subclasses_of_value_error` | The taxonomy is real, not nominal — three concrete siblings of `Exception`, so catching `ValueError` cannot absorb a source silence |
 | `test_a_malformed_member_is_rejected_not_silently_dropped` | An invalid input cannot become a plausible-looking `any_mundane_source_lit is False` |
 | `test_an_exhausted_source_can_never_reach_the_aggregate` | The two independent barriers that keep spent sources out of the aggregate |
 | `test_every_matrix_combination_resolves_as_approved` | All eight ignition combinations against the card's own table |
@@ -214,7 +220,7 @@ src/rules/exploration/light_and_exploration_resources.py   100% stmts, 100% bran
 
 ## 10. Deviations
 
-Four, all deliberate and recorded; none is a departure from the **approved Rule Card**, whose
+Five, all deliberate and recorded; none is a departure from the **approved Rule Card**, whose
 mechanics are implemented as specified.
 
 1. **Error surface: three concrete types, no base class** — against the plan's §10.1 sketch of
@@ -233,6 +239,11 @@ mechanics are implemented as specified.
    never required them to be public, while exporting them put `Item`-returning functions — and so
    `.price` and `Coin` by reference — in this card's public API, which made approved case `L42`
    ("any price, `Coin` or encumbrance value **emitted**") unprovable as worded.
+5. **A non-lantern passed to `refuel_lantern` raises `ValueError`**, not
+   `LanternRefuelNotDefinedError` as Slice B shipped it. **Human adjudication 2026-10-03**,
+   resolving review-#2 finding `LOW-9` — see §12.1 below for the full adjudication record. The
+   approved card is unaffected: it states no case for a non-lantern, and `L12a` is worded
+   *"refuelling a lantern that has not reached zero"*.
 
 **No approved coverage exception was taken** (`TESTING_STRATEGY.md` §8): coverage is 100% per file
 without one.
@@ -259,6 +270,10 @@ without one.
 6. **Not merged and not pushed.** `CLUSTER-004` implementation, `ENC-005` Stage B and any new
    Stage-A card all remain unauthorized.
 
+**`LOW-9` is no longer open.** Review #2's ledger recorded it as *"recorded, not actioned"*, which
+was accurate when written and is preserved there as the historical statement. It was **adjudicated
+by the human project owner on 2026-10-03** and is now implemented — see §12.1.
+
 ## 12. Architectural Consequences
 
 Three, each already reflected in `ARCHITECTURE.md` §15.2:
@@ -272,6 +287,48 @@ Three, each already reflected in `ARCHITECTURE.md` §15.2:
    `ValueError` convention `turn_credit.py` and `dungeon_movement.py` set.
 3. **The `EXP-002` seam is an explicit elapsed-turn input**, not an imported `TurnCredit`. This card
    holds no clock and no counter, which keeps `EXP-002` the single dungeon-time authority.
+
+### 12.1 Human adjudication of `LOW-9` — the refuel error taxonomy
+
+**Adjudicated by the human project owner, 2026-10-03**, closing the one finding review #2's
+remediation left deliberately unresolved. Recorded here rather than in the review-#2 ledger,
+because that ledger's *"recorded, not actioned"* statement is historical evidence and is preserved
+unaltered.
+
+**The defect.** `refuel_lantern` raised `LanternRefuelNotDefinedError` for **two** requests that
+are not the same semantic category:
+
+```text
+A.  refuel_lantern(torch)                      -- a non-lantern source
+B.  refuel_lantern(partially_fuelled_lantern)   -- a valid lantern state
+```
+
+**The adjudication.** `refuel_lantern` is specifically a lantern operation, so **A** is an invalid
+*argument* to that API — a structural/API-domain rejection, handled by the repository's established
+`ValueError` convention. Reporting it as a source silence asserted something false: that RC had
+failed to define how to refuel a torch. RC has no such gap; the operation does not apply to that
+source kind, and there is nothing to report as silent.
+
+**B** is different. A partly-fuelled lantern is a *legitimate lantern state*, and RC establishes
+replacement of the flask after exhaustion while establishing no top-up to 24, no adding 24 and no
+partial-flask arithmetic. That is a genuine rules-domain source silence and keeps
+`LanternRefuelNotDefinedError`.
+
+```text
+refuel_lantern(non-lantern)                 -> ValueError
+refuel_lantern(lantern, remaining > 0)      -> LanternRefuelNotDefinedError
+refuel_lantern(lantern, remaining == 0)     -> 24 turns, lit = False   [unchanged]
+```
+
+**No new exception type and no error hierarchy were introduced.** The three domain types remain
+concrete siblings of `Exception` — verified, not assumed, by
+`test_the_domain_errors_are_not_subclasses_of_value_error`, which is also what makes the
+`NOT ValueError` assertions coherent: a caller catching `ValueError` cannot absorb a source
+silence.
+
+**No approved rules behavior changed.** The correction concerns only the *category* used to report
+an invalid caller request. The refuel mechanics, the card, `L12a`'s wording and the 53-case ledger
+are untouched.
 
 ---
 
@@ -288,6 +345,7 @@ Three, each already reflected in `ARCHITECTURE.md` §15.2:
 | 2026-10-03 | Bounded remediation of all 14 findings | ledger #1 |
 | 2026-10-03 | **Independent final implementation review #2** | **`FAIL`** — 2 HIGH, 5 MED, 11 LOW |
 | 2026-10-03 | Bounded remediation of all 18 findings | ledger #2 |
+| 2026-10-03 | Human adjudication of `LOW-9` — the refuel error taxonomy | implemented (§12.1) |
 | — | Independent final implementation review #3 | **pending, separately authorized** |
 | — | Human acceptance | pending |
 

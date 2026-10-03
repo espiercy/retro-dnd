@@ -28,12 +28,33 @@ point:
   procedure for what was asked;
 - :class:`IgnitionAttemptLimitError` — RC supplies the procedure and
   **forbids using it twice** in one round;
-- :class:`LanternRefuelNotDefinedError` — RC supplies **no**
-  partial-refill procedure.
+- :class:`LanternRefuelNotDefinedError` — a **valid lantern**, but RC
+  supplies **no** partial-refill procedure.
 
 A same-round violation must never claim the rule is undefined, and a
 refusal for want of a stated procedure must never be reported as a
 structural ``ValueError``.
+
+**The converse also holds, and is the point of the 2026-10-03
+adjudication:** an invalid *argument* must never be reported as a source
+silence. Passing a non-lantern to ``refuel_lantern`` is an invalid
+argument to a lantern operation and raises ``ValueError``; it does not
+mean RC failed to define how to refuel a torch. The full taxonomy is:
+
+```text
+IgnitionNotDefinedError        RC supplies no ignition procedure
+LanternRefuelNotDefinedError   valid lantern, but RC supplies no
+                               partial-refill procedure
+IgnitionAttemptLimitError      RC explicitly forbids another ignition
+                               attempt this round
+ValueError                     malformed / invalid API input, including a
+                               non-lantern supplied to refuel_lantern()
+```
+
+These three types are **concrete siblings of ``Exception``**, not
+subclasses of ``ValueError``. A caller catching ``ValueError`` therefore
+does **not** catch a source silence, which is what keeps the structural
+and rules-domain categories genuinely separate rather than nominally so.
 """
 
 from __future__ import annotations
@@ -99,27 +120,35 @@ class IgnitionAttemptLimitError(Exception):
 
 
 class LanternRefuelNotDefinedError(Exception):
-    """RC defines no procedure for the refuelling requested.
+    """A valid lantern, but RC supplies no partial-refill procedure.
 
     EXP-006 Rule Card §4, CLUSTER-004 Slice D remediation. The card
     establishes supplying a further flask **only for a lantern that has
-    reached zero**. Two requests fall outside that:
+    reached zero**. This type covers **exactly one** request:
 
-    - a lantern that is **not yet expended**. Topping up a partly-full
-      lantern is not established, and no arithmetic is assigned to it —
-      no topping up to 24, no adding 24, no partial-flask arithmetic;
-
-    - a **torch**, which has no fuel. RC gives the flask to the lantern;
-      a fresh torch is a new source, not a refuelled one.
+    - a **valid lantern that is not yet expended**. A partly-fuelled
+      lantern is a legitimate lantern state, and RC establishes replacing
+      the flask after exhaustion while establishing nothing for this: no
+      topping up to 24, no adding 24, no partial-flask arithmetic. None
+      is invented.
 
     **A rules-domain rejection, not a structural one** (human
-    adjudication 2026-10-01). The inputs are a well-formed
-    :class:`LightSource`; what is missing is an RC procedure for this
-    case. That makes it a source silence of exactly the kind
+    adjudication 2026-10-01). The input is a well-formed
+    :class:`LightSource` in a legitimate state; what is missing is an RC
+    procedure. That makes it a source silence of exactly the kind
     :class:`IgnitionNotDefinedError` covers for ignition, and it is given
     its own concrete type rather than being merged with it — the two
     describe different silences, and a caller that catches one should not
     silently catch the other.
+
+    **Scope narrowed 2026-10-03 by human adjudication** (review-#2
+    finding `LOW-9`). This type previously also covered a **non-lantern**
+    passed to ``refuel_lantern``, which conflated two different
+    categories. That case is now a plain ``ValueError``: ``refuel_lantern``
+    is a lantern operation, so another source kind is an **invalid
+    argument**, not a gap in RC. Reporting it here implied RC had failed
+    to define how to refuel a torch, when in truth the operation does not
+    apply to that source kind at all and there is no silence to report.
 
     *(Corrected 2026-10-01. Slice B first raised a plain ``ValueError``
     here. The independent final review declined to adjudicate the

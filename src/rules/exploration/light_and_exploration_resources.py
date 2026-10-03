@@ -307,27 +307,35 @@ def refuel_lantern(source: LightSource) -> LightSource:
     Nothing in the card states that supplying a flask lights it.
 
     The card states this operation for a lantern that has **reached
-    zero**, and this function honours that stated precondition rather
-    than extending it. Two requests are refused:
+    zero**. Two requests are refused, and they are refused in **different
+    categories** — the distinction is the point (human adjudication
+    2026-10-03):
 
-    - a **torch**, which has no fuel. RC gives the flask to the lantern;
-      a fresh torch is a new source, not a refuelled one;
-    - a lantern that is **not yet expended**. The card does not state
-      what supplying a flask to a partly-full lantern does, and no
-      arithmetic is assigned to that unsupported operation — no topping
-      up to 24, no adding 24, no partial-flask arithmetic. This is an
-      **API precondition derived from the approved scope**, not a new
-      rules mechanic (human adjudication 2026-10-01).
+    - a **non-lantern** source raises ``ValueError``. This is a lantern
+      operation, so any other source kind is simply an **invalid
+      argument** to it, handled by the package's structural convention.
+      It is emphatically **not** a claim that RC fails to define how to
+      refuel a torch: the operation does not apply to that source kind,
+      and there is no silence to report;
+    - a **valid lantern that is not yet expended** raises
+      :class:`~rules.exploration.errors.LanternRefuelNotDefinedError`.
+      A partly-fuelled lantern is a legitimate lantern state, and here
+      the source genuinely **is** silent: RC establishes replacing the
+      flask after exhaustion and establishes no top-up to 24, no adding
+      24, and no partial-flask arithmetic. That is a rules-domain
+      source-silence rejection, and no arithmetic is invented for it.
     """
     # Structural: not a LightSource at all.
     if not isinstance(source, LightSource):
         raise ValueError(f"source must be a LightSource, got {source!r}")
-    # Rules-domain: well-formed input, but RC defines no procedure for it.
+    # Structural: a LightSource, but not the kind this operation applies to.
     if source.kind is not LightSourceKind.LANTERN:
-        raise LanternRefuelNotDefinedError(
-            f"only a lantern burns a flask of oil, got {source.kind.name}: "
-            "RC gives the flask to the lantern, and a fresh torch is a new source"
+        raise ValueError(
+            f"refuel_lantern is a lantern operation, got {source.kind.name}: "
+            "only a lantern burns a flask of oil, and a fresh torch is a new "
+            "source rather than a refuelled one"
         )
+    # Rules-domain: a valid lantern state, but RC states no procedure for it.
     if source.remaining_turns != 0:
         raise LanternRefuelNotDefinedError(
             "the approved card states refuelling only for a lantern that has reached zero; "
