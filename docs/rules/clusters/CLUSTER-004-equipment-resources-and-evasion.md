@@ -58,7 +58,7 @@ STAGE B (SYNTHESIS)         EXP-006  COMPLETE   (card APPROVED 2026-10-01)
 RULE CARDS                  EXP-006  APPROVED 2026-10-01
                             ENC-005  NONE DRAFTED
 IMPLEMENTATION              EXP-006  AUTHORIZED per-slice; Slices A-D ACCEPTED.
-                                     EXP-006-PHASE: REVIEW-3-REMEDIATED
+                                     EXP-006-PHASE: REVIEW-4-REMEDIATED
                             CLUSTER-004 AS A WHOLE   NOT AUTHORIZED
 ALTERNATE-SOURCE RESEARCH   NONE PERFORMED; one candidate question flagged (§8)
 SIMULATOR RULINGS           SR-11 PROPOSED AND APPROVED 2026-10-01  (§10)
@@ -427,22 +427,28 @@ pinned by `test_live_status_records_agree_on_the_review_phase` so it cannot sile
 again — which it did, twice, and which review #3 recorded as `MED-1`.
 
 ```text
-EXP-006-PHASE: REVIEW-3-REMEDIATED
+EXP-006-PHASE: REVIEW-4-REMEDIATED
 
-EXP-006   Three independent final implementation reviews have been performed.
-          ALL THREE RETURNED FAIL, and all three artifacts are preserved
-          unaltered:
-              review #1   docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW.md
-              review #2   docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_2.md
-              review #3   docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_3.md
-          None found a rules-conformance defect. Each remediation is recorded
-          in its own ledger. Review #3's remediation is the most recent work.
-          A FOURTH independent review is NOT YET AUTHORIZED, and the
-          implementer may not certify its own remediation.
+EXP-006   EVERY independent final implementation review performed so far
+          RETURNED FAIL, and every artifact is preserved unaltered.  The
+          review history is the persisted artifact set itself:
+              docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW*.md
+          each paired with its own remediation ledger.  It is NOT restated
+          as a count here -- every prose count of it has so far gone stale
+          (review-#4 B-4).
 
-          Two review-#3 findings remain OPEN and require human adjudication,
-          because both touch PROTECTED approved Rule Cards: LOW-3 (CHAR-005's
-          two SR-11 denials) and LOW-8 (this card's pre-approval statement).
+          NONE found a rules-conformance defect.  Review #4 additionally
+          found NO guard claiming more than its mechanism establishes.
+          Review #4's remediation is the most recent work.  A further
+          independent review is NOT YET AUTHORIZED, and the implementer may
+          not certify its own remediation.
+
+          Review-#3's two protected-card findings are RESOLVED, adjudicated
+          and applied at a150837 as documentation-only historical
+          clarifications: LOW-3 (CHAR-005's two SR-11 denials) and LOW-8
+          (the EXP-006 card's pre-approval statement). No mechanic,
+          provenance, case ID or approval status changed.  Corrected
+          2026-10-03 under review-#4 finding B-3.
 
 ENC-005   STAGE B REMAINS DEFERRED. §6 Q1 and Q2 are still unsettled and are
           still the deciding questions. Not authorized.

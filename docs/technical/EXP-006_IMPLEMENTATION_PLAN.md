@@ -50,18 +50,19 @@ SLICE C   ACCEPTED   2026-10-01   -- ignition branch/outcome model, carrying SR-
 SLICE D   ACCEPTED   2026-10-03   -- CHAR-004 identity binding + final guards
 
 IMPLEMENTATION  CODE COMPLETE; NOT FINALLY ACCEPTED.
-EXP-006-PHASE: REVIEW-3-REMEDIATED
+EXP-006-PHASE: REVIEW-4-REMEDIATED
 
-                Three independent final reviews, ALL THREE FAIL, all three
-                preserved unaltered.  NONE found a rules-conformance defect.
-                    review #1   2 HIGH, 4 MED,  8 LOW -- remediated
-                    review #2   2 HIGH, 5 MED, 11 LOW -- remediated
-                    review #3   1 HIGH, 4 MED,  8 LOW -- remediated, except
-                                LOW-3 and LOW-8, which touch PROTECTED
-                                approved Rule Cards and await human
-                                adjudication
-                A fourth review is NOT YET AUTHORIZED.  See ISSUE-022 for
-                the authoritative current status.
+                Every independent final review returned FAIL and is
+                preserved unaltered.  NONE found a rules-conformance
+                defect.  The review history is the persisted artifact set
+                itself -- docs/technical/EXP-006_FINAL_IMPLEMENTATION_
+                REVIEW*.md, each paired with its own remediation ledger --
+                and is NOT restated as a count here, because every prose
+                count of it has so far gone stale (review-#4 B-4).
+
+                LOW-3 and LOW-8 are RESOLVED (applied at a150837).
+
+                See ISSUE-022 for the authoritative current status.
 ```
 
 **Slice B's accepted semantics** include `expended lantern + new flask → remaining_turns = 24,
@@ -465,49 +466,62 @@ component supplies the truthful value is a frontier concern, deliberately unansw
 > says were added. A "re-derived and they match" assertion that matched nothing was the defect,
 > not the arithmetic. All of those figures are withdrawn; none is preserved for continuity.
 
-**The authoritative split, recomputed 2026-10-03 from the current 53 cases.**
+**Where the split lives — deliberately NOT here.**
 
-It is **computed, not transcribed.** The single source is `CASE_DISCHARGE` in
-`tests/rules/exploration/test_light_and_exploration_resources.py`, and
-`test_the_case_category_counts_are_recomputed_not_carried_over` asserts these exact numbers, so
-this table cannot drift from the code without a red test. The classification vocabulary is the
-claim-kind vocabulary that replaced the old one, because the old labels did not distinguish a
-machine-proved property from a reviewed boundary:
+> **This plan no longer publishes a category split.** Corrected 2026-10-03 under review-#4 finding
+> `B-1`. This section previously reproduced a table of counts under the assertion *"It is computed,
+> not transcribed… `test_the_case_category_counts_are_recomputed_not_carried_over` asserts these
+> exact numbers, so this table cannot drift from the code without a red test."* **That protection
+> did not exist.** The test asserts the counts it computes from `CASE_DISCHARGE` against its own
+> literals; it never reads this plan. The table then drifted — it still showed the split that
+> review-#3's remediation had explicitly **withdrawn** (`behavior 23 / invariant 5 / surface 23 /
+> reviewed 1 / routed 1`, with thirteen of the fifty-three rows misclassified) — and the whole suite
+> stayed green, which is precisely the defect class the assertion claimed to prevent.
+>
+> The withdrawn figures are **not** restated here with corrected values, and no hand-maintained
+> numeric split replaces them. That would only restart the drift.
 
-| Claim kind | What discharges the case | Count | Cases |
-|---|---|---|---|
-| **`behavior`** | machine-proved behavior (claim B) | **23** | `L1`, `L2`, `L3`, `L4`, `L5`, `L6`, `L7`, `L8`, `L9`, `L10`, `L11`, `L12`, `L15a`, `L17`, `L18`, `L19a`, `L20`, `L21`, `L22`, `L27`, `L28`, `L34`, `L46` |
-| **`invariant`** | machine-proved refusal (claim B) | **5** | `L12a`, `L19`, `L23`, `L24`, `L26` |
-| **`surface`** | machine-proved surface (claim A) | **23** | `L13`, `L14`, `L15`, `L15b`, `L16`, `L19b`, `L25`, `L29`, `L30`, `L31`, `L32`, `L33`, `L35`, `L36`, `L37a`, `L38`, `L39`, `L40`, `L41`, `L42`, `L43`, `L44`, `L45` |
-| **`reviewed`** | a reviewed ownership boundary, **not** machine proof (claim C) | **1** | `L37` |
-| **`routed`** | not owned by this card at all | **1** | `L47` |
-| | **total** | **53** | |
+The 53 Rule Card cases are reconciled by **`CASE_DISCHARGE`** in
+`tests/rules/exploration/test_light_and_exploration_resources.py`. The **current category split is
+derived from `CASE_DISCHARGE` and verified by the test suite**
+(`test_the_case_category_counts_are_recomputed_not_carried_over` and
+`test_every_approved_case_is_accounted_for`); **it is not duplicated normatively in this plan.**
 
-**Documentation-only assertions: none.** Every case is accounted for by a named mechanism.
+The **case total** is likewise not owned here: it is enumerated from the approved Rule Card's own
+case tables and checked by `test_the_approved_case_total_is_still_what_the_records_claim` in
+`tests/rules/exploration/test_exp_006_record_consistency.py`.
 
-**`L37` is the one case deliberately labelled claim C.** That nothing asserts blindness is
-machine-checkable; that this constitutes *complete* discharge of "this card does not establish
-blindness" is a human reading of the ownership boundary. Calling it claim A would be the
-overclaim review #2 found elsewhere.
-
-### 12.1 Provable by API shape rather than by test
-
-These need **no** runtime assertion, because the API offers nothing to violate:
+The classification vocabulary is the claim-kind vocabulary that replaced the original labels,
+because those did not distinguish a machine-proved property from a reviewed boundary:
 
 ```text
-L31  no Visibility category    -- no such type or return value exists
-L32  no infravision folding    -- no infravision parameter exists
-L33  no distance dice          -- no distance operation exists
-L34  no surprise required      -- no surprise parameter exists
-L40  infravision not decided   -- no infravision parameter exists
-L45  torch-as-weapon           -- no weapon operation exists
-L46  oil-as-missile            -- no missile operation exists
-L43  no ration mechanic        -- no ration type or operation exists
-L44  no starvation mechanic    -- no starvation type or operation exists
+behavior   machine-enforced behavior                   (claim B)
+invariant  machine-enforced refusal                    (claim B)
+surface    machine-enforced OBSERVED surface           (claim A)
+reviewed   reviewed architectural ownership boundary,
+           NOT machine proof                           (claim C)
+routed     not owned by this card at all
 ```
 
-They are still **recorded as tests** (asserting the names are absent from `__all__` / the module
-namespace), because API shape can regress silently and a test is what makes the regression loud.
+**Documentation-only assertions: none.** Every case is accounted for by a named mechanism, and
+which mechanism discharges which case is stated per-case in `CASE_DISCHARGE` rather than summarised
+here.
+
+### 12.1 Cases discharged by the shape of the public surface
+
+A substantial group needs **no** runtime value assertion, because the API offers nothing to
+violate — no such type, parameter, member or operation exists. Which cases those are, and whether
+each rests on a machine-enforced observed surface (`surface`) or on a reviewed ownership boundary
+(`reviewed`), is recorded **per case in `CASE_DISCHARGE`**; it is not enumerated here, for the same
+reason the split is not.
+
+> **Enumeration removed 2026-10-03 (`B-1`).** This subsection listed `L31`, `L32`, `L33`, `L34`,
+> `L40`, `L43`, `L44`, `L45` and `L46` as "provable by API shape". That list was written against the
+> original classification and went stale when review-#3's remediation reclassified twelve rows from
+> `surface` to `reviewed`.
+
+Each is still **recorded as a test**, because API shape can regress silently and a test is what
+makes the regression loud.
 
 ### 12.2 Genuinely requiring automated architecture tests
 
@@ -713,7 +727,8 @@ EXP-006 Rule Card              APPROVED        2026-10-01
 EXP-006 PRE-CODE GATE          PASS            2026-10-01
 EXP-006 IMPLEMENTATION PLAN    APPROVED       2026-10-01
 EXP-006 IMPLEMENTATION         CODE COMPLETE; NOT FINALLY ACCEPTED
-EXP-006-PHASE: REVIEW-3-REMEDIATED
+EXP-006-PHASE: REVIEW-4-REMEDIATED
+EXP-006 LOW-3 / LOW-8          RESOLVED  (applied at a150837)
 CLUSTER-004 IMPLEMENTATION     NOT AUTHORIZED  (ARCHITECTURE.md §15.2 step 4)
 CLUSTER-004                    NOT AUTHORIZED
 ENC-005 Stage B                DEFERRED -- not in this plan

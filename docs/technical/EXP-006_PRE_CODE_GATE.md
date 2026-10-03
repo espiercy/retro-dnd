@@ -253,22 +253,31 @@ it is.
 > #2 then found to be internally inconsistent as well (`MED-4`). Both are now corrected.
 >
 > **This section no longer publishes a split.** A gate record written before implementation is the
-> wrong place for a figure that later changed four times. The authoritative split is **computed**
-> from `CASE_DISCHARGE` and asserted by
-> `test_the_case_category_counts_are_recomputed_not_carried_over`; implementation plan §12
-> reproduces it under that assertion's protection. The superseded table — *Implementation test 18 /
-> Boundary-ownership 18 / Boundary-internal 11 / Routed 3*, totalling 50 — is withdrawn, not
-> preserved for continuity.
+> wrong place for a figure that later changed four times. The superseded table — *Implementation
+> test 18 / Boundary-ownership 18 / Boundary-internal 11 / Routed 3*, totalling 50 — is withdrawn,
+> not preserved for continuity.
+>
+> **Corrected again 2026-10-03 under review-#4 finding `B-2`.** This note previously added that
+> *"implementation plan §12 reproduces it under that assertion's protection"*. **No such protection
+> existed** — the test compares counts it derives from `CASE_DISCHARGE` against its own literals and
+> never reads the plan — and plan §12 had in fact drifted to a withdrawn split. Plan §12 no longer
+> publishes a split either. **This gate does not own the post-implementation category split**, and
+> asserts no protection over any other document.
 
 **All 53 approved cases translate into executable obligations, and no case requires exceeding
 `EXP-006` ownership to test.** That was this gate's actual finding and it held: the shipped suite
-discharges all 53.
+discharges all 53. The **case total is reconciled against the approved Rule Card** by
+`test_the_approved_case_total_is_still_what_the_records_claim`, and the **current category
+classification is derived from `CASE_DISCHARGE`** — neither is owned here.
 
-The profile is **guard-heavy** — 23 of the 53 are discharged by the shape of the public surface
-rather than by an assertion about a value. That is a direct product of the bounded remediation:
-four cases that previously *asserted* behaviour now *forbid* it. `L34` inverted outright — from an
-`ERROR` when a surprise state was missing, to a **success** case, because surprise is no longer an
-input.
+The profile is **guard-heavy**: a substantial share of the cases are discharged by the shape of the
+public surface rather than by an assertion about a value, split between a machine-enforced observed
+surface and a reviewed ownership boundary. *The specific figure this paragraph used to quote ("23 of
+the 53") is removed under `B-2`: it was a hand-copied number, it had gone stale, and the current
+counts are derived from `CASE_DISCHARGE`, not from this record.* The guard-heaviness is a direct
+product of the bounded remediation: four cases that previously *asserted* behaviour now *forbid* it.
+`L34` inverted outright — from an `ERROR` when a surprise state was missing, to a **success** case,
+because surprise is no longer an input.
 
 **Caution 2 (non-blocking)** — those surface cases are mostly **negative/architectural**
 assertions ("this module must not import `ENC-001`", "no price value is emitted"). The

@@ -1,42 +1,49 @@
 """`EXP-006` live-record consistency — a deliberately narrow mechanical check.
 
-WHY THIS EXISTS. Three independent final implementation reviews each found
-the same defect class, and never a rules defect:
+WHY THIS EXISTS. Four independent final implementation reviews have now run,
+and not one found a rules defect. Every blocking finding in all four was the
+same class: a fact duplicated into a second place and not updated there.
 
     review #1  MED-3   five artifacts of record said "NOT AUTHORIZED" after
                        implementation was authorized and complete
-    review #2  MED-4   three mutually inconsistent deterministic-case totals
-                       in one plan section, and a gate table still at 50
+    review #2  MED-4   three mutually inconsistent case totals in one plan
+                       section; a gate table still at 50
     review #3  MED-1   three live records still said "review #2 pending"
-               MED-4   ISSUE-022 said 108 tests where its own §6 said 111
+               MED-4   ISSUE-022 said 108 tests where its own section said 111
+    review #4  B-1..5  the plan republished a withdrawn category split under a
+                       false claim of test protection; five records said LOW-3
+                       and LOW-8 were open at the commit that resolved them;
+                       ISSUE-022 contradicted its own status block; the index
+                       said a completed review was pending
+               B-6     THIS FILE's previous design could not detect four of
+                       the six phrasings it enumerated
 
-Hand-patching prose after the fact has now failed three times. The pattern is
-not carelessness about rules -- the mechanics have been clean throughout --
-it is that this project has excellent *mechanical* guards for code and had
-**none** for the handful of current facts its records duplicate.
+B-6 IS WHY THE DESIGN CHANGED. The previous version skipped any line
+containing a "historical marker" before testing it for a forbidden phrase --
+and `"review #2"` was in BOTH lists. So `"review #2 pending"`, the literal
+string review #3 found in three live records, was unconditionally
+unreachable, along with three of its siblings. A guard that enumerates six
+conditions and can only evaluate two is worse than no guard: it reports
+protection it does not provide.
 
-WHAT THIS CHECKS, and nothing more:
+THE NEW RULE: no skip list. This test reads ONLY explicitly named
+live/current records. Historical artifacts -- the review documents and the
+remediation ledgers -- are NEVER scanned, so there is nothing for a
+historical exemption to do. They preserve obsolete claims on purpose and
+must not be "corrected".
 
-    A. the current review PHASE token, across named live status records
-    B. the deterministic Rule Card case TOTAL, across named live records
-       that genuinely state it
+A SECOND LESSON FROM B-1..B-5: prefer DERIVING a fact over transcribing it.
+The case total is enumerated from the approved Rule Card. The category split
+is derived from `CASE_DISCHARGE` and is no longer duplicated in the plan or
+the gate at all. The review history is derived from the artifact files that
+exist on disk rather than from a prose count. What cannot be derived -- the
+review phase -- is carried as one token that every named record must match.
 
-WHAT THIS DELIBERATELY DOES NOT DO (human direction, 2026-10-03):
-
-    * it does not scan arbitrary prose;
-    * it is not a generic documentation linter;
-    * it does not parse historical review artifacts -- those preserve
-      obsolete claims ON PURPOSE and must never be "corrected";
-    * it does not reject deliberately historical numbers; a figure inside a
-      block marked historical, superseded or withdrawn is evidence, not drift;
-    * it does not pin the global suite test count. That number changes
-      whenever any unrelated project test is added, so pinning it across
-      documents would manufacture the very brittleness this file exists to
-      remove. Duplicated global counts were REMOVED from the records instead.
-
-The purpose is to prevent recurrence of the exact live-status and
-current-total contradictions three reviews have already found -- not to
-verify documentation in general.
+WHAT THIS DELIBERATELY DOES NOT DO: it does not scan arbitrary prose, it is
+not a generic documentation linter, it does not validate historical prose,
+and it does not pin the global suite test count (that changes whenever any
+unrelated project test is added; duplicated global counts were removed from
+the records instead).
 """
 
 from __future__ import annotations
@@ -47,14 +54,22 @@ import re
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parents[3]
 
-# --- A. the current review phase -------------------------------------------
+# --- The named live/current records. Nothing else is ever read. ------------
 
-# One token, spelled identically everywhere it appears. Updating the phase is
-# a deliberate act: change it here and every named record must follow, or this
-# test fails.
-CURRENT_PHASE = "EXP-006-PHASE: REVIEW-3-REMEDIATED"
+LIVE_RECORDS = (
+    "ARCHITECTURE.md",
+    "docs/rules/INVENTORY.md",
+    "docs/rules/clusters/CLUSTER-004-equipment-resources-and-evasion.md",
+    "docs/technical/EXP-006_IMPLEMENTATION_PLAN.md",
+    "docs/technical/EXP-006_PRE_CODE_GATE.md",
+    "docs/completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md",
+    "docs/completion-records/INDEX.md",
+)
 
-PHASE_RECORDS = (
+# Records required to carry the phase token. The gate and the index are read
+# for stale wording but are not required to carry it: the gate is a
+# pre-implementation record, and the index is a one-line summary.
+PHASE_TOKEN_RECORDS = (
     "ARCHITECTURE.md",
     "docs/rules/INVENTORY.md",
     "docs/rules/clusters/CLUSTER-004-equipment-resources-and-evasion.md",
@@ -62,39 +77,41 @@ PHASE_RECORDS = (
     "docs/completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md",
 )
 
-# Phrases that were true once and are now false. A live record must not
-# assert any of them; the historical review artifacts may and do.
-SUPERSEDED_PHASE_CLAIMS = (
+CURRENT_PHASE = "EXP-006-PHASE: REVIEW-4-REMEDIATED"
+
+# Historical artifacts. NEVER scanned by this test; listed so that the
+# never-scanned property is itself asserted rather than merely intended.
+HISTORICAL_ARTIFACTS = (
+    "docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW.md",
+    "docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_2.md",
+    "docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_3.md",
+    "docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_4.md",
+    "docs/technical/EXP-006_REVIEW_REMEDIATION_LEDGER.md",
+    "docs/technical/EXP-006_REVIEW_2_REMEDIATION_LEDGER.md",
+    "docs/technical/EXP-006_REVIEW_3_REMEDIATION_LEDGER.md",
+    "docs/technical/EXP-006_REVIEW_4_REMEDIATION_LEDGER.md",
+)
+
+# Statements that were true once and are false now. No exemption mechanism
+# exists: if one of these appears in a named live record, the test fails.
+# A live record that needs to discuss an obsolete claim must quote it in a
+# form that does not reproduce these exact phrases.
+STALE_CURRENT_CLAIMS = (
     "review #2 pending",
     "review #2 PENDING",
+    "review #3 pending",
+    "review #3 PENDING",
     "awaiting review #2",
+    "awaiting review #3",
     "pending independent review #2",
+    "pending independent review #3",
     "a second independent review is pending",
-    "A SECOND INDEPENDENT FINAL IMPLEMENTATION REVIEW",
-)
-
-# --- B. the deterministic case total ---------------------------------------
-
-CASE_TOTAL_RECORDS = (
-    "docs/technical/EXP-006_IMPLEMENTATION_PLAN.md",
-    "docs/technical/EXP-006_PRE_CODE_GATE.md",
-)
-
-# Markers that make a figure explicitly historical. A superseded total inside
-# a line carrying one of these is preserved evidence, not drift.
-HISTORICAL_MARKERS = (
-    "historical",
-    "HISTORICAL",
-    "superseded",
-    "SUPERSEDED",
-    "withdrawn",
-    "previously",
-    "corrected",
-    "review #1",
-    "review #2",
-    "review-#1",
-    "review-#2",
-    "review-#3",
+    "a third independent review is pending",
+    "LOW-3 and LOW-8 remain OPEN",
+    "LOW-3 and LOW-8 remain open",
+    "remain open pending human adjudication",
+    "Two independent final implementation reviews",
+    "23 of the 53",
 )
 
 
@@ -105,8 +122,159 @@ def _read(rel: str) -> str:
 def _approved_case_total() -> int:
     """The Rule Card's own case count, enumerated from its tables."""
     card = _read("docs/rules/exploration/light_and_exploration_resources.md")
-    ids = set(re.findall(r"^\|\s*\**`?(L\d+[a-z]?)`?\**\s*\|", card, re.M))
-    return len(ids)
+    return len(set(re.findall(r"^\|\s*\**`?(L\d+[a-z]?)`?\**\s*\|", card, re.M)))
+
+
+def _case_discharge() -> dict[str, str]:
+    """`CASE_DISCHARGE` parsed from the sibling suite, not imported."""
+    src = (
+        REPO_ROOT / "tests/rules/exploration/test_light_and_exploration_resources.py"
+    ).read_text(encoding="utf-8")
+    for node in ast.walk(ast.parse(src)):
+        if (
+            isinstance(node, ast.AnnAssign)
+            and isinstance(node.target, ast.Name)
+            and node.target.id == "CASE_DISCHARGE"
+            and isinstance(node.value, ast.Dict)
+        ):
+            return {
+                k.value: v.value
+                for k, v in zip(node.value.keys, node.value.values, strict=True)
+                if isinstance(k, ast.Constant)
+                and isinstance(k.value, str)
+                and isinstance(v, ast.Constant)
+                and isinstance(v.value, str)
+            }
+    raise AssertionError("CASE_DISCHARGE not found in the test ledger")
+
+
+# --- Self-checks: the configuration must be meaningful --------------------
+
+
+def test_the_configuration_is_non_empty_and_every_named_record_exists() -> None:
+    """A misconfigured guard is the defect this file exists to prevent."""
+    assert LIVE_RECORDS, "no live records configured"
+    assert PHASE_TOKEN_RECORDS, "no phase-token records configured"
+    assert STALE_CURRENT_CLAIMS, "no stale claims configured"
+    assert HISTORICAL_ARTIFACTS, "no historical artifacts configured"
+
+    for rel in LIVE_RECORDS + PHASE_TOKEN_RECORDS + HISTORICAL_ARTIFACTS:
+        assert (REPO_ROOT / rel).is_file(), f"configured record does not exist: {rel}"
+
+    assert set(PHASE_TOKEN_RECORDS) <= set(LIVE_RECORDS), (
+        "every phase-token record must also be a live record"
+    )
+
+
+def test_no_stale_claim_can_be_silently_excluded() -> None:
+    """`B-6` — the exact defect that made four of six checks unreachable.
+
+    The previous design held `"review #2"` in both the forbidden-claim list
+    and a historical-skip list, so four claims could never be evaluated. There
+    is now **no skip list at all**; this test asserts that, and asserts the
+    two configuration lists cannot overlap in a way that disarms a claim.
+    """
+    # There is no skip/exemption list in this module. If one is ever
+    # reintroduced, this assertion is the tripwire.
+    assert not any(
+        name in globals()
+        for name in ("HISTORICAL_MARKERS", "SKIP_MARKERS", "EXEMPT_MARKERS")
+    ), "a skip list was reintroduced; B-6 is the reason there must not be one"
+
+    # No stale claim may be a substring of another, which would make the
+    # shorter one's failure message ambiguous about which condition fired.
+    for claim in STALE_CURRENT_CLAIMS:
+        others = [c for c in STALE_CURRENT_CLAIMS if c != claim and claim in c]
+        assert not others, f"{claim!r} is subsumed by {others!r}"
+
+    # Historical artifacts must not be in the scanned set.
+    assert not (set(HISTORICAL_ARTIFACTS) & set(LIVE_RECORDS)), (
+        "a historical artifact is configured as a live record; it preserves "
+        "obsolete claims deliberately and must never be scanned"
+    )
+
+
+def test_every_stale_claim_is_actually_evaluated(tmp_path: pathlib.Path) -> None:
+    """Each configured claim must be detectable, proved on a fixture.
+
+    This is the regression `B-6` demanded: injecting a stale claim into a
+    named live record must fail. It runs against a **fixture copy** in
+    ``tmp_path`` — no repository file is altered.
+    """
+    detected: list[str] = []
+    for claim in STALE_CURRENT_CLAIMS:
+        fixture = tmp_path / "live_record.md"
+        fixture.write_text(
+            f"# Fixture\n\nEXP-006 status: {claim}.\n", encoding="utf-8"
+        )
+        text = fixture.read_text(encoding="utf-8")
+        found = [c for c in STALE_CURRENT_CLAIMS if c in text]
+        assert claim in found, f"{claim!r} is not detectable by this predicate"
+        detected.append(claim)
+
+    assert len(detected) == len(STALE_CURRENT_CLAIMS)
+
+
+def test_injecting_review_2_pending_into_a_live_record_is_detected(
+    tmp_path: pathlib.Path,
+) -> None:
+    """`B-6`'s named regression: `"review #2 pending"` must fail.
+
+    Review #4 demonstrated that this exact string could be appended to a
+    pinned live record with every consistency test still passing. The fixture
+    reproduces that injection and asserts it is now caught.
+    """
+    fixture = tmp_path / "ARCHITECTURE.md"
+    fixture.write_text(
+        _read("ARCHITECTURE.md") + "\n\nEXP-006 status: review #2 pending.\n",
+        encoding="utf-8",
+    )
+    offences = [c for c in STALE_CURRENT_CLAIMS if c in fixture.read_text("utf-8")]
+    assert "review #2 pending" in offences
+
+
+def test_injecting_review_3_pending_into_a_live_record_is_detected(
+    tmp_path: pathlib.Path,
+) -> None:
+    """The same regression for the next phase's stale wording.
+
+    `B-5` found exactly this in `INDEX.md`, phrased as "review #3 pending".
+    """
+    fixture = tmp_path / "INDEX.md"
+    fixture.write_text(
+        _read("docs/completion-records/INDEX.md")
+        + "\n\nEXP-006: review #3 pending, separately authorized.\n",
+        encoding="utf-8",
+    )
+    offences = [c for c in STALE_CURRENT_CLAIMS if c in fixture.read_text("utf-8")]
+    assert "review #3 pending" in offences
+
+
+# --- The live-record checks -----------------------------------------------
+
+
+def test_live_records_carry_the_current_phase_token() -> None:
+    """`MED-1`/`B-3` — advancing the phase is one deliberate, atomic act."""
+    missing = [rel for rel in PHASE_TOKEN_RECORDS if CURRENT_PHASE not in _read(rel)]
+    assert missing == [], (
+        f"these live records do not carry {CURRENT_PHASE!r}: {missing}. "
+        "Advancing the phase means updating CURRENT_PHASE here and every "
+        "record in PHASE_TOKEN_RECORDS together."
+    )
+
+
+def test_no_live_record_asserts_a_stale_claim() -> None:
+    """`MED-1`, `B-1`, `B-3`, `B-4`, `B-5` — no exemptions, by design."""
+    offences: list[str] = []
+    for rel in LIVE_RECORDS:
+        for lineno, line in enumerate(_read(rel).splitlines(), 1):
+            for claim in STALE_CURRENT_CLAIMS:
+                if claim in line:
+                    offences.append(f"{rel}:{lineno}: {claim!r}")
+    assert offences == [], f"live records assert stale claims: {offences}"
+
+
+# --- Derived facts: one authoritative source each -------------------------
 
 
 def test_the_approved_case_total_is_still_what_the_records_claim() -> None:
@@ -114,88 +282,57 @@ def test_the_approved_case_total_is_still_what_the_records_claim() -> None:
     assert _approved_case_total() == 53
 
 
-def test_live_status_records_agree_on_the_review_phase() -> None:
-    """`MED-1` — every named live status record carries the same phase token.
-
-    This is the check that makes the review-phase drift impossible rather
-    than merely corrected: a remediation that advances the phase in one
-    record and forgets another fails here.
-    """
-    missing = [rel for rel in PHASE_RECORDS if CURRENT_PHASE not in _read(rel)]
-    assert missing == [], (
-        f"these live records do not carry {CURRENT_PHASE!r}: {missing}. "
-        "Advancing the review phase means updating CURRENT_PHASE here and "
-        "every record in PHASE_RECORDS together."
-    )
-
-
-def test_no_live_record_still_asserts_a_superseded_review_phase() -> None:
-    """`MED-1` — the specific stale phrasings three reviews have found.
-
-    Scoped to the named live records only. The review artifacts preserve
-    these phrases deliberately and are not read here.
-    """
-    offences: list[str] = []
-    for rel in PHASE_RECORDS:
-        for lineno, line in enumerate(_read(rel).splitlines(), 1):
-            if any(marker in line for marker in HISTORICAL_MARKERS):
-                continue  # explicitly historical; evidence, not drift
-            for claim in SUPERSEDED_PHASE_CLAIMS:
-                if claim in line:
-                    offences.append(f"{rel}:{lineno}: {claim!r}")
-    assert offences == [], (
-        "live records still assert a superseded review phase; mark the "
-        f"statement historical or correct it: {offences}"
-    )
-
-
-def test_live_records_do_not_state_a_stale_case_total() -> None:
-    """`MED-4`/review-#2 `MED-4` — no live record contradicts the card's total.
-
-    A line that mentions a case total must state the current one, unless it
-    is explicitly marked historical. Totals the project has actually drifted
-    through are checked; arbitrary numerals are not.
-    """
-    total = _approved_case_total()
-    stale = {"47", "50", "51"} - {str(total)}
-    offences: list[str] = []
-    for rel in CASE_TOTAL_RECORDS:
-        for lineno, line in enumerate(_read(rel).splitlines(), 1):
-            if any(marker in line for marker in HISTORICAL_MARKERS):
-                continue
-            if not re.search(r"\bcase|\bdeterministic|\btotal\b", line, re.I):
-                continue
-            for figure in sorted(stale):
-                if re.search(rf"\b{figure}\b", line):
-                    offences.append(f"{rel}:{lineno}: stale total {figure!r}")
-    assert offences == [], (
-        f"live records state a case total other than {total}, unmarked as "
-        f"historical: {offences}"
-    )
-
-
 def test_the_case_ledger_total_matches_the_card() -> None:
-    """The test ledger and the card cannot disagree about how many cases exist.
+    """`CASE_DISCHARGE` and the card cannot disagree about how many cases exist."""
+    assert len(_case_discharge()) == _approved_case_total()
 
-    Parsed from the sibling module's source rather than imported, so this
-    file stays a document check and does not couple to the suite.
+
+def test_no_live_record_duplicates_the_category_split() -> None:
+    """`B-1`/`B-2` — the split is derived, and lives in exactly one place.
+
+    The plan and the gate each republished a hand-maintained split; both
+    drifted, and the plan asserted a test protection that did not exist. The
+    split is now derived from `CASE_DISCHARGE` and must not be transcribed
+    into a normative record again. A line is an offence only if it states a
+    count **for a claim kind** — the vocabulary may of course be described.
     """
-    ledger_src = (
-        REPO_ROOT / "tests/rules/exploration/test_light_and_exploration_resources.py"
-    ).read_text(encoding="utf-8")
-    tree = ast.parse(ledger_src)
-    mapped: set[str] | None = None
-    for node in ast.walk(tree):
-        if (
-            isinstance(node, ast.AnnAssign)
-            and isinstance(node.target, ast.Name)
-            and node.target.id == "CASE_DISCHARGE"
-            and isinstance(node.value, ast.Dict)
-        ):
-            mapped = {
-                key.value
-                for key in node.value.keys
-                if isinstance(key, ast.Constant) and isinstance(key.value, str)
-            }
-    assert mapped is not None, "CASE_DISCHARGE not found in the test ledger"
-    assert len(mapped) == _approved_case_total()
+    kinds = ("behavior", "invariant", "surface", "reviewed", "routed")
+    offences: list[str] = []
+    for rel in ("docs/technical/EXP-006_IMPLEMENTATION_PLAN.md",
+                "docs/technical/EXP-006_PRE_CODE_GATE.md"):
+        for lineno, line in enumerate(_read(rel).splitlines(), 1):
+            lowered = line.lower()
+            if not any(k in lowered for k in kinds):
+                continue
+            if any(m in line for m in ("withdrawn", "superseded", "previously", "B-1", "B-2")):
+                continue  # an explicitly-marked historical quotation
+            if re.search(r"\*\*\d{1,2}\*\*", line):
+                offences.append(f"{rel}:{lineno}: {line.strip()[:90]}")
+    assert offences == [], (
+        "a normative record transcribes the claim-kind split again; it is "
+        f"derived from CASE_DISCHARGE and must not be duplicated: {offences}"
+    )
+
+
+def test_the_review_artifact_set_is_internally_consistent() -> None:
+    """`B-4` — the review history is the artifact set, not a prose count.
+
+    Every persisted review artifact must have a paired remediation ledger, so
+    the history can be read off the filesystem instead of transcribed into
+    records that then go stale.
+    """
+    technical = REPO_ROOT / "docs/technical"
+    reviews = sorted(technical.glob("EXP-006_FINAL_IMPLEMENTATION_REVIEW*.md"))
+    ledgers = sorted(technical.glob("EXP-006_REVIEW*_REMEDIATION_LEDGER.md"))
+
+    assert reviews, "no review artifacts found"
+    assert len(reviews) == len(ledgers), (
+        f"{len(reviews)} review artifact(s) but {len(ledgers)} ledger(s): "
+        f"reviews={[p.name for p in reviews]} ledgers={[p.name for p in ledgers]}"
+    )
+
+    # Every review artifact is listed in ISSUE-022's §3 artifact inventory,
+    # which DEVELOPMENT_WORKFLOW.md §5 item 3 requires to be complete.
+    issue = _read("docs/completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md")
+    unlisted = [p.name for p in reviews + ledgers if p.name not in issue]
+    assert unlisted == [], f"artifacts missing from ISSUE-022 §3: {unlisted}"

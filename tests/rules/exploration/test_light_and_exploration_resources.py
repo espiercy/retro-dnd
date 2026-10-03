@@ -1725,7 +1725,7 @@ CASE_DISCHARGE: dict[str, str] = {
     # Each of these rests on a mechanism a dynamic attribute hook cannot
     # fake: a parsed import graph, a pinned callable signature, a pinned
     # effective class surface, or an AST property of the source itself.
-    "L15b": "surface: deplete's signature and return type are pinned",
+    "L15b": "surface: deplete's parameters pinned; no world-state value returned",
     "L16": "surface: no hour/minute name is bound, and the source has no scaling operator",
     "L25": "surface: import graph has no CHAR-012; the enum member carries no value",
     "L32": "surface: class surfaces pinned via dir(); no classifying member exists",

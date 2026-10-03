@@ -2,27 +2,33 @@
 
 ```text
 STATUS:  NOT COMPLETE
-EXP-006-PHASE: REVIEW-3-REMEDIATED
+EXP-006-PHASE: REVIEW-4-REMEDIATED
 
          Implementation is code complete and all canonical gates pass, but
          DEVELOPMENT_WORKFLOW.md §5.1 forbids representing an issue as
-         complete while required verification is outstanding.
+         complete while required verification is outstanding, and human
+         acceptance is a separate act that has not occurred.
 
-         THREE independent final implementation reviews have been performed.
-         ALL THREE RETURNED FAIL, and NONE found a rules-conformance defect:
-             review #1   2 HIGH, 4 MED,  8 LOW -- remediated
-             review #2   2 HIGH, 5 MED, 11 LOW -- remediated
-             review #3   1 HIGH, 4 MED,  8 LOW -- remediated, except LOW-3
-                         and LOW-8 (below), which touch PROTECTED approved
-                         Rule Cards and await human adjudication
-         All three artifacts are preserved unaltered.
+         EVERY independent final implementation review performed so far
+         returned FAIL, and NONE found a rules-conformance defect.  The
+         review history is the persisted artifact set in §3, not a count
+         stated here -- see the note below.
 
-         A fourth independent review is NOT YET AUTHORIZED, and human
-         acceptance is a separate act. This record is the authoritative
-         current status for EXP-006.
+         LOW-3 and LOW-8 are RESOLVED (applied at a150837).
+
+         This record is the authoritative current status for EXP-006.
 
 BRANCH:  cluster-004-exp-006-stage-b   (unmerged, unpushed)
 ```
+
+> **Why this record no longer states a review count.** Corrected 2026-10-03 under review-#4 finding
+> `B-4`. Every prose count of the review history written into this record has gone stale within a
+> day of being written — §11 still said "**Two** independent final implementation reviews" and the
+> chronology still listed review #3 as "pending" while the `STATUS` block above said three, so the
+> record contradicted itself. The review history is now established by **the artifact set that
+> exists on disk** (enumerated in §3 and listed in the chronology below), and
+> `test_the_review_artifact_set_is_internally_consistent` checks that every review artifact has a
+> paired remediation ledger and that no live record asserts a contradicting prose count.
 
 > **This record is the single authoritative statement of current `EXP-006` status.** Other records
 > carry the `EXP-006-PHASE` token and point here; a test
@@ -100,18 +106,31 @@ integration, and `ENC-005`.
   registry, §13 next step
 - `docs/technical/EXP-006_IMPLEMENTATION_PLAN.md` — §1.2, §10.1, §10.2, §11, §12, §14, §16, §18
 - `docs/technical/EXP-006_PRE_CODE_GATE.md` — §6
-- `docs/rules/exploration/light_and_exploration_resources.md` — the approved card, amended **only**
-  by the two human-authorized bounded corrections of 2026-10-01 (`5594907`, `e5d92ad`); **not**
-  touched by either remediation pass
+- `docs/rules/exploration/light_and_exploration_resources.md` — the approved card. Amended **only**
+  under explicit human authorization, never by a remediation pass acting on its own: the two bounded
+  corrections of 2026-10-01 (`5594907`, `e5d92ad`), and the `LOW-8` historical clarification of
+  2026-10-03 (`a150837`). *The previous wording claimed the card was "not touched by either
+  remediation pass", which became false at `a150837`; corrected under review-#4 `B-4`.*
+- `docs/rules/character_creation/encumbrance_and_movement_rate.md` — `CHAR-005`, protected approved
+  card, amended once under explicit human authorization for the `LOW-3` historical clarification
+  (`a150837`); documentation only
 - `docs/completion-records/INDEX.md` — this record's index row
 
-**Created — review and remediation artifacts:**
+**Created — review and remediation artifacts.** This list is the authoritative review history; it
+is paired, and a test checks the pairing (`B-4`):
 
 - `docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW.md` — independent review #1, `FAIL`
 - `docs/technical/EXP-006_REVIEW_REMEDIATION_LEDGER.md` — remediation of review #1
 - `docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_2.md` — independent review #2, `FAIL`
 - `docs/technical/EXP-006_REVIEW_2_REMEDIATION_LEDGER.md` — remediation of review #2
+- `docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_3.md` — independent review #3, `FAIL`
+- `docs/technical/EXP-006_REVIEW_3_REMEDIATION_LEDGER.md` — remediation of review #3
+- `docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_4.md` — independent review #4, `FAIL`
+- `docs/technical/EXP-006_REVIEW_4_REMEDIATION_LEDGER.md` — remediation of review #4
 - `docs/completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md` — this record
+
+*Reviews #3 and #4 and their ledgers were missing from this list until 2026-10-03 (`B-4`), which is
+why `DEVELOPMENT_WORKFLOW.md` §5 item 3 was not satisfied.*
 
 **Deleted:** none.
 
@@ -298,8 +317,11 @@ without one.
 
 ## 11. Known Limitations and Unresolved Issues
 
-1. **The issue is not complete.** Two independent final implementation reviews have returned
-   `FAIL`; a third, separately authorized review and then human acceptance are required.
+1. **The issue is not complete.** Every independent final implementation review performed so far
+   returned `FAIL` (the artifact set in §3 is the authoritative history). Each was remediated. A
+   further separately authorized independent review, and then human acceptance, are required.
+   *Corrected 2026-10-03 under review-#4 `B-4`: this item said "**Two** … reviews have returned
+   `FAIL`; a **third** … is required", contradicting this record's own `STATUS` block.*
 2. **Seven RC silences are guarded, not filled** — by express approval. They are not defects.
 3. **The global complete-darkness world-state predicate is unowned:**
 
@@ -326,12 +348,19 @@ without one.
    successful ignition "in any slice", so this module is complete against its plan while the card's
    §4 reference to "a separately authorized ignition operation (§5)" has no implementation yet.
    Recorded 2026-10-03 under review-#3 `LOW-4`; it needs a future authorization, not a fix here.
-7. **Two review-#3 findings are open and require human adjudication**, because both touch
-   **protected** approved Rule Cards (`AGENTS.md` §12) and this task was not authorized to edit
-   them: `LOW-3` (`CHAR-005` still carries both "there is no `SR-11`" denials) and `LOW-8` (the
-   `EXP-006` card's §Status retains the pre-approval sentence "No Pre-Code Gate has been begun for
-   `CLUSTER-004`, and no implementation plan exists"). Both are documentation-only; neither changes
-   mechanics or provenance.
+7. **Review-#3's two protected-card findings are `RESOLVED`** — adjudicated by the human project
+   owner and applied at `a150837` as documentation-only historical clarifications. `LOW-3`:
+   `CHAR-005`'s two "there is no `SR-11`" denials each now carry a note that they describe only the
+   2026-09-25 amendment state and that `SR-11` was subsequently allocated to `EXP-006`. `LOW-8`: the
+   `EXP-006` card's pre-approval sentence is quoted under an explicit "Historical pre-approval
+   note — retained for chronology, NOT current status" heading. Neither changed a mechanic,
+   provenance classification, case ID or approval status; both confirmed applied by review #4.
+8. **One review-#4 informational finding is open and requires human adjudication** (`INFO-1`): the
+   approved card's §Open Questions opens *"All **six** are mapped RC silences or governance items"*
+   above a list of **seven** entries. Inspected 2026-10-03 and **STOPPED rather than corrected**,
+   because the count is genuinely ambiguous rather than a demonstrable typo — see the review-#4
+   remediation ledger §INFO-1 for the exact passage and the reason. Documentation-only; no mechanic,
+   silence disposition, provenance or case ID is affected.
 8. **Not merged and not pushed.** `CLUSTER-004` implementation, `ENC-005` Stage B and any new
    Stage-A card all remain unauthorized.
 
@@ -411,13 +440,24 @@ are untouched.
 | 2026-10-03 | **Independent final implementation review #2** | **`FAIL`** — 2 HIGH, 5 MED, 11 LOW |
 | 2026-10-03 | Bounded remediation of all 18 findings | ledger #2 |
 | 2026-10-03 | Human adjudication of `LOW-9` — the refuel error taxonomy | implemented (§12.1) |
-| — | Independent final implementation review #3 | **pending, separately authorized** |
-| — | Human acceptance | pending |
+| 2026-10-03 | **Independent final implementation review #3** | **`FAIL`** — 1 HIGH, 4 MED, 8 LOW |
+| 2026-10-03 | Bounded remediation of review #3; guard claims **narrowed**, not widened | ledger #3 |
+| 2026-10-03 | Human adjudication of `LOW-3` / `LOW-8` — protected-card historical clarifications | applied at `a150837` |
+| 2026-10-03 | **Independent final implementation review #4** | **`FAIL`** — 6 blocking, 7 non-blocking |
+| 2026-10-03 | Bounded remediation of review #4 — this pass | ledger #4 |
+| — | Further independent review | not yet authorized |
+| — | Human acceptance and merge | **pending** |
 
-**No past `FAIL` or `PASS` is relabelled.** Both final-review artifacts are preserved unaltered,
-as are the four Stage-A `FAIL` reviews and the two superseded first-pass evidence packets.
+**No past `FAIL` or `PASS` is relabelled.** Every final-review artifact is preserved unaltered, as
+are the four Stage-A `FAIL` reviews and the two superseded first-pass evidence packets.
 
-Both reviews found the **rules logic conformant** — clause by clause against the approved card,
-across 36 independent behavioural and state-space mutations. Every finding in both reviews
+**Every review found the rules logic conformant** — clause by clause against the approved card,
+each re-deriving the contract independently and running its own behavioural and state-space
+mutations. **No review has found a rules-conformance defect.** Every finding in every review
 concerned the self-description layer: docstrings, ledgers, case tables, status records and the
-breadth of guard claims.
+breadth of guard claims. Review #4 additionally found, for the first time, **no guard claiming more
+than its mechanism establishes** — the 2026-10-03 narrowing held under independent audit.
+
+*Rows for reviews #3 and #4 and the `LOW-3`/`LOW-8` adjudication were added 2026-10-03 under
+review-#4 `B-4`; the table previously ended with review #3 listed as "pending" and asserted "both
+reviews" below it.*
