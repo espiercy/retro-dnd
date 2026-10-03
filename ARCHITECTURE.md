@@ -518,26 +518,81 @@ This does not authorize or select another cluster; subsequent historical-rules w
 
 > **Correction, 2026-10-03.** This entry previously stated that the card "carries no Simulator Ruling" and that "no implementation plan exists" for `EXP-006`. Both were false when written and are corrected above: `SR-11` is registered in the Rule Card, the `CLUSTER-004` record, `INVENTORY.md` and the plan, and the plan was approved the same day. Found by the independent final implementation review (`HIGH-1`). The denial mattered more than an omission would have: the card's own ID-allocation reasoning treats *prior textual denials* as the evidence distinguishing an allocated `SR` from a free one.
 
-**`EXP-006` IMPLEMENTATION: CODE COMPLETE — NOT FINALLY ACCEPTED.** All four plan slices are implemented and human-accepted (A–D). **`EXP-006-PHASE: REVIEW-5-REMEDIATED`.**
+**`EXP-006` IMPLEMENTATION: all four plan slices are implemented and human-accepted (A–D).**
 
-**Every independent final review performed so far returned `FAIL`**, and each is preserved unaltered, paired with its own remediation ledger:
+> **Current `EXP-006` status — including the review phase, what is pending, and the open-blocker
+> list — is owned by `docs/completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md`.
+> This document does not own it and no longer states it.**
+
+*Normalized 2026-10-03 by human architecture decision, under closure-review-#6 `BLOCKING-6-1`/`-6-2`.*
+This entry previously carried a phase token, a relative review-recency phrase and a sentence
+asserting whether a further review had been authorized. Three successive remediations tried to keep
+such duplicated current-status prose synchronized across records; each left a twin stale, and
+closure review #6 identified the root cause as **duplicated ownership of volatile status** —
+*"token presence is not prose coherence."* The remedy is single ownership, not better
+synchronization. The superseded phrasings are deliberately **described rather than quoted** here:
+reproducing them verbatim would itself place the volatile form back in this record, which is the
+mistake this normalization exists to end.
+
+**`EXP-006` current-status authority — the ownership model, recorded once:**
+
+```text
+ISSUE-022            AUTHORITATIVE for current EXP-006 status: the review
+                     phase, which review is outstanding, which remediation
+                     came last, the acceptance state, the open-blocker list.
+
+CLUSTER-004 record   cluster chronology and durable cluster context.
+                     Does NOT own the current EXP-006 phase.
+
+INDEX.md             navigation.
+                     Does NOT own the current EXP-006 phase.
+
+ARCHITECTURE.md      architecture and durable process history.
+                     Does NOT own the current EXP-006 phase.
+
+INVENTORY.md         rule-inventory ownership and source attribution.
+                     Does NOT own the current EXP-006 phase.
+
+plan / Pre-Code Gate the approved contract and the readiness finding.
+                     Do NOT own the current EXP-006 phase.
+
+review artifacts     immutable historical review results.
+remediation ledgers  immutable historical remediation records.
+                     Neither is ever rewritten to tidy current documentation.
+```
+
+A non-authoritative record that needs to mention status **references `ISSUE-022`**; it does not
+restate the fact. `tests/rules/exploration/test_exp_006_record_consistency.py` enforces exactly
+that for the enrolled records, and nothing broader.
+
+**Durable architectural facts, which this document does own:**
+
+**Every independent review of `EXP-006` performed to date returned `FAIL`**, and each is preserved
+unaltered, paired with its own remediation ledger:
 
 ```text
 docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW*.md    the reviews
+docs/technical/EXP-006_CLOSURE_REVIEW_*.md                the closure review(s)
 docs/technical/EXP-006_REVIEW*_REMEDIATION_LEDGER.md      their remediations
 ```
 
-**That artifact set is the review history.** It is deliberately not restated here as a count or as an inline list, because every prose count and partial enumeration written into this entry has gone stale within a day — review-#4 `B-4` found the count wrong, and review-#5 `BLOCKING-2` then found *"all three … All three remediations are recorded (…)"* still here, omitting the fourth ledger, **inside the very sentence announcing that counts had been abandoned**. `test_the_review_artifact_set_is_internally_consistent` checks the pairing; `ISSUE-022` §3 enumerates the artifacts and is the authoritative current status.
+That artifact set **is** the review history; it is deliberately not restated here as a count, because
+every prose count written into this entry has gone stale within a day. `ISSUE-022` §3 enumerates the
+artifacts.
 
-**No review has found a rules-conformance defect.** Each independently re-derived the contract from the approved card and ran its own behavioural and state-space mutations; **every finding in every review has concerned the self-description layer** — docstrings, audit ledgers, case tables, status records, and the breadth of guard claims. `ISSUE-022` states the issue is **NOT COMPLETE**.
+**No review has found a rules-conformance defect.** Each independently re-derived the contract from
+the approved card and ran its own behavioural and state-space mutations; **every finding in every
+review has concerned the self-description layer** — docstrings, audit ledgers, case tables, status
+records, and the breadth of guard claims. The production tree has not moved across the reviewed
+HEADs.
 
 **Review-#3's two protected-card findings are `RESOLVED`.** `LOW-3` (`CHAR-005`'s two "there is no `SR-11`" denials) and `LOW-8` (the `EXP-006` card's retained pre-approval sentence) were adjudicated by the human project owner and applied at `a150837` as documentation-only historical clarifications — each denial now carries a note that it describes only the 2026-09-25 amendment state and that `SR-11` was subsequently allocated, and the pre-approval sentence is quoted under an explicit historical heading. No mechanic, provenance classification, case ID or approval status changed. Independently confirmed by review #4. *(This paragraph said both findings "remain open" until corrected 2026-10-03 under review-#4 finding `B-3`; it was written before the adjudication and not updated by it.)*
 
-**The two most recent reviews narrowed the open ground to the self-description layer alone.** Review #4 found **no guard claiming more than its mechanism establishes** — the 2026-10-03 claim narrowing held under an independent audit of every guard — and review #5 confirmed that result, additionally establishing that the production tree is **provably frozen** (the `src` tree hash is byte-identical across the last three reviewed HEADs, and the approved Rule Card is byte-identical). Both reviews' blocking findings were, without exception, stale cross-references in governance records or defects in the consistency mechanism built to prevent them. Review #5's own verdict stands as a historical `FAIL`; see its artifact and `EXP-006_REVIEW_5_REMEDIATION_LEDGER.md`.
+**The guard-claim layer has been independently audited and found free of overclaim** (review #4, confirmed by review #5): the 2026-10-03 claim narrowing held. Review #5 additionally established that the production tree is **provably frozen** — the `src` tree hash and the approved Rule Card blob are byte-identical across every reviewed `HEAD`. Reviews #4, #5 and closure review #6 produced, without exception, blocking findings that were stale cross-references in governance records or defects in the consistency mechanism built to prevent them. Each verdict stands as a historical `FAIL` in its own artifact. *(This paragraph opened with a count-shaped relative reference to recent reviews until 2026-10-03; such a reference becomes false the moment another review lands, which is the same drift mechanism — closure-review-#6 `INFO-2`. Described, not quoted, for the reason given above.)*
 
 **The guard arms race is closed by human direction (2026-10-03).** The project now distinguishes a *machine-enforced invariant*, a *machine-enforced observed surface*, and a *reviewed architectural ownership boundary*, and no longer presents the third as the first. Overbroad guard claims were **narrowed** rather than answered with broader mechanisms; **no fourth-generation universal architecture guard is authorized**, and a future reviewer finding another Python construct outside a guard's explicitly narrow claim is a limitation, not by itself a defect.
 
-**A further independent review is not yet authorized**, and acceptance is a human act. *(This sentence read "A **fourth** independent review is not yet authorized" until 2026-10-03, four lines below the paragraph recording that review's `FAIL` — review-#5 `BLOCKING-2`. The same stale sentence was corrected in the implementation plan and the `CLUSTER-004` record in the previous pass and missed here; it is now phrased so that it does not need renumbering.)* **`CLUSTER-004` implementation remains `NOT AUTHORIZED`** — §15.2 step 4 is satisfied for `EXP-006`'s own plan only, and merge is a separate human act.
+Acceptance and merge are human acts, and **whether a further review is authorized is current status — recorded in `ISSUE-022`, not here.** *(This sentence asserted that authorization state directly until 2026-10-03. It first named a specific review number below the paragraph recording that same review's `FAIL`, which review-#5 `BLOCKING-2` found; it was then reworded to a number-free form, and closure review #6 found the same class of defect again in two other records. Under the human architecture decision of 2026-10-03 the assertion is **removed rather than reworded a third time**.)* **`CLUSTER-004` implementation remains `NOT AUTHORIZED`** — §15.2 step 4 is satisfied for `EXP-006`'s own plan only, which is a durable authorization fact this document does own.
 
 **`EXP-006` PRE-CODE GATE: `PASS` — 2026-10-01.** The per-card readiness assessment against §15.1's five criteria is recorded at `docs/technical/EXP-006_PRE_CODE_GATE.md`: **no blocking defects**, three non-blocking implementation cautions. The card consumes only **landed** cards (`EXP-002`, `CHAR-004`); every unresearched dependency is **downstream-only** and is never called by `EXP-006`. **This `PASS` is a readiness finding, not an authorization**, and it is scoped to `EXP-006` alone — it states nothing about `ENC-005` or about `CLUSTER-004` as a whole.
 

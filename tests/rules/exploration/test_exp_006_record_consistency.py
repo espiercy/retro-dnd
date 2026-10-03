@@ -66,31 +66,77 @@ LIVE_RECORDS = (
     "docs/completion-records/INDEX.md",
 )
 
-# Records required to carry the phase token. The gate and the index are read
-# for stale wording but are not required to carry it: the gate is a
-# pre-implementation record, and the index is a one-line summary.
-PHASE_TOKEN_RECORDS = (
+# --- The ownership model (closure review #6, human decision 2026-10-03) ---
+#
+# The phase-token design is WITHDRAWN. It synchronised a duplicated fact, and
+# closure review #6 showed why that can never work: `CLUSTER-004` carried the
+# correct `REVIEW-5-REMEDIATED` token AND, twelve lines below it, the sentence
+# "Review #4's remediation is the most recent work" -- simultaneously, with
+# this suite green. **Token presence is not prose coherence.** Three
+# successive remediations each synchronised the instances a review named and
+# seeded a new one.
+#
+# The replacement is ownership, not synchronisation: exactly one record owns
+# volatile current status, and the others reference it instead of restating
+# it. Nothing here parses English for semantic coherence; the enrolled
+# non-authoritative records simply may not own the fact at all.
+
+STATUS_AUTHORITY = "docs/completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md"
+
+# Non-authoritative records that mention EXP-006 status. Each must reference
+# the authority, and none may assert a volatile current-status form.
+NON_AUTHORITATIVE_RECORDS = (
     "ARCHITECTURE.md",
     "docs/rules/INVENTORY.md",
     "docs/rules/clusters/CLUSTER-004-equipment-resources-and-evasion.md",
     "docs/technical/EXP-006_IMPLEMENTATION_PLAN.md",
-    "docs/completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md",
+    "docs/technical/EXP-006_PRE_CODE_GATE.md",
+    "docs/completion-records/INDEX.md",
 )
 
-CURRENT_PHASE = "EXP-006-PHASE: REVIEW-5-REMEDIATED"
-
-# Historical artifacts. NEVER scanned by this test; listed so that the
-# never-scanned property is itself asserted rather than merely intended.
-HISTORICAL_ARTIFACTS = (
-    "docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW.md",
-    "docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_2.md",
-    "docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_3.md",
-    "docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_4.md",
-    "docs/technical/EXP-006_REVIEW_REMEDIATION_LEDGER.md",
-    "docs/technical/EXP-006_REVIEW_2_REMEDIATION_LEDGER.md",
-    "docs/technical/EXP-006_REVIEW_3_REMEDIATION_LEDGER.md",
-    "docs/technical/EXP-006_REVIEW_4_REMEDIATION_LEDGER.md",
+# Volatile current-status forms. A closed, narrow list of shapes that have
+# repeatedly caused defects in this project. These are CURRENT-STATE
+# assertions, which is why each is matched on its predicate rather than on
+# any mention of a review:
+#
+#   "Review #5 returned FAIL on 2026-10-03"   historical event   -> ALLOWED
+#   "Review #5 is the most recent review"     current assertion  -> REJECTED
+#
+# That distinction is carried by the patterns themselves. There is no
+# historical-marker skip list and must never be one: review #4 and review #5
+# both blocked on exactly that construct.
+VOLATILE_STATUS_FORMS = (
+    r"most recent (?:review|work|remediation|independent)",
+    r"latest (?:review|remediation)",
+    r"review\s*#?\s*\d+(?:'s)?\s+(?:remediation\s+)?is\s+(?:the\s+)?"
+    r"(?:most recent|latest|current|pending)",
+    r"review\s*#?\s*\d+\s+is\s+pending",
+    r"current review is",
+    r"review\s*#?\s*\d+\s+(?:is\s+)?not\s+yet\s+authorized",
+    r"(?:a\s+)?(?:further|another|fourth|fifth|sixth|seventh)\s+"
+    r"(?:independent\s+)?(?:final\s+)?review\s+is\s+not\s+yet\s+authorized",
+    r"EXP-006-PHASE",
 )
+
+# Historical artifacts. NEVER scanned; listed so the never-scanned property
+# is asserted rather than merely intended. Derived by glob so this cannot go
+# stale as further reviews land (closure-review-#6 `INFO-1` found the literal
+# list had omitted review #5 and ledger #5).
+HISTORICAL_ARTIFACT_GLOBS = (
+    "docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW*.md",
+    "docs/technical/EXP-006_CLOSURE_REVIEW_*.md",
+    "docs/technical/EXP-006_REVIEW*_REMEDIATION_LEDGER.md",
+)
+
+
+def _historical_artifacts() -> list[str]:
+    """Every immutable review/ledger artifact, by glob rather than by list."""
+    found: list[str] = []
+    for pattern in HISTORICAL_ARTIFACT_GLOBS:
+        found += [
+            p.relative_to(REPO_ROOT).as_posix() for p in REPO_ROOT.glob(pattern)
+        ]
+    return sorted(set(found))
 
 # Statements that were true once and are false now. No exemption mechanism
 # exists: if one of these appears in a named live record, the test fails.
@@ -124,6 +170,28 @@ def _read(rel: str) -> str:
 # These exist as named functions so that the regression tests exercise THE
 # SAME code path the live-record checks use. Review #5 `NB-3` found the
 # earlier regressions re-implemented the match inline and were tautological.
+
+
+def _volatile_status_in(text: str) -> list[str]:
+    """Volatile current-status assertions present in `text`, per line.
+
+    **The production predicate for the ownership model.** A non-authoritative
+    enrolled record must not own volatile current status, so any of the
+    closed set of `VOLATILE_STATUS_FORMS` appearing in one is an offence.
+
+    **No exemption mechanism, and no attempt to understand English.** The
+    patterns match current-state *predicates* ("is the most recent", "is
+    pending", "not yet authorized"), so a historical event sentence
+    ("Review #5 returned FAIL on 2026-10-03") is simply not a match. That
+    is what keeps historical chronology legal without a marker skip list —
+    the construct both review #4 and review #5 blocked on.
+    """
+    offences: list[str] = []
+    for lineno, line in enumerate(text.splitlines(), 1):
+        for pattern in VOLATILE_STATUS_FORMS:
+            if re.search(pattern, line, re.I):
+                offences.append(f"{lineno}: {pattern}")
+    return offences
 
 
 def _stale_claims_in(text: str) -> list[str]:
@@ -209,15 +277,23 @@ def _case_discharge() -> dict[str, str]:
 def test_the_configuration_is_non_empty_and_every_named_record_exists() -> None:
     """A misconfigured guard is the defect this file exists to prevent."""
     assert LIVE_RECORDS, "no live records configured"
-    assert PHASE_TOKEN_RECORDS, "no phase-token records configured"
+    assert NON_AUTHORITATIVE_RECORDS, "no non-authoritative records configured"
     assert STALE_CURRENT_CLAIMS, "no stale claims configured"
-    assert HISTORICAL_ARTIFACTS, "no historical artifacts configured"
+    assert VOLATILE_STATUS_FORMS, "no volatile-status forms configured"
 
-    for rel in LIVE_RECORDS + PHASE_TOKEN_RECORDS + HISTORICAL_ARTIFACTS:
+    historical = _historical_artifacts()
+    assert historical, "no historical artifacts discovered"
+
+    for rel in LIVE_RECORDS + NON_AUTHORITATIVE_RECORDS + (STATUS_AUTHORITY,):
         assert (REPO_ROOT / rel).is_file(), f"configured record does not exist: {rel}"
+    for rel in historical:
+        assert (REPO_ROOT / rel).is_file(), rel
 
-    assert set(PHASE_TOKEN_RECORDS) <= set(LIVE_RECORDS), (
-        "every phase-token record must also be a live record"
+    assert set(NON_AUTHORITATIVE_RECORDS) <= set(LIVE_RECORDS), (
+        "every non-authoritative record must also be a live record"
+    )
+    assert STATUS_AUTHORITY in LIVE_RECORDS, (
+        "the authority is still read for stale claims, so it must be enrolled as live"
     )
 
 
@@ -249,8 +325,11 @@ def test_the_configuration_cannot_disarm_a_claim() -> None:
         others = [c for c in STALE_CURRENT_CLAIMS if c != claim and claim in c]
         assert not others, f"{claim!r} is subsumed by {others!r}"
 
-    # Historical artifacts must not be in the scanned set.
-    assert not (set(HISTORICAL_ARTIFACTS) & set(LIVE_RECORDS)), (
+    # Historical artifacts must not be in the scanned set. Discovered by
+    # glob, so this cannot omit a newly landed artifact -- closure-review-#6
+    # `INFO-1` found the previous literal list had omitted review #5 and
+    # ledger #5 while claiming to assert the never-scanned property.
+    assert not (set(_historical_artifacts()) & set(LIVE_RECORDS)), (
         "a historical artifact is configured as a live record; it preserves "
         "obsolete claims deliberately and must never be scanned"
     )
@@ -299,6 +378,16 @@ def test_injecting_review_3_pending_into_a_live_record_is_detected(
     """The same regression for the next phase's stale wording.
 
     `B-5` found exactly this in `INDEX.md`, phrased as "review #3 pending".
+
+    **Corrected 2026-10-03 under closure-review-#6 `NB-1`.** This test
+    re-implemented the match inline instead of calling `_stale_claims_in`,
+    which made it tautological in precisely the way review-#5 `NB-3`
+    described — it would have kept passing if the production predicate were
+    disarmed, the one regression it exists to prevent. The review-#5
+    remediation ledger claimed both predicates were used by both the live
+    checks and the regressions; that claim was **false for this test**. The
+    historical ledger is preserved unaltered and the discrepancy is recorded
+    in the closure-review-#6 remediation ledger instead.
     """
     fixture = tmp_path / "INDEX.md"
     fixture.write_text(
@@ -306,20 +395,112 @@ def test_injecting_review_3_pending_into_a_live_record_is_detected(
         + "\n\nEXP-006: review #3 pending, separately authorized.\n",
         encoding="utf-8",
     )
-    offences = [c for c in STALE_CURRENT_CLAIMS if c in fixture.read_text("utf-8")]
+    offences = _stale_claims_in(fixture.read_text(encoding="utf-8"))
     assert "review #3 pending" in offences
 
 
 # --- The live-record checks -----------------------------------------------
 
 
-def test_live_records_carry_the_current_phase_token() -> None:
-    """`MED-1`/`B-3` — advancing the phase is one deliberate, atomic act."""
-    missing = [rel for rel in PHASE_TOKEN_RECORDS if CURRENT_PHASE not in _read(rel)]
+# --- The ownership model: A/B/C/D/E/F --------------------------------------
+
+
+def test_the_status_authority_exists_and_is_designated() -> None:
+    """A — `ISSUE-022` exists and declares itself the current-status authority."""
+    assert (REPO_ROOT / STATUS_AUTHORITY).is_file(), STATUS_AUTHORITY
+    text = _read(STATUS_AUTHORITY)
+    assert "authoritative" in text.lower(), (
+        "the status authority does not declare itself authoritative"
+    )
+    # The ownership model is recorded once, in the governance document.
+    assert "current-status authority" in _read("ARCHITECTURE.md"), (
+        "ARCHITECTURE.md does not record the EXP-006 current-status ownership model"
+    )
+
+
+def test_non_authoritative_records_reference_the_authority() -> None:
+    """B — a record that mentions status must point at the owner of the fact."""
+    missing = [
+        rel for rel in NON_AUTHORITATIVE_RECORDS if "ISSUE-022" not in _read(rel)
+    ]
     assert missing == [], (
-        f"these live records do not carry {CURRENT_PHASE!r}: {missing}. "
-        "Advancing the phase means updating CURRENT_PHASE here and every "
-        "record in PHASE_TOKEN_RECORDS together."
+        f"these records mention EXP-006 but do not reference {STATUS_AUTHORITY}: {missing}"
+    )
+
+
+def test_non_authoritative_records_own_no_volatile_status() -> None:
+    """C/D — the enrolled records may not own volatile current status.
+
+    This replaces the withdrawn phase-token synchronisation. Closure review
+    #6 demonstrated that a correct token and a contradicting sentence can
+    coexist, so the fix is to remove the *fact* from these records rather
+    than to keep their copies of it in step.
+    """
+    offences: list[str] = []
+    for rel in NON_AUTHORITATIVE_RECORDS:
+        offences += [f"{rel}:{o}" for o in _volatile_status_in(_read(rel))]
+    assert offences == [], (
+        "these records assert volatile EXP-006 current status, which only "
+        f"{STATUS_AUTHORITY} may own: {offences}"
+    )
+
+
+def test_a_volatile_duplicate_in_the_cluster_record_is_rejected(
+    tmp_path: pathlib.Path,
+) -> None:
+    """C — the exact `BLOCKING-6-1` shape, against the production predicate."""
+    fixture = tmp_path / "CLUSTER-004.md"
+    fixture.write_text(
+        _read("docs/rules/clusters/CLUSTER-004-equipment-resources-and-evasion.md")
+        + "\n\nReview #5 is the most recent review.\n",
+        encoding="utf-8",
+    )
+    assert _volatile_status_in(fixture.read_text(encoding="utf-8")) != []
+
+
+def test_a_volatile_duplicate_in_the_index_is_rejected(
+    tmp_path: pathlib.Path,
+) -> None:
+    """D — the exact `BLOCKING-6-2` shape, against the production predicate."""
+    fixture = tmp_path / "INDEX.md"
+    fixture.write_text(
+        _read("docs/completion-records/INDEX.md") + "\n\nReview #6 is pending.\n",
+        encoding="utf-8",
+    )
+    assert _volatile_status_in(fixture.read_text(encoding="utf-8")) != []
+
+
+def test_historical_chronology_remains_allowed(tmp_path: pathlib.Path) -> None:
+    """E — a historical event sentence must NOT be rejected.
+
+    This is what makes the model usable: records keep their history. The
+    distinction is carried by the patterns matching current-state predicates,
+    **not** by any historical-marker skip list.
+    """
+    fixture = tmp_path / "CLUSTER-004.md"
+    fixture.write_text(
+        "# Cluster record\n\n"
+        "Review #4 returned FAIL on 2026-10-03.\n"
+        "Review #5 returned FAIL on 2026-10-03.\n"
+        "Closure review #6 returned FAIL on 2026-10-03.\n"
+        "Every independent review to date returned FAIL; none found a rules defect.\n",
+        encoding="utf-8",
+    )
+    assert _volatile_status_in(fixture.read_text(encoding="utf-8")) == []
+
+
+def test_the_authority_may_state_current_status() -> None:
+    """F — `ISSUE-022` owns the fact, so it is exempt by *role*, not by marker.
+
+    Exemption by **record identity** is the whole design: the authority is
+    not in `NON_AUTHORITATIVE_RECORDS`, so the volatile-form check never
+    reads it. Asserted here so the exemption is explicit rather than
+    incidental, and so that enrolling the authority by mistake fails.
+    """
+    assert STATUS_AUTHORITY not in NON_AUTHORITATIVE_RECORDS
+    # And it does in fact exercise that ownership.
+    assert _volatile_status_in(_read(STATUS_AUTHORITY)) != [], (
+        "the authority states no current status; it is supposed to own that fact"
     )
 
 

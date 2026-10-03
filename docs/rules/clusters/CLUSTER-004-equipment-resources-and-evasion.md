@@ -58,7 +58,8 @@ STAGE B (SYNTHESIS)         EXP-006  COMPLETE   (card APPROVED 2026-10-01)
 RULE CARDS                  EXP-006  APPROVED 2026-10-01
                             ENC-005  NONE DRAFTED
 IMPLEMENTATION              EXP-006  AUTHORIZED per-slice; Slices A-D ACCEPTED.
-                                     EXP-006-PHASE: REVIEW-5-REMEDIATED
+                                     Current status: see ISSUE-022 (SS13.1).
+                                     This record does not own that phase.
                             CLUSTER-004 AS A WHOLE   NOT AUTHORIZED
 ALTERNATE-SOURCE RESEARCH   NONE PERFORMED; one candidate question flagged (§8)
 SIMULATOR RULINGS           SR-11 PROPOSED AND APPROVED 2026-10-01  (§10)
@@ -422,41 +423,51 @@ one ownership question (rations), none of which prevents Stage B from beginning
 on that card alone if the human owner prefers to split the cluster.
 ```
 
-**Live next step.** This block is **status**, not history, and the review phase it carries is
-pinned by `test_live_records_carry_the_current_phase_token` so it cannot silently go stale
-again — which it did, twice, and which review #3 recorded as `MED-1`. *(Citation corrected
-2026-10-03 under review-#5 `BLOCKING-3`. It previously named a test that the review-#4 remediation
-had renamed, so the citation resolved to nothing — one citation, zero definitions. The superseded
-identifier is deliberately not reproduced here. The protection itself was never absent, and a
-guard now fails if any live record cites a test that does not exist.)*
+### 13.1 Current `EXP-006` status — not owned here
+
+> **Current `EXP-006` status: see
+> [`ISSUE-022`](../../completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md).**
+
+**This record does not own the current `EXP-006` review phase**, and no longer states one.
+
+*Normalized 2026-10-03 under closure-review-#6 findings `BLOCKING-6-1` and the human architecture
+decision of the same date.* This block previously carried a phase token **and**, twelve lines below
+it, a sentence naming an earlier review as the newest work — both at once, with the test suite
+green, in a block that declared itself *"status, not history"* and *"cannot silently go stale
+again"*. Closure review #6 named the root cause exactly: **token presence is not prose coherence.**
+Three successive remediations had tried to keep duplicated current-status prose synchronized across
+records and each left a twin stale.
+
+That strategy is withdrawn. Volatile current-status facts — which review is newest, which is
+outstanding, which remediation came last, the acceptance phase and the open-blocker list — are owned
+by **`ISSUE-022` alone**. The correction here was therefore **not** to advance a review number: it
+was to **stop asserting the fact at all**. The superseded phrasings are described rather than
+quoted, because reproducing them would put the volatile form back into this record.
+
+### 13.2 Durable cluster context, and historical chronology
+
+What remains below is this record's own business — the cluster's `ENC-005` position and
+`CLUSTER-004`'s own authorization state — plus history, which is legitimately permanent:
 
 ```text
-EXP-006-PHASE: REVIEW-5-REMEDIATED
+HISTORICAL  Every independent review of EXP-006 performed to date returned
+            FAIL, and every artifact is preserved unaltered:
+                docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW*.md
+            each paired with its own remediation ledger.  NONE found a
+            rules-conformance defect.
 
-EXP-006   EVERY independent final implementation review performed so far
-          RETURNED FAIL, and every artifact is preserved unaltered.  The
-          review history is the persisted artifact set itself:
-              docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW*.md
-          each paired with its own remediation ledger.  It is NOT restated
-          as a count here -- every prose count of it has so far gone stale
-          (review-#4 B-4).
+HISTORICAL  Review #3's two protected-card findings were adjudicated and
+            applied at a150837 as documentation-only historical
+            clarifications: LOW-3 (CHAR-005's two SR-11 denials) and LOW-8
+            (the EXP-006 card's pre-approval statement).  No mechanic,
+            provenance, case ID or approval status changed.
 
-          NONE found a rules-conformance defect.  Review #4 additionally
-          found NO guard claiming more than its mechanism establishes.
-          Review #4's remediation is the most recent work.  A further
-          independent review is NOT YET AUTHORIZED, and the implementer may
-          not certify its own remediation.
-
-          Review-#3's two protected-card findings are RESOLVED, adjudicated
-          and applied at a150837 as documentation-only historical
-          clarifications: LOW-3 (CHAR-005's two SR-11 denials) and LOW-8
-          (the EXP-006 card's pre-approval statement). No mechanic,
-          provenance, case ID or approval status changed.  Corrected
-          2026-10-03 under review-#4 finding B-3.
-
-ENC-005   STAGE B REMAINS DEFERRED. §6 Q1 and Q2 are still unsettled and are
-          still the deciding questions. Not authorized.
+ENC-005     STAGE B REMAINS DEFERRED.  SS6 Q1 and Q2 are still unsettled
+            and are still the deciding questions.  Not authorized.
 
 CLUSTER-004 CROSS-CARD INTEGRATION AND CLUSTER COMPLETION: NOT AUTHORIZED,
-          and not reachable while ENC-005 has no card.
+            and not reachable while ENC-005 has no card.
 ```
+
+The implementer may not certify its own remediation; what review stage `EXP-006` has reached, and
+what remains open, are recorded in `ISSUE-022`.

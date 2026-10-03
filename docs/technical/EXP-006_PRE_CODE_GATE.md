@@ -1,5 +1,11 @@
 # `EXP-006` — Pre-Code Gate Assessment
 
+> **Current `EXP-006` status: see
+> [`ISSUE-022`](../completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md).**
+> This gate records a readiness finding made on 2026-10-01 and its bounded revalidation. It does not
+> own the current review phase, the acceptance state or the open-blocker list, and does not state
+> them.
+
 ## 0. Outcome
 
 ```text

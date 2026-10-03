@@ -1,22 +1,50 @@
 # ISSUE-022: `EXP-006` Light & Exploration Resources — Implementation
 
+> **THIS RECORD IS THE AUTHORITATIVE SOURCE FOR CURRENT `EXP-006` STATUS.** Human architecture
+> decision, 2026-10-03, under closure-review-#6 `BLOCKING-6-1`/`-6-2`. The review phase, which
+> review is outstanding, which remediation came last, the acceptance state and the open-blocker list
+> are owned **here and nowhere else**. Other records carry durable facts, history and a reference to
+> this one; they no longer restate volatile status. The ownership model is recorded in
+> `ARCHITECTURE.md` §15.2 and enforced for the enrolled records by
+> `tests/rules/exploration/test_exp_006_record_consistency.py`.
+>
+> *Why: three successive remediations tried to keep duplicated current-status prose synchronized
+> across records, and each left a twin stale. Closure review #6 found a correct phase token and a
+> contradicting sentence coexisting twelve lines apart with the suite green — "token presence is not
+> prose coherence". Single ownership replaces synchronization.*
+
 ```text
 STATUS:  NOT COMPLETE
-EXP-006-PHASE: REVIEW-5-REMEDIATED
+EXP-006-PHASE: CLOSURE-REVIEW-6-REMEDIATED
 
          Implementation is code complete and all canonical gates pass, but
          DEVELOPMENT_WORKFLOW.md §5.1 forbids representing an issue as
          complete while required verification is outstanding, and human
          acceptance is a separate act that has not occurred.
 
-         EVERY independent final implementation review performed so far
-         returned FAIL, and NONE found a rules-conformance defect.  The
-         review history is the persisted artifact set in §3, not a count
-         stated here -- see the note below.
+         EVERY independent review performed to date returned FAIL, and NONE
+         found a rules-conformance defect.  The review history is the
+         persisted artifact set in §3, not a count stated here.
 
-         LOW-3 and LOW-8 are RESOLVED (applied at a150837).
+         REVIEW STAGE REACHED
+             Rule Card EXP-006                     APPROVED  2026-10-01
+             Implementation slices A-D             ACCEPTED
+             Independent final reviews #1-#5       all FAIL, each remediated
+             Closure review #6                    FAIL
+             Review #5 remediation                COMPLETE
+             Closure review #6 remediation        COMPLETE (this pass)
 
-         This record is the authoritative current status for EXP-006.
+         OPEN BLOCKERS                             NONE known
+         FINAL HUMAN ACCEPTANCE                    NOT GIVEN
+         MERGED                                    NO
+         PUSHED                                    NO
+
+         LOW-3 and LOW-8                           RESOLVED (at a150837)
+         INFO-1                                    NO CHANGE (adjudicated;
+                                                   see §12.2)
+
+         Whether a further independent review is authorized is recorded
+         here when it is decided; no other record states it.
 
 BRANCH:  cluster-004-exp-006-stage-b   (unmerged, unpushed)
 ```
@@ -38,10 +66,15 @@ BRANCH:  cluster-004-exp-006-stage-b   (unmerged, unpushed)
 > green. Per the standing project rule the **claim is narrowed to the mechanism**, rather than the
 > mechanism broadened to preserve the claim.
 
-> **This record is the single authoritative statement of current `EXP-006` status.** Other records
-> carry the `EXP-006-PHASE` token and point here; a test
+> **Superseded by the ownership model above (2026-10-03).** This note said other records *carry the
+> phase token and point here*, with a test asserting they agree. Closure review #6 showed that
+> design cannot work: a record can carry the correct token and contradict it in adjacent prose.
+> Non-authoritative records now carry **no** phase token and **only** a reference. The original note
+> follows for provenance.
+>
+> ~~Other records carry the token and point here; a test
 > (`tests/rules/exploration/test_exp_006_record_consistency.py`) asserts they agree, because three
-> consecutive reviews found them disagreeing.
+> consecutive reviews found them disagreeing.~~
 
 > **Rewritten 2026-10-03** under review-#2 finding `MED-5`, which found that the record created to
 > discharge review #1's `MED-3` did not itself satisfy `DEVELOPMENT_WORKFLOW.md` §5: it omitted the
@@ -137,6 +170,8 @@ is paired, and a test checks the pairing (`B-4`):
 - `docs/technical/EXP-006_REVIEW_4_REMEDIATION_LEDGER.md` — remediation of review #4
 - `docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_5.md` — independent review #5, `FAIL`
 - `docs/technical/EXP-006_REVIEW_5_REMEDIATION_LEDGER.md` — remediation of review #5
+- `docs/technical/EXP-006_CLOSURE_REVIEW_6.md` — closure review #6, `FAIL`
+- `docs/technical/EXP-006_CLOSURE_REVIEW_6_REMEDIATION_LEDGER.md` — remediation of closure review #6
 - `docs/completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md` — this record
 
 *Reviews #3 and #4 and their ledgers were missing from this list until 2026-10-03 (`B-4`), which is
@@ -366,12 +401,10 @@ without one.
    `EXP-006` card's pre-approval sentence is quoted under an explicit "Historical pre-approval
    note — retained for chronology, NOT current status" heading. Neither changed a mechanic,
    provenance classification, case ID or approval status; both confirmed applied by review #4.
-8. **One review-#4 informational finding is open and requires human adjudication** (`INFO-1`): the
-   approved card's §Open Questions opens *"All **six** are mapped RC silences or governance items"*
-   above a list of **seven** entries. Inspected 2026-10-03 and **STOPPED rather than corrected**,
-   because the count is genuinely ambiguous rather than a demonstrable typo — see the review-#4
-   remediation ledger §INFO-1 for the exact passage and the reason. Documentation-only; no mechanic,
-   silence disposition, provenance or case ID is affected.
+8. **`INFO-1` is adjudicated `NO CHANGE` and is not open.** See §12.2. *(This item said the finding
+   was "open and requires human adjudication" until 2026-10-03; closure review #6 `NB-5` found that
+   the adjudication had been made but not propagated here. It also cited the review-#4 ledger's
+   `INFO-1` section as "§INFO-1"; that ledger numbers it **§4**.)*
 8. **Not merged and not pushed.** `CLUSTER-004` implementation, `ENC-005` Stage B and any new
    Stage-A card all remain unauthorized.
 
@@ -435,6 +468,36 @@ silence.
 an invalid caller request. The refuel mechanics, the card, `L12a`'s wording and the 53-case ledger
 are untouched.
 
+### 12.2 `INFO-1` — human adjudication: `NO CHANGE`
+
+```text
+INFO-1   REVIEWED
+         NO PROTECTED-CARD CORRECTION AUTHORIZED
+         FINDING NOT SUBSTANTIATED AS A RULES/DOCUMENTATION DEFECT
+```
+
+**Human decision, 2026-10-03.** Review #4 observed that the approved card's §Open Questions opens
+*"All **six** are mapped RC silences or governance items"* above a list of **seven** entries. The
+decision is that **no change is made**, on the accepted rationale:
+
+- **Review #4 did not establish an objective typo.** The introducer's category is a *disjunction*
+  ("mapped RC silences **or governance items**"), and it is satisfied by all seven entries; only the
+  number is at issue.
+- **The nearby seven entries are not seven members of the same mapped-RC-silence category.** Items
+  1–4 are source silences; rations ownership, starvation causation having no Rule ID (which the card
+  itself calls a standing open governance issue) and the unowned complete-darkness predicate are
+  **governance items**.
+- **The card contains a genuine separate six-item list** — `§Rules Cyclopedia Leaves Undefined /
+  Ambiguous` enumerates exactly six, a different set. So `six` may be a cross-reference rather than
+  an error, and the card's other two count statements are mutually consistent (six RC silences plus
+  the unowned predicate = seven source silences).
+- **Therefore the protected approved Rule Card remains unchanged.**
+
+Independently confirmed by review #5 (which verified the separate six-item list against the card)
+and by closure review #6 (which verified the card blob is byte-identical across every reviewed
+`HEAD`). **No mechanic, provenance classification, case ID, silence disposition, approval state or
+wording changed.**
+
 ---
 
 ## Chronology — preserved, not rewritten
@@ -457,8 +520,11 @@ are untouched.
 | 2026-10-03 | **Independent final implementation review #4** | **`FAIL`** — 6 blocking, 7 non-blocking |
 | 2026-10-03 | Bounded remediation of review #4 | ledger #4 |
 | 2026-10-03 | **Independent final review #5** | **`FAIL`** — 3 blocking, 6 non-blocking |
-| 2026-10-03 | Bounded remediation of review #5 — this pass | ledger #5 |
-| — | Further independent review | not yet authorized |
+| 2026-10-03 | Bounded remediation of review #5 | ledger #5 |
+| 2026-10-03 | **Closure review #6** | **`FAIL`** — 2 blocking, 5 non-blocking, 3 informational |
+| 2026-10-03 | Human architecture decision: `ISSUE-022` becomes the sole owner of volatile `EXP-006` status | applied |
+| 2026-10-03 | Human adjudication of `INFO-1` | **`NO CHANGE`** (§12.2) |
+| 2026-10-03 | Bounded remediation of closure review #6 — this pass | ledger #6 |
 | — | Human acceptance and merge | **pending** |
 
 **No past `FAIL` or `PASS` is relabelled.** Every final-review artifact is preserved unaltered, as

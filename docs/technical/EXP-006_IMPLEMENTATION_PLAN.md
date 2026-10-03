@@ -49,8 +49,10 @@ SLICE B   ACCEPTED   2026-10-01   -- depletion + mundane-light contribution
 SLICE C   ACCEPTED   2026-10-01   -- ignition branch/outcome model, carrying SR-11
 SLICE D   ACCEPTED   2026-10-03   -- CHAR-004 identity binding + final guards
 
-IMPLEMENTATION  CODE COMPLETE; NOT FINALLY ACCEPTED.
-EXP-006-PHASE: REVIEW-5-REMEDIATED
+IMPLEMENTATION  Slices A-D accepted.
+                CURRENT STATUS, INCLUDING THE REVIEW PHASE: see
+                ISSUE-022.  This plan does not own that fact
+                (normalized 2026-10-03, closure review #6).
 
                 Every independent final review returned FAIL and is
                 preserved unaltered.  NONE found a rules-conformance
@@ -726,8 +728,8 @@ not specify.
 EXP-006 Rule Card              APPROVED        2026-10-01
 EXP-006 PRE-CODE GATE          PASS            2026-10-01
 EXP-006 IMPLEMENTATION PLAN    APPROVED       2026-10-01
-EXP-006 IMPLEMENTATION         CODE COMPLETE; NOT FINALLY ACCEPTED
-EXP-006-PHASE: REVIEW-5-REMEDIATED
+EXP-006 IMPLEMENTATION         Slices A-D accepted
+EXP-006 CURRENT STATUS         see ISSUE-022 -- not owned here
 EXP-006 LOW-3 / LOW-8          RESOLVED  (applied at a150837)
 CLUSTER-004 IMPLEMENTATION     NOT AUTHORIZED  (ARCHITECTURE.md §15.2 step 4)
 CLUSTER-004                    NOT AUTHORIZED
