@@ -87,8 +87,24 @@ Light & Exploration Resources
 > `Human-Approved Variant`. Every other clause is `Rules Cyclopedia Explicit`, a necessary
 > consequence of one, or an RC silence refused rather than filled.
 >
-> **Approval of this card would not authorize implementation.** No Pre-Code Gate has been begun
-> for `CLUSTER-004`, and no implementation plan exists.
+> **Historical pre-approval note — retained for chronology, NOT current status.** Written before
+> this card was approved, and preserved rather than rewritten:
+>
+> > *"Approval of this card would not authorize implementation. No Pre-Code Gate has been begun
+> > for `CLUSTER-004`, and no implementation plan exists."*
+>
+> At that point in the approval sequence, no Pre-Code Gate had been begun and no implementation
+> plan existed. Both clauses remain literally true **as scoped to `CLUSTER-004` as a whole** — no
+> cluster-wide gate or plan has ever existed — but an `EXP-006`-specific Pre-Code Gate (`PASS`
+> 2026-10-01, `docs/technical/EXP-006_PRE_CODE_GATE.md`) and an `EXP-006`-specific implementation
+> plan (`APPROVED` 2026-10-01, `docs/technical/EXP-006_IMPLEMENTATION_PLAN.md`) now both exist, and
+> `ARCHITECTURE.md` §15.2 step 4 has been given **for this card's own plan only**. For current
+> status see `docs/completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md`.
+>
+> *Marked historical 2026-10-03 under independent-review finding `LOW-8` (documentation only).* The
+> sentence was unmarked and sat some fifty lines after this same §Status block cites the Pre-Code
+> Gate, so it read as a current self-contradiction. **No mechanic, evidence, provenance
+> classification, `SR-11`, case ID or approval status is changed by this marking.**
 
 ## Rules Domain
 

@@ -16,6 +16,8 @@ Encumbrance & Movement Rate
 >
 > **Amended 2026-09-25 — human-approved contract/dependency correction.** §1's level input previously read *"from `CHAR-002` / `ADV-*`"*. **That dependency statement was incorrect**: `CHAR-002` supplies class but not level, and `ADV-*` is `Unresearched`. §1 and §6 now state level as an **explicit, validated caller input bounded by the applicable per-class maximum**, following the landed `CHAR-003` pattern. **The card remains `APPROVED`** — an amendment to an approved card, not a return to review. **No Simulator Ruling was made, granted or renumbered; `SR-8`, `SR-9` and `SR-10` stand exactly as ratified, and there is no `SR-11`.** No movement value, band, gate threshold or deterministic case changed. See §1, §6 and the Amendment History.
 >
+> *Historical disambiguation added 2026-10-03 (documentation only):* **`SR-11` was subsequently allocated to `EXP-006` on 2026-10-01.** The statement above describes only the state of the 2026-09-25 amendment — that this amendment made, granted or renumbered no ruling — and is **not** a current claim that no `SR-11` exists. `SR-8`, `SR-9` and `SR-10` are unaffected, as are this card's mechanics, provenance and `APPROVED` status.
+>
 > **Ratified as approved, without change to the submitted contract:** the §1–§11 mechanical specification; **`SR-8`**, **`SR-9`** and **`SR-10`**; and the treatment of Q4 (running speed) and Q6 (exact fractional Mystic encounter movement) as **RC-explicit interpretation plus necessary consequence and NOT as Simulator Rulings**.
 >
 > **§6.1 Mystic running speed — EXPRESSLY APPROVED, 2026-09-24.** The derivation flagged at draft time is confirmed and is **not** an additional Simulator Ruling. See §6.1.
@@ -624,6 +626,7 @@ The Mystic `MV` values are printed in **RC Chapter 2**, inside the class entry. 
 **What the 2026-09-25 amendment did *not* do**, recorded so it cannot later be misread:
 
 - **No Simulator Ruling was made, granted, or renumbered.** `SR-8`, `SR-9` and `SR-10` stand exactly as ratified on 2026-09-24, and **there is no `SR-11`**.
+  - *Historical disambiguation added 2026-10-03 (documentation only):* **`SR-11` was subsequently allocated to `EXP-006` on 2026-10-01.** The line above describes only the state of the 2026-09-25 amendment and is **not** a current claim that no `SR-11` exists. Recorded because the project's `SR` identifier-allocation procedure reads prior textual denials as evidence that a number is free (`ARCHITECTURE.md` §15.2), so a future allocation must not mistake this chronology for current fact. `SR-8`, `SR-9` and `SR-10` are unaffected; no mechanic, provenance classification or approval status changes.
 - **No movement value, encumbrance band, gate threshold, rate relationship or condition multiplier changed.** §3's table, §4's relationships, §6's `MV` values and `SR-9` threshold, §6.1's running derivation and §7's condition effects are all untouched.
 - **No deterministic case was added, removed or renumbered.** The card remains **76** cases; `M40` already tested the Mystic maximum-level rejection and is unchanged.
 - **No new dependency was created.** The correction **removes** two incorrect ones and adds none — maximum level remains `ADV-002`'s authoritative property, projected here only as a bound, exactly as landed `CHAR-003` does.
