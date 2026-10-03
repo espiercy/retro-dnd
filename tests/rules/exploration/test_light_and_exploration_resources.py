@@ -202,6 +202,17 @@ def test_this_module_uses_no_reflective_attribute_access() -> None:
     guard shows the module uses none of the ordinary mechanisms, and the
     remainder of the boundary is a **reviewed** one (claim C). Building a
     miniature analyzer here was considered and rejected.
+
+    **How open the residue actually is** — recorded 2026-10-03 under
+    review-#3 finding ``LOW-6``, which found the previous framing too
+    comfortable. Ledger #2 attributed the residual risk to a future agent
+    authorizing a new import (the ``dataclasses.astuple`` path). That
+    understates it: ``_LIGHT_SOURCE_IDENTITIES[kind].__getstate__()``
+    reaches every field of a catalog row with **no import change at all**
+    and no name this guard inspects. Approved case ``L42`` is still not
+    breached — it forbids *emitting* an economic value, and no public
+    callable returns an ``Item`` — but the honest statement is that this
+    boundary rests on review, not on this mechanism.
     """
     tree = ast.parse(inspect.getsource(light))
     reflective = {
@@ -257,6 +268,34 @@ def test_an_exhausted_source_may_exist_unlit() -> None:
     """The invariant forbids the *combination*, not the exhausted state."""
     spent = LightSource(kind=LightSourceKind.TORCH, remaining_turns=0, lit=False)
     assert spent.illumination_radius_feet is None
+
+
+def test_no_fresh_duration_ceiling_is_imposed() -> None:
+    """The adjudicated **absence** of a ceiling, now guarded.
+
+    Added 2026-10-03 under review-#3 finding `LOW-1`. The human adjudication
+    of 2026-10-01 refused to add ``remaining_turns <= fresh_duration``:
+    *"Adding it would be an implementation-level rule we have not
+    authorized. If a future mechanic could legitimately alter duration, that
+    cap would become accidental policy."* That decision had no regression
+    test, so re-adding the cap left the suite green — an adjudicated
+    boundary protected only by memory.
+
+    A long-duration source must stay constructible, and must deplete
+    normally, unless some *approved* invariant forbids it. None does.
+    """
+    long_torch = LightSource(kind=TORCH, remaining_turns=600, lit=True)
+    assert long_torch.remaining_turns == 600
+    assert long_torch.illumination_radius_feet == MUNDANE_LIGHT_RADIUS_FEET
+
+    (after,) = deplete([long_torch], 6)
+    assert after.remaining_turns == 594
+    assert after.lit is True
+
+    # Likewise for a lantern beyond one flask, and at the exact boundary.
+    assert LightSource(kind=LANTERN, remaining_turns=100, lit=True).remaining_turns == 100
+    assert LightSource(kind=TORCH, remaining_turns=TORCH_TURNS, lit=True).remaining_turns == 6
+    assert mundane_light_contribution([long_torch]).max_mundane_radius_feet == 30
 
 
 def test_an_unlit_source_retains_its_remaining_duration() -> None:
@@ -1180,15 +1219,32 @@ def test_the_complete_production_dependency_surface() -> None:
 #
 # WHAT THIS SECTION LITERALLY PROVES, and nothing beyond it:
 #
-#   EXP-006's two production modules bind exactly the approved set of
-#   module-level names; its approved classes expose exactly the approved
-#   effective member surface, with exactly the approved base classes; and
-#   every approved public callable has exactly the approved signature.
+#   **At normal module initialization**, EXP-006's two production modules
+#   bind exactly the approved **concrete** module-level namespace; its
+#   approved classes expose exactly the approved effective member surface,
+#   with exactly the approved base classes; and every approved public
+#   callable has exactly the approved signature.
 #
-# WHAT IT DOES NOT PROVE. It is not a proof that no forbidden *behavior*
-# can ever be written. A reviewer still has to read the code. Three
-# distinct kinds of claim are kept apart deliberately, and the
-# `CASE_DISCHARGE` ledger labels each case with which kind discharges it:
+# WHAT IT DOES NOT PROVE -- stated plainly, because three reviews have now
+# each broken a broader reading of it:
+#
+#   * It does NOT prove that no forbidden *behavior* can ever be written.
+#   * It does NOT prove the absence of **dynamic module attribute hooks**.
+#     A module-level `__getattr__` (PEP 562) serves names that are never
+#     bound in `vars()`, so it is outside what this mechanism observes.
+#     Review #3 demonstrated exactly that. **This is deliberately NOT
+#     chased**: by human direction of 2026-10-03, the claim is narrowed to
+#     what the mechanism observes rather than the guard being widened. No
+#     `__getattr__` denylist, no generic dynamic-attribute detector and no
+#     static analyzer is added, because production code uses no such
+#     mechanism -- independently confirmed -- and a fourth-generation
+#     universal guard is not authorized.
+#   * It does NOT prove the absence of arbitrary future reflection, nor of
+#     every possible Python mechanism capable of exposing a value.
+#
+# A reviewer still has to read the code. Three distinct kinds of claim are
+# kept apart deliberately, and the `CASE_DISCHARGE` ledger labels each case
+# with which kind discharges it:
 #
 #   A. machine-proved surface   -- this section
 #   B. machine-proved behavior  -- the behavioral and invariant tests
@@ -1208,14 +1264,21 @@ def test_the_complete_production_dependency_surface() -> None:
 # classmethod `LightSource.fresh`, and a module-level `int` counter that
 # a mutable-container filter could not see.
 #
-# The lesson taken is NOT "add more patterns". It is that the authoritative
-# surface of a module is **the namespace it actually binds when imported**,
-# which is what an importer sees, and the authoritative surface of a class
-# is its **effective** surface including inheritance. Both are now read
-# from the imported objects, so a name created by any executable statement
-# at module scope -- `if`, `try`, `for`, `while`, `with`, a comprehension,
-# or `globals()[...] = ...` -- is visible, because by then it is simply a
-# key in `vars(light)`.
+# The lesson taken is NOT "add more patterns". It is that the **concrete
+# bound namespace** of an imported module is an observable fact worth
+# pinning, and the authoritative surface of a class is its **effective**
+# surface including inheritance. Both are read from the imported objects,
+# so a name created by any executable statement at module scope -- `if`,
+# `try`, `for`, `while`, `with`, `match`, a comprehension, or
+# `globals()[...] = ...` -- is visible, because by then it is simply a key
+# in `vars(light)`.
+#
+# Review #3 (2026-10-03) then showed the limit of that: a module-level
+# `__getattr__` serves attributes that are never keys in `vars()` at all,
+# so no namespace comparison can see them. The arms race stops here. The
+# mechanism's claim is narrowed to the concrete bound namespace at import
+# time, which is true and useful; anything relying on the absence of a
+# dynamic hook is a **reviewed** boundary (claim C), not claim A.
 
 # Every module-level name EXP-006 is approved to bind, partitioned by role.
 # The partition is the point: a new name must be classified by a human
@@ -1348,12 +1411,19 @@ def _is_immutable_module_state(value: object) -> bool:
 
 
 def _module_scope_names(module: ModuleType) -> set[str]:
-    """Every non-dunder name the module actually binds once imported.
+    """Every non-dunder name the module **concretely binds** once imported.
 
-    Read from the live namespace, not parsed from the source. This is what
-    an importer sees, and it is the reason a name created inside ``if``,
-    ``try``, ``for``, ``while``, ``with`` or by ``globals()[...] = ...`` is
-    visible here: by import time it is just a key in ``vars()``.
+    Read from the live namespace, not parsed from the source, which is why
+    a name created inside ``if``, ``try``, ``for``, ``while``, ``with``,
+    ``match`` or by ``globals()[...] = ...`` is visible here: by import
+    time it is just a key in ``vars()``.
+
+    **Scope limit, stated rather than papered over.** Dunder names are
+    excluded, so a module-level ``__getattr__`` (PEP 562) is **not**
+    observed — and such a hook serves attributes that are never keys in
+    ``vars()`` at all, so no namespace comparison could observe them.
+    Callers of this helper may therefore claim only what it sees: the
+    concrete bound namespace at normal module initialization.
     """
     return {n for n in vars(module) if not (n.startswith("__") and n.endswith("__"))}
 
@@ -1376,17 +1446,30 @@ def _signature_of(dotted: str) -> tuple[str, ...]:
 
 
 def test_the_module_scope_surface_is_exactly_approved() -> None:
-    """EXP-006 binds exactly the approved module-level names.
+    """At normal module initialization, EXP-006's concrete bound namespace
+    matches the approved namespace.
 
-    **Claim A (machine-proved surface).** This establishes the module's
-    namespace, not the absence of every forbidden behavior.
+    **Claim A (machine-proved OBSERVED surface). Narrowed 2026-10-03 by
+    human direction, under review-#3 finding `HIGH-1`.** This test
+    previously claimed that "any new module-level name, however spelled and
+    however created, fails here". That was false: a module-level
+    ``__getattr__`` (PEP 562) serves attributes that are never keys in
+    ``vars()``, and review #3 demonstrated unapproved ``VisibilityCategory``
+    and ``encounter_distance_from_light`` reachable with this suite green.
+
+    What is claimed now is exactly what is observed: the **concrete bound**
+    namespace at import time. The absence of a dynamic attribute hook is
+    **not** claimed here and is **not** chased — production code uses none
+    (independently confirmed), and no fourth-generation universal guard is
+    authorized.
 
     Partitioned into public / imported / private deliberately. An
     underscore is *not* an exemption: review #2 escaped the previous guard
     with a module-level ``_TURNS_COUNTED = 0`` accumulator and with a
     private ``_AmbientMixin``, both invisible to a public-only check. Any
-    new module-level name, however spelled and however created, fails here
-    until a human classifies it into one of the three sets.
+    new **bound** module-level name, however spelled and by whatever
+    executable statement created, fails here until a human classifies it
+    into one of the three sets.
     """
     actual = _module_scope_names(light)
     approved = APPROVED_DEFINITIONS | APPROVED_IMPORTED_NAMES | APPROVED_PRIVATE_NAMES
@@ -1398,10 +1481,12 @@ def test_the_module_scope_surface_is_exactly_approved() -> None:
 
 
 def test_the_errors_module_scope_surface_is_exactly_approved() -> None:
-    """The sibling error module gets the same treatment.
+    """The sibling error module's concrete bound namespace, same treatment.
 
-    **Claim A.** Three concrete types, no base class, nothing else — so a
-    fourth type or a stray module-level name cannot arrive unnoticed.
+    **Claim A (observed surface), same scope limit as the module above:**
+    three concrete types, no base class, nothing else bound — so a fourth
+    type or a stray bound name cannot arrive unnoticed. A dynamic attribute
+    hook is outside what this observes, and is not claimed against.
     """
     actual = _module_scope_names(exploration_errors)
     assert actual == {
@@ -1413,17 +1498,35 @@ def test_the_errors_module_scope_surface_is_exactly_approved() -> None:
 
 
 def test_no_module_level_mutable_state_exists() -> None:
-    """EXP-006 defines only the approved module-level state.
+    """Every module-level name EXP-006 binds holds an immutable value.
 
-    **Claim A.** Together with
-    ``test_the_module_scope_surface_is_exactly_approved`` and the behavioral
-    tests that pin each constant's *value*, the project may conclude there
-    is no implemented EXP-006 round or time counter: an accumulator needs
-    either a new name (the surface guard refuses it) or an approved
-    constant's name (the value tests refuse that).
+    **Claim A (machine-proved observed surface), narrowed 2026-10-03 by
+    human direction under review-#3 finding `MED-3`.** This is the exact
+    claim: of the names EXP-006 concretely binds at module scope, none
+    holds mutable state.
 
-    This does **not** claim the test recognizes every semantic notion of a
-    "clock". It claims the module-level state surface, exactly.
+    **The previous wording asserted an exhaustive dichotomy** — that an
+    accumulator "needs *either* a new name (the surface guard refuses it)
+    *or* an approved constant's name (the value tests refuse that)". Review
+    #3 falsified it with a third option: a **private class attribute** on an
+    approved class (``LightSource._rounds_elapsed``, incremented inside
+    ``deplete``) is a working elapsed-turn accumulator that is not a
+    module-level name, is filtered out of the public class-surface check,
+    and changes neither ``__slots__`` nor the MRO. That claim is withdrawn.
+
+    **No shipped state acts as a clock** — independently re-confirmed
+    2026-10-03 across the module namespace, both value types' full class
+    dictionaries (slot descriptors, properties and one classmethod only),
+    and all four public function objects (no attribute state). The
+    *boundary* holds in fact; what is narrowed is the *proof*.
+
+    That no EXP-006-owned clock exists is therefore a **reviewed
+    architectural ownership boundary** (claim C), supported by this
+    observed-surface check, the import-graph guard and
+    `ARCHITECTURE.md` §5 — not a machine-enforced invariant. ``L13`` and
+    ``L14`` are classified accordingly in `CASE_DISCHARGE`. This test does
+    not claim to recognize every semantic notion of a "clock", and no
+    broader detector is authorized.
 
     Scoped to the names EXP-006 itself **binds** — public and private. The
     twelve imported names are excluded on purpose: what ``Enum`` or
@@ -1557,14 +1660,36 @@ def test_no_public_callable_escapes_the_signature_guard() -> None:
 #
 # Each row is prefixed with the KIND of claim that discharges it:
 #
-#   surface:   machine-proved surface      (claim A -- the guards above)
-#   behavior:  machine-proved behavior     (claim B)
-#   invariant: machine-proved refusal      (claim B)
-#   reviewed:  a reviewed ownership boundary, NOT machine proof (claim C)
+#   surface:   machine-enforced OBSERVED surface   (claim A)
+#   behavior:  machine-enforced behavior           (claim B)
+#   invariant: machine-enforced refusal            (claim B)
+#   reviewed:  a reviewed architectural ownership boundary,
+#              NOT machine proof                   (claim C)
 #   routed:    not owned by this card at all
 #
 # Labelling a `reviewed:` claim as `surface:` is the defect review #2
 # found. Do not do it.
+#
+# RECLASSIFIED 2026-10-03 under review-#3 findings `HIGH-1`, `MED-3` and
+# `LOW-2`, by human direction. Twelve rows previously read `surface:` on
+# the strength of "no such name is bound at module scope". Review #3
+# showed a module-level `__getattr__` can serve an unapproved name that is
+# never bound — demonstrating exactly the `Visibility` category (`L30`,
+# `L31`) and the light→distance path (`L36`) those rows claimed to
+# exclude. The observed-namespace check is still true and still useful,
+# but it does not establish *absence of the capability*, so those rows are
+# now `reviewed:` — the project's real guarantee there is an approved
+# architectural ownership boundary plus independent review, which is
+# exactly what claim C means. `L13`/`L14`/`L19b` move for the parallel
+# reason in `MED-3` (a private class attribute is outside the mechanism),
+# and `L46` moves because `LOW-2` showed its cited mechanism addressed a
+# different property than the case states.
+#
+# This is a NARROWING OF CLAIMS, not a weakening of the implementation:
+# nothing shipped uses a dynamic hook or holds mutable state, re-confirmed
+# independently. No fourth-generation universal guard is authorized, and a
+# future reviewer finding another Python construct outside a guard's
+# explicitly narrow claim is a limitation, not by itself a defect.
 
 CASE_DISCHARGE: dict[str, str] = {
     # --- machine-proved behavior (claim B) ---------------------------------
@@ -1590,39 +1715,47 @@ CASE_DISCHARGE: dict[str, str] = {
     "L27": "behavior: aggregate reports a lit source",
     "L28": "behavior: aggregate empty when none lit, asserting nothing further",
     "L34": "behavior: query succeeds with no surprise state supplied",
-    "L46": "behavior: the oil binding resolves the GEAR row, not Oil, Burning",
     # --- machine-proved refusals (claim B) ---------------------------------
     "L12a": "invariant: LanternRefuelNotDefinedError on a VALID lantern's partial refill",
     "L19": "invariant: IgnitionAttemptLimitError on a second same-round attempt",
     "L23": "invariant: IgnitionNotDefinedError, no skill + tinderbox + adverse",
     "L24": "invariant: IgnitionNotDefinedError, no skill and no tinderbox",
     "L26": "invariant: adverse never defaults to the 1d6",
-    # --- machine-proved surface (claim A) ----------------------------------
-    "L13": "surface: import graph has no time module; module-scope name set pinned",
-    "L14": "surface: module-scope state immutable; slots and MRO pinned",
-    "L15": "surface: module-scope name set -- no burn-out event or proration name",
-    "L15b": "surface: deplete's signature and return pinned; no world-state name",
-    "L16": "surface: no hour/minute name anywhere, and no scaling operator at all",
-    "L19b": "surface: selector holds no attribute state; module-scope state pinned",
+    # --- machine-enforced OBSERVED surface (claim A) -----------------------
+    # Each of these rests on a mechanism a dynamic attribute hook cannot
+    # fake: a parsed import graph, a pinned callable signature, a pinned
+    # effective class surface, or an AST property of the source itself.
+    "L15b": "surface: deplete's signature and return type are pinned",
+    "L16": "surface: no hour/minute name is bound, and the source has no scaling operator",
     "L25": "surface: import graph has no CHAR-012; the enum member carries no value",
-    "L29": "surface: module-scope name set -- no NO_LIGHT or world-state name",
-    "L30": "surface: module-scope name set -- no Visibility name at all",
-    "L31": "surface: module-scope name set, incl. names created conditionally",
     "L32": "surface: class surfaces pinned via dir(); no classifying member exists",
-    "L33": "surface: no DIRECT rng import; no distance name in the pinned surface",
+    "L33": "surface: no DIRECT rng import, so no distance roll can be made here",
     "L35": "surface: EVERY public signature pinned -- no surprise parameter",
-    "L36": "surface: module-scope name set -- no distance-returning name",
-    "L37a": "surface: module-scope name set -- no CompleteDarkness name",
     "L38": "surface: signatures and class surfaces pinned; CHAR-005 unimported",
     "L39": "surface: class surfaces pinned via dir(), so inherited members fail",
     "L40": "surface: EVERY public signature pinned, incl. LightSource.fresh",
     "L41": "surface: LightSourceKind members pinned to exactly TORCH/LANTERN",
-    "L42": "surface: no public callable returns an Item, so nothing is emitted",
-    "L43": "surface: module-scope name set -- no ration name, however spelled",
-    "L44": "surface: module-scope name set -- no starvation name",
-    "L45": "surface: module-scope name set -- no weapon name",
-    # --- reviewed boundaries, NOT machine proof (claim C) ------------------
+    "L42": "surface: no approved public callable returns an Item; Item not re-exported",
+    # --- reviewed architectural ownership boundaries (claim C) -------------
+    # NOT machine proof. The observed-namespace check supports each of
+    # these and no unapproved name is bound, but absence of the *capability*
+    # is established by the approved architecture, the card's ownership
+    # routing and independent review -- not by an executable proof. See the
+    # reclassification note above (review #3 `HIGH-1`, `MED-3`, `LOW-2`).
+    "L13": "reviewed: no time import and no bound counter; no-counting is reviewed",
+    "L14": "reviewed: no bound mutable state, slots/MRO pinned; absence is reviewed",
+    "L15": "reviewed: no burn-out/proration name is bound; ownership is reviewed",
+    "L19b": "reviewed: selector holds no attribute state; no-round-tracking reviewed",
+    "L29": "reviewed: no NO_LIGHT or world-state name is bound; ENC-001 owns it",
+    "L30": "reviewed: no Visibility name is bound; ENC-001 owns Visibility",
+    "L31": "reviewed: no Visibility category is bound, incl. conditional creation",
+    "L36": "reviewed: no distance-returning name is bound; ENC-001 owns distance",
     "L37": "reviewed: nothing asserts blindness; that this is COMPLETE is reviewed",
+    "L37a": "reviewed: no CompleteDarkness name is bound; the owner is unresolved",
+    "L43": "reviewed: no ration name is bound; ownership deliberately unassigned",
+    "L44": "reviewed: no starvation name is bound; causation has no Rule ID",
+    "L45": "reviewed: no weapon name is bound; COMBAT-*/CHAR-004 own torch-as-weapon",
+    "L46": "reviewed: no missile/pursuit-delay name is bound; RC states no delay mechanic",
     # --- not owned by this card (routed) -----------------------------------
     "L47": "routed: reports any_mundane_source_lit; item/skill not owned here",
 }
@@ -1681,11 +1814,17 @@ def test_the_case_category_counts_are_recomputed_not_carried_over() -> None:
     for discharge in CASE_DISCHARGE.values():
         counts[discharge.split(":", 1)[0]] += 1
 
+    # Recomputed 2026-10-03 under review-#3 HIGH-1/MED-3/LOW-2. The prior
+    # split (23/5/23/1/1) is NOT preserved for continuity: twelve rows moved
+    # from `surface` to `reviewed` because an observed-namespace check does
+    # not establish absence of a capability, and `L46` moved from `behavior`
+    # for the LOW-2 reason. The total is unchanged because the card's case
+    # set is unchanged.
     assert counts == {
-        "behavior": 23,
+        "behavior": 22,
         "invariant": 5,
-        "surface": 23,
-        "reviewed": 1,
+        "surface": 11,
+        "reviewed": 14,
         "routed": 1,
     }, f"recompute the published split: {counts}"
     assert sum(counts.values()) == 53

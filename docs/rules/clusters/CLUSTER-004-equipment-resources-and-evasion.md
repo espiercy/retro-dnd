@@ -57,9 +57,8 @@ STAGE B (SYNTHESIS)         EXP-006  COMPLETE   (card APPROVED 2026-10-01)
                                      ENC-005-evidence-remediated.md)
 RULE CARDS                  EXP-006  APPROVED 2026-10-01
                             ENC-005  NONE DRAFTED
-IMPLEMENTATION              EXP-006  AUTHORIZED per-slice; Slices A-D ACCEPTED;
-                                     independent final review #1 FAIL, 14 findings
-                                     remediated 2026-10-03, review #2 PENDING
+IMPLEMENTATION              EXP-006  AUTHORIZED per-slice; Slices A-D ACCEPTED.
+                                     EXP-006-PHASE: REVIEW-3-REMEDIATED
                             CLUSTER-004 AS A WHOLE   NOT AUTHORIZED
 ALTERNATE-SOURCE RESEARCH   NONE PERFORMED; one candidate question flagged (§8)
 SIMULATOR RULINGS           SR-11 PROPOSED AND APPROVED 2026-10-01  (§10)
@@ -187,11 +186,20 @@ judged sufficient to defer `EXP-010`.
 | **7** | `ENC-005` | **Does the `Retreat`/`Fighting Withdrawal` running-speed bridge belong here or to `COMBAT-*`?** Evidence now complete on both sides |
 | **8** | `ENC-005` | **Does `CHAR-012`'s Caving skill modify step 6?** Blocked on `CHAR-012`, not on this card's coverage |
 | **9** | `ENC-005` | **Who owns "lost in a dungeon"?** RC states the condition (p. 100), supplies a procedure only for wilderness (p. 91). No Rule ID |
-| **10** | `EXP-006` | **How does a party's carried light map to a `Visibility` category?** RC gives the default (*"normal dungeon conditions"* = `Dim light`) and the infravision case, and nothing between. Torch and lantern radii are identical (30') |
+| **10** | `EXP-006` | **How does a party's carried light map to a `Visibility` category?** ~~RC gives the default (*"normal dungeon conditions"* = `Dim light`) and the infravision case, and nothing between.~~ **SUPERSEDED — see the note below this table.** The approved card's Finding A **withdrew** the equation `normal dungeon conditions → DIM_LIGHT`, and card §Undefined 2 states RC supplies **no rule at all** connecting carried light to the p. 93 column. The question itself stands, and is **`ENC-001`'s**, not this card's. Torch and lantern radii are identical (30′) |
 | **11** | `EXP-006` | **Do rations belong to this card?** Evidence now exists: a dungeon-conditioned consumable duration structurally parallel to torch burn time. **No ownership claimed** |
 | **12** | `EXP-006` | **Tinderbox ignition outside *"normal (comparatively dry) circumstances"*.** `PRIMARY PROCEDURE NOT YET ESTABLISHED` |
 | **13** | `EXP-006` | **What happens when a light source burns out mid-turn?** RC gives durations and a tally aid, and stops |
 | **14** | both | **Starvation causation has no Rule ID anywhere in `INVENTORY.md`.** Confirmed still true. Not absorbed |
+
+> **Question 10 corrected 2026-10-03, under review-#3 finding `LOW-7`.** This table was written on
+> 2026-09-29 as part of the Stage-A body, but §3, §10 and §13 of this record have since been updated
+> for current status, so an uncorrected statement here reads as live rather than historical. Q10 as
+> written restated *"normal dungeon conditions = Dim light"* — precisely the inference the approved
+> Rule Card's **Finding A withdrew**, and which the card lists among items "recorded so they are not
+> reintroduced". Reintroducing it in a record headed *"Open questions requiring human decision"*
+> risked a future agent treating it as an available default. **The surrounding Stage-A findings are
+> otherwise unaltered and remain the 2026-09-29 record.**
 
 ### 6.1 Questions pass 1 raised that remediation **closed**
 
@@ -414,13 +422,27 @@ one ownership question (rations), none of which prevents Stage B from beginning
 on that card alone if the human owner prefers to split the cluster.
 ```
 
-**Live next step, as of 2026-10-03:**
+**Live next step.** This block is **status**, not history, and the review phase it carries is
+pinned by `test_live_status_records_agree_on_the_review_phase` so it cannot silently go stale
+again — which it did, twice, and which review #3 recorded as `MED-1`.
 
 ```text
-EXP-006   A SECOND INDEPENDENT FINAL IMPLEMENTATION REVIEW.
-          Review #1 returned FAIL and is preserved unaltered at
-          docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW.md.
-          The implementer may not certify its own remediation.
+EXP-006-PHASE: REVIEW-3-REMEDIATED
+
+EXP-006   Three independent final implementation reviews have been performed.
+          ALL THREE RETURNED FAIL, and all three artifacts are preserved
+          unaltered:
+              review #1   docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW.md
+              review #2   docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_2.md
+              review #3   docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_3.md
+          None found a rules-conformance defect. Each remediation is recorded
+          in its own ledger. Review #3's remediation is the most recent work.
+          A FOURTH independent review is NOT YET AUTHORIZED, and the
+          implementer may not certify its own remediation.
+
+          Two review-#3 findings remain OPEN and require human adjudication,
+          because both touch PROTECTED approved Rule Cards: LOW-3 (CHAR-005's
+          two SR-11 denials) and LOW-8 (this card's pre-approval statement).
 
 ENC-005   STAGE B REMAINS DEFERRED. §6 Q1 and Q2 are still unsettled and are
           still the deciding questions. Not authorized.

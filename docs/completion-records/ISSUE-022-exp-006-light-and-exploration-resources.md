@@ -2,14 +2,32 @@
 
 ```text
 STATUS:  NOT COMPLETE
-         Implementation is functionally finished and all canonical gates pass,
-         but DEVELOPMENT_WORKFLOW.md §5.1 forbids representing an issue as
-         complete while required verification is outstanding. Two independent
-         final implementation reviews have returned FAIL. A third, separately
-         authorized independent review and then human acceptance are required.
+EXP-006-PHASE: REVIEW-3-REMEDIATED
+
+         Implementation is code complete and all canonical gates pass, but
+         DEVELOPMENT_WORKFLOW.md §5.1 forbids representing an issue as
+         complete while required verification is outstanding.
+
+         THREE independent final implementation reviews have been performed.
+         ALL THREE RETURNED FAIL, and NONE found a rules-conformance defect:
+             review #1   2 HIGH, 4 MED,  8 LOW -- remediated
+             review #2   2 HIGH, 5 MED, 11 LOW -- remediated
+             review #3   1 HIGH, 4 MED,  8 LOW -- remediated, except LOW-3
+                         and LOW-8 (below), which touch PROTECTED approved
+                         Rule Cards and await human adjudication
+         All three artifacts are preserved unaltered.
+
+         A fourth independent review is NOT YET AUTHORIZED, and human
+         acceptance is a separate act. This record is the authoritative
+         current status for EXP-006.
 
 BRANCH:  cluster-004-exp-006-stage-b   (unmerged, unpushed)
 ```
+
+> **This record is the single authoritative statement of current `EXP-006` status.** Other records
+> carry the `EXP-006-PHASE` token and point here; a test
+> (`tests/rules/exploration/test_exp_006_record_consistency.py`) asserts they agree, because three
+> consecutive reviews found them disagreeing.
 
 > **Rewritten 2026-10-03** under review-#2 finding `MED-5`, which found that the record created to
 > discharge review #1's `MED-3` did not itself satisfy `DEVELOPMENT_WORKFLOW.md` §5: it omitted the
@@ -52,17 +70,27 @@ integration, and `ENC-005`.
 
 ## 3. Files Created, Modified, or Deleted
 
+> **Line counts and test counts are deliberately NOT stated here.** Corrected 2026-10-03 under
+> review-#3 finding `MED-4`: this subsection carried "(102 lines)", "(529 lines)", "(1418 lines)"
+> and "108 tests" while §6 of this same record said 111 — three stale figures and a
+> self-contradiction, created precisely because mutable numbers were duplicated across sections.
+> They are not re-stated with corrected values, because that would only reset the drift clock. The
+> **single authoritative current figures live in §8 and §9**, which report the actual output of the
+> canonical verification run, and the deterministic-case total is pinned by a test. Prefer reading
+> the files or running `verify.py` over trusting any transcribed count.
+
 **Created — production:**
 
-- `src/rules/exploration/errors.py` (102 lines) — three concrete domain rejections, no base class
+- `src/rules/exploration/errors.py` — three concrete domain rejections, no base class
 
 **Modified — production:**
 
-- `src/rules/exploration/light_and_exploration_resources.py` (529 lines) — the `EXP-006` module
+- `src/rules/exploration/light_and_exploration_resources.py` — the `EXP-006` module
 
 **Created — tests:**
 
-- `tests/rules/exploration/test_light_and_exploration_resources.py` (1418 lines) — 108 tests
+- `tests/rules/exploration/test_light_and_exploration_resources.py` — the full deterministic-case
+  suite, the behavioural and invariant tests, and the structural guard suite
 
 **Modified — governance and documentation:**
 
@@ -142,8 +170,9 @@ Seven RC silences are **named and guarded rather than filled**, by express appro
 
 ## 6. Tests Added or Modified
 
-**111 tests**, all in `tests/rules/exploration/test_light_and_exploration_resources.py`. What the
-important ones protect:
+All in `tests/rules/exploration/test_light_and_exploration_resources.py`; the current count is
+whatever §8's verification run reports, and is not duplicated here (`MED-4`). What the important
+ones protect:
 
 | Test | Protects |
 |---|---|
@@ -220,8 +249,9 @@ src/rules/exploration/light_and_exploration_resources.py   100% stmts, 100% bran
 
 ## 10. Deviations
 
-Five, all deliberate and recorded; none is a departure from the **approved Rule Card**, whose
-mechanics are implemented as specified.
+Eight, all deliberate and recorded; none is a departure from the **approved Rule Card**, whose
+mechanics are implemented as specified. Items 6–8 were added 2026-10-03 under review-#3 `LOW-5`,
+which found this category incomplete.
 
 1. **Error surface: three concrete types, no base class** — against the plan's §10.1 sketch of
    `ExplorationError` plus one subclass. Human adjudication 2026-10-01 directed that concrete types
@@ -245,6 +275,24 @@ mechanics are implemented as specified.
    approved card is unaffected: it states no case for a non-lantern, and `L12a` is worded
    *"refuelling a lantern that has not reached zero"*.
 
+6. **Guard-strategy departures from the approved plan §13.** Recorded 2026-10-03 under review-#3
+   finding `LOW-5`. Plan `G-3` (a dice-literal AST check) ships as something strictly stronger — no
+   scaling operator of any kind in the source. Plan `G-6` (construction-site reachability) is not
+   shipped; §13 pre-authorized that fallback. Plan `G-5` ships as an `__all__` token check
+   explicitly labelled **claim C** rather than the planned `__all__`-plus-namespace check, because
+   the namespace half is covered by the dedicated surface guard.
+7. **API-shape departures from the plan's sketches.** Also `LOW-5`. Plan §7's `__all__` sketch
+   omitted `FRESH_DURATION_TURNS`, which ships (12 names sketched, 13 exported, minus the three
+   later privatised accessors). Plan §7.1 modelled `any_mundane_source_lit` and
+   `max_mundane_radius_feet` as dataclass **fields**; they ship as **computed properties**, so the
+   derived figures cannot disagree with `lit_sources`. Plan §14 Slice C still names the dropped
+   `ExplorationError`, though §10.1 and §11 carry correction notes.
+8. **Claim-scope narrowing, not mechanism widening** (2026-10-03, review-#3 `HIGH-1`/`MED-3`). The
+   module-surface guard's claim was narrowed to the **concrete bound namespace at import time**,
+   and twelve `CASE_DISCHARGE` rows moved from `surface` to `reviewed`. By explicit human
+   direction, no `__getattr__` denylist, dynamic-attribute detector or static analyzer was added,
+   and no fourth-generation universal guard is authorized.
+
 **No approved coverage exception was taken** (`TESTING_STRATEGY.md` §8): coverage is 100% per file
 without one.
 
@@ -263,11 +311,28 @@ without one.
 
 4. **Rations and starvation causation remain deliberately unassigned.** Stage A evidenced real RC
    ration mechanics; ownership was not assigned, and starvation causation still has no Rule ID.
-5. **The guard suite's claims are narrow by design, and partly reviewed rather than proved.** Case
-   `L37` is labelled claim C — a reviewed ownership boundary, not machine proof — and the
-   reflective-catalog-access boundary is likewise only partly machine-held. No static analyzer was
-   built, and the project does not claim one. An independent reviewer must still inspect these.
-6. **Not merged and not pushed.** `CLUSTER-004` implementation, `ENC-005` Stage B and any new
+5. **The guard suite's claims are narrow by design, and substantially reviewed rather than proved.**
+   **Fourteen** of the 53 cases are now labelled claim C — a reviewed architectural ownership
+   boundary, not machine proof — after the 2026-10-03 narrowing. The module-surface guard
+   establishes the **concrete bound namespace at import time** and does *not* establish the absence
+   of a dynamic attribute hook, arbitrary future reflection, or every Python mechanism capable of
+   exposing a value. The reflective-catalog boundary is likewise only partly machine-held: besides
+   the recorded `dataclasses.astuple` path, `__getstate__()` reaches every catalog field with no
+   import change at all. No static analyzer was built and the project does not claim one. **An
+   independent reviewer must still inspect these boundaries by reading the code.**
+6. **The card's light cycle is not closed anywhere in the codebase.** No operation moves a source
+   from `lit=False` to `lit=True`: `ignition_outcome` returns a branch and never a `LightSource`,
+   and `refuel_lantern` leaves the lantern unlit. The approved plan §11 excludes *applying* a
+   successful ignition "in any slice", so this module is complete against its plan while the card's
+   §4 reference to "a separately authorized ignition operation (§5)" has no implementation yet.
+   Recorded 2026-10-03 under review-#3 `LOW-4`; it needs a future authorization, not a fix here.
+7. **Two review-#3 findings are open and require human adjudication**, because both touch
+   **protected** approved Rule Cards (`AGENTS.md` §12) and this task was not authorized to edit
+   them: `LOW-3` (`CHAR-005` still carries both "there is no `SR-11`" denials) and `LOW-8` (the
+   `EXP-006` card's §Status retains the pre-approval sentence "No Pre-Code Gate has been begun for
+   `CLUSTER-004`, and no implementation plan exists"). Both are documentation-only; neither changes
+   mechanics or provenance.
+8. **Not merged and not pushed.** `CLUSTER-004` implementation, `ENC-005` Stage B and any new
    Stage-A card all remain unauthorized.
 
 **`LOW-9` is no longer open.** Review #2's ledger recorded it as *"recorded, not actioned"*, which

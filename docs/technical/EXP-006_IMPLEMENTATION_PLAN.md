@@ -49,10 +49,19 @@ SLICE B   ACCEPTED   2026-10-01   -- depletion + mundane-light contribution
 SLICE C   ACCEPTED   2026-10-01   -- ignition branch/outcome model, carrying SR-11
 SLICE D   ACCEPTED   2026-10-03   -- CHAR-004 identity binding + final guards
 
-IMPLEMENTATION  COMPLETE -- pending a passing independent final review.
-                Review #1 returned FAIL (2 HIGH, 4 MED, 8 LOW); all 14
-                findings remediated 2026-10-03.  No finding concerned
-                rules logic.  See ISSUE-022.
+IMPLEMENTATION  CODE COMPLETE; NOT FINALLY ACCEPTED.
+EXP-006-PHASE: REVIEW-3-REMEDIATED
+
+                Three independent final reviews, ALL THREE FAIL, all three
+                preserved unaltered.  NONE found a rules-conformance defect.
+                    review #1   2 HIGH, 4 MED,  8 LOW -- remediated
+                    review #2   2 HIGH, 5 MED, 11 LOW -- remediated
+                    review #3   1 HIGH, 4 MED,  8 LOW -- remediated, except
+                                LOW-3 and LOW-8, which touch PROTECTED
+                                approved Rule Cards and await human
+                                adjudication
+                A fourth review is NOT YET AUTHORIZED.  See ISSUE-022 for
+                the authoritative current status.
 ```
 
 **Slice B's accepted semantics** include `expended lantern + new flask → remaining_turns = 24,
@@ -561,8 +570,9 @@ INDEPENDENT  Yes -- depends only on Slice A
 ```text
 FILES     same two files; src/rules/exploration/errors.py (new)
 BEHAVIOR  IgnitionConditions, IgnitionOutcome, ignition_outcome(),
-          ExplorationError, IgnitionNotDefinedError
-CASES     L17, L18, L19, L20, L21, L22, L23, L24, L25, L26
+          IgnitionNotDefinedError, IgnitionAttemptLimitError
+          -- the sketched ExplorationError base is DROPPED; see SS10.1
+CASES     L17, L18, L19, L19a, L19b, L20, L21, L22, L23, L24, L25, L26
 CONSUMES  nothing
 CHECKPOINT  Are both refusals genuinely unreachable-by-default rather than
             defaulted?  Is ROUTED_SKILL_CHECK emitted, never resolved?
@@ -702,7 +712,8 @@ not specify.
 EXP-006 Rule Card              APPROVED        2026-10-01
 EXP-006 PRE-CODE GATE          PASS            2026-10-01
 EXP-006 IMPLEMENTATION PLAN    APPROVED       2026-10-01
-EXP-006 IMPLEMENTATION         COMPLETE -- pending independent review #2 PASS
+EXP-006 IMPLEMENTATION         CODE COMPLETE; NOT FINALLY ACCEPTED
+EXP-006-PHASE: REVIEW-3-REMEDIATED
 CLUSTER-004 IMPLEMENTATION     NOT AUTHORIZED  (ARCHITECTURE.md §15.2 step 4)
 CLUSTER-004                    NOT AUTHORIZED
 ENC-005 Stage B                DEFERRED -- not in this plan

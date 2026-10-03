@@ -152,10 +152,14 @@ Branch selection is a pure function of three booleans (`has_skill`, `has_tinderb
 
 ```text
 AUTOMATIC              no roll
-ROLL_1d6_IGNITE_1_2    this card's own roll
+ROLL_1d6_IGNITE_1_2    select the 1d6 branch; THE CALLER ROLLS, not this card
 ROUTED_SKILL_CHECK     emit a request; CHAR-012 resolves
 REFUSE                 explanatory error
 ```
+
+> **Corrected 2026-10-03 (review-#3 `MED-2`).** This line read *"this card's own roll"*, which
+> contradicts the approved plan §11 and the shipped module: `EXP-006` **rolls nothing** and imports
+> no RNG. It returns the selected branch, and rolling is the caller's.
 
 Only `ROUTED_SKILL_CHECK` touches `CHAR-012`, and it is **emitted, not resolved** — the DM-assigned
 penalty is an input to that check, not a value `EXP-006` must produce. **`EXP-006` is implementable
@@ -205,13 +209,38 @@ adjudicating a rule by picking one. Flagged rather than resolved here.
 | `ignition attempted → lit` | **Yes** — automatic, or on `1–2` of `1d6`, one attempt per round |
 | `ignition attempted → still unlit` | **Yes** — L18, retry next round |
 | `lit → expended` | **Yes** — §4, at `remaining_turns == 0` |
-| `expended → refuelled` (lantern) | **Yes** — §4, a further flask resets to `24`; L12 confirms it contributes again |
-| `expended → refuelled` (torch) | **Not applicable** — a torch has no fuel; a fresh torch is a new source |
+| `expended → refuelled` (lantern) | **Yes** — §4: a further flask **restores `remaining_turns` to `24` and leaves the lantern unlit**. **No mundane-light contribution until separately ignited** (§5). *Corrected 2026-10-03 — see the note below this table.* |
+| `expended → refuelled` (torch) | **Not applicable** — a torch has no fuel; a fresh torch is a new source. *(The implementation treats this as an invalid **argument**, `ValueError`, not a source silence — human adjudication 2026-10-03, review-#2 `LOW-9`.)* |
 | `lit → unlit` (deliberate extinguish) | **INTENTIONALLY UNAVAILABLE** — RC is silent (§Undefined 4). The implementation must **refuse deterministically**; no extinguish, relight or refill-timing procedure is invented |
 
 **No transition is silently invented.** The one unavailable transition is unavailable because RC
 does not state it, which the authorizing direction accepts provided refusal is deterministic — and
 it is.
+
+> **Withdrawn wording corrected 2026-10-03, under review-#3 finding `MED-2`.** The lantern-refuel
+> row above read *"a further flask resets to `24`; **L12 confirms it contributes again**"*. The
+> phrase *"contributes illumination again"* was **expressly withdrawn from the Rule Card on
+> 2026-10-01** by human adjudication, as asserting an ignition the card never establishes. Because
+> §8a below declares §1–§8 to be standing findings, this sentence was reading as a **current**
+> claim rather than as history — review #2 graded the identical misquote `HIGH-2` where it appeared
+> in a test docstring, and it survived here. The current refuel contract is:
+>
+> ```text
+> refuel restores remaining_turns = 24
+> lit = False
+> no mundane-light contribution until separately ignited
+> ```
+>
+> **The Rule Card mechanic is unchanged by this correction** — only this record's statement of it.
+>
+> Two further corrections in this same section, also under `MED-2`:
+>
+> - §5.C's transition table glossed `ROLL_1d6_IGNITE_1_2` as *"this card's own roll"*. **This card
+>   rolls nothing**: it selects a branch and returns it, and the roll belongs to the caller
+>   (approved plan §11; approved card §5). Corrected in place.
+> - §8a's claim that *"§1–§8 are preserved unaltered"* is **false as written** and is corrected
+>   there: §6 carries a 2026-10-03 correction, and so now does this section. What §8a means, and
+>   now says, is that no §1–§8 *finding* was re-performed or reversed.
 
 ---
 
@@ -305,10 +334,16 @@ remains **DEFERRED** and is untouched by this assessment.
 
 ## 8a. Bounded remediation — 2026-10-01, ignition portion only
 
-> **The original `PASS` in §0 and the assessment in §1–§8 are preserved unaltered.** They were
-> made on 2026-10-01 and **missed two defects in the ignition portion**. This section records what
-> was missed, the human adjudications that resolve it, and a reassessment of **only** that portion.
-> Every other finding above stands and is not re-performed.
+> **The original `PASS` in §0 and every §1–§8 *finding* stand, unreversed and not re-performed.**
+> They were made on 2026-10-01 and **missed two defects in the ignition portion**. This section
+> records what was missed, the human adjudications that resolve it, and a reassessment of **only**
+> that portion.
+>
+> **Wording corrected 2026-10-03 (review-#3 `MED-2`).** This preamble previously said §1–§8 were
+> "preserved unaltered", which review #3 correctly identified as false: §6 carries a 2026-10-03
+> case-count correction, §5.C and §5.F carry 2026-10-03 corrections, and each is marked in place.
+> The accurate statement is the one above — no §1–§8 *finding* was reversed; several *statements*
+> of those findings have been corrected where they had gone stale or misquoted the card.
 
 ### 8a.1 What the original gate missed
 

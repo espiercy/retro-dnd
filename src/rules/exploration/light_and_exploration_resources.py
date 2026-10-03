@@ -26,10 +26,24 @@ It does not, and must not:
   (CHAR-009), torch-as-weapon or oil-as-missile behaviour (COMBAT-*),
   rations, or starvation causation.
 
-The card's responsibilities are implemented in full: the light-source
-value model, depletion against authoritative elapsed turns, the mundane
-light contribution, the ignition branch selector (carrying ``SR-11``),
-and the CHAR-004 identity binding (private — see ``__all__``).
+Every responsibility the **approved implementation plan** assigns to this
+module is implemented: the light-source value model, depletion against
+authoritative elapsed turns, the mundane light contribution, the ignition
+branch *selector* (carrying ``SR-11``), and the CHAR-004 identity binding
+(private — see ``__all__``).
+
+**One transition is deliberately absent, and it is not this module's.**
+Nothing here moves a source from ``lit=False`` to ``lit=True``:
+:func:`ignition_outcome` returns a *branch*, never a ``LightSource``, and
+:func:`refuel_lantern` leaves the lantern unlit. The card's §4 speaks of
+"a separately authorized ignition operation (§5)" that changes ``lit``;
+**applying** a successful ignition is excluded by the approved plan §11
+"in any slice" and belongs to whatever later authorization supplies it.
+So this module is complete against its plan, and the card's light cycle
+is not yet closed anywhere. Scoped this way 2026-10-03 under review-#3
+finding ``LOW-4``, which found the previous phrasing — "the card's
+responsibilities are implemented in full" — broader than true at card
+level.
 
 Public surface: four constants, five types and four functions, all listed
 in ``__all__``. That list is the contract; guards in the test module pin
