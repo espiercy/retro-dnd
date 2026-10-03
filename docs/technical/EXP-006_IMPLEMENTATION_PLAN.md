@@ -44,12 +44,15 @@ see §14 Slice A — it requires none, and introduces none.
 ### 1.2 Implementation authorization
 
 ```text
-SLICE A   ACCEPTED     2026-10-01   -- light-source value/state model
-SLICE B   ACCEPTED     2026-10-01   -- depletion + mundane-light contribution,
-                                      including the bounded refuel correction
-                                      and the Rule Card consistency correction
-SLICE C   NOT authorized -- BLOCKED, see §19
-SLICE D   NOT authorized
+SLICE A   ACCEPTED   2026-10-01   -- light-source value/state model
+SLICE B   ACCEPTED   2026-10-01   -- depletion + mundane-light contribution
+SLICE C   ACCEPTED   2026-10-01   -- ignition branch/outcome model, carrying SR-11
+SLICE D   ACCEPTED   2026-10-03   -- CHAR-004 identity binding + final guards
+
+IMPLEMENTATION  COMPLETE -- pending a passing independent final review.
+                Review #1 returned FAIL (2 HIGH, 4 MED, 8 LOW); all 14
+                findings remediated 2026-10-03.  No finding concerned
+                rules logic.  See ISSUE-022.
 ```
 
 **Slice B's accepted semantics** include `expended lantern + new flask → remaining_turns = 24,
@@ -353,10 +356,16 @@ branch is not the same as lighting a source, and applying a successful ignition 
 
 > **Error type, narrowed 2026-10-01 by human adjudication.** This section originally called for
 > `ExplorationError` (a domain base) **plus** `IgnitionNotDefinedError`. The adjudication directs
-> that a single concrete type be preferred where it suffices, and no speculative exploration-wide
-> hierarchy be built. Exploration has exactly **one** domain rejection, so the base is dropped:
-> **`IgnitionNotDefinedError` only.** Recorded as a deliberate departure from the approved plan
-> sketch rather than an unnoticed one.
+> that concrete types be preferred where they suffice, and no speculative exploration-wide
+> hierarchy be built. The base is dropped.
+>
+> **Final shipped surface — three concrete types, no base** (corrected 2026-10-03, `LOW-9`; this
+> paragraph previously read *"`IgnitionNotDefinedError` only"* and so disagreed with the code):
+> `IgnitionNotDefinedError` (RC supplies no ignition procedure), `IgnitionAttemptLimitError` (RC
+> forbids a second same-round attempt) and `LanternRefuelNotDefinedError` (RC supplies no
+> partial-refill procedure — human adjudication 2026-10-03). Structural violations remain plain
+> `ValueError`. Recorded as a deliberate departure from the approved plan sketch rather than an
+> unnoticed one.
 
 > **Matrix corrected 2026-10-01.** The original used `any`/`—` wildcards in two rows that
 > overlapped at `(✓, ✗, ADVERSE)` and prescribed two incompatible outcomes — a plan defect, recorded
@@ -527,7 +536,10 @@ INDEPENDENT  Yes -- orthogonal to A and B; could in principle land first
 ### Slice D — `CHAR-004` identity binding and architectural guards
 
 ```text
-FILES     same module; tests/rules/exploration/test_light_guards.py (new)
+FILES     same module; guards placed in the SINGLE existing test module
+          rather than a new test_light_guards.py (deliberate departure,
+          recorded 2026-10-03 per LOW-10: one module keeps the 53-case
+          ledger and the guards that discharge it in one place)
 BEHAVIOR  the private _CATALOG_NAMES mapping; no new rules behavior
 CASES     L13, L14, L29-L33, L35, L36, L38-L47   (guards G-1..G-6)
 CONSUMES  CHAR-004 identity only
@@ -571,7 +583,7 @@ place for unresolved frontier items; this plan adds a third pointer rather than 
 | 7 | **Magical-light scope creep** | **PASS.** `LightSourceKind` is closed at two members with no extension point (G-5) |
 | 8 | **Ration/starvation scope creep** | **PASS.** No type, operation or constant. G-5 forbids the names |
 | 9 | **Exhausted source still contributing light** | **PASS** — and this is the strongest result. The state is **unconstructible** (§6.1 invariant), not merely untested; `L15a` proves the scoping is source-local, not party-wide |
-| 10 | **Speculative abstractions for future cards** | **PASS.** No interface, protocol, registry, plugin seam or "environment" type. One module, one error base plus one subclass, four public functions. §5 records what was deliberately not created |
+| 10 | **Speculative abstractions for future cards** | **PASS.** No interface, protocol, registry, plugin seam or "environment" type. One module, three concrete error types with no base, and a pinned public surface. §5 records what was deliberately not created |
 
 ## 17. Blockers
 
@@ -653,8 +665,9 @@ not specify.
 ```text
 EXP-006 Rule Card              APPROVED        2026-10-01
 EXP-006 PRE-CODE GATE          PASS            2026-10-01
-EXP-006 IMPLEMENTATION PLAN    DRAFT -- awaiting human review
-IMPLEMENTATION                 NOT AUTHORIZED  (ARCHITECTURE.md §15.2 step 4)
+EXP-006 IMPLEMENTATION PLAN    APPROVED       2026-10-01
+EXP-006 IMPLEMENTATION         COMPLETE -- pending independent review #2 PASS
+CLUSTER-004 IMPLEMENTATION     NOT AUTHORIZED  (ARCHITECTURE.md §15.2 step 4)
 CLUSTER-004                    NOT AUTHORIZED
 ENC-005 Stage B                DEFERRED -- not in this plan
 ```

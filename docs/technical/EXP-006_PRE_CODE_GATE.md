@@ -215,7 +215,13 @@ it is.
 
 ---
 
-## 6. Deterministic-case readiness — all 50 translate
+## 6. Deterministic-case readiness — all 53 translate
+
+> **Count and classification corrected 2026-10-03 (`LOW-12`).** This section tabulated
+> **50** cases and classed `L22` as *Routed dependency*. The ledger reached **53** by two
+> later human adjudications (`L12a`; `L19a`/`L19b`), and the shipped implementation classes
+> `L22` as **behavior** — it is an asserted outcome of the matrix, not a routed call. The
+> authoritative split is in the implementation plan §12 and the test ledger.
 
 | Obligation type | Count | Examples |
 |---|---|---|
@@ -226,7 +232,7 @@ it is.
 
 **No case fails to translate, and no case requires exceeding `EXP-006` ownership to test.**
 
-The guard-heavy profile (**29 of 50**) is a direct product of the bounded remediation: four cases
+The guard-heavy profile (**26 guards of 53**, as finally recomputed) is a direct product of the bounded remediation: four cases
 that previously *asserted* behaviour now *forbid* it. `L34` inverted outright — from an `ERROR`
 when a surprise state was missing, to a **success** case, because surprise is no longer an input.
 

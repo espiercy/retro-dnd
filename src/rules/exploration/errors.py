@@ -9,7 +9,7 @@ defines no procedure for what was asked.
 
 **Concrete types, no base class.** The character-creation domain uses a
 base plus subclasses because it has ten of them
-(src/rules/character_creation/errors.py). Exploration has two domain
+(src/rules/character_creation/errors.py). Exploration has three domain
 rejections, which does not require a hierarchy; the EXP-006
 implementation plan's §11 originally sketched an ``ExplorationError``
 base, and the human adjudication of 2026-10-01 directs that concrete
@@ -86,4 +86,37 @@ class IgnitionAttemptLimitError(Exception):
     The flag itself being a non-``bool`` remains a structural violation
     and still raises ``ValueError``: that is a malformed input, not a
     rule being broken.
+    """
+
+
+class LanternRefuelNotDefinedError(Exception):
+    """RC defines no procedure for the refuelling requested.
+
+    EXP-006 Rule Card §4, CLUSTER-004 Slice D remediation. The card
+    establishes supplying a further flask **only for a lantern that has
+    reached zero**. Two requests fall outside that:
+
+    - a lantern that is **not yet expended**. Topping up a partly-full
+      lantern is not established, and no arithmetic is assigned to it —
+      no topping up to 24, no adding 24, no partial-flask arithmetic;
+
+    - a **torch**, which has no fuel. RC gives the flask to the lantern;
+      a fresh torch is a new source, not a refuelled one.
+
+    **A rules-domain rejection, not a structural one** (human
+    adjudication 2026-10-01). The inputs are a well-formed
+    :class:`LightSource`; what is missing is an RC procedure for this
+    case. That makes it a source silence of exactly the kind
+    :class:`IgnitionNotDefinedError` covers for ignition, and it is given
+    its own concrete type rather than being merged with it — the two
+    describe different silences, and a caller that catches one should not
+    silently catch the other.
+
+    *(Corrected 2026-10-01. Slice B first raised a plain ``ValueError``
+    here. The independent final review declined to adjudicate the
+    category, correctly, because the card specifies none; the human
+    project owner then ruled it a rules-domain source-silence rejection.)*
+
+    A malformed argument — something that is not a
+    :class:`LightSource` at all — remains a structural ``ValueError``.
     """

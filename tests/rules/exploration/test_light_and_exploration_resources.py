@@ -1,14 +1,28 @@
-"""EXP-006 Slices A and B.
+"""EXP-006 — the complete deterministic-case ledger for the approved card.
 
-Slice A — the light-source value/state model: L1, L2, L3, L4, L5, L6, L7
-and L16, plus the construction invariants the human adjudication of
-2026-10-01 §8 requires.
+All four accepted slices are covered here, in one module, so that the
+53-case ledger and the guards that discharge it stay in one place:
 
-Slice B — depletion and mundane-light contribution: L8, L9, L10, L11,
-L12, L15, L15a, L15b, L27, L28 and L34.
+Slice A — the light-source value/state model: L1-L7, L16, plus the
+construction invariants required by the human adjudication of
+2026-10-01 §8.
 
-Ignition (L17-L26) and CHAR-004 catalog integration are Slices C and D
-and are deliberately absent.
+Slice B — depletion and mundane-light contribution: L8-L12, L15, L15a,
+L15b, L27, L28, L34.
+
+Slice C — the ignition branch/outcome selector, carrying ``SR-11``:
+L17-L26, L19a, L19b.
+
+Slice D — CHAR-004 identity binding and the final architectural guards:
+L29-L33, L35-L39.
+
+``CASE_DISCHARGE`` below maps every case ID to the mechanism that
+discharges it, and a guard asserts the mapping is exactly the ledger.
+
+Deliberately absent, and guarded as absent rather than merely unwritten:
+the seven RC silences the card names, global/world illumination, the
+encounter-``Visibility`` product, blindness establishment, rations and
+starvation causation. None of these is this card's responsibility.
 """
 
 from __future__ import annotations
@@ -23,7 +37,11 @@ from itertools import product
 import pytest
 
 from rules.exploration import light_and_exploration_resources as light
-from rules.exploration.errors import IgnitionAttemptLimitError, IgnitionNotDefinedError
+from rules.exploration.errors import (
+    IgnitionAttemptLimitError,
+    IgnitionNotDefinedError,
+    LanternRefuelNotDefinedError,
+)
 from rules.exploration.light_and_exploration_resources import (
     FRESH_DURATION_TURNS,
     LANTERN_TURNS_PER_FLASK,
@@ -127,15 +145,59 @@ def test_this_module_performs_no_hour_to_turn_conversion() -> None:
     false-positive mode CLUSTER-003 recorded (implementation plan §13).
     """
     tree = ast.parse(inspect.getsource(light))
-    multipliers = {
-        node.right.value
+
+    # (1) The structural property that actually matters: no API, field or
+    #     constant is denominated in hours, so there is nothing to convert
+    #     FROM. This is stronger than enumerating arithmetic spellings.
+    hour_names = {
+        name
+        for name in _public_top_level_definitions()
+        if "hour" in name.lower() or "minute" in name.lower()
+    }
+    for params in APPROVED_PARAMETERS.values():
+        hour_names |= {p for p in params if "hour" in p.lower() or "minute" in p.lower()}
+    for members in APPROVED_MEMBERS.values():
+        hour_names |= {m for m in members if "hour" in m.lower() or "minute" in m.lower()}
+    assert hour_names == set(), f"hours/minutes-denominated surface: {hour_names}"
+
+    # (2) And no int multiplication or floor-division survives on EITHER
+    #     operand. The original guard inspected only the right operand, so
+    #     `6 * hours` and `minutes // 10` both passed (LOW-7).
+    arithmetic = [
+        ast.dump(node)
         for node in ast.walk(tree)
         if isinstance(node, ast.BinOp)
-        and isinstance(node.op, ast.Mult)
-        and isinstance(node.right, ast.Constant)
-        and isinstance(node.right.value, int)
+        and isinstance(node.op, (ast.Mult, ast.FloorDiv, ast.Div))
+        and any(
+            isinstance(side, ast.Constant) and isinstance(side.value, int)
+            for side in (node.left, node.right)
+        )
+    ]
+    assert arithmetic == [], f"unexpected duration arithmetic: {arithmetic}"
+
+
+def test_this_module_uses_no_reflective_attribute_access() -> None:
+    """LOW-14 — closes the `getattr` escape from the economic-field guard.
+
+    `test_no_catalog_economic_field_is_ever_accessed` walks `ast.Attribute`
+    nodes, so `getattr(item, "price")` evades it. EXP-006 has no legitimate
+    need for reflective access on a `CHAR-004` row, so the mechanisms are
+    structurally prohibited here rather than the AST walk being extended into
+    a general static analyser.
+    """
+    tree = ast.parse(inspect.getsource(light))
+    reflective = {"getattr", "setattr", "delattr", "vars", "eval", "exec", "__getattribute__"}
+    used = {
+        node.func.id
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id in reflective
     }
-    assert multipliers == set(), f"unexpected arithmetic on durations: {multipliers}"
+    assert used == set(), f"reflective access could evade the field guard: {used}"
+    # Non-vacuity: the walk must actually be seeing calls in this module.
+    calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call)]
+    assert calls, "guard anchored on zero Call nodes"
 
 
 # --- Construction invariants (human adjudication 2026-10-01 §7, §8) --------
@@ -317,8 +379,12 @@ def test_a_refuelled_lantern_still_does_not_deplete_while_unlit() -> None:
 
 
 def test_a_torch_cannot_be_refuelled() -> None:
-    """RC gives the flask to the lantern; a fresh torch is a new source."""
-    with pytest.raises(ValueError, match="only a lantern burns a flask"):
+    """RC gives the flask to the lantern; a fresh torch is a new source.
+
+    A **rules-domain** source silence, not a structural error (human
+    adjudication 2026-10-01).
+    """
+    with pytest.raises(LanternRefuelNotDefinedError, match="only a lantern burns a flask"):
         refuel_lantern(LightSource(kind=TORCH, remaining_turns=0, lit=False))
 
 
@@ -331,7 +397,9 @@ def test_refuelling_a_lantern_that_has_not_reached_zero_is_refused() -> None:
     operation** — no topping up to 24, no adding 24, no partial-flask
     arithmetic. It is rejected deterministically.
     """
-    with pytest.raises(ValueError, match="only for a lantern that has reached zero"):
+    with pytest.raises(
+        LanternRefuelNotDefinedError, match="only for a lantern that has reached zero"
+    ):
         refuel_lantern(LightSource.fresh(LANTERN, lit=True))
 
 
@@ -340,7 +408,9 @@ def test_refuelling_a_partly_spent_lantern_is_refused_whether_lit_or_not() -> No
     partly_spent_lit = LightSource(kind=LANTERN, remaining_turns=7, lit=True)
     partly_spent_unlit = LightSource(kind=LANTERN, remaining_turns=7, lit=False)
     for source in (partly_spent_lit, partly_spent_unlit):
-        with pytest.raises(ValueError, match="only for a lantern that has reached zero"):
+        with pytest.raises(
+            LanternRefuelNotDefinedError, match="only for a lantern that has reached zero"
+        ):
             refuel_lantern(source)
 
 
@@ -371,7 +441,12 @@ def test_a_lit_source_contributes_thirty_feet() -> None:
 
 def test_unlit_sources_are_filtered_out_by_the_aggregate_not_the_caller() -> None:
     """A caller cannot accidentally include a spent torch by forgetting to
-    filter, because filtering is not the caller's job."""
+    filter, because filtering is not the caller's job.
+
+    Note the asymmetry this test fixes in place: a VALID unlit source is
+    accepted and simply does not contribute, while a MALFORMED member is
+    refused outright (MED-5).
+    """
     contribution = mundane_light_contribution(
         [
             LightSource.fresh(TORCH),  # unlit
@@ -425,21 +500,74 @@ def test_querying_light_state_needs_no_surprise_or_encounter_state() -> None:
     assert list(signature.parameters) == ["sources"]
 
 
+def test_a_malformed_member_is_rejected_not_silently_dropped() -> None:
+    """MED-5 — the aggregate refuses what `deplete` refuses.
+
+    Before this correction a caller's type error degraded into
+    `any_mundane_source_lit is False`: a plausible-looking answer, and the one
+    output the card's Finding B warns hardest against over-reading. Both
+    sibling functions now reject the same malformed input.
+    """
+    for bad in ["torch", {"lit": True}, None, 42]:
+        with pytest.raises(ValueError, match="must contain LightSource values"):
+            mundane_light_contribution([bad])  # type: ignore[list-item]
+        with pytest.raises(ValueError, match="must contain LightSource values"):
+            deplete([bad], 1)  # type: ignore[list-item]
+
+
+def test_a_valid_unlit_source_is_accepted_and_simply_does_not_contribute() -> None:
+    """The distinction MED-5 turns on: malformed is refused, unlit is not."""
+    contribution = mundane_light_contribution(
+        [LightSource.fresh(TORCH), LightSource(kind=TORCH, remaining_turns=0, lit=False)]
+    )
+    assert contribution.lit_sources == ()
+    assert contribution.any_mundane_source_lit is False
+
+
+def test_a_duck_typed_impostor_is_rejected() -> None:
+    """A object that merely *looks* like a lit source must not slip through."""
+
+    class _Impostor:
+        lit = True
+        remaining_turns = 6
+
+    with pytest.raises(ValueError, match="must contain LightSource values"):
+        mundane_light_contribution([_Impostor()])  # type: ignore[list-item]
+
+
+def test_a_failed_1d6_leaves_its_own_branch_selectable() -> None:
+    """L18 — using the case's OWN row (no skill, tinderbox, ORDINARY).
+
+    The prior discharge cited a test looping over (skill, tinderbox, ORDINARY),
+    which is L20's row, not L18's (MED-4). The card's L18 is a failed roll on
+    the tinderbox branch; this card selects the branch and never rolls, so what
+    it guarantees is that the same input re-selects the same branch.
+    """
+    for _ in range(3):
+        assert _ignite(False, True, ORDINARY) is IgnitionOutcome.ROLL_1D6_IGNITE_1_2
+
+
 # --- L15a / L15b: the multiple-source distinction --------------------------
 
 
 def test_one_source_expiring_does_not_darken_the_party() -> None:
-    """L15a — the decisive case. Two lit torches, one expires after its six
-    turns; the other was lit later and still burns. The aggregate still
-    reports mundane illumination."""
-    older = LightSource(kind=TORCH, remaining_turns=6, lit=True)
-    newer = LightSource(kind=LANTERN, remaining_turns=24, lit=True)
+    """L15a — the decisive case, using the card's literal input.
 
-    spent = deplete([older, newer], 6)
+    **Two lit torches**, one with 2 turns left and one with 6, depleted by 2:
+    the first expires, the second still burns, and the aggregate still reports
+    mundane illumination. (Previously this used a torch and a lantern while
+    its own docstring said "two torches" — LOW-13. Behaviour is
+    kind-independent, so the property held either way, but the test now
+    exercises what the card actually writes.)
+    """
+    older = LightSource(kind=TORCH, remaining_turns=2, lit=True)
+    newer = LightSource(kind=TORCH, remaining_turns=6, lit=True)
+
+    spent = deplete([older, newer], 2)
 
     expired, still_burning = spent
     assert expired.remaining_turns == 0 and expired.lit is False
-    assert still_burning.remaining_turns == 18 and still_burning.lit is True
+    assert still_burning.remaining_turns == 4 and still_burning.lit is True
 
     contribution = mundane_light_contribution(spent)
     assert contribution.any_mundane_source_lit is True, "one source expiring darkened the party"
@@ -842,12 +970,20 @@ def test_no_currency_or_pricing_machinery_is_imported() -> None:
 
 
 def test_the_complete_production_dependency_surface() -> None:
-    """The final guard: EXP-006's whole import graph, stated positively.
+    """EXP-006's whole **direct** import graph, stated positively.
 
-    Proves in one assertion that there is no production dependency on
-    TurnCredit, EXP-001 time machinery, the CHAR-012 skill resolver, RNG,
-    encounter resolution, combat resolution, magic resolution, or any
-    world-darkness state — because nothing of the kind is imported at all.
+    Proves there is no **direct** production import of TurnCredit, EXP-001
+    time machinery, the CHAR-012 skill resolver, RNG, encounter, combat or
+    magic resolution, or any world-darkness state.
+
+    **It does not claim a transitive property, and must not be read as one**
+    (MED-6). Importing this module loads `rng` and `rules.currency`
+    transitively, because the `CHAR-004` seam this card is *directed* to use
+    imports them itself. That is forced by the approved plan §1.1 ("use
+    `catalog_item(...)`"; "no landed `CHAR-004` production code changes"),
+    and it is behaviourally clean: no RNG object is constructed, no RNG
+    method called, no `Coin` read. The accurate guarantee is **"no RNG is
+    consumed"**, not "nothing of the kind is reachable".
     """
     tree = ast.parse(inspect.getsource(light))
     imported: set[str] = set()
@@ -869,69 +1005,202 @@ def test_the_complete_production_dependency_surface() -> None:
     }
 
 
+# =========================================================================
+# The exact public-surface guard (MED-4A)
+# =========================================================================
+#
+# An ALLOWLIST, not a forbidden-token denylist. The independent review of
+# 2026-10-01 proved the denylist could be walked past: `VisibilityCategory`
+# survived because `"VisibilityCategory".split("_")` is one token and never
+# equals `visibility`, and `ration_spoilage_turns` survived because the set
+# held `rations` but not `ration`. Every such escape adds a PUBLIC name,
+# member or parameter — so pinning the exact shape catches them all at once,
+# regardless of spelling, and keeps catching names nobody thought to forbid.
+
+APPROVED_DEFINITIONS: frozenset[str] = frozenset(
+    {
+        "FRESH_DURATION_TURNS",
+        "LANTERN_TURNS_PER_FLASK",
+        "MUNDANE_LIGHT_RADIUS_FEET",
+        "TORCH_TURNS",
+        "IgnitionConditions",
+        "IgnitionOutcome",
+        "LightSource",
+        "LightSourceKind",
+        "MundaneLightContribution",
+        "catalog_identity",
+        "deplete",
+        "ignition_outcome",
+        "mundane_light_contribution",
+        "oil_flask_identity",
+        "refuel_lantern",
+        "tinderbox_identity",
+    }
+)
+
+APPROVED_MEMBERS: dict[str, frozenset[str]] = {
+    "LightSourceKind": frozenset({"TORCH", "LANTERN"}),
+    "IgnitionConditions": frozenset({"ORDINARY", "ADVERSE"}),
+    "IgnitionOutcome": frozenset(
+        {"AUTOMATIC", "ROLL_1D6_IGNITE_1_2", "ROUTED_SKILL_CHECK"}
+    ),
+    "LightSource": frozenset(
+        {"kind", "remaining_turns", "lit", "fresh", "illumination_radius_feet"}
+    ),
+    "MundaneLightContribution": frozenset(
+        {"lit_sources", "any_mundane_source_lit", "max_mundane_radius_feet"}
+    ),
+}
+
+APPROVED_PARAMETERS: dict[str, tuple[str, ...]] = {
+    "deplete": ("sources", "elapsed_turns"),
+    "refuel_lantern": ("source",),
+    "mundane_light_contribution": ("sources",),
+    "catalog_identity": ("kind",),
+    "oil_flask_identity": (),
+    "tinderbox_identity": (),
+    "ignition_outcome": (
+        "has_fire_building",
+        "has_tinderbox",
+        "conditions",
+        "attempt_already_made_this_round",
+    ),
+}
+
+
+def _public_top_level_definitions() -> set[str]:
+    """Names this module *defines* at top level and does not prefix with `_`.
+
+    Parsed rather than taken from ``dir()``, so imported names (``Item``,
+    ``Enum``, ``dataclass``…) are not mistaken for this module's own surface.
+    """
+    tree = ast.parse(inspect.getsource(light))
+    found: set[str] = set()
+    for node in tree.body:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            if not node.name.startswith("_"):
+                found.add(node.name)
+        elif isinstance(node, ast.AnnAssign):
+            if isinstance(node.target, ast.Name) and not node.target.id.startswith("_"):
+                found.add(node.target.id)
+        elif isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Name) and not target.id.startswith("_"):
+                    found.add(target.id)
+    return found
+
+
+def test_the_public_definition_surface_is_exactly_the_approved_set() -> None:
+    """Any new public class, enum, function or constant fails this.
+
+    Private helpers are deliberately unconstrained — a leading underscore is
+    an implementation detail, not public surface.
+    """
+    defined = _public_top_level_definitions()
+    assert defined, "guard anchored on zero definitions"
+    assert defined == set(APPROVED_DEFINITIONS), (
+        f"unapproved public definitions: {defined - set(APPROVED_DEFINITIONS)}; "
+        f"missing: {set(APPROVED_DEFINITIONS) - defined}"
+    )
+
+
+def test_all_matches_the_approved_surface() -> None:
+    """`__all__` and the definitions must not drift apart."""
+    assert set(light.__all__) == set(APPROVED_DEFINITIONS)
+    assert len(light.__all__) == len(set(light.__all__)), "duplicate in __all__"
+
+
+def test_public_class_members_are_exactly_approved() -> None:
+    """Catches a forbidden *member*, which a top-level check cannot see —
+    e.g. `LightSource.attack_penalty_when_dark`, which the review's mutation
+    M added and the old guard missed."""
+    checked = 0
+    for cls_name, approved in APPROVED_MEMBERS.items():
+        cls = getattr(light, cls_name)
+        actual = {n for n in vars(cls) if not n.startswith("_")}
+        # dataclass fields live in __dataclass_fields__, not vars()
+        actual |= {
+            n for n in getattr(cls, "__dataclass_fields__", {}) if not n.startswith("_")
+        }
+        assert actual == set(approved), f"{cls_name}: unapproved members {actual ^ set(approved)}"
+        checked += 1
+    assert checked == len(APPROVED_MEMBERS) == 5
+
+
+def test_public_function_parameters_are_exactly_approved() -> None:
+    """Catches a forbidden *parameter* on any public function — e.g.
+    `deplete(..., party_surprised, has_infravision)`. The previous guard
+    asserted only `mundane_light_contribution`'s signature, so `L32`/`L35`'s
+    claim of "no parameter on *any* function" was not actually established."""
+    checked = 0
+    for fn_name, approved in APPROVED_PARAMETERS.items():
+        fn = getattr(light, fn_name)
+        actual = tuple(inspect.signature(fn).parameters)
+        assert actual == approved, f"{fn_name}: parameters {actual} != approved {approved}"
+        checked += 1
+    assert checked == len(APPROVED_PARAMETERS) == 7
+
+
 # --- §13 ledger reconciliation ---------------------------------------------
 
 CASE_DISCHARGE: dict[str, str] = {
-    # --- implemented behavior -------------------------------------------
+    # --- implemented behavior --------------------------------------------
     "L1": "behavior: lit torch radius 30",
     "L2": "behavior: lit lantern radius 30",
     "L3": "behavior: unlit illuminates nothing",
     "L6": "behavior: fresh torch 6 turns",
     "L7": "behavior: fresh lantern 24 turns",
     "L8": "behavior: 1 elapsed turn -> 5 remaining",
-    "L9": "behavior: 6 elapsed turns -> EXPENDED",
-    "L10": "behavior: floors at 0",
-    "L11": "behavior: unlit does not deplete",
-    "L12": "behavior: refuel -> 24 turns, unlit",
-    "L15a": "behavior: one source expires, the other still contributes",
+    "L9": "behavior: 6 elapsed turns -> EXPENDED, contributes nothing",
+    "L10": "behavior: floors at 0, never negative",
+    "L11": "behavior: unlit sources do not deplete",
+    "L12": "behavior: refuel -> 24 turns, still unlit",
+    "L15a": "behavior: two torches, one expires, the other still contributes",
     "L17": "behavior: tinderbox 1d6 branch selected",
+    "L18": "behavior: its OWN row (no skill, tinderbox, ORDINARY) re-selects",
+    "L19a": "behavior: first attempt evaluates and records nothing",
     "L20": "behavior: skill + tinderbox + ordinary -> AUTOMATIC",
     "L21": "behavior: skill, no tinderbox, ordinary -> 1d6",
-    "L22": "behavior: adverse -> ROUTED_SKILL_CHECK (incl. SR-11 row)",
-    "L19a": "behavior: first attempt evaluates, records nothing",
-    "L27": "behavior: aggregate reports lit source",
-    "L28": "behavior: aggregate empty when none lit",
-    "L34": "behavior: query succeeds with no surprise state",
-    "L12a_": "placeholder-never-used",
-    # --- implemented invariants (refusals) -------------------------------
-    "L12a": "invariant: partial refill refused",
-    "L19": "invariant: IgnitionAttemptLimitError on second attempt",
-    "L23": "invariant: IgnitionNotDefinedError, no-skill adverse",
-    "L24": "invariant: IgnitionNotDefinedError, no skill no tinderbox",
-    "L18": "invariant: a failed 1d6 may retry -- the roll is the caller's, "
-    "so this card only guarantees the branch stays selectable",
+    "L22": "behavior: adverse -> ROUTED_SKILL_CHECK, incl. the SR-11 row",
+    "L27": "behavior: aggregate reports a lit source",
+    "L28": "behavior: aggregate empty when none lit, asserting nothing further",
+    "L34": "behavior: query succeeds with no surprise state supplied",
+    # --- implemented invariants (deterministic refusals) -------------------
+    "L12a": "invariant: LanternRefuelNotDefinedError on partial refill",
+    "L19": "invariant: IgnitionAttemptLimitError on a second same-round attempt",
+    "L23": "invariant: IgnitionNotDefinedError, no skill + tinderbox + adverse",
+    "L24": "invariant: IgnitionNotDefinedError, no skill and no tinderbox",
     "L26": "invariant: adverse never defaults to the 1d6",
-    # --- architectural guards ---------------------------------------------
-    "L4": "guard: torch/lantern radii cannot differ (one constant)",
-    "L5": "guard: no illumination-quality distinction exists",
-    "L13": "guard: import graph -- no time machinery",
-    "L14": "guard: import graph -- no second counter/clock",
-    "L15": "guard: no burn-out event/proration (absent from the API)",
-    "L15b": "guard: exhaustion produces no world state (deplete returns sources)",
-    "L16": "guard: no hour->turn arithmetic in the parsed module",
-    "L19b": "guard: no round state, no flag mutation",
-    "L25": "guard: no skill check resolved here (import graph)",
-    "L29": "guard: no NO_LIGHT/world claim from absence",
-    "L30": "guard: no DIM_LIGHT from 'normal dungeon conditions' -- no "
-    "Visibility type exists to express it",
-    "L31": "guard: no Visibility category produced (API shape)",
-    "L32": "guard: no infravision parameter exists",
-    "L33": "guard: no distance dice (no RNG imported)",
-    "L35": "guard: surprise is not a parameter of any function",
-    "L36": "guard: no light->distance path (no distance operation exists)",
-    "L37a": "guard: complete darkness never established here",
-    "L38": "guard: no movement multiplier (import graph)",
-    "L39": "guard: no save/attack/AC values (import graph)",
-    "L40": "guard: infravision never decided (no parameter)",
-    "L41": "guard: no magical light (LightSourceKind closed at two)",
-    "L42": "guard: no CHAR-004 economic field accessed (AST)",
-    "L43": "guard: no ration name or operation",
-    "L44": "guard: no starvation name or operation",
-    "L45": "guard: torch-as-weapon -- no weapon operation exists",
-    "L46": "guard: oil-as-missile/pursuit -- no such operation exists",
-    # --- routed / non-owned ------------------------------------------------
-    "L37": "routed: blindness predicate not asserted; illumination facts only",
-    "L47": "routed: reports any_mundane_source_lit; item/skill mechanic not owned",
+    # --- architectural guards ----------------------------------------------
+    "L4": "guard: one radius constant, so the radii cannot differ",
+    "L5": "guard: public member surface pinned -- no quality distinction",
+    "L13": "guard: no time import, and no module-level mutable exists",
+    "L14": "guard: __slots__ and the aggregate's single field are pinned",
+    "L15": "guard: public surface pinned -- no burn-out event or proration",
+    "L15b": "guard: deplete returns sources only; no world-state type exists",
+    "L16": "guard: no hours-denominated surface, and no int mult/floordiv",
+    "L19b": "guard: no round state; no module mutable; flag never mutated",
+    "L25": "guard: no CHAR-012 import; ROUTED_SKILL_CHECK carries no value",
+    "L29": "guard: public definition allowlist -- no NO_LIGHT/world type",
+    "L30": "guard: public definition allowlist -- no Visibility type at all",
+    "L31": "guard: allowlist (review added VisibilityCategory; now fails)",
+    "L32": "guard: allowlist -- no visibility-classifying type or member exists",
+    "L33": "guard: no DIRECT rng import; no distance operation in the surface",
+    "L35": "guard: EVERY public signature pinned -- no surprise parameter",
+    "L36": "guard: allowlist -- no distance-returning operation may be added",
+    "L37a": "guard: allowlist (review added CompleteDarkness; now fails)",
+    "L38": "guard: public member/parameter surface pinned; CHAR-005 unimported",
+    "L39": "guard: member surface pinned (review added a -6 attr; now fails)",
+    "L40": "guard: EVERY public signature pinned -- no infravision input at all",
+    "L41": "guard: LightSourceKind members pinned to exactly TORCH/LANTERN",
+    "L42": "guard: AST attribute walk + reflective access prohibited",
+    "L43": "guard: allowlist (review added ration_spoilage_turns; now fails)",
+    "L44": "guard: public definition allowlist -- no starvation operation",
+    "L45": "guard: public definition allowlist -- no weapon operation",
+    "L46": "guard: allowlist; oil_flask_identity binds GEAR, not Oil, Burning",
+    # --- routed / non-owned -------------------------------------------------
+    "L37": "routed: no blindness predicate asserted; illumination facts only",
+    "L47": "routed: reports any_mundane_source_lit; item/skill not owned here",
 }
 
 
@@ -957,6 +1226,16 @@ def test_every_approved_case_is_accounted_for() -> None:
     assert approved - mapped == set(), f"approved case not accounted for: {approved - mapped}"
     assert mapped - approved == set(), f"mapped case not in the card: {mapped - approved}"
     assert len(approved) == 53
+
+    # Added 2026-10-03 under review finding MED-4. Two distinct cases sharing
+    # one discharge string is how the ledger previously overclaimed: a generic
+    # phrase copied across rows reads as coverage without being it. L32
+    # ("infravision folded into a visibility classification") and L40
+    # ("infravision possession decided here") both read "no infravision
+    # parameter", which named neither case's actual mechanism. Each row must
+    # now state what discharges *that* case.
+    duplicates = {v for v in CASE_DISCHARGE.values() if list(CASE_DISCHARGE.values()).count(v) > 1}
+    assert duplicates == set(), f"two cases share one discharge description: {duplicates}"
 
 
 # --- Architectural guard: no second clock ----------------------------------

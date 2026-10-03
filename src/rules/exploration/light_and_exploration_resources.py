@@ -27,8 +27,10 @@ It does not, and must not:
   (CHAR-009), torch-as-weapon or oil-as-missile behaviour (COMBAT-*),
   rations, or starvation causation.
 
-Slices A and B are implemented. Ignition (Slice C) and CHAR-004 catalog
-lookup (Slice D) are not authorized yet and are deliberately absent.
+The card's responsibilities are implemented in full: the light-source
+value model, depletion against authoritative elapsed turns, the mundane
+light contribution, the ignition branch selector (carrying ``SR-11``),
+and CHAR-004 identity binding.
 """
 
 from __future__ import annotations
@@ -41,7 +43,11 @@ from typing import Final
 
 from rules.character_creation.equipment import TORCH as _TORCH_ITEM
 from rules.character_creation.equipment import Item, catalog_item
-from rules.exploration.errors import IgnitionAttemptLimitError, IgnitionNotDefinedError
+from rules.exploration.errors import (
+    IgnitionAttemptLimitError,
+    IgnitionNotDefinedError,
+    LanternRefuelNotDefinedError,
+)
 
 __all__ = [
     "FRESH_DURATION_TURNS",
@@ -301,14 +307,20 @@ def refuel_lantern(source: LightSource) -> LightSource:
       **API precondition derived from the approved scope**, not a new
       rules mechanic (human adjudication 2026-10-01).
     """
+    # Structural: not a LightSource at all.
     if not isinstance(source, LightSource):
         raise ValueError(f"source must be a LightSource, got {source!r}")
+    # Rules-domain: well-formed input, but RC defines no procedure for it.
     if source.kind is not LightSourceKind.LANTERN:
-        raise ValueError(f"only a lantern burns a flask of oil, got {source.kind!r}")
+        raise LanternRefuelNotDefinedError(
+            f"only a lantern burns a flask of oil, got {source.kind.name}: "
+            "RC gives the flask to the lantern, and a fresh torch is a new source"
+        )
     if source.remaining_turns != 0:
-        raise ValueError(
+        raise LanternRefuelNotDefinedError(
             "the approved card states refuelling only for a lantern that has reached zero; "
-            f"got remaining_turns={source.remaining_turns!r}"
+            f"got remaining_turns={source.remaining_turns!r}. No partial-flask arithmetic "
+            "is assigned to this request"
         )
     return LightSource(
         kind=LightSourceKind.LANTERN,
@@ -597,11 +609,20 @@ def mundane_light_contribution(sources: Iterable[LightSource]) -> MundaneLightCo
 
     Takes no surprise state and no encounter circumstance: querying this
     card's own light state requires neither (approved case **L34**).
+
+    **A malformed member is refused, not filtered.** A collection
+    containing something that is not a :class:`LightSource` raises
+    ``ValueError``, matching :func:`deplete`'s treatment of the same
+    input. Silently dropping it would turn a caller's type error into
+    ``any_mundane_source_lit is False`` — a plausible-looking answer, and
+    the single output the Rule Card's Finding B surrounds with the most
+    warnings against over-reading. That is distinct from a **valid**
+    unlit source, which is accepted and simply does not contribute.
     """
-    return MundaneLightContribution(
-        lit_sources=tuple(
-            source
-            for source in sources
-            if isinstance(source, LightSource) and source.lit
-        )
-    )
+    accepted: list[LightSource] = []
+    for source in sources:
+        if not isinstance(source, LightSource):
+            raise ValueError(f"sources must contain LightSource values, got {source!r}")
+        if source.lit:
+            accepted.append(source)
+    return MundaneLightContribution(lit_sources=tuple(accepted))

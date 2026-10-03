@@ -50,13 +50,27 @@ STAGE A (EVIDENCE)          COMPLETE -- INDEPENDENT COMPLETENESS REVIEW PASSED
         review 4   e3115ff   FAIL / FAIL   ...completeness-review-4.md
         review 5             PASS / PASS   ...completeness-review-5.md
 
-HUMAN EVIDENCE REVIEW       NOT GIVEN  -- hard gate, DEC-0009 §6
-STAGE B (SYNTHESIS)         NOT STARTED, NOT AUTHORIZED
-RULE CARDS                  NONE DRAFTED
-IMPLEMENTATION              NOT AUTHORIZED
+HUMAN EVIDENCE REVIEW       GIVEN 2026-09-29  -- both packets ACCEPTED
+STAGE B (SYNTHESIS)         EXP-006  COMPLETE   (card APPROVED 2026-10-01)
+                            ENC-005  DEFERRED   (explicit human decision; §6 Q1/Q2
+                                     unsettled -- see docs/rules/evidence/
+                                     ENC-005-evidence-remediated.md)
+RULE CARDS                  EXP-006  APPROVED 2026-10-01
+                            ENC-005  NONE DRAFTED
+IMPLEMENTATION              EXP-006  AUTHORIZED per-slice; Slices A-D ACCEPTED;
+                                     independent final review #1 FAIL, 14 findings
+                                     remediated 2026-10-03, review #2 PENDING
+                            CLUSTER-004 AS A WHOLE   NOT AUTHORIZED
 ALTERNATE-SOURCE RESEARCH   NONE PERFORMED; one candidate question flagged (§8)
-SIMULATOR RULINGS           NONE PROPOSED
+SIMULATOR RULINGS           SR-11 PROPOSED AND APPROVED 2026-10-01  (§10)
 ```
+
+> **Status block corrected 2026-10-03** under independent-review finding `MED-3`. It previously
+> read `HUMAN EVIDENCE REVIEW: NOT GIVEN` / `STAGE B: NOT STARTED` / `RULE CARDS: NONE DRAFTED` /
+> `IMPLEMENTATION: NOT AUTHORIZED` / `SIMULATOR RULINGS: NONE PROPOSED`, every one of which had
+> been overtaken by events this same record documents in §10. **No review verdict, date or
+> evidence artifact above is altered** — the five Stage-A reviews and the two superseded first-pass
+> packets stand exactly as recorded.
 
 ---
 
@@ -372,7 +386,14 @@ neither reopened nor extended by this cluster.
 
 ## 13. Next step
 
+> **Superseded 2026-10-03** (`MED-3`). This section asked for the human evidence review that was
+> subsequently **given** on 2026-09-29, and anticipated a cluster split that the human owner then
+> **chose**. Its prediction held: `ENC-005` was blocked by §6 Q1/Q2 and `EXP-006` was not. The
+> original text is preserved below for provenance; the live next step follows it.
+
 ```text
+SUPERSEDED -- recorded as written on 2026-09-29:
+
 HUMAN EVIDENCE REVIEW -- a hard gate under DEC-0009 §6.
 
 Stage B may not begin without explicit human authorization, and §6 Q1 and Q2
@@ -383,4 +404,19 @@ unresearched counterparties in a later encounter cluster.
 EXP-006 carries no such blocker. Its open questions are genuine RC silences and
 one ownership question (rations), none of which prevents Stage B from beginning
 on that card alone if the human owner prefers to split the cluster.
+```
+
+**Live next step, as of 2026-10-03:**
+
+```text
+EXP-006   A SECOND INDEPENDENT FINAL IMPLEMENTATION REVIEW.
+          Review #1 returned FAIL and is preserved unaltered at
+          docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW.md.
+          The implementer may not certify its own remediation.
+
+ENC-005   STAGE B REMAINS DEFERRED. §6 Q1 and Q2 are still unsettled and are
+          still the deciding questions. Not authorized.
+
+CLUSTER-004 CROSS-CARD INTEGRATION AND CLUSTER COMPLETION: NOT AUTHORIZED,
+          and not reachable while ENC-005 has no card.
 ```
