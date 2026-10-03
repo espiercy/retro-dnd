@@ -77,7 +77,7 @@ PHASE_TOKEN_RECORDS = (
     "docs/completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md",
 )
 
-CURRENT_PHASE = "EXP-006-PHASE: REVIEW-4-REMEDIATED"
+CURRENT_PHASE = "EXP-006-PHASE: REVIEW-5-REMEDIATED"
 
 # Historical artifacts. NEVER scanned by this test; listed so that the
 # never-scanned property is itself asserted rather than merely intended.
@@ -117,6 +117,61 @@ STALE_CURRENT_CLAIMS = (
 
 def _read(rel: str) -> str:
     return (REPO_ROOT / rel).read_text(encoding="utf-8")
+
+
+# --- The two production predicates. Neither takes an exemption. -----------
+#
+# These exist as named functions so that the regression tests exercise THE
+# SAME code path the live-record checks use. Review #5 `NB-3` found the
+# earlier regressions re-implemented the match inline and were tautological.
+
+
+def _stale_claims_in(text: str) -> list[str]:
+    """Configured stale claims present in `text`, checked line by line.
+
+    **No exemption mechanism.** A line is not excused by containing a
+    historical-sounding word. A current record that needs to discuss an
+    obsolete claim must word it so that it does not reproduce the stale
+    assertion verbatim.
+    """
+    found: list[str] = []
+    for line in text.splitlines():
+        for claim in STALE_CURRENT_CLAIMS:
+            if claim in line and claim not in found:
+                found.append(claim)
+    return found
+
+
+def _split_transcriptions_in(text: str) -> list[str]:
+    """Lines that transcribe a claim-kind count — the `B-1` defect shape.
+
+    A line offends when it names a claim kind **and** carries a bolded
+    one-or-two-digit count. The split is derived from `CASE_DISCHARGE`; a
+    normative record must not restate it.
+
+    **The marker bypass is DELETED** (2026-10-03, human direction, review-#5
+    `BLOCKING-1`). This predicate's predecessor excused any line containing
+    ``"withdrawn"``, ``"superseded"``, ``"previously"``, ``"B-1"`` or
+    ``"B-2"`` — three of them verbatim members of the very skip list the
+    review-#4 remediation claimed to have removed entirely, and the last two
+    simply the finding IDs that remediation prose in these documents
+    naturally cites. Review #5 re-transcribed the exact withdrawn
+    ``23/5/23/1/1`` split into the approved plan on a line citing ``B-1`` and
+    the whole suite stayed green.
+
+    Deleting the bypass was proven safe before it was done: the real
+    documents stay green without it, and the injection is caught. **A live
+    record does not become exempt from truthfulness because its line
+    contains a historical-sounding word.**
+    """
+    kinds = ("behavior", "invariant", "surface", "reviewed", "routed")
+    offences: list[str] = []
+    for lineno, line in enumerate(text.splitlines(), 1):
+        if not any(k in line.lower() for k in kinds):
+            continue
+        if re.search(r"\*\*\d{1,2}\*\*", line):
+            offences.append(f"{lineno}: {line.strip()[:90]}")
+    return offences
 
 
 def _approved_case_total() -> int:
@@ -166,21 +221,28 @@ def test_the_configuration_is_non_empty_and_every_named_record_exists() -> None:
     )
 
 
-def test_no_stale_claim_can_be_silently_excluded() -> None:
-    """`B-6` — the exact defect that made four of six checks unreachable.
+def test_the_configuration_cannot_disarm_a_claim() -> None:
+    """`B-6` — the configuration must not neutralise its own checks.
 
-    The previous design held `"review #2"` in both the forbidden-claim list
-    and a historical-skip list, so four claims could never be evaluated. There
-    is now **no skip list at all**; this test asserts that, and asserts the
-    two configuration lists cannot overlap in a way that disarms a claim.
+    The original design held `"review #2"` in both the forbidden-claim list
+    and a historical-skip list, so four of six claims could never be
+    evaluated. **There is no skip or exemption mechanism in this module at
+    all** — not a global one and not a function-local one. That is now a
+    structural property of the code rather than something a test asserts:
+    `_stale_claims_in` and `_split_transcriptions_in` are the only
+    predicates, and neither takes an exemption.
+
+    The previous version of this test asserted the absence of a skip list by
+    checking three *global* names against ``globals()``. Review #5 showed
+    that assertion was worthless: a **function-local** marker tuple had been
+    added to `_split_transcriptions_in`'s predecessor, the `globals()` check
+    structurally could not see it, and the exact defect it was meant to
+    forbid passed. Per the human direction of 2026-10-03, the remedy is
+    structural simplification — remove the skip mechanism — not a cleverer
+    reflection check to police it. The indirect assertion is therefore
+    **deleted**, and what remains below are properties about the
+    configuration that can actually be checked.
     """
-    # There is no skip/exemption list in this module. If one is ever
-    # reintroduced, this assertion is the tripwire.
-    assert not any(
-        name in globals()
-        for name in ("HISTORICAL_MARKERS", "SKIP_MARKERS", "EXEMPT_MARKERS")
-    ), "a skip list was reintroduced; B-6 is the reason there must not be one"
-
     # No stale claim may be a substring of another, which would make the
     # shorter one's failure message ambiguous about which condition fired.
     for claim in STALE_CURRENT_CLAIMS:
@@ -194,43 +256,41 @@ def test_no_stale_claim_can_be_silently_excluded() -> None:
     )
 
 
-def test_every_stale_claim_is_actually_evaluated(tmp_path: pathlib.Path) -> None:
-    """Each configured claim must be detectable, proved on a fixture.
+def test_every_stale_claim_is_detectable_by_the_production_predicate(
+    tmp_path: pathlib.Path,
+) -> None:
+    """Each configured claim must be detectable — by the real predicate.
 
-    This is the regression `B-6` demanded: injecting a stale claim into a
-    named live record must fail. It runs against a **fixture copy** in
-    ``tmp_path`` — no repository file is altered.
+    Rewritten 2026-10-03 under review-#5 `NB-3`, which found the previous
+    version re-implemented the match inline against a fixture it had just
+    written (``claim in f"…{claim}."``) and was therefore tautological: it
+    would have kept passing even if the production check had been disarmed.
+    It now calls :func:`_stale_claims_in`, the same function
+    `test_no_live_record_asserts_a_stale_claim` uses.
     """
-    detected: list[str] = []
     for claim in STALE_CURRENT_CLAIMS:
         fixture = tmp_path / "live_record.md"
-        fixture.write_text(
-            f"# Fixture\n\nEXP-006 status: {claim}.\n", encoding="utf-8"
-        )
-        text = fixture.read_text(encoding="utf-8")
-        found = [c for c in STALE_CURRENT_CLAIMS if c in text]
-        assert claim in found, f"{claim!r} is not detectable by this predicate"
-        detected.append(claim)
-
-    assert len(detected) == len(STALE_CURRENT_CLAIMS)
+        fixture.write_text(f"# Fixture\n\nEXP-006 status: {claim}.\n", encoding="utf-8")
+        found = _stale_claims_in(fixture.read_text(encoding="utf-8"))
+        assert claim in found, f"{claim!r} is not detectable by the production predicate"
 
 
 def test_injecting_review_2_pending_into_a_live_record_is_detected(
     tmp_path: pathlib.Path,
 ) -> None:
-    """`B-6`'s named regression: `"review #2 pending"` must fail.
+    """`B-6`'s named regression: `"review #2 pending"` must be caught.
 
     Review #4 demonstrated that this exact string could be appended to a
     pinned live record with every consistency test still passing. The fixture
-    reproduces that injection and asserts it is now caught.
+    reproduces that injection against the **production predicate** and
+    asserts it is now caught.
     """
     fixture = tmp_path / "ARCHITECTURE.md"
     fixture.write_text(
         _read("ARCHITECTURE.md") + "\n\nEXP-006 status: review #2 pending.\n",
         encoding="utf-8",
     )
-    offences = [c for c in STALE_CURRENT_CLAIMS if c in fixture.read_text("utf-8")]
-    assert "review #2 pending" in offences
+    assert "review #2 pending" in _stale_claims_in(fixture.read_text(encoding="utf-8"))
 
 
 def test_injecting_review_3_pending_into_a_live_record_is_detected(
@@ -264,13 +324,11 @@ def test_live_records_carry_the_current_phase_token() -> None:
 
 
 def test_no_live_record_asserts_a_stale_claim() -> None:
-    """`MED-1`, `B-1`, `B-3`, `B-4`, `B-5` — no exemptions, by design."""
+    """`MED-1`, `B-3`, `B-4`, `B-5` — no exemptions, by design."""
     offences: list[str] = []
     for rel in LIVE_RECORDS:
-        for lineno, line in enumerate(_read(rel).splitlines(), 1):
-            for claim in STALE_CURRENT_CLAIMS:
-                if claim in line:
-                    offences.append(f"{rel}:{lineno}: {claim!r}")
+        for claim in _stale_claims_in(_read(rel)):
+            offences.append(f"{rel}: {claim!r}")
     assert offences == [], f"live records assert stale claims: {offences}"
 
 
@@ -287,31 +345,121 @@ def test_the_case_ledger_total_matches_the_card() -> None:
     assert len(_case_discharge()) == _approved_case_total()
 
 
+SPLIT_OWNING_RECORDS = (
+    "docs/technical/EXP-006_IMPLEMENTATION_PLAN.md",
+    "docs/technical/EXP-006_PRE_CODE_GATE.md",
+)
+
+
 def test_no_live_record_duplicates_the_category_split() -> None:
     """`B-1`/`B-2` — the split is derived, and lives in exactly one place.
 
     The plan and the gate each republished a hand-maintained split; both
     drifted, and the plan asserted a test protection that did not exist. The
-    split is now derived from `CASE_DISCHARGE` and must not be transcribed
-    into a normative record again. A line is an offence only if it states a
-    count **for a claim kind** — the vocabulary may of course be described.
+    split is derived from `CASE_DISCHARGE` and must not be transcribed into a
+    normative record again. A line offends only if it states a count **for a
+    claim kind** — the vocabulary may of course be described.
+
+    See :func:`_split_transcriptions_in` for why there is no longer any
+    marker-based exemption.
     """
-    kinds = ("behavior", "invariant", "surface", "reviewed", "routed")
     offences: list[str] = []
-    for rel in ("docs/technical/EXP-006_IMPLEMENTATION_PLAN.md",
-                "docs/technical/EXP-006_PRE_CODE_GATE.md"):
-        for lineno, line in enumerate(_read(rel).splitlines(), 1):
-            lowered = line.lower()
-            if not any(k in lowered for k in kinds):
-                continue
-            if any(m in line for m in ("withdrawn", "superseded", "previously", "B-1", "B-2")):
-                continue  # an explicitly-marked historical quotation
-            if re.search(r"\*\*\d{1,2}\*\*", line):
-                offences.append(f"{rel}:{lineno}: {line.strip()[:90]}")
+    for rel in SPLIT_OWNING_RECORDS:
+        offences += [f"{rel}:{o}" for o in _split_transcriptions_in(_read(rel))]
     assert offences == [], (
         "a normative record transcribes the claim-kind split again; it is "
         f"derived from CASE_DISCHARGE and must not be duplicated: {offences}"
     )
+
+
+# --- BLOCKING-1 regressions: a stale split is caught regardless of markers -
+
+STALE_SPLIT = (
+    "the split is behavior **23** / invariant **5** / surface **23** / "
+    "reviewed **1** / routed **1**"
+)
+
+
+def test_a_stale_split_is_caught(tmp_path: pathlib.Path) -> None:
+    """§5 A — the withdrawn split, plainly stated, must be caught."""
+    fixture = tmp_path / "plan.md"
+    fixture.write_text(f"# Plan\n\nPer the ledger {STALE_SPLIT}.\n", encoding="utf-8")
+    assert _split_transcriptions_in(fixture.read_text(encoding="utf-8")) != []
+
+
+def test_a_stale_split_containing_withdrawn_is_still_caught(
+    tmp_path: pathlib.Path,
+) -> None:
+    """§5 B — `"withdrawn"` must not excuse it.
+
+    This is one of the three markers review #5 proved were being reused from
+    the skip list the previous remediation claimed to have deleted.
+    """
+    fixture = tmp_path / "plan.md"
+    fixture.write_text(
+        f"# Plan\n\nThe withdrawn table said {STALE_SPLIT}.\n", encoding="utf-8"
+    )
+    assert _split_transcriptions_in(fixture.read_text(encoding="utf-8")) != []
+
+
+def test_a_stale_split_citing_b_1_is_still_caught(tmp_path: pathlib.Path) -> None:
+    """§5 C — citing `B-1` must not excuse it.
+
+    Review #5's `E4d`: the exact withdrawn ``23/5/23/1/1`` split, in the
+    approved plan, on a line citing ``B-1``, with the whole suite green.
+    """
+    fixture = tmp_path / "plan.md"
+    fixture.write_text(
+        f"# Plan\n\nPer `B-1` {STALE_SPLIT}.\n", encoding="utf-8"
+    )
+    assert _split_transcriptions_in(fixture.read_text(encoding="utf-8")) != []
+
+
+def test_the_real_split_owning_records_are_clean() -> None:
+    """§5 D — and the actual current records pass, with no bypass helping."""
+    for rel in SPLIT_OWNING_RECORDS:
+        assert _split_transcriptions_in(_read(rel)) == [], rel
+
+
+def test_every_test_name_cited_in_a_live_record_exists() -> None:
+    """`BLOCKING-3` — a cited guard must actually exist.
+
+    The `CLUSTER-004` live status block cited
+    ``test_live_status_records_agree_on_the_review_phase`` after the
+    review-#4 remediation renamed it: 1 citation, 0 definitions. False
+    traceability in a block that declares itself current status.
+
+    Deliberately narrow, per the human direction of 2026-10-03: this
+    harvests ``test_*`` identifiers from the **named live records only** and
+    resolves them against the test functions actually defined in the two
+    `EXP-006` test modules. It is **not** a generic documentation parser and
+    does not validate any other kind of citation.
+    """
+    test_modules = (
+        "tests/rules/exploration/test_exp_006_record_consistency.py",
+        "tests/rules/exploration/test_light_and_exploration_resources.py",
+    )
+    defined: set[str] = set()
+    for rel in test_modules:
+        defined |= set(re.findall(r"^def (test_\w+)", _read(rel), re.M))
+    assert len(defined) > 100, f"anchor failed: only {len(defined)} tests discovered"
+
+    # Records legitimately name test *files* as well as test functions. Those
+    # are the only exclusion, and it is a closed set of known stems -- not a
+    # marker-keyed line skip. A correction note that needs to discuss a
+    # since-renamed test describes it instead of reproducing the dead
+    # identifier, exactly as a note discussing a stale claim must not
+    # reproduce the stale claim.
+    module_stems = {pathlib.Path(rel).stem for rel in test_modules} | {"test_light_guards"}
+
+    dangling: list[str] = []
+    for rel in LIVE_RECORDS:
+        for lineno, line in enumerate(_read(rel).splitlines(), 1):
+            for cited in set(re.findall(r"\btest_[a-z0-9_]{8,}", line)):
+                if cited in module_stems or cited in defined:
+                    continue
+                dangling.append(f"{rel}:{lineno}: {cited}")
+    assert dangling == [], f"live records cite tests that do not exist: {dangling}"
 
 
 def test_the_review_artifact_set_is_internally_consistent() -> None:

@@ -50,7 +50,7 @@ SLICE C   ACCEPTED   2026-10-01   -- ignition branch/outcome model, carrying SR-
 SLICE D   ACCEPTED   2026-10-03   -- CHAR-004 identity binding + final guards
 
 IMPLEMENTATION  CODE COMPLETE; NOT FINALLY ACCEPTED.
-EXP-006-PHASE: REVIEW-4-REMEDIATED
+EXP-006-PHASE: REVIEW-5-REMEDIATED
 
                 Every independent final review returned FAIL and is
                 preserved unaltered.  NONE found a rules-conformance
@@ -727,7 +727,7 @@ EXP-006 Rule Card              APPROVED        2026-10-01
 EXP-006 PRE-CODE GATE          PASS            2026-10-01
 EXP-006 IMPLEMENTATION PLAN    APPROVED       2026-10-01
 EXP-006 IMPLEMENTATION         CODE COMPLETE; NOT FINALLY ACCEPTED
-EXP-006-PHASE: REVIEW-4-REMEDIATED
+EXP-006-PHASE: REVIEW-5-REMEDIATED
 EXP-006 LOW-3 / LOW-8          RESOLVED  (applied at a150837)
 CLUSTER-004 IMPLEMENTATION     NOT AUTHORIZED  (ARCHITECTURE.md §15.2 step 4)
 CLUSTER-004                    NOT AUTHORIZED

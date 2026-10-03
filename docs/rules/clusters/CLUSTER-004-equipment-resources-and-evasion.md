@@ -58,7 +58,7 @@ STAGE B (SYNTHESIS)         EXP-006  COMPLETE   (card APPROVED 2026-10-01)
 RULE CARDS                  EXP-006  APPROVED 2026-10-01
                             ENC-005  NONE DRAFTED
 IMPLEMENTATION              EXP-006  AUTHORIZED per-slice; Slices A-D ACCEPTED.
-                                     EXP-006-PHASE: REVIEW-4-REMEDIATED
+                                     EXP-006-PHASE: REVIEW-5-REMEDIATED
                             CLUSTER-004 AS A WHOLE   NOT AUTHORIZED
 ALTERNATE-SOURCE RESEARCH   NONE PERFORMED; one candidate question flagged (§8)
 SIMULATOR RULINGS           SR-11 PROPOSED AND APPROVED 2026-10-01  (§10)
@@ -423,11 +423,15 @@ on that card alone if the human owner prefers to split the cluster.
 ```
 
 **Live next step.** This block is **status**, not history, and the review phase it carries is
-pinned by `test_live_status_records_agree_on_the_review_phase` so it cannot silently go stale
-again — which it did, twice, and which review #3 recorded as `MED-1`.
+pinned by `test_live_records_carry_the_current_phase_token` so it cannot silently go stale
+again — which it did, twice, and which review #3 recorded as `MED-1`. *(Citation corrected
+2026-10-03 under review-#5 `BLOCKING-3`. It previously named a test that the review-#4 remediation
+had renamed, so the citation resolved to nothing — one citation, zero definitions. The superseded
+identifier is deliberately not reproduced here. The protection itself was never absent, and a
+guard now fails if any live record cites a test that does not exist.)*
 
 ```text
-EXP-006-PHASE: REVIEW-4-REMEDIATED
+EXP-006-PHASE: REVIEW-5-REMEDIATED
 
 EXP-006   EVERY independent final implementation review performed so far
           RETURNED FAIL, and every artifact is preserved unaltered.  The

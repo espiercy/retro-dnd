@@ -2,7 +2,7 @@
 
 ```text
 STATUS:  NOT COMPLETE
-EXP-006-PHASE: REVIEW-4-REMEDIATED
+EXP-006-PHASE: REVIEW-5-REMEDIATED
 
          Implementation is code complete and all canonical gates pass, but
          DEVELOPMENT_WORKFLOW.md §5.1 forbids representing an issue as
@@ -28,7 +28,15 @@ BRANCH:  cluster-004-exp-006-stage-b   (unmerged, unpushed)
 > record contradicted itself. The review history is now established by **the artifact set that
 > exists on disk** (enumerated in §3 and listed in the chronology below), and
 > `test_the_review_artifact_set_is_internally_consistent` checks that every review artifact has a
-> paired remediation ledger and that no live record asserts a contradicting prose count.
+> paired remediation ledger and that each appears in §3.
+>
+> *Unsupported conjunct dropped 2026-10-03 under review-#5 `BLOCKING-2`.* This sentence also claimed
+> the test checks *"that no live record asserts a contradicting prose count"*. **It does not** — it
+> globs the review and ledger files, compares their counts, and checks each filename appears in this
+> record; it reads no other live record, and no mechanism anywhere checks prose counts. Review #5
+> demonstrated the gap against a contradicting count then live in `ARCHITECTURE.md`, with the suite
+> green. Per the standing project rule the **claim is narrowed to the mechanism**, rather than the
+> mechanism broadened to preserve the claim.
 
 > **This record is the single authoritative statement of current `EXP-006` status.** Other records
 > carry the `EXP-006-PHASE` token and point here; a test
@@ -127,10 +135,13 @@ is paired, and a test checks the pairing (`B-4`):
 - `docs/technical/EXP-006_REVIEW_3_REMEDIATION_LEDGER.md` — remediation of review #3
 - `docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_4.md` — independent review #4, `FAIL`
 - `docs/technical/EXP-006_REVIEW_4_REMEDIATION_LEDGER.md` — remediation of review #4
+- `docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW_5.md` — independent review #5, `FAIL`
+- `docs/technical/EXP-006_REVIEW_5_REMEDIATION_LEDGER.md` — remediation of review #5
 - `docs/completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md` — this record
 
 *Reviews #3 and #4 and their ledgers were missing from this list until 2026-10-03 (`B-4`), which is
-why `DEVELOPMENT_WORKFLOW.md` §5 item 3 was not satisfied.*
+why `DEVELOPMENT_WORKFLOW.md` §5 item 3 was not satisfied. `test_the_review_artifact_set_is_internally_consistent`
+now fails if a review artifact exists without a paired ledger, or if either is absent from this list.*
 
 **Deleted:** none.
 
@@ -444,7 +455,9 @@ are untouched.
 | 2026-10-03 | Bounded remediation of review #3; guard claims **narrowed**, not widened | ledger #3 |
 | 2026-10-03 | Human adjudication of `LOW-3` / `LOW-8` — protected-card historical clarifications | applied at `a150837` |
 | 2026-10-03 | **Independent final implementation review #4** | **`FAIL`** — 6 blocking, 7 non-blocking |
-| 2026-10-03 | Bounded remediation of review #4 — this pass | ledger #4 |
+| 2026-10-03 | Bounded remediation of review #4 | ledger #4 |
+| 2026-10-03 | **Independent final review #5** | **`FAIL`** — 3 blocking, 6 non-blocking |
+| 2026-10-03 | Bounded remediation of review #5 — this pass | ledger #5 |
 | — | Further independent review | not yet authorized |
 | — | Human acceptance and merge | **pending** |
 
