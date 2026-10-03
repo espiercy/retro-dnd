@@ -3,8 +3,7 @@
 See docs/rules/exploration/light_and_exploration_resources.md (Status:
 APPROVED, 2026-10-01) for the governing Rule Card, and
 docs/technical/EXP-006_IMPLEMENTATION_PLAN.md (APPROVED, 2026-10-01) for
-the implementation contract this module implements. This file currently
-contains **Slice A only** — the light-source value/state model.
+the implementation contract this module implements.
 
 This module owns the *mundane* light-resource state this project's own
 sources contribute: whether a source it owns is lit, that source's
@@ -30,7 +29,12 @@ It does not, and must not:
 The card's responsibilities are implemented in full: the light-source
 value model, depletion against authoritative elapsed turns, the mundane
 light contribution, the ignition branch selector (carrying ``SR-11``),
-and CHAR-004 identity binding.
+and the CHAR-004 identity binding (private — see ``__all__``).
+
+Public surface: four constants, five types and four functions, all listed
+in ``__all__``. That list is the contract; guards in the test module pin
+the module namespace, the effective class surfaces and every public
+signature against it.
 """
 
 from __future__ import annotations
@@ -59,14 +63,21 @@ __all__ = [
     "LightSource",
     "LightSourceKind",
     "MundaneLightContribution",
-    "catalog_identity",
     "deplete",
     "ignition_outcome",
     "mundane_light_contribution",
-    "oil_flask_identity",
     "refuel_lantern",
-    "tinderbox_identity",
 ]
+# The three `CHAR-004` identity accessors are deliberately NOT exported.
+# Human adjudication 2026-10-03, on review-#2 finding `MED-2`: no approved
+# mechanic consumes them, and the implementation plan §9 requires only that
+# the binding exist and restate nothing — it never requires a public
+# accessor. Exporting them put `Item`-returning functions, and therefore
+# `.price` and `.encumbrance_cn` by reference, in `EXP-006`'s public API,
+# which is what made approved case `L42` ("any price, `Coin` or encumbrance
+# value **emitted**") unprovable. Private, the binding still demonstrably
+# restates no catalog data, and no public callable of this card returns a
+# catalog row at all.
 
 
 class LightSourceKind(Enum):
@@ -144,12 +155,13 @@ class LightSource:
     this, which is why a "a source is always lit" model was rejected
     (implementation plan §6.1).
 
-    Structural violations raise the plain ``ValueError`` that value
-    objects in this package raise — the convention
+    Constructing a source is a **structural** operation, so every
+    violation here raises the plain ``ValueError`` that value objects in
+    this package raise — the convention
     src/rules/exploration/turn_credit.py and dungeon_movement.py
-    establish. Slice A has no *domain* rejection and therefore
-    introduces no exception type of its own (implementation plan §14,
-    Slice A; human adjudication 2026-10-01).
+    establish. The card defines no procedure this constructor could be
+    asked for and fail to supply, so none of this module's three domain
+    rejections (rules.exploration.errors) arises from it.
     """
 
     kind: LightSourceKind
@@ -270,14 +282,14 @@ def deplete(sources: Iterable[LightSource], elapsed_turns: int) -> tuple[LightSo
 def refuel_lantern(source: LightSource) -> LightSource:
     """Supply a fresh flask of oil to an **expended** lantern.
 
-    Rule Card §4: *"A lantern reaching zero consumes its flask; a further
-    flask may be supplied, which resets ``remaining_turns`` to 24."*
+    Rule Card §4: *"A lantern reaching zero consumes its flask, and a
+    further flask may be supplied, which restores ``remaining_turns`` to
+    ``24`` and leaves the lantern unlit."*
 
-    **Refuelling restores fuel. It does not ignite** (human adjudication
-    2026-10-01). The approved card establishes that a further flask
-    restores the lantern's fuel duration; it establishes **no** automatic
-    ignition or relighting. Fuel availability and ignition state are
-    independent, and ignition belongs to the later ignition slice::
+    **Refuelling restores fuel. It does not ignite.** That is the card's
+    own words, not a reading of them: §4 states the unlit outcome
+    literally, and case `L12` states it again. Fuel availability and
+    ignition state are independent, and ignition is §5's::
 
         expended lantern + new flask  ->  remaining_turns = 24
                                       ->  lit = False
@@ -287,11 +299,11 @@ def refuel_lantern(source: LightSource) -> LightSource:
     state. No tinderbox or ``Fire-Building`` behaviour is invoked or
     implemented here.
 
-    On approved case **L12**: the card's own wording for that case reads
-    *"contributes illumination again"*, and that wording is **not
-    rewritten here**. It is read, under the approved separation above, as
-    *able* to contribute again once lit — the lantern has fuel once more,
-    which is the condition the card's §4 sentence actually establishes.
+    Approved case **L12** specifies the same outcome directly: ``24``
+    remaining, ``lit = False``, no illumination contribution until
+    separately ignited. An earlier draft of that case said a refuelled
+    lantern *contributes illumination again*; the card **withdrew** that
+    wording on 2026-10-01 as asserting an ignition it never establishes.
     Nothing in the card states that supplying a flask lights it.
 
     The card states this operation for a lantern that has **reached
@@ -424,15 +436,15 @@ _LIGHT_SOURCE_IDENTITIES: Final = MappingProxyType(
 )
 
 
-def catalog_identity(kind: LightSourceKind) -> Item:
+def _catalog_identity(kind: LightSourceKind) -> Item:
     """The `CHAR-004` catalog row this light source **is**.
 
-    **Identity consumption only.** This card reads an item's identity so a
-    caller can reconcile a light source against inventory; it reads no
-    economic field and derives nothing from one. Price, encumbrance, price
-    form, capacity, size, traits, material and legality are all `CHAR-004`'s
-    and are never consulted here (Rule Card §C; guard `L42`, which asserts
-    this structurally over the parsed module rather than by text search).
+    **Identity consumption only, and deliberately not public.** This card
+    binds a light-source kind to `CHAR-004`'s row so that it demonstrably
+    restates no catalog data of its own. It reads no economic field and
+    derives nothing from one: price, encumbrance, price form, capacity,
+    size, traits, material and legality are all `CHAR-004`'s (Rule Card
+    §C).
 
     This card is **not** a second equipment catalog: it holds no row, no
     name beyond :data:`_CATALOG_NAMES`, and no value copied from one.
@@ -442,7 +454,7 @@ def catalog_identity(kind: LightSourceKind) -> Item:
     return _LIGHT_SOURCE_IDENTITIES[kind]
 
 
-def oil_flask_identity() -> Item:
+def _oil_flask_identity() -> Item:
     """The `CHAR-004` row for a flask of lamp oil — the lantern's fuel.
 
     The Adventuring-Gear ``"Oil"`` row. **Not** ``"Oil, Burning"``: that is
@@ -452,7 +464,7 @@ def oil_flask_identity() -> Item:
     return catalog_item(_CATALOG_NAMES["OIL_FLASK"])
 
 
-def tinderbox_identity() -> Item:
+def _tinderbox_identity() -> Item:
     """The `CHAR-004` row for a tinderbox — the ignition implement of §5."""
     return catalog_item(_CATALOG_NAMES["TINDERBOX"])
 

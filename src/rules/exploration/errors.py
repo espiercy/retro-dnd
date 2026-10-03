@@ -21,10 +21,19 @@ departure from the plan sketch.
 by name to character creation, and its own docstring draws that domain
 boundary.
 
-**The two types are not interchangeable**, and the distinction is the
-point: one says *RC supplies no procedure*, the other says *RC supplies
-a procedure and forbids using it twice*. A same-round violation must
-never claim the rule is undefined.
+**The three types are not interchangeable**, and the distinctions are the
+point:
+
+- :class:`IgnitionNotDefinedError` — RC supplies **no** ignition
+  procedure for what was asked;
+- :class:`IgnitionAttemptLimitError` — RC supplies the procedure and
+  **forbids using it twice** in one round;
+- :class:`LanternRefuelNotDefinedError` — RC supplies **no**
+  partial-refill procedure.
+
+A same-round violation must never claim the rule is undefined, and a
+refusal for want of a stated procedure must never be reported as a
+structural ``ValueError``.
 """
 
 from __future__ import annotations

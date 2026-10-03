@@ -306,17 +306,30 @@ is read and discarded.
 **`EXP-006` is the first exploration card with genuine *rules* refusals.** `L23` and `L24` reject
 because **RC defines no procedure**, which is a domain rejection, not a malformed input.
 
-**Recommendation: add `src/rules/exploration/errors.py` with**
+**Add `src/rules/exploration/errors.py`.** It **instantiates the established pattern at the
+correct scope**, and is explicitly **not** a new global error framework: `CharacterCreationError`
+is scoped by name to character creation, and reusing it from an exploration module would cross a
+domain boundary the existing docstring draws.
 
-```python
-class ExplorationError(Exception):           # domain base, mirrors CharacterCreationError
-class IgnitionNotDefinedError(ExplorationError):
+> **This recommendation is superseded; the shipped taxonomy is below.** Corrected 2026-10-03 under
+> review-#2 finding `MED-3`. This subsection previously recommended a domain base
+> `ExplorationError` plus one subclass and asserted *"One base plus one subclass — no hierarchy is
+> built ahead of need."* The human adjudication of 2026-10-01 dropped the base, and two further
+> concrete types were later adjudicated, so the recommendation disagreed with both §11 and the
+> code. The superseded sketch is not restored.
+
+**The shipped error taxonomy — authoritative, and the only version in force:**
+
+```text
+IgnitionNotDefinedError        RC supplies no ignition procedure
+LanternRefuelNotDefinedError   RC supplies no partial-refill procedure
+IgnitionAttemptLimitError      RC explicitly prohibits another attempt this round
+ValueError                     malformed structural input
+
+No base class. Exploration has three domain rejections, which does not
+require a hierarchy; a base would be the speculative framework the
+2026-10-01 adjudication forbade.
 ```
-
-This **instantiates the established pattern at the correct scope**. It is explicitly **not** a new
-global error framework: `CharacterCreationError` is scoped by name to character creation, and
-reusing it from an exploration module would cross a domain boundary the existing docstring draws.
-One base plus one subclass — no hierarchy is built ahead of need.
 
 ### 10.2 Mapping
 
@@ -326,9 +339,10 @@ One base plus one subclass — no hierarchy is built ahead of need.
 | **`L24`** | no skill + no tinderbox | `IgnitionNotDefinedError`, message naming *"no procedure stated"* |
 | **`L45`** | torch resolved as a weapon | **No API exists to call.** `EXP-006` exposes no weapon operation; `COMBAT-*`/`CHAR-004` own it. Proven by API shape + guard G-5, not by an exception |
 | **`L46`** | oil as missile / pursuit delay | **No API exists to call.** Same mechanism |
-| `L19` | second ignition attempt in one round | `ValueError` — a caller-protocol violation, not a rules gap |
+| **`L19`** | second ignition attempt in one round | **`IgnitionAttemptLimitError`.** *Corrected 2026-10-03 (`MED-3`); this row read `ValueError` — "a caller-protocol violation, not a rules gap" — which was wrong and disagreed with the shipped code. RC's once-per-round rule is exactly what rejects it, so the rejection is a rules rejection* |
+| **`L12a`** | refuel requested for a partly-full lantern, or for a torch | **`LanternRefuelNotDefinedError`.** *Row added 2026-10-03 (`MED-3`); the human adjudication of 2026-10-03 established that "the card states no arithmetic for a partial refill" is a card silence, not a structural violation* |
 | `L34` | light state queried with no surprise state | **Not an error — succeeds.** There is no surprise parameter to omit |
-| Structural | non-`int`, `bool`, negative `remaining_turns`/`elapsed_turns` | plain `ValueError` |
+| Structural | non-`int`, `bool`, negative `remaining_turns`/`elapsed_turns`; a non-`LightSource` member; a non-enum `kind`/`conditions`; a non-`bool` flag | plain `ValueError` |
 
 **`L45` and `L46` are deliberately *not* exceptions.** An exception would require an entry point
 that accepts the request, and the approved card's position is that no such entry point exists.
@@ -429,21 +443,42 @@ component supplies the truthful value is a frontier concern, deliberately unansw
 > - **`L19b`** — this card tracking rounds or mutating the attempt flag **MUST NOT OCCUR**.
 >   Classified **ownership/boundary guard**.
 >
-> Running totals: unit behavior **19**, ownership guard **19**, internal invariant guard **12**,
-> routed dependency **3**. Future slice accounting must use **53**. `L19` itself is restated, not
-> added. No other case mapping is changed.
+> `L19` itself is restated, not added. No other case mapping is changed.
+>
+> **HISTORICAL — the split figures that accompanied this note are superseded.** The note
+> originally continued *"Running totals: unit behavior 19, ownership guard 19, internal invariant
+> guard 12, routed dependency 3"*, and the paragraph beneath it asserted *"Counts re-derived from
+> the approved card for this plan, not assumed from the gate; they match: 18 / 18 / 11 / 3"*.
+> Review #2 (`MED-4`) found that **three mutually inconsistent totals** stood in this one section
+> — 53 in the heading, 53 in the blockquote, 50 in the "re-derived … they match" line, and 51 in
+> the table, whose rows also **omitted `L19a` and `L19b` entirely**, the two cases the blockquote
+> says were added. A "re-derived and they match" assertion that matched nothing was the defect,
+> not the arithmetic. All of those figures are withdrawn; none is preserved for continuity.
 
-Counts re-derived from the approved card for this plan, **not assumed from the gate**; they
-match: **18 / 18 / 11 / 3**.
+**The authoritative split, recomputed 2026-10-03 from the current 53 cases.**
 
-| Classification | Count | Cases |
-|---|---|---|
-| **Unit behavior** | **18** | `L1`, `L2`, `L3`, `L6`, `L7`, `L8`, `L9`, `L10`, `L11`, `L12`, `L15a`, `L17`, `L18`, `L20`, `L21`, `L27`, `L28`, `L34` |
-| **Ownership/boundary guard** | **18** | `L29`, `L30`, `L31`, `L32`, `L33`, `L37a`, `L38`, `L39`, `L40`, `L41`, `L42`, `L43`, `L44`, `L45`, `L46`, plus `L13`, `L14`, `L36` |
-| **Internal invariant guard** | **12** | `L4`, `L5`, `L12a`, `L15`, `L15b`, `L16`, `L19`, `L23`, `L24`, `L25`, `L26`, `L35` |
-| **Routed dependency behavior** | **3** | `L22`, `L37`, `L47` |
+It is **computed, not transcribed.** The single source is `CASE_DISCHARGE` in
+`tests/rules/exploration/test_light_and_exploration_resources.py`, and
+`test_the_case_category_counts_are_recomputed_not_carried_over` asserts these exact numbers, so
+this table cannot drift from the code without a red test. The classification vocabulary is the
+claim-kind vocabulary that replaced the old one, because the old labels did not distinguish a
+machine-proved property from a reviewed boundary:
 
-**Documentation-only assertions: none.** Every case becomes an executable obligation.
+| Claim kind | What discharges the case | Count | Cases |
+|---|---|---|---|
+| **`behavior`** | machine-proved behavior (claim B) | **23** | `L1`, `L2`, `L3`, `L4`, `L5`, `L6`, `L7`, `L8`, `L9`, `L10`, `L11`, `L12`, `L15a`, `L17`, `L18`, `L19a`, `L20`, `L21`, `L22`, `L27`, `L28`, `L34`, `L46` |
+| **`invariant`** | machine-proved refusal (claim B) | **5** | `L12a`, `L19`, `L23`, `L24`, `L26` |
+| **`surface`** | machine-proved surface (claim A) | **23** | `L13`, `L14`, `L15`, `L15b`, `L16`, `L19b`, `L25`, `L29`, `L30`, `L31`, `L32`, `L33`, `L35`, `L36`, `L37a`, `L38`, `L39`, `L40`, `L41`, `L42`, `L43`, `L44`, `L45` |
+| **`reviewed`** | a reviewed ownership boundary, **not** machine proof (claim C) | **1** | `L37` |
+| **`routed`** | not owned by this card at all | **1** | `L47` |
+| | **total** | **53** | |
+
+**Documentation-only assertions: none.** Every case is accounted for by a named mechanism.
+
+**`L37` is the one case deliberately labelled claim C.** That nothing asserts blindness is
+machine-checkable; that this constitutes *complete* discharge of "this card does not establish
+blindness" is a human reading of the ownership boundary. Calling it claim A would be the
+overclaim review #2 found elsewhere.
 
 ### 12.1 Provable by API shape rather than by test
 

@@ -339,8 +339,16 @@ was consulted).
 was inspected rather than assumed: the only prior textual occurrences of `SR-11` were
 `CHAR-005`'s two explicit statements that **no `SR-11` exists** — denials, not allocations.
 
-**Recorded on:** this cluster record; the `EXP-006` Rule Card §Simulator Ruling; `INVENTORY.md`'s
-`EXP-006` row; `docs/technical/EXP-006_IMPLEMENTATION_PLAN.md` §11.
+**Recorded on — five locations:** this cluster record; the `EXP-006` Rule Card §Simulator Ruling;
+`INVENTORY.md`'s `EXP-006` row; `docs/technical/EXP-006_IMPLEMENTATION_PLAN.md` §11; and
+`ARCHITECTURE.md` §15.2.
+
+> **Fifth location added 2026-10-03** under review-#2 finding `LOW-10`. `ARCHITECTURE.md` §15.2
+> previously **denied** that `SR-11` existed; that was corrected on 2026-10-03 under review-#1
+> finding `HIGH-1`, but this registry — the place a later agent would check — was not updated to
+> record the new location. A ruling's registry is only useful if it is complete, and the
+> consequence is concrete: the ID-allocation procedure treats a prior textual denial as evidence
+> that a number is free, which is exactly how `SR-11` was selected.
 
 ---
 

@@ -217,30 +217,39 @@ it is.
 
 ## 6. Deterministic-case readiness — all 53 translate
 
-> **Count and classification corrected 2026-10-03 (`LOW-12`).** This section tabulated
-> **50** cases and classed `L22` as *Routed dependency*. The ledger reached **53** by two
-> later human adjudications (`L12a`; `L19a`/`L19b`), and the shipped implementation classes
-> `L22` as **behavior** — it is an asserted outcome of the matrix, not a routed call. The
-> authoritative split is in the implementation plan §12 and the test ledger.
+> **Count and classification corrected 2026-10-03, twice.** This section first tabulated **50**
+> cases and classed `L22` as *Routed dependency*. A first correction (review-#1 `LOW-12`) fixed the
+> heading and one profile figure but **left this section's own table at 50 and `L22` still routed**
+> — the two things it claimed to have fixed — and pointed at implementation plan §12, which review
+> #2 then found to be internally inconsistent as well (`MED-4`). Both are now corrected.
+>
+> **This section no longer publishes a split.** A gate record written before implementation is the
+> wrong place for a figure that later changed four times. The authoritative split is **computed**
+> from `CASE_DISCHARGE` and asserted by
+> `test_the_case_category_counts_are_recomputed_not_carried_over`; implementation plan §12
+> reproduces it under that assertion's protection. The superseded table — *Implementation test 18 /
+> Boundary-ownership 18 / Boundary-internal 11 / Routed 3*, totalling 50 — is withdrawn, not
+> preserved for continuity.
 
-| Obligation type | Count | Examples |
-|---|---|---|
-| **Implementation test** | 18 | L1, L2, L6–L12, L17, L18, L20, L21, L27, L28, L34 |
-| **Boundary / guard — ownership** | 18 | L29, L31, L33, L37a, L38–L46 |
-| **Boundary / guard — internal** | 11 | L4, L5, L13–L16, L15b, L19, L23–L26, L30, L35, L36 |
-| **Routed dependency** | 3 | L22, L37, L47 |
+**All 53 approved cases translate into executable obligations, and no case requires exceeding
+`EXP-006` ownership to test.** That was this gate's actual finding and it held: the shipped suite
+discharges all 53.
 
-**No case fails to translate, and no case requires exceeding `EXP-006` ownership to test.**
+The profile is **guard-heavy** — 23 of the 53 are discharged by the shape of the public surface
+rather than by an assertion about a value. That is a direct product of the bounded remediation:
+four cases that previously *asserted* behaviour now *forbid* it. `L34` inverted outright — from an
+`ERROR` when a surprise state was missing, to a **success** case, because surprise is no longer an
+input.
 
-The guard-heavy profile (**26 guards of 53**, as finally recomputed) is a direct product of the bounded remediation: four cases
-that previously *asserted* behaviour now *forbid* it. `L34` inverted outright — from an `ERROR`
-when a surprise state was missing, to a **success** case, because surprise is no longer an input.
-
-**Caution 2 (non-blocking)** — the 29 guards are mostly **negative/architectural** assertions
-("this module must not import `ENC-001`", "no price value is emitted"). The `CLUSTER-003`
-precedent is directly relevant: guard tests written as substring checks over source text produced
-false positives, and the project moved to **AST/import-graph assertions**. The implementation plan
-should adopt that technique rather than rediscover it.
+**Caution 2 (non-blocking)** — those surface cases are mostly **negative/architectural**
+assertions ("this module must not import `ENC-001`", "no price value is emitted"). The
+`CLUSTER-003` precedent is directly relevant: guard tests written as substring checks over source
+text produced false positives, and the project moved to **AST/import-graph assertions**. The
+implementation plan should adopt that technique rather than rediscover it.
+>
+> *Borne out, and then some.* Review #1 broke a token denylist; review #2 broke the AST
+> declaration-walk that replaced it, six ways. The shipped guards read the **imported module
+> namespace** and the **effective class surface** instead, and state their claims narrowly.
 
 **Caution 3 (non-blocking)** — `L22` and `L37` assert what the card **does not do** while also
 describing a routed outcome. They are testable as "returns a routed request / returns no

@@ -28,14 +28,18 @@ starvation causation. None of these is this card's responsibility.
 from __future__ import annotations
 
 import ast
+import dataclasses
 import inspect
 import pathlib
 import re
 from enum import Enum
 from itertools import product
+from types import FunctionType, MappingProxyType, ModuleType
 
 import pytest
 
+from rules.character_creation.equipment import Item
+from rules.exploration import errors as exploration_errors
 from rules.exploration import light_and_exploration_resources as light
 from rules.exploration.errors import (
     IgnitionAttemptLimitError,
@@ -52,13 +56,10 @@ from rules.exploration.light_and_exploration_resources import (
     LightSource,
     LightSourceKind,
     MundaneLightContribution,
-    catalog_identity,
     deplete,
     ignition_outcome,
     mundane_light_contribution,
-    oil_flask_identity,
     refuel_lantern,
-    tinderbox_identity,
 )
 
 TORCH = LightSourceKind.TORCH
@@ -151,53 +152,94 @@ def test_this_module_performs_no_hour_to_turn_conversion() -> None:
     #     FROM. This is stronger than enumerating arithmetic spellings.
     hour_names = {
         name
-        for name in _public_top_level_definitions()
+        for name in _module_scope_names(light)
         if "hour" in name.lower() or "minute" in name.lower()
     }
-    for params in APPROVED_PARAMETERS.values():
+    for params in APPROVED_CALLABLES.values():
         hour_names |= {p for p in params if "hour" in p.lower() or "minute" in p.lower()}
     for members in APPROVED_MEMBERS.values():
         hour_names |= {m for m in members if "hour" in m.lower() or "minute" in m.lower()}
     assert hour_names == set(), f"hours/minutes-denominated surface: {hour_names}"
 
-    # (2) And no int multiplication or floor-division survives on EITHER
-    #     operand. The original guard inspected only the right operand, so
-    #     `6 * hours` and `minutes // 10` both passed (LOW-7).
+    # (2) And NO scaling arithmetic survives at all, on either operand.
+    #     History: the first version inspected only the right operand, so
+    #     `6 * hours` and `minutes // 10` passed (review-#1 LOW-7). The
+    #     second required an int *Constant*, so `value * TORCH_TURNS`
+    #     passed (review-#2 LOW-5). Multiplication and division simply have
+    #     no legitimate use in this module — RC states both durations in
+    #     turns and depletion is subtraction — so the honest guard forbids
+    #     the operators outright rather than guessing their spellings.
     arithmetic = [
         ast.dump(node)
         for node in ast.walk(tree)
         if isinstance(node, ast.BinOp)
-        and isinstance(node.op, (ast.Mult, ast.FloorDiv, ast.Div))
-        and any(
-            isinstance(side, ast.Constant) and isinstance(side.value, int)
-            for side in (node.left, node.right)
-        )
+        and isinstance(node.op, (ast.Mult, ast.FloorDiv, ast.Div, ast.Mod, ast.Pow))
     ]
-    assert arithmetic == [], f"unexpected duration arithmetic: {arithmetic}"
+    assert arithmetic == [], f"unexpected scaling arithmetic: {arithmetic}"
+
+    augmented = [
+        ast.dump(node)
+        for node in ast.walk(tree)
+        if isinstance(node, ast.AugAssign)
+        and isinstance(node.op, (ast.Mult, ast.FloorDiv, ast.Div, ast.Mod, ast.Pow))
+    ]
+    assert augmented == [], f"unexpected in-place scaling: {augmented}"
 
 
 def test_this_module_uses_no_reflective_attribute_access() -> None:
-    """LOW-14 — closes the `getattr` escape from the economic-field guard.
+    """EXP-006 contains no approved reflective catalog-access path.
 
-    `test_no_catalog_economic_field_is_ever_accessed` walks `ast.Attribute`
-    nodes, so `getattr(item, "price")` evades it. EXP-006 has no legitimate
-    need for reflective access on a `CHAR-004` row, so the mechanisms are
-    structurally prohibited here rather than the AST walk being extended into
-    a general static analyser.
+    **Claim A, stated narrowly — and deliberately NOT the stronger claim.**
+    This does not establish that economic fields are unreachable by every
+    conceivable reflection mechanism. Review #2 defeated that stronger
+    reading with ``object.__getattribute__(item, "price")``, which is an
+    ``ast.Attribute`` call and so was invisible to an ``ast.Name``-only
+    predicate. The predicate now covers both call *shapes* — a bare name
+    and a dotted attribute — which closes that specific spelling.
+
+    It is still not a static analyzer, and the project does not claim it is
+    one: EXP-006 has no approved need for reflective catalog access, this
+    guard shows the module uses none of the ordinary mechanisms, and the
+    remainder of the boundary is a **reviewed** one (claim C). Building a
+    miniature analyzer here was considered and rejected.
     """
     tree = ast.parse(inspect.getsource(light))
-    reflective = {"getattr", "setattr", "delattr", "vars", "eval", "exec", "__getattribute__"}
-    used = {
-        node.func.id
-        for node in ast.walk(tree)
-        if isinstance(node, ast.Call)
-        and isinstance(node.func, ast.Name)
-        and node.func.id in reflective
+    reflective = {
+        "getattr",
+        "setattr",
+        "delattr",
+        "vars",
+        "globals",
+        "locals",
+        "eval",
+        "exec",
+        "compile",
+        "__getattribute__",
+        "__getattr__",
+        "__dict__",
+        "__class__",
+        "__reduce__",
+        "_asdict",
     }
-    assert used == set(), f"reflective access could evade the field guard: {used}"
-    # Non-vacuity: the walk must actually be seeing calls in this module.
-    calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call)]
+    calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call)]
     assert calls, "guard anchored on zero Call nodes"
+
+    used: set[str] = set()
+    for node in calls:
+        if isinstance(node.func, ast.Name) and node.func.id in reflective:
+            used.add(node.func.id)
+        # object.__getattribute__(x, "price") and x.__getattribute__("price")
+        elif isinstance(node.func, ast.Attribute) and node.func.attr in reflective:
+            used.add(node.func.attr)
+    assert used == set(), f"reflective access could evade the field guard: {used}"
+
+    # Attribute reads of the reflection entry points, not only calls of them.
+    reads = {
+        node.attr
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Attribute) and node.attr in reflective
+    }
+    assert reads == set(), f"reflective entry point referenced: {reads}"
 
 
 # --- Construction invariants (human adjudication 2026-10-01 §7, §8) --------
@@ -338,13 +380,12 @@ def test_depletion_refuses_a_non_light_source() -> None:
 def test_an_expended_lantern_takes_a_fresh_flask() -> None:
     """L12 — 24 remaining, and **unlit**.
 
-    Implementation interpretation, recorded rather than read back into the
-    card: L12's own wording is *"contributes illumination again"*, and that
-    wording is not rewritten. Under the approved separation of fuel state
-    from ignition state (human adjudication 2026-10-01), a further flask
-    restores the lantern's *fuel*; it does not light it. The lantern is
-    *able* to contribute again, once some separately authorized ignition
-    operation changes ``lit``.
+    This is the card's literal specification, not an interpretation of it:
+    §4 and case `L12` both state 24 remaining and ``lit = False``. (The
+    earlier `L12` wording *"contributes illumination again"* was withdrawn
+    by the card on 2026-10-01; quoting it as current was review-#2 finding
+    `HIGH-2` and is corrected here.) A further flask restores the lantern's
+    *fuel*; only a separately authorized ignition operation changes ``lit``.
     """
     expended = LightSource(kind=LANTERN, remaining_turns=0, lit=False)
     refuelled = refuel_lantern(expended)
@@ -481,10 +522,22 @@ def test_an_exhausted_source_can_never_reach_the_aggregate() -> None:
 
 def test_the_derived_figures_cannot_disagree_with_the_sources() -> None:
     """They are computed properties, not stored fields, so there is no
-    state to get out of step."""
-    assert not hasattr(MundaneLightContribution, "__dataclass_fields__") or set(
-        MundaneLightContribution.__dataclass_fields__
-    ) == {"lit_sources"}
+    state to get out of step.
+
+    Corrected 2026-10-03 under review-#2 finding `LOW-4`. This was written
+    as ``assert not hasattr(cls, "__dataclass_fields__") or set(...) ==
+    {...}`` — a disjunction that passes if the structure it inspects
+    disappears, which is a vacuous pass dressed as a check. The dataclass
+    is now asserted to exist first.
+    """
+    assert dataclasses.is_dataclass(MundaneLightContribution)
+    assert set(MundaneLightContribution.__dataclass_fields__) == {"lit_sources"}
+    assert isinstance(
+        inspect.getattr_static(MundaneLightContribution, "any_mundane_source_lit"), property
+    )
+    assert isinstance(
+        inspect.getattr_static(MundaneLightContribution, "max_mundane_radius_feet"), property
+    )
 
 
 def test_the_aggregate_refuses_a_non_tuple_and_non_source() -> None:
@@ -779,19 +832,22 @@ def test_a_first_attempt_evaluates_normally_and_records_nothing() -> None:
 
 
 def test_the_selector_stores_no_round_state() -> None:
-    """L19b — guard. No module-level mutable state, and no attribute on the
-    function, could carry an attempt between calls."""
-    assert not hasattr(ignition_outcome, "__dict__") or not [
-        k for k in vars(ignition_outcome) if not k.startswith("__")
-    ]
-    module_mutables = [
-        name
-        for name, value in vars(light).items()
-        if not name.startswith("__")
-        and isinstance(value, (list, dict, set))
-        and not isinstance(value, type)
-    ]
-    assert module_mutables == [], f"mutable module state could track rounds: {module_mutables}"
+    """L19b — guard. The selector carries nothing between calls.
+
+    **Claim A (surface), narrowly.** This establishes that the function
+    object itself holds no attribute state. The *module*-level half of the
+    claim is established by ``test_the_module_scope_surface_is_exactly_approved``
+    and ``test_no_module_level_mutable_state_exists``, not here.
+
+    Corrected 2026-10-03 under review-#2 finding `MED-1`. This test
+    previously filtered ``vars(light)`` for ``list``/``dict``/``set`` only,
+    and a module-level ``_ROUNDS_SEEN = 0`` incremented inside
+    ``ignition_outcome`` walked straight past it — an ``int`` is none of
+    those three types. Filtering by *value type* was the wrong instrument;
+    the approved **name set** is the right one.
+    """
+    function_state = [k for k in vars(ignition_outcome) if not k.startswith("__")]
+    assert function_state == [], f"attribute state on the selector: {function_state}"
 
 
 @pytest.mark.parametrize(
@@ -853,25 +909,39 @@ def test_the_1d6_branch_is_selected_not_rolled() -> None:
 # Slice D — CHAR-004 identity binding + final architectural guards
 # =========================================================================
 
+CATALOG_IDENTITY_FIELDS = frozenset({"name", "category"})
+
 CATALOG_ECONOMIC_FIELDS = frozenset(
-    {
-        "price",
-        "encumbrance_cn",
-        "capacity_cn",
-        "dimension_feet",
-        "size",
-        "traits",
-        "material",
-        "made_for_race",
-    }
-)
-"""`Item` fields EXP-006 must never consume. `name` and `category` are
-identity; everything else is CHAR-004's economics or combat data."""
+    f.name for f in dataclasses.fields(Item)
+) - CATALOG_IDENTITY_FIELDS
+"""`Item` fields EXP-006 must never read directly.
+
+**Derived from `CHAR-004`'s own dataclass**, not hand-listed — corrected
+2026-10-03 under review-#2 finding `LOW-2`. This was an eight-name literal
+that happened to be complete; a new `Item` field would have become readable
+with the suite green. Deriving it means `CHAR-004` adding a field
+automatically extends the guard, which is the rank-1 shape mechanism the
+project's guard-design order prescribes over a maintained denylist.
+"""
+
+
+def test_the_economic_field_set_is_derived_and_non_trivial() -> None:
+    """Non-vacuity anchor for the guard set itself.
+
+    **Claim A.** If `Item` were ever restructured so that `fields()` returned
+    nothing, `CATALOG_ECONOMIC_FIELDS` would silently become empty and the
+    read-guard below would pass on an empty forbidden set.
+    """
+    assert {f.name for f in dataclasses.fields(Item)} >= CATALOG_IDENTITY_FIELDS
+    assert "price" in CATALOG_ECONOMIC_FIELDS
+    assert "encumbrance_cn" in CATALOG_ECONOMIC_FIELDS
+    assert CATALOG_IDENTITY_FIELDS.isdisjoint(CATALOG_ECONOMIC_FIELDS)
+    assert len(CATALOG_ECONOMIC_FIELDS) >= 8
 
 
 def test_each_light_source_binds_to_its_char_004_row() -> None:
-    assert catalog_identity(TORCH).name == "Torch"
-    assert catalog_identity(LANTERN).name == "Lantern"
+    assert light._catalog_identity(TORCH).name == "Torch"
+    assert light._catalog_identity(LANTERN).name == "Lantern"
 
 
 def test_the_torch_uses_char_004s_exported_identity() -> None:
@@ -879,22 +949,22 @@ def test_the_torch_uses_char_004s_exported_identity() -> None:
     commodity in both catalogs; the other three do not and are looked up."""
     from rules.character_creation import equipment
 
-    assert catalog_identity(TORCH) is equipment.TORCH
+    assert light._catalog_identity(TORCH) is equipment.TORCH
 
 
 def test_catalog_identity_refuses_an_unsupported_kind() -> None:
     with pytest.raises(ValueError, match="must be a LightSourceKind"):
-        catalog_identity("torch")  # type: ignore[arg-type]
+        light._catalog_identity("torch")  # type: ignore[arg-type]
 
 
 def test_oil_and_tinderbox_bind_to_their_rows() -> None:
-    assert oil_flask_identity().name == "Oil"
-    assert tinderbox_identity().name == "Tinder box"
+    assert light._oil_flask_identity().name == "Oil"
+    assert light._tinderbox_identity().name == "Tinder box"
 
 
 def test_the_oil_identity_is_the_gear_row_not_the_weapon_row() -> None:
     """`Oil, Burning` is the Weapons row and belongs to COMBAT-* (L46)."""
-    assert oil_flask_identity().name != "Oil, Burning"
+    assert light._oil_flask_identity().name != "Oil, Burning"
 
 
 def test_catalog_names_live_in_exactly_one_private_location() -> None:
@@ -936,20 +1006,66 @@ def test_catalog_names_live_in_exactly_one_private_location() -> None:
     assert stray == [], f"catalog name used outside _CATALOG_NAMES: {stray}"
 
 
-def test_no_catalog_economic_field_is_ever_accessed() -> None:
-    """Guard G-4 — the CHAR-004 seam, asserted structurally.
+def test_no_public_callable_can_emit_a_catalog_row() -> None:
+    """`L42` — *"any price, `Coin` or encumbrance value **emitted**"*.
 
-    Every attribute access in the parsed module is inspected. A field named
-    in prose, a docstring or a comment cannot fail this, because comments and
-    docstring text are not `ast.Attribute` nodes — which is exactly why this
-    is an AST check and not a text search.
+    **Claim A (machine-proved surface), and this is now the primary `L42`
+    mechanism.** No public callable of this card returns a `CHAR-004`
+    ``Item``, so no economic value is reachable through this card's public
+    API — by value or by reference.
+
+    Added 2026-10-03 under review-#2 finding `MED-2`. The previous mechanism
+    established that the module never *accessed* an economic field, which is
+    a different property from the one the card states. With the three
+    identity accessors public, ``catalog_identity(TORCH).price`` did in fact
+    reach a `Coin` through this card's API; the human adjudication of
+    2026-10-03 made the binding private instead of defending it, which makes
+    the card's actual wording provable rather than approximated.
+    """
+    checked = 0
+    for name in sorted(APPROVED_DEFINITIONS):
+        obj = getattr(light, name)
+        if not isinstance(obj, FunctionType):
+            continue
+        hints = inspect.signature(obj).return_annotation
+        assert "Item" not in str(hints), f"public {name} returns a catalog row: {hints}"
+        checked += 1
+    assert checked == 4, f"expected 4 public functions, inspected {checked}"
+
+    # And the Item type itself is not re-exported under any public name.
+    for name in APPROVED_DEFINITIONS:
+        assert getattr(light, name) is not Item, f"{name} re-exports CHAR-004's Item"
+
+
+def test_no_catalog_economic_field_is_ever_read_directly() -> None:
+    """`L42`, supporting half — nothing in this module reads an economic field.
+
+    **Claim A, stated narrowly.** What this establishes is exactly: *EXP-006
+    production code contains no approved reflective catalog-access path and
+    does not directly read catalog-economic fields.* It is **not** a claim
+    that economic fields are unreachable by every conceivable reflection
+    mechanism in Python — review #2 defeated that stronger claim with
+    ``object.__getattribute__(item, "price")``, and no AST matcher short of a
+    static analyzer closes it. The boundary remains partly a **reviewed**
+    one (claim C), and is recorded as such in `CASE_DISCHARGE`.
+
+    The forbidden field set is derived from `CHAR-004`'s own dataclass, so a
+    new `Item` field extends this guard automatically.
     """
     tree = ast.parse(inspect.getsource(light))
-    accessed = {
-        node.attr for node in ast.walk(tree) if isinstance(node, ast.Attribute)
-    }
-    leaked = accessed & CATALOG_ECONOMIC_FIELDS
+    attributes = [node for node in ast.walk(tree) if isinstance(node, ast.Attribute)]
+    assert attributes, "guard anchored on zero attribute accesses"
+    leaked = {node.attr for node in attributes} & CATALOG_ECONOMIC_FIELDS
     assert leaked == set(), f"EXP-006 reads CHAR-004 economic field(s): {leaked}"
+
+    subscripts = [
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Subscript)
+        and isinstance(node.slice, ast.Constant)
+        and node.slice.value in CATALOG_ECONOMIC_FIELDS
+    ]
+    assert subscripts == [], "an economic field is reached by subscript"
 
 
 def test_no_currency_or_pricing_machinery_is_imported() -> None:
@@ -1006,16 +1122,88 @@ def test_the_complete_production_dependency_surface() -> None:
 
 
 # =========================================================================
-# The exact public-surface guard (MED-4A)
+# The exact RUNTIME surface guard
 # =========================================================================
 #
-# An ALLOWLIST, not a forbidden-token denylist. The independent review of
-# 2026-10-01 proved the denylist could be walked past: `VisibilityCategory`
-# survived because `"VisibilityCategory".split("_")` is one token and never
-# equals `visibility`, and `ration_spoilage_turns` survived because the set
-# held `rations` but not `ration`. Every such escape adds a PUBLIC name,
-# member or parameter — so pinning the exact shape catches them all at once,
-# regardless of spelling, and keeps catching names nobody thought to forbid.
+# WHAT THIS SECTION LITERALLY PROVES, and nothing beyond it:
+#
+#   EXP-006's two production modules bind exactly the approved set of
+#   module-level names; its approved classes expose exactly the approved
+#   effective member surface, with exactly the approved base classes; and
+#   every approved public callable has exactly the approved signature.
+#
+# WHAT IT DOES NOT PROVE. It is not a proof that no forbidden *behavior*
+# can ever be written. A reviewer still has to read the code. Three
+# distinct kinds of claim are kept apart deliberately, and the
+# `CASE_DISCHARGE` ledger labels each case with which kind discharges it:
+#
+#   A. machine-proved surface   -- this section
+#   B. machine-proved behavior  -- the behavioral and invariant tests
+#   C. reviewed ownership boundary, NOT machine proof -- recorded as such
+#
+# Labelling a C claim as an A claim is the defect the second independent
+# review found, and is forbidden here.
+#
+# DESIGN HISTORY, so the shape is not casually undone. Review #1
+# (2026-10-01) broke a forbidden-token DENYLIST: `VisibilityCategory`
+# survived because its name is one token that never equals `visibility`,
+# and `ration_spoilage_turns` survived because the set held `rations`.
+# That was answered with an AST allowlist over `tree.body`. Review #2
+# (2026-10-03) broke *that*, six ways: a definition inside `if True:`,
+# inside `try:`, injected through `globals()` from a top-level `for`, an
+# inherited member from a private mixin, a forbidden parameter on the
+# classmethod `LightSource.fresh`, and a module-level `int` counter that
+# a mutable-container filter could not see.
+#
+# The lesson taken is NOT "add more patterns". It is that the authoritative
+# surface of a module is **the namespace it actually binds when imported**,
+# which is what an importer sees, and the authoritative surface of a class
+# is its **effective** surface including inheritance. Both are now read
+# from the imported objects, so a name created by any executable statement
+# at module scope -- `if`, `try`, `for`, `while`, `with`, a comprehension,
+# or `globals()[...] = ...` -- is visible, because by then it is simply a
+# key in `vars(light)`.
+
+# Every module-level name EXP-006 is approved to bind, partitioned by role.
+# The partition is the point: a new name must be classified by a human
+# before this guard will pass, and "it starts with an underscore" is not a
+# way out. `MODULE_SCOPE_IS_CONSTANT` below additionally pins the kind of
+# value each may hold, so an unauthorized accumulator cannot hide behind an
+# approved name's role.
+
+APPROVED_IMPORTED_NAMES: frozenset[str] = frozenset(
+    {
+        "Enum",
+        "Final",
+        "Item",
+        "Iterable",
+        "MappingProxyType",
+        "annotations",
+        "auto",
+        "catalog_item",
+        "dataclass",
+        # Raised by this module, defined in rules.exploration.errors.
+        "IgnitionAttemptLimitError",
+        "IgnitionNotDefinedError",
+        "LanternRefuelNotDefinedError",
+    }
+)
+
+APPROVED_PRIVATE_NAMES: frozenset[str] = frozenset(
+    {
+        "_CATALOG_NAMES",
+        "_IGNITION_MATRIX",
+        "_LIGHT_SOURCE_IDENTITIES",
+        "_TORCH_ITEM",
+        "_require_elapsed_turns",
+        # The CHAR-004 identity binding, made private 2026-10-03 under
+        # review-#2 finding MED-2. Tests reach these deliberately, to prove
+        # the binding restates nothing; no caller needs them.
+        "_catalog_identity",
+        "_oil_flask_identity",
+        "_tinderbox_identity",
+    }
+)
 
 APPROVED_DEFINITIONS: frozenset[str] = frozenset(
     {
@@ -1028,22 +1216,21 @@ APPROVED_DEFINITIONS: frozenset[str] = frozenset(
         "LightSource",
         "LightSourceKind",
         "MundaneLightContribution",
-        "catalog_identity",
         "deplete",
         "ignition_outcome",
         "mundane_light_contribution",
-        "oil_flask_identity",
         "refuel_lantern",
-        "tinderbox_identity",
     }
 )
+
+# The approved EFFECTIVE member surface of each approved class, read with
+# `dir()` so a member arriving through a base class or mixin is included.
+# `APPROVED_BASES` pins the inheritance itself, so a mixin fails twice.
 
 APPROVED_MEMBERS: dict[str, frozenset[str]] = {
     "LightSourceKind": frozenset({"TORCH", "LANTERN"}),
     "IgnitionConditions": frozenset({"ORDINARY", "ADVERSE"}),
-    "IgnitionOutcome": frozenset(
-        {"AUTOMATIC", "ROLL_1D6_IGNITE_1_2", "ROUTED_SKILL_CHECK"}
-    ),
+    "IgnitionOutcome": frozenset({"AUTOMATIC", "ROLL_1D6_IGNITE_1_2", "ROUTED_SKILL_CHECK"}),
     "LightSource": frozenset(
         {"kind", "remaining_turns", "lit", "fresh", "illumination_radius_feet"}
     ),
@@ -1052,102 +1239,287 @@ APPROVED_MEMBERS: dict[str, frozenset[str]] = {
     ),
 }
 
-APPROVED_PARAMETERS: dict[str, tuple[str, ...]] = {
+APPROVED_BASES: dict[str, tuple[str, ...]] = {
+    "LightSourceKind": ("LightSourceKind", "Enum", "object"),
+    "IgnitionConditions": ("IgnitionConditions", "Enum", "object"),
+    "IgnitionOutcome": ("IgnitionOutcome", "Enum", "object"),
+    "LightSource": ("LightSource", "object"),
+    "MundaneLightContribution": ("MundaneLightContribution", "object"),
+}
+
+# Every approved public callable, keyed by its dotted path. Review #2 added
+# `party_surprised` and `has_infravision` to the classmethod
+# `LightSource.fresh` and escaped, because only module-level functions were
+# pinned. Class members, properties and the generated dataclass constructors
+# are therefore all pinned here too.
+
+APPROVED_CALLABLES: dict[str, tuple[str, ...]] = {
     "deplete": ("sources", "elapsed_turns"),
     "refuel_lantern": ("source",),
     "mundane_light_contribution": ("sources",),
-    "catalog_identity": ("kind",),
-    "oil_flask_identity": (),
-    "tinderbox_identity": (),
     "ignition_outcome": (
         "has_fire_building",
         "has_tinderbox",
         "conditions",
         "attempt_already_made_this_round",
     ),
+    "LightSource.fresh": ("kind", "lit"),
+    "LightSource.illumination_radius_feet": ("self",),
+    "LightSource.__init__": ("self", "kind", "remaining_turns", "lit"),
+    "MundaneLightContribution.any_mundane_source_lit": ("self",),
+    "MundaneLightContribution.max_mundane_radius_feet": ("self",),
+    "MundaneLightContribution.__init__": ("self", "lit_sources"),
 }
 
+# The kinds of value a module-level name may hold. Everything EXP-006 binds
+# at module scope is a constant, a read-only mapping, a frozen value object,
+# a type or a function. A `list`, `dict`, `set` or ordinary mutable object
+# fails -- and so does a new scalar, because it would need a name nobody
+# approved.
+MODULE_SCOPE_IS_CONSTANT = (int, str, frozenset, MappingProxyType, type, FunctionType)
 
-def _public_top_level_definitions() -> set[str]:
-    """Names this module *defines* at top level and does not prefix with `_`.
 
-    Parsed rather than taken from ``dir()``, so imported names (``Item``,
-    ``Enum``, ``dataclass``…) are not mistaken for this module's own surface.
+def _is_immutable_module_state(value: object) -> bool:
+    """True for the value kinds EXP-006 may bind at module scope.
+
+    A frozen dataclass instance counts: ``_TORCH_ITEM`` is `CHAR-004`'s own
+    frozen `Item`, and rebinding its fields raises. An unfrozen dataclass,
+    a list, a dict, a set or a plain object does not.
     """
-    tree = ast.parse(inspect.getsource(light))
-    found: set[str] = set()
-    for node in tree.body:
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-            if not node.name.startswith("_"):
-                found.add(node.name)
-        elif isinstance(node, ast.AnnAssign):
-            if isinstance(node.target, ast.Name) and not node.target.id.startswith("_"):
-                found.add(node.target.id)
-        elif isinstance(node, ast.Assign):
-            for target in node.targets:
-                if isinstance(target, ast.Name) and not target.id.startswith("_"):
-                    found.add(target.id)
-    return found
+    if isinstance(value, MODULE_SCOPE_IS_CONSTANT):
+        return True
+    cls = type(value)
+    if not dataclasses.is_dataclass(cls):
+        return False
+    return bool(cls.__dataclass_params__.frozen)  # type: ignore[attr-defined]
 
 
-def test_the_public_definition_surface_is_exactly_the_approved_set() -> None:
-    """Any new public class, enum, function or constant fails this.
+def _module_scope_names(module: ModuleType) -> set[str]:
+    """Every non-dunder name the module actually binds once imported.
 
-    Private helpers are deliberately unconstrained — a leading underscore is
-    an implementation detail, not public surface.
+    Read from the live namespace, not parsed from the source. This is what
+    an importer sees, and it is the reason a name created inside ``if``,
+    ``try``, ``for``, ``while``, ``with`` or by ``globals()[...] = ...`` is
+    visible here: by import time it is just a key in ``vars()``.
     """
-    defined = _public_top_level_definitions()
-    assert defined, "guard anchored on zero definitions"
-    assert defined == set(APPROVED_DEFINITIONS), (
-        f"unapproved public definitions: {defined - set(APPROVED_DEFINITIONS)}; "
-        f"missing: {set(APPROVED_DEFINITIONS) - defined}"
+    return {n for n in vars(module) if not (n.startswith("__") and n.endswith("__"))}
+
+
+def _signature_of(dotted: str) -> tuple[str, ...]:
+    """Parameter names of an approved callable, resolved through descriptors."""
+    if "." not in dotted:
+        return tuple(inspect.signature(getattr(light, dotted)).parameters)
+    cls_name, member = dotted.split(".", 1)
+    cls = getattr(light, cls_name)
+    raw = inspect.getattr_static(cls, member)
+    if isinstance(raw, property):
+        assert raw.fget is not None, f"{dotted}: property has no getter to inspect"
+        return tuple(inspect.signature(raw.fget).parameters)
+    if isinstance(raw, (classmethod, staticmethod)):
+        # Resolve through the class so the bound first parameter is dropped,
+        # matching how a caller actually invokes it.
+        return tuple(inspect.signature(getattr(cls, member)).parameters)
+    return tuple(inspect.signature(raw).parameters)
+
+
+def test_the_module_scope_surface_is_exactly_approved() -> None:
+    """EXP-006 binds exactly the approved module-level names.
+
+    **Claim A (machine-proved surface).** This establishes the module's
+    namespace, not the absence of every forbidden behavior.
+
+    Partitioned into public / imported / private deliberately. An
+    underscore is *not* an exemption: review #2 escaped the previous guard
+    with a module-level ``_TURNS_COUNTED = 0`` accumulator and with a
+    private ``_AmbientMixin``, both invisible to a public-only check. Any
+    new module-level name, however spelled and however created, fails here
+    until a human classifies it into one of the three sets.
+    """
+    actual = _module_scope_names(light)
+    approved = APPROVED_DEFINITIONS | APPROVED_IMPORTED_NAMES | APPROVED_PRIVATE_NAMES
+    assert actual, "guard anchored on an empty namespace"
+    assert actual == set(approved), (
+        f"unapproved module-level names: {sorted(actual - set(approved))}; "
+        f"missing: {sorted(set(approved) - actual)}"
     )
 
 
+def test_the_errors_module_scope_surface_is_exactly_approved() -> None:
+    """The sibling error module gets the same treatment.
+
+    **Claim A.** Three concrete types, no base class, nothing else — so a
+    fourth type or a stray module-level name cannot arrive unnoticed.
+    """
+    actual = _module_scope_names(exploration_errors)
+    assert actual == {
+        "annotations",
+        "IgnitionNotDefinedError",
+        "IgnitionAttemptLimitError",
+        "LanternRefuelNotDefinedError",
+    }, f"unapproved names in errors.py: {sorted(actual)}"
+
+
+def test_no_module_level_mutable_state_exists() -> None:
+    """EXP-006 defines only the approved module-level state.
+
+    **Claim A.** Together with
+    ``test_the_module_scope_surface_is_exactly_approved`` and the behavioral
+    tests that pin each constant's *value*, the project may conclude there
+    is no implemented EXP-006 round or time counter: an accumulator needs
+    either a new name (the surface guard refuses it) or an approved
+    constant's name (the value tests refuse that).
+
+    This does **not** claim the test recognizes every semantic notion of a
+    "clock". It claims the module-level state surface, exactly.
+
+    Scoped to the names EXP-006 itself **binds** — public and private. The
+    twelve imported names are excluded on purpose: what ``Enum`` or
+    ``annotations`` holds is its own module's business, and
+    ``APPROVED_IMPORTED_NAMES`` is what pins the import set.
+    """
+    own_names = APPROVED_DEFINITIONS | APPROVED_PRIVATE_NAMES
+    checked = 0
+    for name in sorted(own_names):
+        value = vars(light)[name]
+        assert _is_immutable_module_state(value), (
+            f"module-level {name} holds a mutable {type(value).__name__} -- "
+            f"an unauthorized accumulator or cache?"
+        )
+        checked += 1
+    assert checked == len(own_names) == 21, f"inspected {checked} of EXP-006's own names"
+    assert len(_module_scope_names(light)) == 33
+
+
 def test_all_matches_the_approved_surface() -> None:
-    """`__all__` and the definitions must not drift apart."""
+    """``__all__`` and the approved public set must not drift apart."""
     assert set(light.__all__) == set(APPROVED_DEFINITIONS)
     assert len(light.__all__) == len(set(light.__all__)), "duplicate in __all__"
 
 
 def test_public_class_members_are_exactly_approved() -> None:
-    """Catches a forbidden *member*, which a top-level check cannot see —
-    e.g. `LightSource.attack_penalty_when_dark`, which the review's mutation
-    M added and the old guard missed."""
+    """The approved classes expose exactly the approved EFFECTIVE surface.
+
+    **Claim A.** Uses ``dir()``, not ``vars()``. Review #2 added
+    ``encounter_range_feet`` and ``ambient_state`` to the aggregate through a
+    private mixin; ``vars(cls)`` sees only a class's own ``__dict__`` and
+    missed both. ``dir()`` includes inherited members, so it fails.
+    """
     checked = 0
     for cls_name, approved in APPROVED_MEMBERS.items():
         cls = getattr(light, cls_name)
-        actual = {n for n in vars(cls) if not n.startswith("_")}
-        # dataclass fields live in __dataclass_fields__, not vars()
-        actual |= {
-            n for n in getattr(cls, "__dataclass_fields__", {}) if not n.startswith("_")
-        }
-        assert actual == set(approved), f"{cls_name}: unapproved members {actual ^ set(approved)}"
+        actual = {n for n in dir(cls) if not n.startswith("_")}
+        assert actual == set(approved), (
+            f"{cls_name}: unapproved members {sorted(actual - set(approved))}; "
+            f"missing {sorted(set(approved) - actual)}"
+        )
         checked += 1
     assert checked == len(APPROVED_MEMBERS) == 5
 
 
-def test_public_function_parameters_are_exactly_approved() -> None:
-    """Catches a forbidden *parameter* on any public function — e.g.
-    `deplete(..., party_surprised, has_infravision)`. The previous guard
-    asserted only `mundane_light_contribution`'s signature, so `L32`/`L35`'s
-    claim of "no parameter on *any* function" was not actually established."""
+def test_approved_classes_have_exactly_the_approved_bases() -> None:
+    """No mixin, no intermediate base, and the two value types stay slotted.
+
+    **Claim A.** The second, independent barrier against review #2's
+    inheritance escape: even a mixin contributing no *new* public member
+    would change the MRO and fail here.
+    """
     checked = 0
-    for fn_name, approved in APPROVED_PARAMETERS.items():
-        fn = getattr(light, fn_name)
-        actual = tuple(inspect.signature(fn).parameters)
-        assert actual == approved, f"{fn_name}: parameters {actual} != approved {approved}"
+    for cls_name, approved_mro in APPROVED_BASES.items():
+        cls = getattr(light, cls_name)
+        assert tuple(c.__name__ for c in cls.__mro__) == approved_mro, (
+            f"{cls_name}: MRO {[c.__name__ for c in cls.__mro__]} != {list(approved_mro)}"
+        )
         checked += 1
-    assert checked == len(APPROVED_PARAMETERS) == 7
+    assert checked == len(APPROVED_BASES) == 5
+
+    # Slots are what make an unapproved instance attribute unassignable.
+    assert light.LightSource.__slots__ == ("kind", "remaining_turns", "lit")
+    assert light.MundaneLightContribution.__slots__ == ("lit_sources",)
 
 
-# --- §13 ledger reconciliation ---------------------------------------------
+def test_every_approved_public_callable_signature_is_pinned() -> None:
+    """Every approved public callable has exactly the approved parameters.
+
+    **Claim A.** Covers module functions, the ``fresh`` classmethod, both
+    dataclass constructors and all three properties. Review #2 added
+    ``party_surprised`` and ``has_infravision`` to ``LightSource.fresh`` and
+    escaped a guard that pinned module-level functions only.
+    """
+    checked = 0
+    for dotted, approved in APPROVED_CALLABLES.items():
+        actual = _signature_of(dotted)
+        assert actual == approved, f"{dotted}: parameters {actual} != approved {approved}"
+        checked += 1
+    assert checked == len(APPROVED_CALLABLES) == 10
+
+
+def test_no_public_callable_escapes_the_signature_guard() -> None:
+    """Every public callable in the approved surface IS pinned above.
+
+    **Claim A, and the non-vacuity anchor for the guard above.** Without
+    this, adding a new public method and forgetting to list it in
+    ``APPROVED_CALLABLES`` would simply not be checked — which is exactly
+    how ``LightSource.fresh`` went unpinned through review #2.
+    """
+    discovered: set[str] = set()
+    for name in APPROVED_DEFINITIONS:
+        obj = getattr(light, name)
+        if isinstance(obj, FunctionType):
+            discovered.add(name)
+    for cls_name, members in APPROVED_MEMBERS.items():
+        cls = getattr(light, cls_name)
+        if issubclass(cls, Enum):
+            continue  # enum members are data, not callables
+        discovered.add(f"{cls_name}.__init__")
+        for member in members:
+            raw = inspect.getattr_static(cls, member)
+            if isinstance(raw, (property, classmethod, staticmethod, FunctionType)):
+                discovered.add(f"{cls_name}.{member}")
+
+    assert discovered == set(APPROVED_CALLABLES), (
+        f"public callables not pinned: {sorted(discovered - set(APPROVED_CALLABLES))}; "
+        f"pinned but no longer present: {sorted(set(APPROVED_CALLABLES) - discovered)}"
+    )
+
+
+# =========================================================================
+# CASE_DISCHARGE — traceability, NOT certification
+# =========================================================================
+#
+# This ledger answers exactly one question:
+#
+#     Where is this approved case discharged?
+#
+# It does NOT answer:
+#
+#     Have we formally proved no future implementation could violate it?
+#
+# Role narrowed 2026-10-03 under review-#2 findings `MED-2`, `LOW-6` and
+# `LOW-7`. The ledger had drifted into reading as a certification, and
+# several rows cited a guard for a property that guard did not establish —
+# `L4` credited "one radius constant" for a property a behavioral test
+# actually holds, and `L18` was classed as behavior this module does not
+# produce. A row that names the wrong mechanism is worse than no row: it
+# tells a later reader the boundary is machine-held when it is not.
+#
+# Each row is prefixed with the KIND of claim that discharges it:
+#
+#   surface:   machine-proved surface      (claim A -- the guards above)
+#   behavior:  machine-proved behavior     (claim B)
+#   invariant: machine-proved refusal      (claim B)
+#   reviewed:  a reviewed ownership boundary, NOT machine proof (claim C)
+#   routed:    not owned by this card at all
+#
+# Labelling a `reviewed:` claim as `surface:` is the defect review #2
+# found. Do not do it.
 
 CASE_DISCHARGE: dict[str, str] = {
-    # --- implemented behavior --------------------------------------------
+    # --- machine-proved behavior (claim B) ---------------------------------
     "L1": "behavior: lit torch radius 30",
     "L2": "behavior: lit lantern radius 30",
     "L3": "behavior: unlit illuminates nothing",
+    "L4": "behavior: both kinds parametrized to the same 30; radii cannot differ",
+    "L5": "behavior: no brighter/dimmer figure is produced for either kind",
     "L6": "behavior: fresh torch 6 turns",
     "L7": "behavior: fresh lantern 24 turns",
     "L8": "behavior: 1 elapsed turn -> 5 remaining",
@@ -1156,8 +1528,8 @@ CASE_DISCHARGE: dict[str, str] = {
     "L11": "behavior: unlit sources do not deplete",
     "L12": "behavior: refuel -> 24 turns, still unlit",
     "L15a": "behavior: two torches, one expires, the other still contributes",
-    "L17": "behavior: tinderbox 1d6 branch selected",
-    "L18": "behavior: its OWN row (no skill, tinderbox, ORDINARY) re-selects",
+    "L17": "behavior: tinderbox 1d6 branch is SELECTED (the roll is the caller's)",
+    "L18": "behavior: its own row re-selects; the card's roll is not ours to make",
     "L19a": "behavior: first attempt evaluates and records nothing",
     "L20": "behavior: skill + tinderbox + ordinary -> AUTOMATIC",
     "L21": "behavior: skill, no tinderbox, ordinary -> 1d6",
@@ -1165,55 +1537,55 @@ CASE_DISCHARGE: dict[str, str] = {
     "L27": "behavior: aggregate reports a lit source",
     "L28": "behavior: aggregate empty when none lit, asserting nothing further",
     "L34": "behavior: query succeeds with no surprise state supplied",
-    # --- implemented invariants (deterministic refusals) -------------------
+    "L46": "behavior: the oil binding resolves the GEAR row, not Oil, Burning",
+    # --- machine-proved refusals (claim B) ---------------------------------
     "L12a": "invariant: LanternRefuelNotDefinedError on partial refill",
     "L19": "invariant: IgnitionAttemptLimitError on a second same-round attempt",
     "L23": "invariant: IgnitionNotDefinedError, no skill + tinderbox + adverse",
     "L24": "invariant: IgnitionNotDefinedError, no skill and no tinderbox",
     "L26": "invariant: adverse never defaults to the 1d6",
-    # --- architectural guards ----------------------------------------------
-    "L4": "guard: one radius constant, so the radii cannot differ",
-    "L5": "guard: public member surface pinned -- no quality distinction",
-    "L13": "guard: no time import, and no module-level mutable exists",
-    "L14": "guard: __slots__ and the aggregate's single field are pinned",
-    "L15": "guard: public surface pinned -- no burn-out event or proration",
-    "L15b": "guard: deplete returns sources only; no world-state type exists",
-    "L16": "guard: no hours-denominated surface, and no int mult/floordiv",
-    "L19b": "guard: no round state; no module mutable; flag never mutated",
-    "L25": "guard: no CHAR-012 import; ROUTED_SKILL_CHECK carries no value",
-    "L29": "guard: public definition allowlist -- no NO_LIGHT/world type",
-    "L30": "guard: public definition allowlist -- no Visibility type at all",
-    "L31": "guard: allowlist (review added VisibilityCategory; now fails)",
-    "L32": "guard: allowlist -- no visibility-classifying type or member exists",
-    "L33": "guard: no DIRECT rng import; no distance operation in the surface",
-    "L35": "guard: EVERY public signature pinned -- no surprise parameter",
-    "L36": "guard: allowlist -- no distance-returning operation may be added",
-    "L37a": "guard: allowlist (review added CompleteDarkness; now fails)",
-    "L38": "guard: public member/parameter surface pinned; CHAR-005 unimported",
-    "L39": "guard: member surface pinned (review added a -6 attr; now fails)",
-    "L40": "guard: EVERY public signature pinned -- no infravision input at all",
-    "L41": "guard: LightSourceKind members pinned to exactly TORCH/LANTERN",
-    "L42": "guard: AST attribute walk + reflective access prohibited",
-    "L43": "guard: allowlist (review added ration_spoilage_turns; now fails)",
-    "L44": "guard: public definition allowlist -- no starvation operation",
-    "L45": "guard: public definition allowlist -- no weapon operation",
-    "L46": "guard: allowlist; oil_flask_identity binds GEAR, not Oil, Burning",
-    # --- routed / non-owned -------------------------------------------------
-    "L37": "routed: no blindness predicate asserted; illumination facts only",
+    # --- machine-proved surface (claim A) ----------------------------------
+    "L13": "surface: import graph has no time module; module-scope name set pinned",
+    "L14": "surface: module-scope state immutable; slots and MRO pinned",
+    "L15": "surface: module-scope name set -- no burn-out event or proration name",
+    "L15b": "surface: deplete's signature and return pinned; no world-state name",
+    "L16": "surface: no hour/minute name anywhere, and no scaling operator at all",
+    "L19b": "surface: selector holds no attribute state; module-scope state pinned",
+    "L25": "surface: import graph has no CHAR-012; the enum member carries no value",
+    "L29": "surface: module-scope name set -- no NO_LIGHT or world-state name",
+    "L30": "surface: module-scope name set -- no Visibility name at all",
+    "L31": "surface: module-scope name set, incl. names created conditionally",
+    "L32": "surface: class surfaces pinned via dir(); no classifying member exists",
+    "L33": "surface: no DIRECT rng import; no distance name in the pinned surface",
+    "L35": "surface: EVERY public signature pinned -- no surprise parameter",
+    "L36": "surface: module-scope name set -- no distance-returning name",
+    "L37a": "surface: module-scope name set -- no CompleteDarkness name",
+    "L38": "surface: signatures and class surfaces pinned; CHAR-005 unimported",
+    "L39": "surface: class surfaces pinned via dir(), so inherited members fail",
+    "L40": "surface: EVERY public signature pinned, incl. LightSource.fresh",
+    "L41": "surface: LightSourceKind members pinned to exactly TORCH/LANTERN",
+    "L42": "surface: no public callable returns an Item, so nothing is emitted",
+    "L43": "surface: module-scope name set -- no ration name, however spelled",
+    "L44": "surface: module-scope name set -- no starvation name",
+    "L45": "surface: module-scope name set -- no weapon name",
+    # --- reviewed boundaries, NOT machine proof (claim C) ------------------
+    "L37": "reviewed: nothing asserts blindness; that this is COMPLETE is reviewed",
+    # --- not owned by this card (routed) -----------------------------------
     "L47": "routed: reports any_mundane_source_lit; item/skill not owned here",
 }
+
+CLAIM_KINDS = ("surface", "behavior", "invariant", "reviewed", "routed")
 
 
 def test_every_approved_case_is_accounted_for() -> None:
     """§13 — the complete ledger, reconciled against the finished card.
 
-    Many cases are discharged by **absence** — no such type, parameter or
-    operation exists — which is a stronger guarantee than a runtime
-    assertion but leaves no case ID in a test name. This map is the audit
-    trail for those, so no case is accidentally unaccounted for.
+    Many cases are discharged by **absence** — no such name, member,
+    parameter or operation exists — which leaves no case ID in a test name.
+    This map is the audit trail for those, so no case goes unaccounted for.
 
     **No code was written to turn a non-owned assertion into executable
-    behavior**; the two routed entries stay routed.
+    behavior.**
     """
     card = (
         pathlib.Path(__file__).resolve().parents[3]
@@ -1227,15 +1599,43 @@ def test_every_approved_case_is_accounted_for() -> None:
     assert mapped - approved == set(), f"mapped case not in the card: {mapped - approved}"
     assert len(approved) == 53
 
-    # Added 2026-10-03 under review finding MED-4. Two distinct cases sharing
-    # one discharge string is how the ledger previously overclaimed: a generic
-    # phrase copied across rows reads as coverage without being it. L32
-    # ("infravision folded into a visibility classification") and L40
+    # Added 2026-10-03 under review-#1 finding MED-4. Two distinct cases
+    # sharing one discharge string is how the ledger previously overclaimed:
+    # a generic phrase copied across rows reads as coverage without being it.
+    # L32 ("infravision folded into a visibility classification") and L40
     # ("infravision possession decided here") both read "no infravision
-    # parameter", which named neither case's actual mechanism. Each row must
-    # now state what discharges *that* case.
+    # parameter", which named neither case's actual mechanism.
     duplicates = {v for v in CASE_DISCHARGE.values() if list(CASE_DISCHARGE.values()).count(v) > 1}
     assert duplicates == set(), f"two cases share one discharge description: {duplicates}"
+
+    # Every row declares which KIND of claim discharges it, so a reviewed
+    # boundary can never be read as machine proof (review-#2 MED-2).
+    for case, discharge in CASE_DISCHARGE.items():
+        kind = discharge.split(":", 1)[0]
+        assert kind in CLAIM_KINDS, f"{case}: unknown claim kind {kind!r}"
+
+
+def test_the_case_category_counts_are_recomputed_not_carried_over() -> None:
+    """The authoritative 53-case split, computed from the rows themselves.
+
+    Every governance artifact that states a split must agree with this. The
+    numbers are deliberately asserted here rather than written into prose
+    and copied around: review #2 found three mutually inconsistent totals
+    across the implementation plan and the Pre-Code Gate, each one a figure
+    that had been transcribed rather than recomputed.
+    """
+    counts = {kind: 0 for kind in CLAIM_KINDS}
+    for discharge in CASE_DISCHARGE.values():
+        counts[discharge.split(":", 1)[0]] += 1
+
+    assert counts == {
+        "behavior": 23,
+        "invariant": 5,
+        "surface": 23,
+        "reviewed": 1,
+        "routed": 1,
+    }, f"recompute the published split: {counts}"
+    assert sum(counts.values()) == 53
 
 
 # --- Architectural guard: no second clock ----------------------------------
@@ -1296,10 +1696,12 @@ def test_this_module_imports_no_rng_skill_encounter_combat_or_magic_machinery() 
         if forbidden_tokens & {part.lower() for part in module.replace(".", "_").split("_")}
     }
     assert offending == set(), f"forbidden dependency: {offending}"
-    # `equipment` is NOT forbidden here: Slice D consumes CHAR-004 identities
-    # legitimately. That it reads no economic field is a separate, stronger
-    # guard -- test_no_catalog_economic_field_is_ever_accessed. The complete
-    # import surface is asserted by test_the_complete_production_dependency_surface.
+    # `equipment` is NOT forbidden here: the identity binding consumes
+    # CHAR-004 rows legitimately. That no economic value can be emitted is a
+    # separate and now stronger guard -- test_no_public_callable_can_emit_a_
+    # catalog_row, backed by test_no_catalog_economic_field_is_ever_read_
+    # directly. The complete import surface is asserted by
+    # test_the_complete_production_dependency_surface.
 
 
 def test_no_unauthorized_slice_behaviour_is_exposed() -> None:
@@ -1307,11 +1709,16 @@ def test_no_unauthorized_slice_behaviour_is_exposed() -> None:
     card's **permanently excluded** responsibilities (§B, implementation
     plan §4) — the ones no slice may ever add.
 
-    ``catalog_identity`` and friends are Slice D and are expected; that they
-    consume identity only is proved by the economic-field guard. ``skill`` is
-    likewise not forbidden: ``ROUTED_SKILL_CHECK`` legitimately *names* the
-    owner it routes to, and a name test could not establish whether the
-    resolver is imported — the import graph does that.
+    **Claim C — a reviewed boundary, not machine proof.** This is a token
+    denylist. Review #1 proved a denylist can be walked past by spelling
+    (`VisibilityCategory`, `ration_spoilage_turns`), and it is kept only as
+    a cheap second net over obvious regressions. The *surface* claim is made
+    by the module-scope, class-surface and signature guards; this test is
+    not cited as the sole mechanism for any case.
+
+    ``skill`` is deliberately not forbidden: ``ROUTED_SKILL_CHECK``
+    legitimately *names* the owner it routes to, and a name test could not
+    establish whether the resolver is imported — the import graph does that.
     """
     forbidden = {
         "rng",
