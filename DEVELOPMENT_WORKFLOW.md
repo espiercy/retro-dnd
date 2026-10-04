@@ -263,6 +263,39 @@ Revalidation follows the **Evidence-First** two-stage protocol required for all 
 
 Completion records (§3–§8) and decision records (§9) are durable, human-readable reports. They are not the enforcement mechanism for testing or coverage requirements. Once the implementation toolchain is selected, automated CI/build gates are the objective enforcement mechanism for those requirements; a completion record documents what those gates showed, after the fact. See `TESTING_STRATEGY.md` §9–§10 for the full model, including the requirement that a failed mandatory gate must fail the build and must not be described as a completed issue.
 
+### 10.1 Stage-A Evidence Verification
+
+Stage-A rules research is verified the same way: by gates, not by assertions in the
+artifact. `docs/decisions/DEC-0013-externally-derived-stage-a-evidence-checks.md`
+supersedes `DEC-0012` and governs how a Stage-A evidence packet is checked.
+
+The rule that record exists to enforce, stated once here:
+
+> **Internal consistency is not external completeness.**
+
+A researcher's own instruments agreeing with one another proves nothing about the source.
+`DEC-0012`'s pilot failed on exactly that: a packet whose ledgers agreed perfectly, and
+which passed its linter, had never opened a page that an already-accepted neighbouring
+packet cited by name. Facts a machine can establish — which pages the indexes and accepted
+neighbour packets put in scope, whether a quotation occurs on the page it cites, how many
+rows a table has — are therefore checked mechanically and **must not be restated as
+researcher-maintained prose or counts**.
+
+Two consequences bind every Stage-A task:
+
+- **Counts are derived, never written.** A hand-maintained tally in a packet is a defect,
+  not a convenience, regardless of whether it happens to be correct.
+- **Escalation follows consequence, not artifact type.** A mechanical defect that leaves
+  the inspected source set and the rules conclusions unchanged is fixed and
+  machine-verified; it does not reopen independent review. A defect that reveals a
+  previously uninspected potentially governing source does. `DEC-0013` §14 carries the
+  full table and the two-review budget, including the rule that an exhausted budget stops
+  the work and evaluates the process rather than authorizing another review.
+
+This section states the verification relationship only. `DEC-0013` is authoritative for
+the Stage-A mechanism, and `RULE_CARD_RESEARCH_PROTOCOL.md` remains authoritative for the
+research procedure itself.
+
 ## 11. Status
 
 This document is a proposed and approved process standard (`docs/decisions/DEC-0001-project-foundation-baseline.md`). No completion records exist yet, and none will be created until implementation begins.
