@@ -445,8 +445,9 @@ one into the other.
 Encounter Distances Table, and **surprise is not an input to it** — a consumer may ask this card
 for its mundane-light facts without supplying any encounter circumstance at all.
 
-The following RC facts are recorded **for `ENC-001`**, which owns the classification and the
-resolution:
+The following RC facts are recorded **for `ENC-001`**, which owns the encounter-distance
+resolution and the `Visibility` **classification scheme** — which categories exist, which are
+legal for which `Setting`, and how the table is keyed (§B):
 
 ```text
 p. 93  The Encounter Distances Table is keyed on a Visibility column with three
@@ -461,9 +462,22 @@ p. 92  When EITHER party is surprised, the encounter-distance path is a flat
        1d4 x 10', and light does not enter the calculation.
 ```
 
-**None of the above is executed here.** `ENC-001` is `[UNRESEARCHED]`; whatever aggregation it
-needs — mundane light, environmental illumination, magical light, infravision, encounter
-circumstances — is **its** rule to write, and **this card does not invent that aggregation**.
+**None of the above is executed here, and the aggregation behind it is owned by neither
+card.** `ENC-001` *consumes* a `Visibility` category for the encounter-distance lookup; it
+does not derive one. This card supplies only the mundane light-source contribution and state
+it owns. **Aggregating world/environment facts — daylight and time of day, weather, magical
+light, environmental darkness — into a `Visibility` category is owned by neither `EXP-006`
+nor `ENC-001`**, and that responsibility is **unassigned pending a separate architecture
+decision** (§B; Open Question 7). This card does not invent that aggregation, and nothing
+here assigns it.
+
+> **Corrected 2026-10-04 by human architecture decision** (`ENC-001` Stage-B `Q-7`). The
+> previous wording — *"whatever aggregation it needs … is **its** rule to write"* — routed
+> world/environment aggregation to `ENC-001`, contradicting this card's own §B line
+> (`environmental illumination world state` → `OWNER NOT SETTLED`). The human chose the §B
+> boundary, so §7 is brought into line with §B. **Nothing else changed:** no light-resource
+> mechanic, no `Simulator Ruling` (`SR-11` included), no guard test, no §B boundary and no
+> implementation. This is a documentation-consistency correction only.
 
 ### 8. Darkness and blindness — **not established by this card**
 
