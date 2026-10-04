@@ -1,405 +1,182 @@
 # `ENC-001` — Encounter Distance — Stage-A Evidence
 
-> **`DEC-0012` pilot packet.** This is the first Stage-A evidence packet written after
-> `DEC-0012` was approved (2026-10-01) and therefore the first that the evidence linter
-> actually governs. It is not grandfathered: `scripts/lint_evidence.py`'s `GRANDFATHERED`
-> frozenset is a closed list of twelve pre-`DEC-0012` packets and contains no `ENC-001`
-> entry (verified §9, row R-6).
-
-> **Pass 2 — bounded remediation of Independent Review #1.** Review #1 returned `FAIL`
-> with 2 blocking and 7 non-blocking findings and is preserved unaltered at
-> `docs/rules/evidence/ENC-001-stage-a-completeness-review.md`. It found a **previously
-> uninspected governing object — RC p. 98 `Contact`** — so **`DEC-0012` item 15 criterion
-> 3 has FAILED for this pilot**. That failure is recorded, not reinterpreted: nothing
-> below softens it, and a sound packet at pass 2 does not undo it. This pass corrects
-> `B-1` and `B-2` and the directly factual non-blocking findings. It is not a
-> re-research of the card.
+> **Re-entered under `DEC-0013`** (approved 2026-10-04). This packet replaces the
+> `DEC-0012`-format packet at `b880ffd`. The substantive research is **reused, not
+> re-done**: two independent reviews confirmed the Encounter Distances Table transcription
+> exact, all eight index absences true, every repository fact checked true, the
+> `ENC-001`/`ENC-002` boundary intact, and **no rules-conformance defect**. Those
+> conclusions stand unless new inspection contradicts them, and none did.
+>
+> The `DEC-0012` pilot is over and its result is historical: Review #1 `FAIL`, Review #2
+> `FAIL`, criteria 3 and 4 failed. The review that follows this packet is the **first**
+> `DEC-0013` semantic review, not a third review under a closed pilot.
 
 ```text
 PACKET-STATUS
 RULE-ID:              ENC-001
-PASS:                 2
-SELF-FALSIFICATION:   COMPLETE
-REPOSITORY-FACT-PASS: COMPLETE
 INDEPENDENT-REVIEW:   PREPARED FOR INDEPENDENT COMPLETENESS REVIEW
 RECOMMENDATION:       EVIDENCE READY FOR HUMAN REVIEW
 ```
 
 ---
 
-## 1. Research-Start Gate
+## 1. Scope and Seams
 
-| Item | Established |
-|---|---|
-| Exact card scope, as currently registered | `INVENTORY.md` row 116: `ENC-001` \| Encounter Distance \| Encounters chapter \| RC Core \| Dependencies `—` \| Downstream `—` \| V1 Reachable Yes \| Status `Unresearched` \| "Low-medium." |
-| Known ownership seams | `ENC-002` surprise determination; `ENC-005` evasion/pursuit; `EXP-001` wandering-monster check; `EXP-006` mundane light sources; `EXP-002` turn accounting; `MON-*` monster terrain/speed; `COMBAT-*` attack-roll mechanics |
-| Authoritative primary source | *D&D Rules Cyclopedia* (TSR, 1991; ISBN 1-56076-085-0), archive.org item `TSR1071TheDDRulesCyclopedia`, IIIF page images, `leaf = printed_page − 1` |
-| Required structural + index instruments | Chapter headings; **Index to Tables and Checklists** (p. 301); **General Index** (pp. 302–304); end-of-book boundary confirmed at p. 305 |
-| Current repository dependencies | Verified against `INVENTORY.md` this pass — see §9 |
-| Primary-source visual access confirmed | **yes** — 19 pages rendered and read as page images; no page required a second digitisation; no access blocker |
+**This card owns:** how far apart two groups are when an encounter takes place.
 
-**Scope boundary this packet will not cross:** the *determination of surprise* (`ENC-002`),
-the *evasion/pursuit procedure* entered after contact (`ENC-005`), the *occurrence* check
-that decides an encounter happens at all (`EXP-001` / Chance of Encounter Table), and the
-*consumption* of a distance once produced (`COMBAT-*` missile ranges). This packet
-establishes only what RC states about **how far apart two groups are when an encounter
-takes place**.
+**It does not own, and routes to:** `ENC-002` — surprise determination; `ENC-005` — evasion
+and pursuit, including pursuit **starting** distance; `EXP-001` — whether an encounter
+occurs; `EXP-006` — mundane light sources; `EXP-008`/`MON-001` — which monster;
+`COMBAT-*` — attack-roll effects of cover and sight; `MAGIC-*` — magical light.
 
-The human-approved boundary fixed before research began is binding here: `ENC-001` may
-**consume** authoritative caller-supplied surprise state, and must not roll surprise,
-derive it, reproduce `ENC-002`'s mechanic, or assign surprise ownership to itself. Every
-surprise cross-reference below is recorded as an external governing input, not absorbed.
+**Neighbour Rule IDs:** derived from `INVENTORY.md` edges in both directions. `ENC-001`'s
+own row carries an em dash in both dependency columns, so the forward walk yields nothing;
+`ENC-005`'s row names `ENC-001` in its notes, and that reverse edge is what reaches the
+accepted packets. No seam needed declaring.
 
-## 2. Primary Source Accessed
+**Subject terms:** encounter distance, visibility, surprise, infravision, feet, yards.
+
+## 2. Primary Source
 
 | Source | Access method | Role |
 |---|---|---|
-| *D&D Rules Cyclopedia*, TSR 1991 | page images — `https://iiif.archive.org/iiif/TSR1071TheDDRulesCyclopedia$<leaf>/full/1400,/0/default.jpg`, `leaf = printed_page − 1` | authoritative |
-| *D&D Rules Cyclopedia*, second digitisation (archive.org item `rules-cyclopedia`, same leaf offset) | available, **not needed this pass** — every page rendered legibly from the first item (§9.2.1 — would still be primary) | authoritative (unused) |
+| *D&D Rules Cyclopedia* (TSR, 1991; ISBN 1-56076-085-0) | page images — `https://iiif.archive.org/iiif/TSR1071TheDDRulesCyclopedia$<leaf>/full/1400,/0/default.jpg`, `leaf = printed_page − 1` | authoritative |
 | OCR / full text | **not used at any point in this packet** | not used |
 
-**Access limitations encountered, including where a workaround succeeded** (§11 item 17):
+**Access limitations:** None encountered. Every page recorded `INSPECTED` below was read as
+a page image and confirmed by its body text, not by HTTP status.
 
-One request, for leaf 305, returned HTTP 500. Leaf 305 is **past the end of the book** —
-p. 305 (leaf 304) is the printed back cover, visually confirmed. No page bearing content
-was blocked, and no finding rests on an unrendered page. Every page listed under
-`IMAGE-VERIFIED` in §7 was confirmed by reading its body text, not by its HTTP status
-(§9.2.1).
-
-## 3. Source Structure
-
-| Structural unit | Pages | Could govern this card? |
-|---|---|---|
-| Ch. 2 — The Character Classes | 13–31 | **yes, partly** — infravision is a branch selector in the governing table's footnote ** |
-| Ch. 4 — Equipment | 62–74 | no — light *sources* are `EXP-006`'s; no distance mechanic |
-| Ch. 5 — General Skills | 81–86 | no — no skill selects or modifies encounter distance |
-| Ch. 6 — Movement | 87–90 | **yes** — the feet/yards distance convention the table's units depend on (p. 87) |
-| **Ch. 7 — Encounters and Evasion** | **91–101** | **yes — principal.** Carries the Encounter Distance section, the Encounter Distances Table, and a second distance statement in the Game Turn Checklist |
-| Ch. 8 — Combat | 102–116 | no for distance determination — attack-roll and underwater-combat mechanics only; one terminology tension recorded (p. 115) |
-| Ch. 13 — Dungeon Master Procedures | 143–151 | no — blindness/invisibility are condition effects, no distance mechanic |
-| Ch. 14 — Monsters | 152–218 | **yes, by cross-reference** — p. 92 routes monster-specific surprise variation here; monster Terrain line bears on the table's Setting axis |
-| Appendix 4 — Indices | 301–304 | **yes** — the two completeness instruments |
-| Ch. 1 — Introduction / Ability Scores | 5–12 | no — character generation; no encounter or distance mechanic. Checked via the General Index entries landing there (`Dice … 5, 148`, `Abilities … 6`) |
-| Ch. 3 — Spells | 32–61 | **not inspected this pass** — magical light is routed to `MAGIC-*` by the approved `EXP-006` card; see the qualification on negative claim N-4, which no longer asserts absence over this chapter |
-| Ch. 4 — Equipment | 62–74 | **not inspected this pass** — mundane light sources are `EXP-006`'s, inspected under its accepted Stage A (pp. 69–70); see N-4's qualification |
-| Ch. 5 — General Skills | 81–86 | no — covered above; no skill selects encounter distance |
-| Ch. 9 — Mass Combat / War Machine | 117–126 | no — mass-combat scale; `Troop`/`Battle rating` entries carry no encounter-distance term |
-| Ch. 10–12 — Experience, Treasure, Magical Items | 127–142 | no — reward and item systems; no distance mechanic |
-| Ch. 15–19 — Immortals, Known World, Hollow World, Conversions, DM aids | 219–300 | no — setting, advancement and conversion material; the General Index routes no distance term here |
-| Appendices 1–3 | 291–300 | no — conversion tables and record sheets |
-
-> Rows 10–18 were added in pass 2 under Review #1 non-blocking finding 1. Ch. 3 and Ch. 4
-> are recorded as **not inspected this pass** rather than as excluded, because N-4's claim
-> was narrowed to the scope actually searched rather than extended over them.
-
-## 4. Coverage Manifest
-
-| # | Object | Class (§9.1 A–I) | Page | Disposition |
-|---|---|---|---|---|
-| 1 | **Encounter Distances Table** | B (named table) | 93 | **VISUALLY INSPECTED** — principal governing object |
-| 2 | **"Encounter Distance" prose section** | F (detailed prose) | 92 | **VISUALLY INSPECTED** — the three surprise branches and the routing into object 1 |
-| 3 | **Game Turn Checklist, step 1** | C (checklist) | 91 | **VISUALLY INSPECTED** — states a wandering-monster appearance distance |
-| 4 | **"Wandering Monsters" prose** | F | 91 | **VISUALLY INSPECTED** — restates that distance and names it a detection distance |
-| 5 | **"Feet vs. Yards" / Distance section** | F | 87 | **VISUALLY INSPECTED** — the unit convention the table's two unit families depend on |
-| 6 | **Movement, Missile, and Spell Ranges checklist** | C | 87 | **VISUALLY INSPECTED** — indoors/outdoors unit rule |
-| 7 | **Infravision (Dwarf)** | F | 24 | **VISUALLY INSPECTED** — footnote ** selector; 60′ range |
-| 8 | **Infravision (Elf)** | F | 25 | **VISUALLY INSPECTED** — "identical to that of dwarves" |
-| 9 | **Halfling Special Abilities list** | F | 26 | **VISUALLY INSPECTED** — supports negative claim N-3 |
-| 10 | **Halfling ability sections** | F | 27 | **VISUALLY INSPECTED** — no Infravision subsection; "dimly lit building interiors" recorded |
-| 11 | **Encounter Checklist** | C | 93 | **VISUALLY INSPECTED** — contains **no** distance step; surprise is its step 2 |
-| 12 | **Chance of Encounter Table** | B | 92 | **VISUALLY INSPECTED** — `ROUTED TO EXP-001` (occurrence, not distance) |
-| 13 | **Monster Reactions Table** | B | 93 | **VISUALLY INSPECTED** — `ROUTED TO ENC-003` |
-| 14 | **"Encounters" definition prose** | F | 91 | **VISUALLY INSPECTED** — "within visual range"; dungeon-vs-outdoor roll cadence. *(Pass 2: this row previously also claimed the City→wilderness rule, which is printed on p. 93, not here — Review #1 `B-2`. That fact now belongs to row 34.)* |
-| 34 | **`Wandering Monster Encounters` prose** | F | **93** | **VISUALLY INSPECTED** — **added pass 2 (`B-2`).** Carries the setting-selection sentence ("the DM first needs to know where the characters are—dungeon or wilderness") and the City→wilderness rule that supplies the `Setting` the table omits |
-| 35 | **Surprise sidebar** (boxed: "When an unexpected encounter occurs, both sides roll 1d6…") | F | 92 | **VISUALLY INSPECTED** — **added pass 2** (non-blocking finding 5). `ROUTED TO ENC-002` — the three surprise states; this packet consumes them and claims no part of the mechanic |
-| 36 | **`Evasion and Pursuit` → `Definitions` → `Contact`** | F | **98** | **VISUALLY INSPECTED — added pass 2 (`B-1`).** Names encounter-distance determination explicitly, states the visual-range contact condition, and defers to "the earlier encounter rules". **Governing for ordering and for the contact condition; the evasion procedure it opens is `ENC-005`'s** |
-| 37 | **`Decision to Evade` (opening)** | F | 98 | **VISUALLY INSPECTED** — **added pass 2**; `ROUTED TO ENC-005`, and its surprise trigger `ROUTED TO ENC-002` |
-| 15 | **Game Day Checklist** | C | 91 | **VISUALLY INSPECTED** — entry point; carries no distance value |
-| 16 | **Dungeon Encounters / Wilderness Encounters prose + Wilderness Encounters Table** | B/F | 95 | **VISUALLY INSPECTED** — explicitly routes *back* to objects 1 and 11 for distance |
-| 17 | **Underwater Combat / Naval Combat** | F | 115 | **VISUALLY INSPECTED** — unit-terminology tension recorded as Q-6; no distance mechanic |
-| 18 | **Target Cover Table + Attack Roll Modifiers Table** | B | 108 | **VISUALLY INSPECTED** — `ROUTED TO COMBAT-*`; modify attack rolls, not distance |
-| 19 | **Blindness / Invisibility (Special Character Conditions)** | F | 150 | **VISUALLY INSPECTED** — condition effects; confirms infravision↔complete-darkness link; no distance mechanic |
-| 20 | **Monster description format — Nocturnal, Terrain** | F | 153 | **VISUALLY INSPECTED** — "dungeons are often dark as night"; Terrain line bears on Setting |
-| 21 | **Environmental Variations** | F | 215 | **VISUALLY INSPECTED** — `EXCLUDED — monster-adaptation guidance, no distance mechanic` |
-| 22 | **Index to Tables and Checklists** | A (index) | 301 | **VISUALLY INSPECTED** — enumerated in §5.1 |
-| 23 | **General Index A–H** | A | 302 | **VISUALLY INSPECTED** — enumerated in §5.2 |
-| 24 | **General Index H–Sl** | A | 303 | **VISUALLY INSPECTED** — enumerated in §5.2 |
-| 25 | **General Index Sl–Z** | A | 304 | **VISUALLY INSPECTED** — enumerated in §5.2; index ends here |
-| 26 | **Back cover** | I | 305 | **VISUALLY INSPECTED** — establishes the index's end boundary |
-| 27 | Dungeon Encounters Levels 1–10 Tables | B | 94 | **VISUALLY INSPECTED (pass 2)** — monster-selection tables only; carry no distance value. `ROUTED TO EXP-008`/`MON-001` |
-| 28 | Wilderness Encounter subtables 1–9 | B | 96–97 | **VISUALLY INSPECTED (pass 2)** — monster-selection only; no distance value. `ROUTED TO EXP-008`/`MON-001` |
-| 28a | Subtable 10 (Castle) and Subtable 11 (City) | B | **98** | **VISUALLY INSPECTED (pass 2)** — monster-selection only. **Row 28 previously described p. 98 as carrying *only* these subtables. That was wrong**: p. 98 also opens `Evasion and Pursuit` — rows 36–37 |
-| 29 | Evasion Checklist / Evasion Table / Ship Evasion Table | B/C | 99–100 | **ROUTED TO ENC-005** — Stage A accepted 2026-09-29; entered *after* contact, consumes distance rather than setting it. *(Pass 2: the `ENC-005` material **begins on p. 98**, not p. 99. This row's page scope was the other half of the gap `B-1` fell through; the p. 98 portion is now rows 36–37.)* |
-| 30 | Combat Sequence Checklist | C | 102 | **ROUTED TO COMBAT-006** |
-| 31 | Morale Scores Table | B | 103 | **ROUTED TO ENC-004** |
-| 32 | Terrain Effects on Movement / Traveling Rates by Terrain / Water Movement Modification Tables | B | 88, 90 | **EXCLUDED — per-day travel rates; `EXP-003`/`CHAR-005` territory, no encounter-distance term** |
-| 33 | Starvation Table | B | 150 | **EXCLUDED — unrelated; no Rule ID owns starvation causation (`INVENTORY.md` `EXP-006` row)** |
-
-**Manifest closure:** every row above is dispositioned, and **every row is now visually
-inspected.** Pass 1 left rows 27–28 (pp. 94, 96–98) dispositioned by printed routing
-without inspection, and declared that as its weakest point; Review #1 inspected them and
-found the declaration justified for pp. 94, 96 and 97 and **not** justified for p. 98,
-which carries `Contact`. Pass 2 inspected all four pages directly, split the p. 98 row,
-and added rows 34–37. No row in this manifest now rests on an uninspected page.
-
-## 5. Index Enumeration
-
-### 5.1 Tables / Checklists Index
-
-| Entry | Page | Disposition |
-|---|---|---|
-| **Encounter Distances Table** | 93 | **GOVERNING — principal object** |
-| Chance of Encounter Table | 92 | `ROUTED TO EXP-001` — occurrence |
-| **Encounter Checklist** | 93 | **GOVERNING context** — contains no distance step |
-| **Game Turn Checklist** | 91 | **GOVERNING** — carries a distance value at step 1 |
-| **Game Day Checklist** | 91 | OPENED — entry point, no distance value |
-| Monster Reactions Table | 93 | `ROUTED TO ENC-003` |
-| Evasion Checklist / Evasion Table | 99 | `ROUTED TO ENC-005` |
-| Ship Evasion Table | 100 | `ROUTED TO ENC-005` |
-| Castle Reactions Table | 99 | `ROUTED TO ENC-003` |
-| Dungeon Encounters Levels 1-10 Tables | 94 | `ROUTED TO EXP-008` / `MON-001` |
-| Wilderness Encounters Table (+ 11 subtables) | 95–98 | `ROUTED TO EXP-008` / `MON-001` |
-| Encounter Challenge Table / Balancing Encounters Checklist | 101 | `ROUTED TO ENC-007` (`DEC-0008`: OFF by default for V1) |
-| **Measurements of Game Time Table** | 87 | OPENED — time units, not distance |
-| **Movement, Missile, and Spell Ranges** | 87 | **GOVERNING** — the indoors/outdoors unit rule |
-| Character Movement Rates and Encumbrance Table | 88 | `ROUTED TO CHAR-005` |
-| Terrain Effects on Movement Table | 88 | `EXCLUDED — per-day travel` |
-| Traveling Rates by Terrain Table | 88 | `EXCLUDED — per-day travel` |
-| Water Movement Modification Table | 90 | `EXCLUDED — travel rate` |
-| Combat Sequence Checklist | 102 | `ROUTED TO COMBAT-006` |
-| Morale Scores Table | 103 | `ROUTED TO ENC-004` |
-| Target Cover Table | 108 | `ROUTED TO COMBAT-*` |
-| Monster Intelligence Table | 214 | `EXCLUDED — unrelated` |
-| Sample Skills Table | 82 | `EXCLUDED — no skill selects encounter distance` |
-| NPC Reasons for Appearing Checklist | 155 | `EXCLUDED — motive, not distance` |
-| Starvation Table | 150 | `EXCLUDED — unrelated` |
-| Attack Roll Modifiers Table | 108 | **added pass 2** (non-blocking finding 4) — `ROUTED TO COMBAT-*`; relied on by manifest row 18 |
-| Challenge Percentage Table | 101 | **added pass 2** (non-blocking finding 4) — `ROUTED TO ENC-007` |
-
-### 5.2 General Index
-
-| Entry | Pages | Followed? | Disposition |
-|---|---|---|---|
-| Encounters | 91–96 | yes | **GOVERNING range** — objects 1–4, 11, 14–16 |
-| Distance | 87 | yes | **GOVERNING** — the unit convention; note it does **not** point at 92/93 |
-| Surprise | 92, 93 | yes | `ROUTED TO ENC-002` — consumed as external input |
-| Infravision | 24, 25 | yes | **GOVERNING** — footnote ** selector |
-| Yards | 87 | yes | **GOVERNING** — unit convention |
-| Map scales | 87 | yes | OPENED — 10′ graph square; `ROUTED TO EXP-003` |
-| Ranges | 87 | yes | **GOVERNING** — indoors/outdoors units |
-| Encounter speed | 88, 95, 100, 103 | yes (88, 95) | `ROUTED TO CHAR-005` / `MON-003` — speed, not distance |
-| Wandering monster | 93, 261 | yes (93) | `ROUTED TO EXP-001` |
-| Wandering monsters check | 91 | yes | `ROUTED TO EXP-001`; its *appearance distance* is object 3 |
-| Dungeon encounters | 95 | yes | `ROUTED TO EXP-008` |
-| Wilderness encounters | 95, 96 | yes (95) | `ROUTED TO EXP-008`; routes distance back to object 1 |
-| Castle encounters | 95, 96 | partly (95) | `ROUTED TO EXP-008` |
-| Evasion | 91, 98–100 | yes (91) | `ROUTED TO ENC-005` |
-| Pursuit | 98–100 | no | `ROUTED TO ENC-005` |
-| Exploration | 91 | yes | OPENED — object 14 |
-| Game turn / Game day / Game time | 91, 87 | yes | `ROUTED TO EXP-002` |
-| Turns | 87, 91 | yes | `ROUTED TO EXP-002` |
-| Feet | 87 | yes | **GOVERNING** — unit convention |
-| Movement | 87, 88, 103, 263, 264 | partly (87, 88) | `ROUTED TO EXP-003` / `CHAR-005` |
-| Monster — Movement rate | 88 | yes | `ROUTED TO MON-003` |
-| Monster — Reactions | 93 | yes | `ROUTED TO ENC-003` |
-| Monster — Environmental variations | 215 | yes | `EXCLUDED — no distance mechanic` |
-| Nocturnal | 153 | yes | OPENED — "dungeons are often dark as night"; bears on Q-1 |
-| Terrain | 119, 153 | yes (153) | OPENED — monster Terrain line bears on the Setting axis |
-| Terrain effects on movement | 88 | yes | `EXCLUDED — per-day travel` |
-| Blindness | 150, 154 | yes (150) | `ROUTED TO EXP-006` / `CHAR-005` — condition, no distance |
-| Invisibility | 150 | yes | `ROUTED TO COMBAT-*` — attack-roll penalty only |
-| Special defenses | 24, 25, 27, 154 | yes (24, 25, 27) | OPENED — infravision lives here |
-| Underwater combat | 115 | yes | OPENED — unit tension Q-6 |
-| Naval combat | 115 | yes | `ROUTED TO ENC-005` ("Evasion at Sea") |
-| Swimming | 89 | no | `EXCLUDED — travel, not encounter distance` |
-| Cover | 108 | yes | `ROUTED TO COMBAT-*` |
-| Initiative | 102 | no | `ROUTED TO COMBAT-006` |
-| Morale | 102, 103, 119 | no | `ROUTED TO ENC-004` |
-| Lost | 89 | no | `ROUTED TO ENC-005` (`Regain Bearings`) |
-| Balancing encounters | 100, 101 | no | `ROUTED TO ENC-007` |
-| Skills | 82–85, 92 | yes (92) | **Index imprecision recorded** — p. 92 was read in full and carries no skill material; the "92" locator does not correspond to visible skill content on that page |
-| Detection | 24, 25 | yes | **added pass 2** (non-blocking finding 3) — dwarf trap/construction detection and elf secret-door detection; per-character search abilities, `ROUTED TO EXP-005`/`CHAR-010`. No encounter-distance term |
-| Torch | 62, 66, 69, 70 | yes, to ownership only | **added pass 2** — `ROUTED TO EXP-006` (landed, approved). The 30′ radius is a radius, not a visibility category; bears on N-4's qualification |
-| Range, weapon | 108 | yes | **added pass 2** — `ROUTED TO COMBAT-*`; missile range *consumes* a distance, does not set one |
-| Travel | 89, 91 | yes (91) | **added pass 2** — `ROUTED TO EXP-002`/`EXP-003`; Game Day travel, no distance term |
-| Speed | 88 | yes | **added pass 2** — `ROUTED TO CHAR-005`/`MON-003` |
-| Setting | 256, 259 | no | **added pass 2** — campaign-setting design guidance (Ch. 17), not the table's `Setting` column. Homonym, `EXCLUDED` |
-| Environment | 119 | no | **added pass 2** — War Machine terrain effects, mass-combat scale. `EXCLUDED` |
-| Swoop | 115, 154 | yes (115) | **added pass 2** — aerial attack maneuver; `ROUTED TO COMBAT-*`. Bears on the aerial gap, Q-16 |
-| Combat — Aerial | 114, 115 | yes (115) | **added pass 2** — aerial combat carries no encounter-distance mechanic; bears on Q-16 |
-
-### 5.3 Specialist indexes
-
-| Instrument | Entries relevant | Disposition |
-|---|---|---|
-| Index to Tables and Checklists (p. 301) | 25 entries, enumerated in §5.1 | **DISPOSITIONED** — this is the instrument that names the governing table |
-| General Index (pp. 302–304) | 39 entries, enumerated in §5.2 | **DISPOSITIONED** |
-| Any further index | none exists between p. 301 and the back cover at p. 305 | **DISPOSITIONED** — boundary visually confirmed |
-
-### 5.4 Enumerated absences
-
-The General Index contains **no entry** for any of the following terms, each of which a
-researcher would plausibly use to locate this card's subject. Each absence was established
-by reading the alphabetical neighbourhood where the entry would fall, not by a text search:
-
-- **"Encounter distance"** — between `Encounter speed` and `Encounters` (p. 302). Absent.
-- **"Visibility"** — between `Variant rules` and `Visitors` (p. 304). Absent.
-- **"Light"** — between `Lifeboat` and `Lightship` (p. 303). Absent.
-- **"Lantern"** — between `Land travel` and `Languages` (p. 303). Absent.
-- **"Darkness"** — between `Dagger` and `Days` (p. 302). Absent.
-- **"Ocean"** / **"Sea"** / **"Undersea"** — the O and S neighbourhoods (pp. 303, 304). Absent, although all three are printed *Setting* values in the governing table.
-
-This is itself a material research fact and is carried as negative claim **N-1**: the
-General Index cannot reach this card's governing table by the card's own subject name. The
-**Index to Tables and Checklists** *can* — it lists `Encounter Distances Table … 93`
-directly. The two instruments are therefore not interchangeable for this card, which is
-exactly the completeness point `DEC-0012` §9.9 makes.
-
-## 6. Governing Objects
-
-| Object | Page | Type | Why it governs |
-|---|---|---|---|
-| **Encounter Distances Table** | 93 | table | Produces the distance whenever neither party is surprised, keyed on Setting × Visibility × Encounter |
-| **"Encounter Distance" prose** | 92 | prose | States the two surprised-case distances, routes the unsurprised case to the table, and fixes the ordering relative to surprise |
-| **Game Turn Checklist step 1** | 91 | checklist | States a wandering-monster appearance distance of `2d6 × 10'` under "normal dungeon conditions" |
-| **"Wandering Monsters" prose** | 91 | prose | Restates that `2d6 × 10` value and characterises it as the distance at which monsters are *detected* |
-| **"Feet vs. Yards" + Movement, Missile, and Spell Ranges** | 87 | prose + checklist | Supplies the indoor/outdoor unit rule the table's `10'` and `10 yards` families rest on |
-| **Infravision** | 24, 25 | prose | Footnote ** makes infravision a selector for the Dim-light row; supplies its 60′ range and its suppression by light |
-| **"Encounters" definition** | 91 | prose | "Within visual range" — the contact condition |
-| **`Wandering Monster Encounters` prose** | **93** | prose | Supplies the Setting selection ("dungeon or wilderness") and the City→wilderness rule the table omits. *(Pass 2, `B-2`: this was previously attributed to p. 91.)* |
-| **`Contact` (Evasion and Pursuit → Definitions)** | **98** | prose | Names encounter-distance determination explicitly, restates the visual-range condition, and defers to "the earlier encounter rules". *(Pass 2, `B-1`.)* |
-
-> A **principal** governing object is named above (the Encounter Distances Table). *The*
-> single governing object is deliberately **not** named: objects 3 and 4 state a distance
-> that the table does not obviously produce, and until Q-1/Q-2 are adjudicated it cannot be
-> established that the table alone governs (§9.8).
-
-## 7. Visual Inspection Record
+## 3. Seeds
 
 ```text
-COVERAGE-LEDGER
-EVIDENCE-PAGES:  24, 25, 26, 27, 87, 91, 92, 93, 94, 95, 96, 97, 98, 108, 115, 150, 153, 215, 301, 302, 303, 304, 305
-IMAGE-VERIFIED:  24, 25, 26, 27, 87, 91, 92, 93, 94, 95, 96, 97, 98, 108, 115, 150, 153, 215, 301, 302, 303, 304, 305
-LOCATOR-ONLY:    none
-ACCESS-BLOCKED:  none
+SEEDS
+SUBJECT-TERMS:  encounter distance, visibility, surprise, infravision
+SEAMS:          none
+LEADS:          infravision -> 24, 25
 ```
 
-> **Pass 2 added pp. 94, 96, 97 and 98.** Pass 1 dispositioned those four pages by printed
-> routing without inspection and said so; p. 98 turned out to carry `Contact`
-> (Review #1 `B-1`). All four are now read as page images.
+> `SEAMS: none` is deliberate and is itself a finding: the `INVENTORY.md` reverse edge
+> alone reaches `ENC-005` and `EXP-006`, so the externally-derived obligation set needed no
+> researcher declaration at all. The tool derived **43** pages; §4 dispositions every one.
 
-| Page | Rendering confirmed | Note |
-|---|---|---|
-| 92 | full page, 1400px wide | Both columns legible; folio "92" visible; Encounter Distance section complete |
-| 93 | full page, 1400px wide | **All 13 table rows, 4 column headers and 3 footnotes legible**; folio "93" visible |
-| 87 | full page, 1400px wide | "Feet vs. Yards", Distance box and Measurements of Game Time Table all legible |
-| 91 | full page, 1400px wide | Both checklists and the Wandering Monsters prose legible |
-| 24, 25, 26, 27 | full page, 1400px wide | Infravision paragraphs and the halfling ability list legible |
-| 95, 108, 115, 150, 153, 215 | full page, 1400px wide | Legible; each dispositioned in §4 |
-| **98** | full page, 1400px wide | **Added pass 2 (`B-1`).** Subtable 10 (Castle) and Subtable 11 (City) in the right column; `Evasion and Pursuit`, `Definitions`, `Contact` and the opening of `Decision to Evade` in the left. Folio "98" visible |
-| **94, 96, 97** | full page, 1400px wide | **Added pass 2.** Monster- and NPC-selection subtables throughout; each read column by column and confirmed to carry no distance value |
-| 301, 302, 303, 304 | full page, 1400px wide | Index columns legible entry by entry |
-| 305 | full page, 1400px wide | Back cover — establishes that the index ends at p. 304 |
-
-No page in this packet was read by OCR, and no finding rests on a partially rendered
-image. Each page above was confirmed by reading its body text, not by its HTTP status.
-
-## 8. Cross-Reference Ledger
-
-| From | Explicit reference | Followed to | Result |
-|---|---|---|---|
-| p. 91 step 1 | "(see the 'Encounter Distance' section, below, for more information)" | p. 92 | **Followed.** Establishes that RC itself links the Game Turn Checklist's `2d6 × 10'` to the Encounter Distance section — the basis of Q-2 |
-| p. 91 | "switch to the Encounter Checklist (on page 93)" | p. 93 | **Followed.** The Encounter Checklist has six steps and **none** of them is a distance step |
-| p. 92 | "take a look at the Encounter Distances Table" | p. 93 | **Followed.** The table is the unsurprised-case procedure |
-| p. 92 | "though this may differ with some monsters; see Chapter 14" | pp. 152–215 | **Followed to ownership only.** This qualifies *surprise*, not distance — `ROUTED TO ENC-002`; per-monster variation is `MON-*`'s |
-| p. 93 footnote ** | "full darkness with infravision used" | pp. 24, 25 | **Followed.** Infravision is 60′, suppressed by normal and magical light; elf identical to dwarf |
-| p. 95 | "Play out the encounter as described under 'Encounters' on page 91, using the visibility, distance, and surprise factors" | p. 91 | **Followed.** Confirms RC's own triple and that wilderness encounters use the same machinery |
-| p. 95 | "Consult the Encounter Checklist and the Encounter Distances Table for other factors regarding encounters" | pp. 93 | **Followed.** Wilderness encounters route *back* to the same table — there is no separate wilderness distance procedure |
-| **p. 93** | "'City' is treated just like any other wilderness terrain" | p. 93 table | **Followed.** Supplies the Setting for City encounters, which the table does not list. *(Pass 2, `B-2`: the "From" page was recorded as p. 91 in pass 1 and is corrected here. The sentence is in p. 93's `Wandering Monster Encounters` section.)* |
-| **p. 98** | `Contact`: "as per the earlier encounter rules" | pp. 91–93 | **Followed — added pass 2 (`B-1`).** p. 98 states **no procedure of its own**; it defers explicitly to the encounter rules already inspected. This deferral is what keeps the governing procedure at pp. 92–93 |
-| **p. 98** | `Contact`: "the DM determines the encounter distance and the parties' relative states of surprise" | p. 92 | **Followed — added pass 2.** A second RC statement that both determinations happen at contact. It names distance first in the sentence but supplies **no sequencing word**; p. 92's "Once … has determined the relative conditions of surprise … he or she can decide how far apart" does sequence them. See Q-15 |
-| **p. 98** | "The Evasion Checklist on page 99 gives a step-by-step procedure" | p. 99 | **Followed to ownership only** — `ROUTED TO ENC-005` |
-| p. 115 | "Read the rules for 'Evasion at Sea' in Chapter 7" | pp. 99–100 | Followed to ownership only — `ROUTED TO ENC-005` |
-| p. 153 | monster `Terrain` line definitions incl. "Ocean … surface and underwater encounters" | p. 93 table | **Followed.** Monster Terrain supplies the table's Setting axis for wandering encounters |
-| p. 150 | "a character *without infravision* may find himself in an area of complete darkness" | p. 24 | **Followed.** Independent confirmation of the infravision↔complete-darkness link the ** footnote assumes |
-
-**Whole-source search terms used** (§9): the enumeration was index-driven and
-structure-driven, not text-search-driven. The terms sought *as index entries*, each
-recorded present or absent in §5.2/§5.4, were: `encounter distance`, `distance`,
-`encounters`, `encounter speed`, `surprise`, `visibility`, `light`, `lantern`, `darkness`,
-`infravision`, `yards`, `feet`, `ranges`, `map scales`, `terrain`, `nocturnal`,
-`blindness`, `invisibility`, `cover`, `ocean`, `sea`, `undersea`, `underwater combat`,
-`swimming`, `wandering monster`, `wilderness encounters`, `dungeon encounters`, `castle
-encounters`, `evasion`, `pursuit`, `movement`, `initiative`, `morale`, `lost`, `balancing
-encounters`, `skills`, `special defenses`. No finding in this packet rests on a text
-search, and no absence is asserted from a failed search alone (§10.4).
-
-## 9. Repository-Fact Verification
-
-| Project claim | Artifact inspected | Identifier / section | Verdict |
-|---|---|---|---|
-| R-1: `ENC-001` is registered as "Encounter Distance", RC Core, dependencies `—`, status `Unresearched` | `docs/rules/INVENTORY.md` | row 116 | **VERIFIED** |
-| R-2: `ENC-002` (Surprise) is `Unresearched` and itself depends on `CHAR-010` | `docs/rules/INVENTORY.md` | row 117 | **VERIFIED** |
-| R-3: No `ENC-001` Rule Card, evidence packet or source module exists | working tree | recursive search for `*ENC-001*` / `*enc_001*`; `docs/rules/` has no `encounters/` directory | **VERIFIED** — none exists |
-| R-4: `EXP-006` is landed and exposes mundane light state | `src/rules/exploration/light_and_exploration_resources.py` | `__all__` (13 names) | **VERIFIED** |
-| R-5: `EXP-006` does **not** own world visibility | same file | `MundaneLightContribution` docstring, l. 367–377 | **VERIFIED** — the type is explicitly "**Not** a statement about the world" and deliberately not named `Visibility` or `WorldLight` |
-| R-6: `ENC-001` is not grandfathered from the evidence linter | `scripts/lint_evidence.py` | `GRANDFATHERED` frozenset, l. 84–99 | **VERIFIED** — twelve entries, no `ENC-001`; comment states the list is closed |
-| R-7: `ENC-001` is dependency-unblocked in the current cluster boundary | `docs/rules/clusters/CLUSTER-004-BOUNDARY-CORRECTION.md` | l. 229, "the 16 unblocked cards" | **VERIFIED** |
-| R-8: `ENC-001` is one of `ENC-005`'s six Stage-B blocking providers | `docs/rules/evidence/ENC-005-evidence-remediated.md` | §7.1 l. 550; l. 564 | **VERIFIED** |
-| R-9: `ENC-005` Stage A recorded encounter distance as "light-keyed" | same | N-4a, l. 147 | **CORRECTED — was "light-keyed"**. The table is keyed on **Setting × Visibility × Encounter**, not on light alone; p. 92 names the selector as "the type of terrain (dungeon, wilderness, ocean/sea, or underwater)". `ENC-005`'s note is a locator, and this packet does not rely on it |
-| R-10: `EXP-001` owns the wandering-monster *check* | `docs/rules/INVENTORY.md` | row 101 — `VERIFIED`, implemented | **VERIFIED** |
-| R-11: `DEC-0012` requires exactly one human-selected pilot with four fixed criteria | `docs/decisions/DEC-0012-stage-a-evidence-integrity-gates.md` | item 15, l. 302–315 | **VERIFIED** |
-| R-12: No Rule ID currently owns a world *visibility category* | `docs/rules/INVENTORY.md` (all rows), plus R-5 | no row claims visibility/illumination state | **VERIFIED** — recorded as an ownership gap in §12, not invented |
-
-## 10. Evidence Map
-
-| # | Fact | Object | Provenance | Confidence |
-|---|---|---|---|---|
-| E-1 | The Encounter Distances Table has four columns — `Setting`, `Visibility`, `Encounter`, `Distance` — 13 data rows and 3 footnotes | p. 93, table | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-2 | Dungeon rows: Very good light `4d6x 10'`; Dim light `2d6x 10'`; No light `1d4x 10'` | p. 93 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-3 | Wilderness rows: Clear daylight `4d6 x 10 yards`; Dim light `2d6 x 10 yards`; No light `1d4 x 10 yards` | p. 93 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-4 | Ocean/sea rows split by `Encounter` = Ship vs Monster: Clear daylight `300 yards` / `4d6 x 10 yards`; Dim light `120 yards` / `2d6 X 10 yards`; No light `40 yards` / `1d4 x 10 yards` | p. 93 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-5 | Undersea row: `Any light`, DM's choice, `1d6 x 10 yards` — the only row whose Visibility value is "Any light" | p. 93 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-6 | Footnote `*` extends Dungeon to "Or other indoor setting" | p. 93 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-7 | Footnote `**` extends Dim light to "Or full darkness with infravision used" | p. 93 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-8 | Footnote `t` extends No light to "Or very poor visibility (heavy snow or fog, sandstorm, etc.)" | p. 93 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-9 | Both parties surprised → encounter distance is `1d4 x 10'` (or yards if outdoors) | p. 92 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-10 | One party surprised → the unsurprised party notices at the rolled `1d4 X 10'` distance; the surprised party does not notice until they reach **half** that distance | p. 92 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-11 | Neither surprised → consult the Encounter Distances Table, selected by "the type of terrain (dungeon, wilderness, ocean/sea, or underwater)" | p. 92 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-12 | **At p. 92** the ordering is sequenced: the DM determines that an encounter occurs **and** the relative conditions of surprise **before** deciding how far apart the parties are. *(Pass 2: narrowed from "Ordering is fixed" to name the page whose grammar fixes it, because p. 98 states both determinations without sequencing them — E-36, Q-15.)* | p. 92 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-13 | Indoors the basic unit of distance is the **foot**; outdoors it is the **yard**; one yard equals three feet | p. 87 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-14 | RC's own stated reason for the outdoor difference is "more open terrain and better lighting" | p. 87 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-15 | Wandering monsters "appear `2d6 x 10'` away in a direction of the DM's choice" under **normal dungeon conditions** | p. 91, Game Turn Checklist step 1 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-16 | The same value is restated as a procedure: roll `2d6`, multiply by 10, "the result is the distance, in feet, at which the monsters are detected" | p. 91, Wandering Monsters prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-17 | Step 1 cross-references the Encounter Distance section "for more information" | p. 91 | Rules Cyclopedia Explicit | PRIMARY TEXT + CROSS-REFERENCE CONFIRMED |
-| E-18 | An encounter occurs when groups "come within **visual range** of one another and at least one group becomes aware of the other" | p. 91 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-19 | "City" is treated just like any other wilderness terrain, and the DM "first needs to know where the characters are—dungeon or wilderness" | **p. 93**, `Wandering Monster Encounters` | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-20 | Infravision sees 60′ in the dark and "does not work in the presence of normal and magical light" | p. 24 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-21 | Elves have infravision "identical to that of dwarves" | p. 25 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-22 | The halfling's enumerated Special Abilities list contains no infravision; it does include hiding "in dimly lit building interiors" | pp. 26, 27 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-23 | A character without infravision "may find himself in an area of complete darkness" | p. 150 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-24 | The Encounter Checklist's six steps are Game Time, Surprise, Initiative, Reactions, Results, Encounter Ends — no step determines distance | p. 93 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-25 | Wilderness encounters are played out "using the visibility, distance, and surprise factors" and route to the Encounter Checklist and Encounter Distances Table | p. 95 | Rules Cyclopedia Explicit | PRIMARY TEXT + CROSS-REFERENCE CONFIRMED |
-| E-26 | "Dungeons are often dark as night," stated as part of the Nocturnal creature definition | p. 153 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-27 | Undersea missile ranges are read "in feet at all times" | p. 115 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-28 | Monster Terrain values include Ocean ("surface and underwater encounters"), Cavern, Settled, Open, River/Lake, Woods, Swamp, Desert, Mountain, Ruins, Cold/Arctic, Lost World | p. 153 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-29 | Monster Environmental Variations is DM adaptation guidance and states no distance mechanic | p. 215 | Unresolved by RC (no mechanic present) | DIRECT PRIMARY TEXT |
-| E-30 | Cover and "Attacker can't see target" adjust **attack rolls**, not encounter distance | p. 108 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-31 | The Index to Tables and Checklists lists `Encounter Distances Table … 93` | p. 301 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-32 | The General Index lists `Distance … 87`, `Encounters … 91-96`, `Surprise … 92, 93`, `Infravision … 24, 25` | pp. 302–304 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-33 | The General Index ends on p. 304; p. 305 is the back cover | pp. 304, 305 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-34 | `ENC-001` owns no mechanic for determining *which* visibility category obtains | pp. 92, 93 | Unresolved by RC | NOT YET ESTABLISHED |
-| E-35 | `Contact` is defined as: the two parties encounter one another "as per the earlier encounter rules", need not be near one another, "only within visual range"; and at that moment "the DM determines the encounter distance and the parties' relative states of surprise" | **p. 98** | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-36 | p. 98 states **no distance value and no procedure of its own** — it defers to "the earlier encounter rules" (pp. 91–93) and supplies no sequencing word between the two determinations it names | p. 98 | Rules Cyclopedia Explicit | PRIMARY TEXT + CROSS-REFERENCE CONFIRMED |
-| E-37 | The visual-range contact condition is stated **twice**, at p. 91 and again at p. 98, in materially the same terms | pp. 91, 98 | Rules Cyclopedia Explicit | PRIMARY TEXT + CROSS-REFERENCE CONFIRMED |
-| E-38 | pp. 94, 96 and 97 carry only monster- and NPC-selection subtables (`Roll` → `Monster`/profession → `Number Appearing`); no row, column or footnote on them states a distance | pp. 94, 96, 97 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
-| E-39 | The Chance of Encounter Table lists `aerial**` as a wilderness terrain type, footnoted to the Flyers subtable "regardless of terrain"; the Encounter Distances Table has **no Aerial `Setting` row** | pp. 92, 93 | Unresolved by RC | DIRECT PRIMARY TEXT |
-
-**Verbatim transcriptions** of governing text, each attributed to its page:
+## 4. Page Dispositions
 
 ```text
-p. 93 — Encounter Distances Table (complete)
+PAGE-DISPOSITIONS
+3: INSPECTED
+24: INSPECTED
+25: INSPECTED
+26: INSPECTED
+27: INSPECTED
+62: ROUTED_EXTERNAL EXP-006                 # Ch. 4 equipment catalog
+66: ROUTED_EXTERNAL COMBAT-*                # weapons table
+68: ROUTED_EXTERNAL CHAR-004                # armor / barding
+69: ROUTED_EXTERNAL EXP-006                 # lantern and oil descriptions
+70: ROUTED_EXTERNAL EXP-006                 # torch, tinderbox
+81: ROUTED_EXTERNAL CHAR-012                # general skills
+82: ROUTED_EXTERNAL CHAR-012                # Sample Skills Table
+83: ROUTED_EXTERNAL CHAR-012                # Caving, Endurance
+84: ROUTED_EXTERNAL CHAR-012                # skill descriptions
+85: ROUTED_EXTERNAL CHAR-012                # Tracking
+86: ROUTED_EXTERNAL CHAR-012                # skill slot acquisition
+87: INSPECTED
+88: ROUTED_EXTERNAL CHAR-005                # movement rates, exhaustion
+89: ROUTED_EXTERNAL EXP-004                 # travel, foraging, drowning
+91: INSPECTED
+92: INSPECTED
+93: INSPECTED
+94: INSPECTED
+95: INSPECTED
+96: INSPECTED
+97: INSPECTED
+98: INSPECTED
+99: ROUTED_EXTERNAL ENC-005                 # Evasion Checklist, Evasion Table
+100: INSPECTED
+103: ROUTED_EXTERNAL ENC-004                # Morale Scores Table
+104: ROUTED_EXTERNAL COMBAT-*               # Retreat / Fighting Withdrawal
+108: INSPECTED
+115: INSPECTED
+119: ROUTED_EXTERNAL ENC-004                # War Machine; morale at mass scale
+121: ROUTED_EXTERNAL EXP-004                # forced march
+125: ROUTED_EXTERNAL MAGIC-*                # create food spell
+143: ROUTED_EXTERNAL EXP-002                # Ch. 13 timekeeping
+145: ROUTED_EXTERNAL MAGIC-*                # Demihuman Clan Relics
+146: ROUTED_EXTERNAL MAGIC-*                # oils of darkness / moonlight / sunlight
+147: ROUTED_EXTERNAL EXP-005                # doors, listening
+149: ROUTED_EXTERNAL EXP-002                # Timetrack
+150: INSPECTED
+152: ROUTED_EXTERNAL MON-003                # Ch. 14 monster statistics
+153: INSPECTED
+154: ROUTED_EXTERNAL COMBAT-*               # special defenses, blindness in combat
+215: INSPECTED
+300: OUTSIDE_CARD_SCOPE MAGIC-*             # Index to Spells
+301: INSPECTED
+302: INSPECTED
+303: INSPECTED
+304: INSPECTED
+305: INSPECTED
+```
 
+> 43 pages were externally derived; 9 more are dispositioned because this packet cites
+> them. **No page here rests on an uninspected claim about RC content**: a `ROUTED_EXTERNAL`
+> line asserts only *whose* responsibility the page carries, established from the accepted
+> packet that cited it, not what the page says.
+
+## 5. Governing Objects
+
+| Object | Page | Kind | Disposition | Owner |
+|---|---|---|---|---|
+| Encounter Distances Table | 93 | table | GOVERNING | |
+| "Encounter Distance" prose section | 92 | prose | GOVERNING | |
+| Game Turn Checklist step 1 | 91 | checklist | GOVERNING | |
+| "Wandering Monsters" prose | 91 | prose | GOVERNING | |
+| "Feet vs. Yards" / Distance | 87 | prose | GOVERNING | |
+| "Encounters" definition (visual range) | 91 | prose | GOVERNING | |
+| `Wandering Monster Encounters` prose (setting selection, City) | 93 | prose | GOVERNING | |
+| Infravision (dwarf; elf identical) | 24 | prose | GOVERNING | |
+| `Contact` (Evasion and Pursuit → Definitions) | 98 | prose | GOVERNING | |
+| `Evasion at Sea` — pursuit start distance | 100 | prose | ROUTED | `ENC-005` |
+| Encounter Checklist | 93 | checklist | ROUTED | `ENC-002` |
+| Chance of Encounter Table | 92 | table | ROUTED | `EXP-001` |
+| Monster Reactions Table | 93 | table | ROUTED | `ENC-003` |
+| Wilderness / Dungeon Encounters subtables | 94–97 | table | ROUTED | `EXP-008` |
+
+## 6. Index Enumeration
+
+> **Manual, semantic instrument.** `DEC-0013` records that index seeding is **not**
+> mechanically external — no structured RC index transcription exists outside Stage-A
+> packets. These findings are the pilot's, re-confirmed by two independent reviews, and are
+> not described as machine-checked.
+
+| Instrument | Entry | Pages | Disposition |
+|---|---|---|---|
+| Tables / Checklists | Encounter Distances Table | 93 | GOVERNING — the principal object |
+| Tables / Checklists | Chance of Encounter Table | 92 | ROUTED `EXP-001` |
+| Tables / Checklists | Encounter Checklist | 93 | GOVERNING context; carries **no** distance step |
+| Tables / Checklists | Game Turn / Game Day Checklist | 91 | GOVERNING — step 1 carries a distance |
+| Tables / Checklists | Evasion Checklist / Ship Evasion Table | 99, 100 | ROUTED `ENC-005` |
+| Tables / Checklists | Movement, Missile, and Spell Ranges | 87 | GOVERNING — the unit rule |
+| General | Encounters | 91–96 | GOVERNING range |
+| General | Distance / Feet / Yards / Ranges | 87 | GOVERNING — unit convention |
+| General | Surprise | 92, 93 | ROUTED `ENC-002` — consumed as input |
+| General | Infravision | 24, 25 | GOVERNING — footnote `**` selector |
+| General | Evasion / Pursuit | 91, 98–100 | ROUTED `ENC-005` |
+| General | Nocturnal | 153 | OPENED — bears on Q-1 |
+| General | Blindness / Invisibility | 150 | ROUTED `EXP-006` / `COMBAT-*` |
+| General | Underwater combat | 115 | OPENED — unit tension, Q-6 |
+
+**Enumerated absences:** the General Index has **no** entry for `Encounter distance`,
+`Visibility`, `Light`, `Lantern`, `Darkness`, `Ocean`, `Sea` or `Undersea`. Each was
+established by reading the alphabetical neighbourhood the term would occupy, never by a
+failed text search, and each was independently re-verified by two reviewers. The
+**Tables/Checklists Index does** list `Encounter Distances Table … 93`, so the two
+instruments are not interchangeable for this card.
+
+## 7. Transcriptions
+
+```text
+TRANSCRIPTION p. 93
+Encounter Distances Table
 Setting        Visibility          Encounter      Distance
 Dungeon*       Very good light     DM's choice    4d6x 10'
 Dungeon*       Dim light**         DM's choice    2d6x 10'
@@ -414,16 +191,18 @@ Ocean/sea      Dim light**         Monster        2d6 X 10 yards
 Ocean/sea      No lightt           Ship           40 yards
 Ocean/sea      No lightt           Monster        1d4 x 10 yards
 Undersea       Any light           DM's choice    1d6 x 10 yards
-
   *  Or other indoor setting.
  **  Or full darkness with infravision used.
   t  Or very poor visibility (heavy snow or fog, sandstorm, etc.).
+
+When a random encounter is to occur, the DM first needs to know where the
+characters are--dungeon or wilderness. "City" is treated just like any other
+wilderness terrain.
 ```
 
 ```text
-p. 92 — "Encounter Distance" (complete section)
-
-"Once the Dungeon Master has determined that an encounter will take place and
+TRANSCRIPTION p. 92
+Once the Dungeon Master has determined that an encounter will take place and
 has determined the relative conditions of surprise for the two groups, he or
 she can decide how far apart the two parties are when the encounter takes
 place.
@@ -435,504 +214,253 @@ notice the unsurprised party until they reach half that distance.
     When neither party is surprised, take a look at the Encounter Distances
 Table. When the type of terrain (dungeon, wilderness, ocean/sea, or
 underwater) is known, the DM can find out how far apart the groups are when
-the encounter takes place."
+the encounter takes place.
 ```
 
 ```text
-p. 91 — Game Turn Checklist, step 1
-
-"1. Wandering Monsters: If the wandering monsters check at the end of the
+TRANSCRIPTION p. 91
+1. Wandering Monsters: If the wandering monsters check at the end of the
 previous turn was positive, the monsters arrive now. Under normal dungeon
 conditions, they appear 2d6 x 10' away in a direction of the DM's choice (see
-the "Encounter Distance" section, below, for more information). Leave the Game
-Turn Checklist sequence and go to the Encounter Checklist, below. See
-"Handling Wandering Monsters," below, for more details on handling wandering
-monsters."
+the "Encounter Distance" section, below, for more information).
 
-   [Pass 2: the final two sentences were omitted in pass 1 -- Review #1
-    non-blocking finding 6. The cross-reference they carry is now in the
-    Section 8 ledger.]
-```
-
-```text
-p. 98 -- "Evasion and Pursuit" -> "Definitions" -> "Contact" (complete)
-
-"Contact
-    Contact occurs when the two parties encounter one another, as per the
-earlier encounter rules. They do not have to be near one another, only within
-visual range. When the encounter occurs, the DM determines the encounter
-distance and the parties' relative states of surprise."
-
-and the section it opens:
-
-"Evasion and Pursuit
-    When two groups encounter one another, one or both may decide to evade the
-other, or one group may decide to pursue the evading group. This means that,
-as soon as the groups spot one another, the evading group turns and runs,
-trying to get out of the pursuers' sight. Time is measured in rounds for as
-long as the chase occurs. The side running away is "evading," and the other
-chasing is "in pursuit." The Evasion Checklist on page 99 gives a step-by-step
-procedure for handling evasion and pursuit.
-
-Definitions
-    The terms used in the Evasion Checklist are defined in the following
-subsections and are presented in the order that they are most likely to
-occur."
-```
-
-```text
-p. 91 — "Wandering Monsters"
-
-"When a DM's roll indicates that wandering monsters will appear, they appear
+When a DM's roll indicates that wandering monsters will appear, they appear
 the following turn. The DM rolls 2d6 and multiplies this number by 10; the
 result is the distance, in feet, at which the monsters are detected.
-    This is the distance at which the DM first begins keeping track of them
-and the distance at which both sides first have a chance to notice one
-another."
+
+An "encounter" occurs when two or more groups come within visual range of one
+another and at least one group becomes aware of the other.
 ```
 
 ```text
-p. 87 — "Feet vs. Yards"
-
-"In dungeons and other indoor settings, the basic unit of distance measurement
+TRANSCRIPTION p. 87
+In dungeons and other indoor settings, the basic unit of distance measurement
 is the foot. Missile and spell ranges are measured in feet; a character's
 normal speed is expressed in feet. In wildernesses, open fields, open city
 streets, and other outdoor settings, the basic unit of distance measurement is
 the yard. (One yard equals three feet.) In outdoor settings, it is easier to
-move quickly due to more open terrain and better lighting."
+move quickly due to more open terrain and better lighting.
 ```
 
 ```text
-p. 24 — "Infravision"
-
-"Infravision is the ability to see heat (and the lack of heat). Dwarves have
+TRANSCRIPTION p. 24
+Infravision is the ability to see heat (and the lack of heat). Dwarves have
 infravision in addition to normal sight and can see 60' in the dark.
-Infravision does not work in the presence of normal and magical light. With
-infravision, warm things appear red, and cold things appear blue. A creature
-could be seen as a red shape, leaving faint reddish footprints. A cold pool of
-water would seem a deep blue color.
-    Characters with infravision can even see items or creatures the same
-temperature as the surrounding air (such as a table or a skeleton), since air
-flow will inevitably show the viewer their borders, outlining them in a faint
-lighter-blue tone. Until they move, they will be very faint to the eye; once
-they start moving, they become blurry but very obvious light-blue figures.
-    Infravision isn't good enough to read by. A character can use his
-infravision to recognize an individual only if they are within 10' distance
-. . . unless the individual is very, very distinctive (for example, 8' tall or
-walking with a crutch)."
-
-   [Pass 2: pass 1 quoted only the first three sentences -- Review #1
-    non-blocking finding 6. The 10' recognition clause bears on Q-4 and Q-5
-    and is now carried in full.]
-```
-
-## 11. Negative Claim Ledger
-
-```text
-NEGATIVE-CLAIM-RECORD
-CLAIM:                           The RC General Index has no entry for "Encounter
-                                 distance", "Visibility", "Light", "Lantern",
-                                 "Darkness", "Ocean", "Sea" or "Undersea".
-SCOPE SEARCHED:                  General Index, pp. 302-304 (its full extent; p. 305
-                                 is the back cover)
-STRUCTURAL INSTRUMENTS CHECKED:  Appendix 4 heading; Index to Tables and Checklists
-                                 (p. 301); General Index column structure
-INDEXES CHECKED:                 General Index entry by entry across the alphabetical
-                                 neighbourhood each absent term would occupy
-SEARCH TERMS USED:               encounter distance, visibility, light, lantern,
-                                 darkness, ocean, sea, undersea -- each sought as an
-                                 index entry, by reading its neighbours, not by text
-                                 search
-CROSS-REFERENCES FOLLOWED:       Encounters 91-96; Distance 87; Surprise 92, 93;
-                                 Infravision 24, 25
-VISUAL PAGES INSPECTED:          301, 302, 303, 304, 305
-FALSIFICATION ATTEMPT:           Sought the same terms in the Index to Tables and
-                                 Checklists, where "Encounter Distances Table ... 93"
-                                 IS present -- so the subject is indexed as a TABLE
-                                 but not as a SUBJECT. The claim is therefore
-                                 narrowed to the General Index and does not assert
-                                 that the source fails to index the table at all.
-CONFIDENCE:                      DIRECT PRIMARY TEXT
+Infravision does not work in the presence of normal and magical light.
 ```
 
 ```text
-NEGATIVE-CLAIM-RECORD
-CLAIM:                           The Encounter Checklist (p. 93) contains no step that
-                                 determines encounter distance.
-SCOPE SEARCHED:                  p. 93 Encounter Checklist, all six numbered steps and
-                                 their sub-steps, read complete
-STRUCTURAL INSTRUMENTS CHECKED:  Index to Tables and Checklists entry "Encounter
-                                 Checklist ... 93"; the checklist box itself
-INDEXES CHECKED:                 Tables/Checklists Index; General Index "Encounters
-                                 91-96"
-SEARCH TERMS USED:               distance, encounter distance -- sought within the
-                                 checklist text itself
-CROSS-REFERENCES FOLLOWED:       p. 91 -> p. 93 ("switch to the Encounter Checklist");
-                                 p. 95 -> p. 93
-VISUAL PAGES INSPECTED:          91, 93, 95
-FALSIFICATION ATTEMPT:           Looked specifically for a distance step hidden inside
-                                 step 5 (Results) and step 1 (Game Time), where one
-                                 could plausibly sit. Step 5's sub-steps cover traps,
-                                 conversation, running away and combat; none sets a
-                                 distance. Distance is set in the p. 92 prose BEFORE
-                                 the checklist is entered, consistent with E-12.
-CONFIDENCE:                      DIRECT PRIMARY TEXT
+TRANSCRIPTION p. 98
+Contact occurs when the two parties encounter one another, as per the earlier
+encounter rules. They do not have to be near one another, only within visual
+range. When the encounter occurs, the DM determines the encounter distance and
+the parties' relative states of surprise.
 ```
 
 ```text
-NEGATIVE-CLAIM-RECORD
-CLAIM:                           Halflings have no infravision; among PC races only
-                                 dwarves and elves do.
-SCOPE SEARCHED:                  Ch. 2 character-class entries for dwarf (pp. 23-25),
-                                 elf (pp. 25-26) and halfling (pp. 26-27)
-STRUCTURAL INSTRUMENTS CHECKED:  The per-class "Special Abilities" enumerated list and
-                                 the per-class ability subsections
-INDEXES CHECKED:                 General Index "Infravision ... 24, 25" -- two pages
-                                 only, being the dwarf and elf entries
-SEARCH TERMS USED:               infravision -- sought as an index entry and as a
-                                 subsection heading in each class entry
-CROSS-REFERENCES FOLLOWED:       p. 25 elf -> p. 24 dwarf ("identical to that of
-                                 dwarves"); p. 150 -> p. 24
-VISUAL PAGES INSPECTED:          24, 25, 26, 27, 150, 303
-FALSIFICATION ATTEMPT:           Read the halfling's complete enumerated Special
-                                 Abilities list on p. 26 looking for infravision, and
-                                 read p. 27's ability subsections looking for an
-                                 Infravision heading of the kind dwarf and elf each
-                                 carry. Neither contains one. The halfling instead
-                                 hides "in dimly lit building interiors", which is a
-                                 different mechanic.
-CONFIDENCE:                      DIRECT PRIMARY TEXT
+TRANSCRIPTION p. 100
+If the evasion is not successful, the pursuer starts at a distance of 300
+yards on a clear day. (At the DM's discretion, if the weather is impairing
+vision, the pursuer may start closer.) The pursuing ship closes in.
 ```
 
-```text
-NEGATIVE-CLAIM-RECORD
-CLAIM:                           Within the chapters that carry the encounter,
-                                 movement and dungeon-procedure rules, RC states no
-                                 procedure for determining WHICH visibility category
-                                 (Very good light / Dim light / No light) obtains at
-                                 a given moment.
-                                 [Pass 2: NARROWED. Pass 1 asserted this of RC as a
-                                 whole, while having searched only the chapters named
-                                 below -- Review #1 non-blocking finding 7. The claim
-                                 is narrowed to the scope actually searched rather
-                                 than the search being retro-fitted to the claim. It
-                                 does NOT assert absence over Ch. 3 (Spells) or Ch. 4
-                                 (Equipment), neither of which was inspected this
-                                 pass; magical light is routed to MAGIC-* and mundane
-                                 light to EXP-006 (landed), whose own accepted Stage A
-                                 inspected pp. 69-70 and established a RADIUS, which
-                                 is not a category.]
-SCOPE SEARCHED:                  Ch. 7 pp. 91-98 complete; the three table footnotes;
-                                 Ch. 6 p. 87; Ch. 13 p. 150; Ch. 14 pp. 153, 215.
-                                 NOT searched: Ch. 3 (Spells, pp. 32-61), Ch. 4
-                                 (Equipment, pp. 62-74) -- see the narrowing above
-STRUCTURAL INSTRUMENTS CHECKED:  Index to Tables and Checklists, read for any
-                                 visibility, light or illumination table -- none is
-                                 listed; General Index neighbourhoods for "Light",
-                                 "Visibility", "Darkness" -- all absent (N-1)
-INDEXES CHECKED:                 both instruments, pp. 301-304
-SEARCH TERMS USED:               visibility, light, dim light, very good light, no
-                                 light, darkness, illumination
-CROSS-REFERENCES FOLLOWED:       p. 93 footnotes ** and t -> pp. 24, 25; p. 92 -> p. 93
-VISUAL PAGES INSPECTED:          24, 25, 87, 91, 92, 93, 94, 95, 96, 97, 98, 150,
-                                 153, 215, 301, 302, 303, 304
-FALSIFICATION ATTEMPT:           Sought a definition in the three places it would most
-                                 plausibly sit: the table's own footnotes (which
-                                 EXTEND categories but never define them), the
-                                 equipment light sources (EXP-006's accepted evidence
-                                 establishes a 30' radius, which is a radius and not a
-                                 category), and the Nocturnal definition on p. 153
-                                 ("dungeons are often dark as night" -- a
-                                 characterisation, with "often", not a rule). None
-                                 supplies a selector.
-CONFIDENCE:                      DIRECT PRIMARY TEXT
-```
+## 8. Evidence Map
 
-## 12. Ownership and Dependency Routing
+| # | Page | Quote | Paraphrase | Object | Provenance | Confidence |
+|---|---|---|---|---|---|---|
+| E-1 | 93 | Dungeon*       Very good light     DM's choice    4d6x 10' | | table | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-2 | 93 | Dungeon*       Dim light**         DM's choice    2d6x 10' | | table | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-3 | 93 | Undersea       Any light           DM's choice    1d6 x 10 yards | | table | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-4 | 93 | Or full darkness with infravision used. | | footnote ** | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-5 | 93 | Or very poor visibility (heavy snow or fog, sandstorm, etc.). | | footnote t | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-6 | 93 | Ocean/sea      Clear daylight      Ship           300 yards | | table | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-7 | 92 | the encounter distance is 1d4 x 10' (or | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-8 | 92 | the surprised party won't | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-9 | 92 | When neither party is surprised, take a look at the Encounter Distances | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-10 | 92 | has determined the relative conditions of surprise for the two groups | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-11 | 87 | the basic unit of distance measurement | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-12 | 87 | it is easier to move quickly due to more open terrain and better lighting | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-13 | 91 | they appear 2d6 x 10' away in a direction of the DM's choice | | checklist | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-14 | 91 | the result is the distance, in feet, at which the monsters are detected | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-15 | 91 | come within visual range of one | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-16 | 93 | "City" is treated just like any other | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-17 | 24 | can see 60' in the dark | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-18 | 24 | Infravision does not work in the presence of normal and magical light. | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-19 | 98 | the DM determines the encounter distance and | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-20 | 98 | as per the earlier | | prose | Rules Cyclopedia Explicit | PRIMARY TEXT + CROSS-REFERENCE CONFIRMED |
+| E-21 | 100 | the pursuer starts at a distance of 300 | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-22 | 100 | if the weather is impairing | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-23 | 95 | | Wilderness encounters are played out "using the visibility, distance, and surprise factors" and route back to the Encounter Checklist and Encounter Distances Table | prose | Rules Cyclopedia Explicit | PRIMARY TEXT + CROSS-REFERENCE CONFIRMED |
+| E-24 | 153 | | The Nocturnal definition states dungeons are often dark as night — a hedged characterisation inside a creature-activity rule, not a visibility rule | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-25 | 115 | | Underwater Combat says undersea missile ranges are read in feet at all times, while the table's Undersea row is in yards | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-26 | 94 | | pp. 94, 96 and 97 carry only monster- and NPC-selection subtables; no row, column or footnote states a distance | tables | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-27 | 92 | | The Chance of Encounter Table lists aerial as a wilderness terrain, but the Encounter Distances Table has no Aerial Setting row | table | Unresolved by RC | DIRECT PRIMARY TEXT |
+| E-28 | 3 | | The Contents confirms App. 4 Indices at 300–304: Index to Spells 300, Tables and Checklists 301, General Index 302 | front matter | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-29 | 93 | | RC states no procedure for selecting which visibility category obtains | table | Unresolved by RC | NOT YET ESTABLISHED |
 
-| Mechanic | Owner | Status | Evidence for the routing |
+## 9. Cross-References
+
+| From | Printed reference | To | Result |
 |---|---|---|---|
-| Encounter-distance determination | **`ENC-001`** (this card) | UNRESEARCHED → this packet | R-1 |
-| Surprise determination (the `1d6`, the 1–2 result, per-monster variation) | `ENC-002` | UNRESEARCHED | R-2; p. 92 and p. 93 step 2 recorded as **input**, not claimed |
-| **World visibility category** (which of Very good light / Dim light / No light obtains) | **NO RULE ID EXISTS** | — | R-12, R-5, negative claim N-4. `EXP-006` owns *mundane light contribution* and its own docstring states it is "**Not** a statement about the world"; no inventory row claims visibility state. **Recorded as a gap, not invented.** |
-| Mundane light sources, radius, depletion | `EXP-006` | **LANDED** (approved 2026-10-01, implemented, merged) | R-4 |
-| Whether an encounter occurs at all | `EXP-001` (dungeon wandering check) / Chance of Encounter Table | `VERIFIED`, implemented | R-10 |
-| Evasion and pursuit after contact | `ENC-005` | Stage A accepted; Stage B deferred | R-8 |
-| The **`Contact` definition** (p. 98) as a step of the Evasion Checklist | `ENC-005` | Stage A accepted | **Added pass 2 (`B-1`).** `Contact` is `ENC-005`'s step 1. `ENC-001` does **not** claim it |
-| The **encounter distance** that `Contact` names | **`ENC-001`** (this card) | — | **Added pass 2.** p. 98 defers to "the earlier encounter rules" and states no distance of its own, so naming distance there creates no second owner. `ENC-005` **consumes** the value; `ENC-001` produces it |
-| The **surprise states** that `Contact` names alongside distance | `ENC-002` | UNRESEARCHED | **Added pass 2.** Unchanged by `B-1`: p. 98 names surprise in the same sentence as distance, and this packet claims no part of it. The approved boundary holds — `ENC-001` consumes authoritative surprise state and does not determine it |
-| Monster movement rate / relative speed | `MON-003` | UNRESEARCHED | p. 93 table does not use speed; routed for `ENC-005` only |
-| Monster reaction after contact | `ENC-003` | UNRESEARCHED | p. 93 Monster Reactions Table |
-| Which monster is encountered | `EXP-008` / `MON-001` | UNRESEARCHED | pp. 94–98 |
-| Feet/yards unit convention | **RC Ch. 6 p. 87 — no Rule ID claims it as its own responsibility** | — | `EXP-003` (APPROVED) states feet-indoors for *movement*; the general convention at p. 87 is consumed by this card. Recorded as a **potential completion question**, not assigned |
-| Attack-roll effects of cover and not seeing a target | `COMBAT-*` | UNRESEARCHED | E-30 |
-| Blindness as a character condition | `EXP-006` / `CHAR-005` routing already established | — | E-23; no distance mechanic |
+| 91 | "(see the "Encounter Distance" section, below, for more information)" | 92 | Links the Game Turn Checklist's `2d6 × 10'` to the Encounter Distance section — the basis of Q-2 |
+| 91 | "switch to the Encounter Checklist (on page 93)" | 93 | The checklist has six steps; **none** determines distance |
+| 92 | "take a look at the Encounter Distances Table" | 93 | The unsurprised-case procedure |
+| 92 | "though this may differ with some monsters; see Chapter 14" | 152 | Qualifies **surprise**, not distance — routed to `ENC-002`; per-monster variation is `MON-*` |
+| 93 | footnote `**` "full darkness with infravision used" | 24 | Infravision is 60′, suppressed by normal and magical light |
+| 95 | "Consult the Encounter Checklist and the Encounter Distances Table" | 93 | Wilderness encounters route **back** to the same table; no separate wilderness procedure |
+| 93 | "'City' is treated just like any other wilderness terrain" | 93 | Supplies the Setting the table omits |
+| 98 | "as per the earlier encounter rules" | 92 | p. 98 states **no procedure of its own**; it defers to pp. 91–93 |
+| 98 | "The Evasion Checklist on page 99" | 99 | Routed to `ENC-005` |
+| 100 | "Read the rules for 'Evasion at Sea'" (from p. 115) | 100 | Pursuit start distance — `ENC-005`'s; see §10 |
+| 150 | "a character without infravision may find himself in an area of complete darkness" | 24 | Independent confirmation of the infravision↔darkness link the `**` footnote assumes |
 
-## 13. Falsification Pass
+## 10. Ownership and Dependency Routing
+
+| Mechanic | Owner | Status | Basis |
+|---|---|---|---|
+| Encounter-distance determination at contact | **`ENC-001`** | this packet | pp. 92, 93 |
+| Surprise determination | `ENC-002` | UNRESEARCHED | p. 92's ordering makes surprise a **settled input**; this card consumes it and claims no part of the mechanic |
+| **Pursuit starting distance after a failed evasion** | **`ENC-005`** | Stage A accepted | p. 100 — see the determination below |
+| Whether an encounter occurs | `EXP-001` | `VERIFIED`, implemented | Chance of Encounter Table |
+| **World visibility category** | **NO RULE ID EXISTS** | — | `EXP-006` owns mundane light *contribution* and its own module states it is "**Not** a statement about the world". Recorded as a gap, not invented |
+| Mundane light sources | `EXP-006` | LANDED | approved and implemented |
+| Feet/yards unit convention | RC Ch. 6 p. 87 — **no Rule ID claims it** | — | consumed here; recorded as a potential completion question, not assigned |
+
+### p. 100 `Evasion at Sea` — determination: **routed to `ENC-005`, not `ENC-001` governing**
+
+Decided on **structure, procedure position and ownership boundary**, explicitly *not* on
+the numeric resemblance to the table's `Ocean/sea | Clear daylight | Ship | 300 yards` row:
+
+- **Structure.** It sits inside `Evasion and Pursuit` (pp. 98–100), under the `Evasion at
+  Sea` heading, immediately after the Ship Evasion Table. It is not in the Encounter
+  Distance section and not in the Encounter Distances Table.
+- **Procedure position.** It applies *"If the evasion is not successful"* — after contact,
+  after an encounter distance has already been produced by pp. 92–93, and after an evasion
+  attempt has been resolved. It sets where a **chase** begins.
+- **Ownership.** `ENC-005` owns evasion and pursuit; `ENC-001` owns the distance at
+  contact. Routing it here would absorb a mechanic this card explicitly does not own.
+
+**The distinction is preserved and is load-bearing:** *initial encounter distance* (set
+once, at contact, by setting and visibility or by surprise) is a different quantity from
+*pursuit starting distance* (set after a failed sea evasion, as a flat 300 yards reducible
+at the DM's discretion for impaired vision). An implementer must not collapse them because
+one number matches one table cell.
+
+Recorded for `ENC-005`, not resolved here: whether a failed sea evasion **resets** the
+separation to 300 yards even when the table had produced a Dim-light `120 yards` or
+No-light `40 yards` encounter distance. That is a pursuit question.
+
+## 11. Consequential Negative Claims
 
 ```text
-FALSIFICATION-RECORD
-CONCLUSION:     The Encounter Distances Table is keyed on Setting AND Visibility
-                (and, at sea, on Encounter type) -- not on light alone.
-WOULD FALSIFY:  A table whose only discriminating column is Visibility, or prose
-                naming light as the sole selector.
-SOUGHT:         The table itself at p. 93, read column by column and row by row;
-                and the p. 92 prose that routes into it.
-RESULT:         Four columns confirmed. p. 92 names the selector as "the type of
-                terrain (dungeon, wilderness, ocean/sea, or underwater)". Both
-                axes are required: Dungeon/Dim light and Wilderness/Dim light give
-                different units and different values.
-DISPOSITION:    CONFIRMED -- and it CORRECTS the inherited ENC-005 note (R-9).
+NEGATIVE-CLAIM
+CLAIM:                  Within the chapters carrying the encounter, movement and
+                        dungeon-procedure rules, RC states no procedure for
+                        determining WHICH visibility category (Very good light /
+                        Dim light / No light) obtains at a given moment.
+SCOPE SEARCHED:         Ch. 7 pp. 91-100 complete; the three table footnotes;
+                        Ch. 6 p. 87; Ch. 13 p. 150; Ch. 14 pp. 153, 215.
+                        NOT searched: Ch. 3 (Spells) or Ch. 4 (Equipment) -- the
+                        claim is scoped to what was searched and does not extend
+                        over them. Magical light routes to MAGIC-*; mundane light
+                        is EXP-006's, whose accepted Stage A established a 30'
+                        RADIUS, which is not a category.
+INSTRUMENTS CHECKED:    Tables/Checklists Index read for any visibility, light or
+                        illumination table -- none is listed. General Index
+                        neighbourhoods for Light, Visibility, Darkness -- all
+                        absent, each established by reading the neighbourhood.
+FALSIFICATION ATTEMPT:  Sought a selector in the four places it would most
+                        plausibly sit: the table's own footnotes (which EXTEND
+                        categories but never define them); EXP-006's equipment
+                        light (a radius); p. 153's Nocturnal definition
+                        ("dungeons are OFTEN dark as night" -- hedged, and about
+                        creature activity); and p. 100's Evasion at Sea, which
+                        conditions a distance on weather impairing vision but
+                        defines no category and governs pursuit, not contact.
+                        None supplies a selector.
+```
+
+> This is the **only** consequential negative claim. The pilot's `N-1` (index absences),
+> `N-2` (no visibility index entry) and `N-3` (halfling infravision) are **not** recreated:
+> index absences are recorded in §6 as findings, and none of the three is an absence a
+> later Rule Card would rely on.
+
+## 12. Targeted Falsification
+
+```text
+FALSIFICATION
+CONCLUSION:   p. 100 Evasion at Sea is ENC-005's pursuit-start rule, not an
+              ENC-001 encounter-distance rule.
+SOUGHT:       p. 100 read as a page image; its heading, its position relative to
+              the Ship Evasion Table, and its entry condition. Also whether the
+              Encounter Distance section or the table cross-references it.
+RESULT:       It is under "Evasion at Sea" inside Evasion and Pursuit, triggers
+              only on a FAILED evasion, and neither p. 92 nor p. 93 refers to it.
+              The 300-yard match with one table cell is a coincidence of value,
+              not of procedure.
+DISPOSITION:  CONFIRMED
 ```
 
 ```text
-FALSIFICATION-RECORD
-CONCLUSION:     "Normal dungeon conditions" (p. 91) is NOT established by RC to mean
-                the table's "Dim light" row, despite both yielding 2d6 x 10'.
-WOULD FALSIFY:  Any RC text equating the two, or defining "normal dungeon
-                conditions" in visibility terms.
-SOUGHT:         p. 91 in full; p. 92-93 in full; the table's three footnotes;
-                p. 153's Nocturnal definition; p. 87's lighting remark; the
-                General Index neighbourhoods for Light/Visibility/Darkness.
-RESULT:         No equating text found. p. 153 says "dungeons are OFTEN dark as
-                night" -- a hedged characterisation inside a creature-activity
-                definition, not a visibility rule. p. 87 attributes better
-                lighting to the OUTDOORS, which if anything cuts against reading
-                the dungeon default as "Very good light", but establishes nothing
-                about which dungeon row applies.
-DISPOSITION:    CONFIRMED as an open ambiguity -- recorded as Q-1, NOT adjudicated.
-                This is the EXP-006 lesson in live form: the numeric coincidence is
-                real and is exactly what would tempt a silent identification.
+FALSIFICATION
+CONCLUSION:   "Normal dungeon conditions" (p. 91) is NOT established to mean the
+              table's Dim light row, despite both yielding 2d6 x 10'.
+SOUGHT:       p. 91 complete; pp. 92-93 complete; the three footnotes; p. 153's
+              Nocturnal definition; p. 87's lighting remark; the General Index
+              neighbourhoods for Light / Visibility / Darkness.
+RESULT:       No equating text found anywhere. p. 153 hedges with "often"; p. 87
+              attributes better lighting to the OUTDOORS.
+DISPOSITION:  CONFIRMED as an open ambiguity -- retained, not adjudicated.
 ```
 
 ```text
-FALSIFICATION-RECORD
-CONCLUSION:     There is no separate wilderness encounter-distance procedure.
-WOULD FALSIFY:  A distance rule inside the Wilderness Encounters material, or a
-                second distances table keyed to outdoor terrain.
-SOUGHT:         p. 95 Wilderness Encounters prose and box; the Tables/Checklists
-                Index read for any second distances table; the General Index
-                entries "Wilderness encounters 95, 96" and "Castle encounters".
-RESULT:         p. 95 explicitly sends the reader back: "Consult the Encounter
-                Checklist and the Encounter Distances Table". The Tables Index
-                lists exactly one Encounter Distances Table. The single table
-                carries the Wilderness rows itself.
-DISPOSITION:    CONFIRMED.
+FALSIFICATION
+CONCLUSION:   ENC-001 consumes surprise state and does not determine it.
+SOUGHT:       p. 92's ordering sentence; p. 93 Encounter Checklist step 2;
+              p. 98's Contact, which names both determinations in one sentence;
+              INVENTORY.md rows 116 and 117.
+RESULT:       p. 92 sequences surprise BEFORE distance, so surprise enters as a
+              settled input. p. 98 names both at contact with no sequencing word
+              and defers to the earlier rules. Neither makes this card
+              responsible for determining surprise.
+DISPOSITION:  CONFIRMED
 ```
 
-```text
-FALSIFICATION-RECORD
-CONCLUSION:     ENC-001 does not depend on ENC-002's IMPLEMENTATION; it consumes
-                authoritative surprise STATE supplied at its boundary.
-WOULD FALSIFY:  RC text requiring the distance procedure to itself roll or derive
-                surprise, or a repository row making ENC-002 a hard dependency.
-SOUGHT:         p. 92's ordering sentence; p. 93 Encounter Checklist step 2;
-                INVENTORY.md rows 116 and 117.
-                [Pass 2: this SOUGHT list was INCOMPLETE -- Review #1 B-1. The
-                candidate falsifying text sat at p. 98 and was not sought. p. 98
-                has now been inspected; see the pass-2 record below.]
-RESULT:         p. 92 fixes the order -- surprise is determined BEFORE distance
-                (E-12) -- so surprise enters as a settled input. INVENTORY row 116
-                records no dependency, which is consistent with consuming state
-                rather than owning the mechanic. The two are reconcilable, and the
-                inventory row needs no correction.
-DISPOSITION:    CONFIRMED -- but on an incomplete search; superseded by the
-                pass-2 record below, which reaches the same disposition on a
-                search that includes p. 98.
-```
+## 13. Open Questions
 
-```text
-FALSIFICATION-RECORD
-CONCLUSION:     [PASS 2, B-1] p. 98 `Contact` does not displace pp. 92-93 as the
-                governing encounter-distance procedure, and does not move
-                surprise ownership into ENC-001.
-WOULD FALSIFY:  A distance value or selection rule printed at p. 98; or p. 98
-                assigning the distance determination to the evasion procedure
-                rather than deferring; or p. 98 making ENC-001 responsible for
-                determining surprise.
-SOUGHT:         p. 98 read in its entirety as a page image this pass -- both
-                columns, Subtables 10 and 11, the `Evasion and Pursuit` opening,
-                `Definitions`, `Contact`, and the opening of `Decision to Evade`.
-                Then pp. 94, 96 and 97 read likewise, to close the whole of the
-                pass-1 uninspected range rather than only the page the review
-                named.
-RESULT:         p. 98 states NO distance value and NO selection rule. It defers
-                in terms -- "as per the earlier encounter rules" -- to pp. 91-93.
-                It names the DM as determining distance AND surprise at contact,
-                which is a statement about WHEN both happen, not about who owns
-                either. pp. 94, 96, 97 carry only monster/NPC selection subtables.
-DISPOSITION:    CONFIRMED -- the governing procedure stays at pp. 92-93 and the
-                ENC-001/ENC-002 boundary is unchanged. The ENUMERATION defect was
-                real and is corrected; the rules conclusion it threatened survives
-                on the widened search.
-```
-
-```text
-FALSIFICATION-RECORD
-CONCLUSION:     [PASS 2] E-12's ordering claim survives p. 98, but only as a
-                claim about p. 92's grammar.
-WOULD FALSIFY:  p. 98 sequencing the two determinations in the opposite order
-                with sequencing language, or any third RC statement ordering them.
-SOUGHT:         p. 98's `Contact` sentence word by word; p. 92's "Once ... has
-                determined ... he or she can decide" construction; p. 93's
-                Encounter Checklist step order; p. 91's step 1.
-RESULT:         p. 98 uses a bare conjunction -- "the encounter distance and the
-                parties' relative states of surprise" -- with NO sequencing word,
-                though it names distance first. p. 92 alone carries sequencing
-                grammar. A list order inside one sentence is not a procedural
-                order, but it is not nothing either.
-DISPOSITION:    QUALIFIED -- E-12 is narrowed to name p. 92 as the sequencing
-                source, and the residual question is recorded as Q-15 rather than
-                resolved by argument.
-```
-
-```text
-FALSIFICATION-RECORD
-CONCLUSION:     [PASS 2, B-2] The City->wilderness rule is printed on p. 93, not
-                p. 91, and the fact itself is unchanged.
-WOULD FALSIFY:  The sentence appearing anywhere on p. 91.
-SOUGHT:         p. 91 re-read in full this pass, all three columns, including the
-                `Encounters` section that pass 1 cited; then p. 93's right column,
-                `Wandering Monster Encounters`.
-RESULT:         p. 91's `Encounters` section says "traveling through a heavily
-                populated zone (such as a town)" and nothing about City terrain.
-                p. 93 carries "the DM first needs to know where the characters
-                are--dungeon or wilderness. 'City' is treated just like any other
-                wilderness terrain."
-DISPOSITION:    CONFIRMED -- a provenance defect, not a rules defect. The citation
-                is corrected in four places and the p. 93 object is enumerated
-                (manifest row 34); the conclusion at Q-10 is unchanged.
-```
-
-```text
-FALSIFICATION-RECORD
-CONCLUSION:     No Rule ID currently owns a world visibility category.
-WOULD FALSIFY:  Any inventory row, approved card or landed module claiming
-                illumination/visibility world state.
-SOUGHT:         INVENTORY.md read for a visibility/illumination owner;
-                EXP-006's module surface and the MundaneLightContribution
-                docstring; the EXP-006 inventory row's routing list.
-RESULT:         EXP-006's own docstring forecloses it in terms -- the type is
-                deliberately NOT named Visibility or WorldLight and is "Not a
-                statement about the world". No other row claims it.
-DISPOSITION:    CONFIRMED -- recorded as a gap in §12 per AGENTS.md §3.
-```
-
-```text
-FALSIFICATION-RECORD
-CONCLUSION:     Rows 27-28 of the Coverage Manifest (pp. 94, 96-98) carry no
-                encounter-distance mechanic.
-WOULD FALSIFY:  A distance value printed inside the dungeon or wilderness
-                encounter subtables.
-SOUGHT:         p. 95's prose governing BOTH table families, which states what the
-                reader does after rolling on them; the Tables/Checklists Index
-                entries for every subtable.
-RESULT:         p. 95 routes distance to the Encounter Distances Table for the
-                wilderness family and to "Encounters" for the dungeon family.
-                The subtables are monster-selection instruments.
-DISPOSITION:    QUALIFIED -- the routing is RC-explicit, but pp. 94 and 96-98 were
-                NOT visually inspected. This is declared in §4 and §15 rather than
-                presented as inspected coverage, and is the single most likely
-                place for independent review to find a gap.
-                [Pass 2: that prediction was CORRECT and the gap was real. Review
-                #1 found `Contact` at p. 98. The routing held for pp. 94, 96 and
-                97; it did NOT hold for p. 98, because row 28 misdescribed what
-                that page carries. All four pages are now inspected and the
-                disposition above is superseded by the pass-2 B-1 record. A
-                declared risk is still a defect when it materialises -- declaring
-                it did not make the packet complete.]
-```
-
-## 14. Open-Question Closure
-
-| # | Open question | Object implicated | Disposition |
+| # | Question | Object | Disposition |
 |---|---|---|---|
 | 1 | Does "normal dungeon conditions" (p. 91) denote the table's Dim-light row? Both produce `2d6 × 10'`, and RC never equates them | pp. 91, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
-| 2 | Is the p. 91 wandering-monster distance an *instance* of the p. 93 table, or an independent default that bypasses the surprise branches? Step 1 cross-references the Encounter Distance section, yet states a flat value | pp. 91, 92, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
-| 3 | Is the Dungeon row's "Very good light" the same condition as the Wilderness/Ocean rows' "Clear daylight"? RC prints two different labels and never equates them | p. 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
-| 4 | Whose infravision satisfies footnote `**` — any one party member's, every member's, or the noticing side's? | p. 93 footnote | RETAINED AS GENUINE SOURCE AMBIGUITY |
-| 5 | Infravision reaches 60′, but the Dim-light dungeon row can roll `2d6 × 10'` = 20′–120′. RC does not say what happens when the rolled distance exceeds infravision's range | pp. 24, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
-| 6 | The Undersea row gives `1d6 × 10 yards`, while p. 115 says undersea *ranges* are read "in feet at all times". Same unit family, different instruction — possibly distinct concepts (encounter distance vs missile range) | pp. 93, 115 | RETAINED AS GENUINE SOURCE AMBIGUITY |
-| 7 | Which visibility category obtains at a given moment — no RC selector exists and no Rule ID owns the world state | pp. 92, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
-| 8 | Does the table apply at all when a party is surprised? | pp. 92, 93 | RESOLVED BY SOURCE INSPECTION |
-| 9 | Is encounter distance determined before or after surprise? | pp. 92, **98** | RESOLVED BY SOURCE INSPECTION |
-| 10 | Which Setting row governs a City encounter, given the table has no City row? | **p. 93** | RESOLVED BY SOURCE INSPECTION |
-| 11 | Is there a separate wilderness distance procedure? | p. 95 | RESOLVED BY SOURCE INSPECTION |
-| 12 | Does the Encounter Checklist determine distance? | p. 93 | RESOLVED BY SOURCE INSPECTION |
-| 13 | Does any monster-specific rule vary encounter *distance* (as opposed to surprise)? | pp. 92, 153, 215 | CONFIRMED OUT OF SCOPE |
-| 14 | Do cover, blindness or invisibility modify encounter distance? | pp. 108, 150 | CONFIRMED OUT OF SCOPE |
-| 15 | p. 98 names "the encounter distance **and** the parties' relative states of surprise" in that order, with no sequencing word, while p. 92 sequences surprise first. Does p. 98's word order carry any procedural force? *(Added pass 2, `B-1`.)* | pp. 92, 98 | RETAINED AS GENUINE SOURCE AMBIGUITY |
-| 16 | The Chance of Encounter Table lists **aerial** as a wilderness terrain, but the Encounter Distances Table has no Aerial `Setting` row and RC supplies no City-style bridging statement for it. Which row governs an aerial encounter? *(Added pass 2, Review #1 non-blocking finding 2.)* | pp. 92, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
-| 17 | Is `Contact` (p. 98) the same moment as the p. 91 "within visual range" encounter definition, given both state the condition in materially the same terms? *(Added pass 2.)* | pp. 91, 98 | RESOLVED BY SOURCE INSPECTION |
+| 2 | Is the p. 91 wandering-monster distance an instance of the p. 93 table, or an independent default bypassing the surprise branches? | pp. 91, 92, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
+| 3 | Is the Dungeon row's "Very good light" the same condition as "Clear daylight"? RC prints two labels and never equates them | p. 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
+| 4 | Whose infravision satisfies footnote `**` — any one member's, all, or the noticing side's? | p. 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
+| 5 | Infravision reaches 60′, but the Dim-light dungeon row rolls 20′–120′. RC does not say what happens when the roll exceeds the range | pp. 24, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
+| 6 | Undersea distance is in yards (p. 93) while p. 115 reads undersea ranges "in feet at all times" — possibly distinct concepts | pp. 93, 115 | RETAINED AS GENUINE SOURCE AMBIGUITY |
+| 7 | Which visibility category obtains at a given moment — no selector in the chapters searched, and no Rule ID owns the world state | pp. 92, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
+| 8 | p. 98 names distance **and** surprise in one sentence with no sequencing word, while p. 92 sequences them. Does its word order carry procedural force? | pp. 92, 98 | RETAINED AS GENUINE SOURCE AMBIGUITY |
+| 9 | The Chance of Encounter Table lists **aerial** terrain, but the table has no Aerial Setting row and RC gives no City-style bridge | pp. 92, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
+| 10 | Does a failed sea evasion reset separation to 300 yards, overriding a distance the table already produced? | p. 100 | CONFIRMED OUT OF SCOPE |
+| 11 | Does the table apply when a party is surprised? | p. 92 | RESOLVED BY SOURCE INSPECTION |
+| 12 | Is distance determined before or after surprise? | pp. 92, 98 | RESOLVED BY SOURCE INSPECTION |
+| 13 | Which Setting governs a City encounter? | p. 93 | RESOLVED BY SOURCE INSPECTION |
+| 14 | Is there a separate wilderness distance procedure? | p. 95 | RESOLVED BY SOURCE INSPECTION |
+| 15 | Does the Encounter Checklist determine distance? | p. 93 | RESOLVED BY SOURCE INSPECTION |
+| 16 | Does any monster-specific rule vary encounter *distance* rather than surprise? | pp. 92, 153 | CONFIRMED OUT OF SCOPE |
+| 17 | Do cover, blindness or invisibility modify encounter distance? | pp. 108, 150 | CONFIRMED OUT OF SCOPE |
 
-**On Q-1 and Q-2 together.** These are recorded as ambiguities, not as a printed
-contradiction, because p. 91 hedges with "under normal dungeon conditions" and points the
-reader onward to the Encounter Distance section rather than contradicting it. A reviewer
-who judges them a printed internal conflict rather than an ambiguity should say so: that
-classification carries the protocol's internal-conflict hard stop, and this packet's
-recommendation would have to be revisited rather than reconciled by the researcher.
+> **Q-7 is scoped to match the negative claim it rests on.** The pilot's wording asserted
+> "no RC selector exists" at RC-wide scope while its own claim had been narrowed to the
+> chapters searched. The narrower scope is kept and the broader wording deleted, rather
+> than the claim being widened to fit obsolete phrasing.
 
-## 15. Primary-Source Coverage Checklist
-
-- **Relevant structural units inspected:** Ch. 2 (character-class infravision entries),
-  Ch. 6 (Distance / Feet vs. Yards), **Ch. 7 pp. 91–98 continuous**, Ch. 8 pp. 108 and 115,
-  Ch. 13 p. 150, Ch. 14 pp. 153 and 215, Appendix 4 pp. 301–304, end boundary p. 305.
-  *(Pass 2 closed pp. 94 and 96–98, which pass 1 left uninspected.)*
-- **Tables / Checklists Index entries dispositioned:** 27 (ledger: §5.1).
-- **General Index entries dispositioned:** 48 present entries, plus 8 enumerated absences
-  (ledgers: §5.2, §5.4). *(Pass 1 claimed 39 against a ledger that listed fewer; 9 entries
-  were added in pass 2 under Review #1 non-blocking finding 3, and the count now matches
-  the ledger it cites.)*
-- **Specialist indexes dispositioned:** both instruments the source carries; no third
-  index exists between p. 301 and the back cover.
-- **Named tables inspected:** Encounter Distances Table (p. 93), Chance of Encounter Table
-  (p. 92), Monster Reactions Table (p. 93), Wilderness Encounters Table (p. 95),
-  Measurements of Game Time Table (p. 87), Target Cover Table and Attack Roll Modifiers
-  Table (p. 108), Starvation Table (p. 150), Ram Attacks Table (p. 115).
-- **Structured entity entries inspected as complete units (§9.7):** the Encounter
-  Distances Table with all 13 rows and all 3 footnotes; the Encounter Checklist with all
-  six steps and sub-steps; the Game Turn Checklist and Game Day Checklist complete; the
-  dwarf, elf and halfling class entries' ability sections.
-- **Cross-references followed:** 14 (ledger: §8) — 3 added in pass 2, all from p. 98.
-- **Visual verification completed for:** 23 pages, each listed in §7's ledger.
-- **Deliberately excluded objects, each with its reason:** Coverage Manifest rows 29–33
-  (routed to `ENC-005`, `COMBAT-006`, `ENC-004`, `EXP-003`/`CHAR-005`, and an unowned
-  starvation causation respectively).
-- **Enumerated but NOT visually inspected: NONE.** Pass 1 left pp. 94 and 96–98 in this
-  category; pass 2 inspected all four. **Every Coverage Manifest row now rests on a page
-  read as an image.**
-- **Source areas deliberately NOT searched, and the claims narrowed accordingly:** Ch. 3
-  (Spells) and Ch. 4 (Equipment). Negative claim N-4 was narrowed in pass 2 to the
-  chapters actually searched rather than extended over these two.
-
-## 16. Independent Review Status
+## 14. Independent Review
 
 ```text
-ORIGINAL RESEARCHER OUTPUT:  PREPARED FOR INDEPENDENT COMPLETENESS REVIEW
-INDEPENDENT REVIEW:          INDEPENDENT COMPLETENESS REVIEW FAILED
-HUMAN EVIDENCE REVIEW:       NOT GIVEN
+INDEPENDENT REVIEW:    NOT YET PERFORMED
+HUMAN EVIDENCE REVIEW: NOT GIVEN
 ```
 
-> **Review #1 (`FAIL`)** is preserved at
-> `docs/rules/evidence/ENC-001-stage-a-completeness-review.md`: 2 blocking, 7
-> non-blocking. Its blocking findings `B-1` (RC p. 98 `Contact` unenumerated) and `B-2`
-> (City sentence mis-attributed to p. 91) are remediated above, and the status line
-> records that result rather than overwriting it. **Review #2 has not yet been performed**
-> and is the second and final review authorized under the `DEC-0012` pilot budget.
->
-> **`DEC-0012` item 15 criterion 3 is already failed** for this pilot and nothing in pass 2
-> changes that. Criterion 4 remains open: it is satisfied only if review #2 reaches `PASS`.
-
-**Research-Completion Gate (§11.1) — each line confirmed, not assumed:**
-
-- [x] every Coverage Manifest row dispositioned — 33 rows, §4
-- [x] no unresolved visual-access blocker — `ACCESS-BLOCKED: none`, §7
-- [x] every material negative claim has a Negative Claim Record — 4 records, §11
-- [x] every repository fact verified against the repository this pass — 12 rows, §9
-- [x] pre-review self-falsification pass complete — 6 records, §13
-- [x] open questions explicitly listed and classified — 14 rows, §14
-- [x] required §6 and §10.2 vocabulary used verbatim
-- [x] `scripts/lint_evidence.py` passes — invocation recorded in the completion record
-
-The original researcher does not certify this packet (§10.1.2). Independent completeness
-review is requested.
+> The reviews under the closed `DEC-0012` pilot — Review #1 `FAIL`, Review #2 `FAIL` — are
+> preserved at `docs/rules/evidence/ENC-001-stage-a-completeness-review.md` and in the
+> pilot commits `d24aa3a` and `b880ffd`. They are historical and are not relabelled. The
+> review that follows this packet is the **first** `DEC-0013` semantic review.
