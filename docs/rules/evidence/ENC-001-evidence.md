@@ -476,9 +476,30 @@ DISPOSITION:  CONFIRMED
 ## 14. Independent Review
 
 ```text
-INDEPENDENT REVIEW:    NOT YET PERFORMED
-HUMAN EVIDENCE REVIEW: NOT GIVEN
+INDEPENDENT REVIEW:    INDEPENDENT COMPLETENESS REVIEW PASSED
+HUMAN EVIDENCE REVIEW: ACCEPTED 2026-10-04
 ```
+
+**Stage-A acceptance.** This record is the authority for `ENC-001`'s Stage-A status
+(`DEVELOPMENT_WORKFLOW.md` §4.1); other records reference it rather than restating it.
+
+```text
+STAGE A:      ACCEPTED
+ACCEPTED BY:  human project owner
+DATE:         2026-10-04
+PROCESS:      DEC-0013 (approved 2026-10-04), after re-entry
+BASIS         DEC-0013 semantic review                 PASS
+              blocking findings                        0
+              new governing source discovered          NONE
+              rules-conformance defects                NONE
+              mechanical verification (lint_evidence)  PASS
+              canonical verification                   PASS
+STAGE B:      NOT AUTHORIZED
+```
+
+**Pending human adjudication before Stage B can close** — recorded, not decided here:
+`Q-1`, `Q-3`, `Q-7`, `Q-9`, and the two ownership gaps §10 records (world visibility
+category — `NO RULE ID EXISTS`; the feet/yards convention, which no Rule ID claims).
 
 > The reviews under the closed `DEC-0012` pilot — Review #1 `FAIL`, Review #2 `FAIL` — are
 > preserved at `docs/rules/evidence/ENC-001-stage-a-completeness-review.md` and in the
