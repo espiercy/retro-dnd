@@ -273,8 +273,11 @@ not guess can only refuse (`AGENTS.md` §3, §13).
 | `visibility` absent on a **surprise** branch (steps 2–3) | **not an error** — visibility is not consulted there and **must not be demanded for formality** |
 
 **No silent default.** In particular `"normal dungeon conditions"` is **not** read as
-`Dim light`: that inference was classified `QUALIFIED, not forced` in the accepted evidence and
-withdrawn by human adjudication 2026-10-01, and `SR-12` does not reinstate it.
+`Dim light`. This card's own accepted Stage-A evidence retains that question as `Q-1`,
+`RETAINED AS GENUINE SOURCE AMBIGUITY`, and `SR-12` expressly does not reinstate the inference
+— see its non-scope above. **`EXP-006`** reached the same conclusion separately: *its* accepted
+evidence classified the inference `QUALIFIED, not forced` (`E-13a`) and human adjudication
+2026-10-01 (**Finding A**) withdrew it from that card entirely.
 
 **No exception class, function signature or message is specified here** — that is implementation.
 
