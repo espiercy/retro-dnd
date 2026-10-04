@@ -71,9 +71,9 @@ def main() -> int:
     mypy_exit = _run(sys.executable, "-m", "mypy")
     results["mypy"] = "PASS" if mypy_exit == 0 else "FAIL"
 
-    # Stage-A evidence-packet structural gate (DEC-0012; research-process
-    # tooling, not simulator code). Like Ruff and mypy it does not depend
-    # on the test run, so it reports independently.
+    # Stage-A evidence-packet gate (DEC-0013, which supersedes DEC-0012;
+    # research-process tooling, not simulator code). Like Ruff and mypy it does
+    # not depend on the test run, so it reports independently.
     evidence_exit = _run(sys.executable, str(LINT_EVIDENCE_SCRIPT))
     results["Evidence"] = "PASS" if evidence_exit == 0 else "FAIL"
 
