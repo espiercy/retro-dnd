@@ -33,7 +33,10 @@ FEET/YARDS ADJUDICATED 2026-10-04; NO NEW SIMULATOR RULING, NO NEW OWNER
            part of ENC-001's typed output, not an ownership problem
 Q-6:       resolved AS IT BEARS ON ENC-001 -- p. 115 is a different
            procedural domain (undersea missile ranges, not encounter distance)
-STAGE B:   adjudication only; no Rule Card, no implementation
+STAGE B:   COMPLETE 2026-10-04 -- RULE CARD DRAFT AUTHORIZED
+           no blocking items; all residue ROUTED / EXTERNAL
+           no Rule Card drafted here, no implementation
+           drafting is authorized; APPROVAL remains the human owner's
 ```
 
 > **Historical note, 2026-10-04 — a label discrepancy that was stopped on.** An earlier
@@ -1910,14 +1913,51 @@ SOFTWARE REPRESENTATION   ENC-001 owns the complete representation of its own
 
 ## `ENC-001` Stage-B completion assessment
 
-**Assessment only — nothing below is adjudicated**, and no question is settled by appearing in
-this table.
+```text
+STATUS:  FORMAL COMPLETION ASSESSMENT, 2026-10-04
+         Supersedes the interim assessment recorded with the feet/yards
+         adjudication. Nothing here adjudicates a question; no question is
+         settled by appearing below.
+```
+
+### The completion question
 
 ```text
-BLOCKING FOR AN ENC-001 RULE CARD:    none for the contract itself
-ON ENC-001's DISTANCE PATH:           one unowned item (Q-4)
-EXTERNAL, ALSO UNOWNED:               SIM-003's daylight and weather inputs
+Is ENC-001 Stage B complete enough to authorize DRAFTING the ENC-001 Rule Card?
 ```
+
+That is **not** *"are all related rules in the repository solved?"* — several are not, and
+several never were `ENC-001`'s. Every remaining item below is classified into exactly **two**
+categories, with no third:
+
+```text
+BLOCKING FOR ENC-001 RULE CARD
+ROUTED / EXTERNAL / NON-BLOCKING RESIDUE
+```
+
+### The reconstructed `ENC-001` contract
+
+From the accepted Stage-A evidence plus the settled Stage-B adjudications only — nothing
+inferred beyond those artifacts:
+
+| Contract element | Settled? | Basis |
+|---|---|---|
+| **Surprise input** | **yes** — consumed, never derived; `ENC-002`-owned. Both-surprised and one-surprised short-circuit to a flat `1d4 × 10'` without consulting the table | packet §10; p. 92; `SR-12` |
+| **Setting input** | **yes** — caller-supplied, validated against exactly `Dungeon*` / `Wilderness` / `Ocean/sea` / `Undersea`; City is wilderness terrain; `Aerial` is **not** a member | `Q-9`; packet `Q-13` |
+| **Visibility input** | **yes** — caller-supplied RC-native label, setting-indexed, validated, never derived or normalized | `Q-7` human decision; `Q-3` |
+| **Encounter type / table branch** | **yes** — `Ship` / `Monster` where the setting distinguishes them (`Ocean/sea`), otherwise `DM's choice` | p. 93 table |
+| **Distance roll / formula** | **yes** — the selected row's expression, including the three flat `Ocean/sea` `Ship` values | p. 93 table |
+| **Result unit** | **yes** — `feet` for `Dungeon*`, `yards` for the other three, carried with the magnitude | feet/yards adjudication |
+| **Wandering-monster duplicate procedure** | **yes** — removed. Distance is determined **once**, by pp. 92–93; p. 91's `2d6 × 10'` is not rolled as a second distance | **`SR-12`** |
+| **Aerial handling** | **yes** — `aerial` is a Type of Terrain in the Wilderness branch, not a Setting; no row is missing | `Q-9` |
+| **Unsupported / missing-input behaviour** | **yes** — explicit refusal; no silent default; scoped to the neither-surprised path | `Q-7` §16 |
+
+**All nine are settled.** None requires a determination `ENC-001` cannot make.
+
+### Residue, classified — derived from the artifacts, not assumed
+
+Every item in the accepted packet's §13 (all seventeen), plus every open item recorded in this
+document and in `SIM-003`:
 
 | Item | Status | Blocking? |
 |---|---|---|
@@ -1933,15 +1973,146 @@ EXTERNAL, ALSO UNOWNED:               SIM-003's daylight and weather inputs
 | **`Q-4` whose infravision satisfies footnote `**`** | retained; carried as `SIM-003` open dependency 1 | **the one unowned item on `ENC-001`'s distance path** — see below |
 | `SIM-003` unowned daylight/weather inputs | external, **also unowned** | **no** for the `ENC-001` contract — they are inputs to `SIM-003`, not to `ENC-001` — but they are **not closed**, and are scenario-supplied today |
 
-**The distinction that matters, stated plainly.** `ENC-001`'s **contract** is complete: a
-Setting and a visibility label in, a distance with its unit out, refusal when a required input
-is absent. Nothing above blocks writing that.
+Items from the accepted packet's §13 not listed above, for completeness of the sweep:
+`Q-11`–`Q-15` are `RESOLVED BY SOURCE INSPECTION` at Stage A; `Q-10` (sea-evasion reset),
+`Q-16` (monster-specific distance variation) and `Q-17` (cover/blindness/invisibility) are
+`CONFIRMED OUT OF SCOPE`. Further residue recorded in this document and in `SIM-003`:
 
-**End-to-end determinism is not complete**, for one case: full darkness **with infravision
-used**, where the p. 93 footnote `**` promotes `No light` to `Dim light`. `SIM-003` explicitly
-excludes infravision, and `ENC-001` consumes a supplied label — so **no component currently
-owns applying that footnote**. That is `Q-4`, it is a classification-side question rather than
-`ENC-001`'s to resolve, and it is **not adjudicated here**.
+| Item | Classification | Why |
+|---|---|---|
+| Over-ocean **aerial Setting** for distance (`Q-9` §13) | **ROUTED / EXTERNAL** | A Setting-*selection* question, upstream of `ENC-001`, which validates whatever Setting it is given. Both admissible readings coincide numerically for the monster encounters aerial produces |
+| Undersea **missile-range** comparison (p. 115, feet/yards §12) | **ROUTED / EXTERNAL** | `COMBAT-*`'s. Never an input to `ENC-001` |
+| `SIM-003` open dependency 4 — whether `CHAR-005`/`COMBAT-*` consume this label or a distinct darkness predicate | **ROUTED / EXTERNAL** | A question about *other* consumers of `SIM-003`, not about `ENC-001` |
+| **Feet/yards conversion** having no owner | **ROUTED / EXTERNAL** | Nothing in the project converts; `ENC-001` does not |
+| `CHAR-005` / `ENC-001` **`Setting` name collision** | **ROUTED / EXTERNAL** | An implementation hazard, recorded in feet/yards §6. Not a rules question and not a contract gap |
 
-A Rule Card could be written for `ENC-001` today with that case routed out explicitly rather
-than silently defaulted. Whether to do so is a human decision and is not taken here.
+### `Q-4` — the candidate blocker, assessed without adjudicating it
+
+`Q-4` asks *whose* infravision satisfies the p. 93 footnote `**` (*"Or full darkness with
+infravision used"*). It is the only remaining item with a plausible claim to block, so it is
+tested directly.
+
+**The decisive structural fact: the footnote attaches to the `Visibility` column, not the
+`Distance` column.** It reads `Dim light**`. What it extends is *which world conditions count
+as `Dim light`* — a statement about what the **label** means. It does not change what
+`Dim light` yields once selected.
+
+**Therefore the boundary is already fixed by settled architecture, and is not invented here:**
+
+```text
+Q-7 human decision   ENC-001 consumes a caller-supplied RC-native visibility
+                     label and validates it. It never derives one.
+
+SIM-003 section 7    Infravision and other per-character perception are NOT
+                     inputs to SIM-003; the footnote ** adjustment is carried
+                     as SIM-003 open dependency 1, awaiting Q-4.
+```
+
+`ENC-001` never asks *"is infravision in use?"* It asks *"what is the visibility label?"* Given
+`Dim light` it yields the Dungeon `2d6 × 10'` **whether that label arose from actual dim light
+or from full darkness with infravision used** — the procedure is identical. The footnote's
+entire effect is upstream of `ENC-001`'s boundary.
+
+**`Q-4` is therefore NON-BLOCKING for the `ENC-001` Rule Card**, and the Rule Card can state
+its own position without inventing anything: *visibility is caller-supplied; the p. 93 footnote
+`**` extension is a classification-side determination, is not applied by this card, and is
+recorded as depending on `Q-4`.*
+
+> **What this does not say.** It does **not** say the footnote is handled. **No component
+> currently applies it** — `SIM-003` carved it out and `ENC-001` consumes a label — so the
+> *system* cannot yet produce a deterministic end-to-end result in the full-darkness-with-
+> infravision case. That is a real gap, it sits **upstream** of `ENC-001`, and it is
+> `Q-4`/`SIM-003`'s to close. **`Q-4` is not adjudicated here.**
+
+### `SIM-003`'s open inputs
+
+Daylight/time-of-day and weather determination remain unowned and scenario-supplied. The
+question that decides their classification:
+
+```text
+Does ENC-001 need to know HOW those facts are generated,
+or only to receive the RC-native visibility classification?
+```
+
+**Only the latter.** `ENC-001`'s input is one validated label; how `SIM-003` arrives at it,
+and from which world facts, is behind `SIM-003`'s interface. **NON-BLOCKING for `ENC-001`** —
+and **not closed** as architecture items.
+
+### Completeness checks
+
+**Result completeness — complete.** Every branch of `ENC-001`'s own domain yields a magnitude
+*and* a unit: the thirteen table rows (including the three flat `Ocean/sea` `Ship` values), and
+both surprise branches via p. 92's `1d4 × 10'` *(or yards if outdoors)*. **No branch is
+underspecified.**
+
+**Input-domain completeness — complete and bounded.** `Setting` is exactly four values;
+`Visibility` is setting-indexed over `Very good light` / `Clear daylight` / `Dim light` /
+`No light` / `Any light`; surprise state is a consumed `ENC-002` fact; encounter type is
+`Ship` / `Monster` / `DM's choice` where the setting distinguishes it. Each is caller-supplied
+— which is **not** a blocker, because `ENC-001` knows which values are legal and what to do
+with them.
+
+**Unsupported / error behaviour — stated.** Refuse when a required visibility is absent; do not
+require visibility where surprise has short-circuited the table; reject a visibility label not
+legal for the supplied Setting, and reject `Aerial` as a Setting. No exception class or API
+syntax is designed.
+
+### Simulator Rulings `ENC-001` depends on — **`SR-12` only**
+
+Verified rather than assumed: the accepted Stage-A packet references **no** Simulator Ruling
+anywhere, and Stage B introduced exactly one. `SR-11` is `EXP-006`'s Fire-Building branch and
+is not consumed here. **No unresolved `ENC-001` behaviour requires a further ruling** — `Q-3`,
+`Q-9` and feet/yards each closed with `NO NEW SIMULATOR RULING`, and `SR-13` remains unused.
+
+### Ownership completeness
+
+| Dependency | Owner / boundary |
+|---|---|
+| Surprise | `ENC-002` — unresearched, but **owned**; ownership clarity is the test, not implementation availability |
+| Visibility classification | `SIM-003` |
+| Mundane light contribution | `EXP-006` **[LANDED]** |
+| Setting | a primitive world/location fact — `ARCHITECTURE.md` §6 Dungeon/Campaign State |
+| Whether an encounter occurs | `EXP-001` **[VERIFIED, implemented]** |
+| Pursuit starting distance | `ENC-005` |
+| Result unit | `ENC-001`'s own typed output |
+
+**Every dependency has an owner or an accepted caller/world-state boundary.**
+
+### Rule Card readiness
+
+| Item | Verdict |
+|---|---|
+| purpose | **READY** |
+| inputs | **READY** |
+| outputs | **READY** |
+| procedure | **READY** |
+| decision branches | **READY** |
+| RC-native table values | **READY** |
+| unit behaviour | **READY** |
+| ownership boundaries | **READY** |
+| error / refusal conditions | **READY** |
+| Simulator Rulings | **READY** — `SR-12`, approved |
+| external dependencies | **READY** — each named, owned or routed |
+| explicit non-responsibilities | **READY** |
+
+Nothing is `BLOCKED`.
+
+### Verdict
+
+```text
+STAGE B COMPLETE -- RULE CARD DRAFT AUTHORIZED
+```
+
+**BLOCKING items: none.**
+
+All residue above is `ROUTED / EXTERNAL / NON-BLOCKING`. External residue is not treated as a
+blocker merely for remaining open — the test applied throughout is whether `ENC-001` must
+resolve it to specify its own card, and in every case the answer is no.
+
+> **Two limits on what this verdict means.** It authorizes **drafting**, not approval: a Rule
+> Card is not authoritative until a human project owner sets its `Status` to `APPROVED`
+> (`AGENTS.md` §2). And it does **not** claim the simulator can run an encounter end to end —
+> the `Q-4` footnote gap and `SIM-003`'s unowned daylight and weather inputs are real and
+> remain open upstream.
+
+**No Rule Card is drafted in this task.**
