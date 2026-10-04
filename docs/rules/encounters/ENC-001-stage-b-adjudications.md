@@ -8,9 +8,13 @@
 > **`Q-1`, `Q-3`, `Q-7`, `Q-9` and the feet/yards convention are adjudicated here.** `Q-7` is
 > fully settled: its contract by human architecture decision, and its world/environment
 > visibility owner **assigned to `SIM-003`**. Feet/yards is settled by finding that **no
-> separate owner is required** — it is part of `ENC-001`'s typed output. **`Q-4` remains
-> open**, preserved rather than closed by `SIM-003`, and it is the one gap left in end-to-end
-> determinism; see the completion assessment at the end.
+> separate owner is required** — it is part of `ENC-001`'s typed output.
+>
+> **Known outstanding dependencies, enumerated rather than summarised as "one gap":**
+> **`Q-4`** (whose infravision satisfies the p. 93 `**` footnote) is the one item **on
+> `ENC-001`'s distance path that no component owns**; `SIM-003` additionally carries
+> **daylight/time-of-day** and **weather** determination as unowned, scenario-supplied inputs.
+> None of the three is adjudicated here. See the completion assessment at the end.
 >
 > **The accepted Stage-A packet is never modified by this document.** It records each question
 > at its Stage-A disposition; Stage B adjudicates what `ENC-001` does about them without
@@ -1555,11 +1559,20 @@ p. 87  sidebar "Movement, Missile, and Spell Ranges"
 "Everywhere: Spell effects are always measured in feet."
 ```
 
-**The feature that decides the representation question (§8).** RC's convention is a
-**notation** convention, not only a unit-selection rule: *"120' actually means 120 yards
-outdoors."* The glyph `'` is **scale-relative**, and the *same printed numeral* denotes feet
-indoors and yards outdoors. A bare number in RC is therefore genuinely ambiguous without its
-setting — this is RC's own design, not a modelling artefact.
+**A notation convention, not only a unit-selection rule.** *"120' actually means 120 yards
+outdoors"*: the glyph `'` is **scale-relative**, and the *same printed numeral* denotes feet
+indoors and yards outdoors.
+
+**Two scope limits on this observation, stated so it is not made to carry more than it does:**
+
+- The notation statement sits in a sidebar headed *"Movement, Missile, and Spell **Ranges**"*.
+  Encounter distance is none of those three. The broader *"basic unit of distance
+  measurement"* sentence does cover distance generally, but what it establishes is **unit
+  selection**, not the scale-relative glyph.
+- **RC's encounter-distance material never leaves the unit ambiguous.** §5 shows p. 93 prints
+  the unit on every row and p. 92 disambiguates the surprise path inline. So this notation
+  feature is *not* the reason `ENC-001`'s result must carry a unit — see §9, which gives the
+  actual reason.
 
 ### 4. p. 115 — the tension dissolves, and `E-25`'s paraphrase understated why
 
@@ -1586,7 +1599,19 @@ unresolved tension — and this is established by position and subject, not by p
 
 **Encounter distance is not a missile range.** The Encounter Distances Table's `Undersea` row
 (`1d6 x 10 yards`) is Chapter 7 material governing how far apart two groups are at contact.
-p. 115 governs how far a crossbow bolt carries underwater. The two never meet.
+p. 115 governs how far a crossbow bolt carries underwater. **The narrower claim actually
+established:** the `ENC-001` procedure never consults a missile range, and p. 115 never
+supplies an encounter distance — so neither is an input to the other. (A *comparison* between
+the two can still arise in play — an undersea encounter at a distance in yards against a
+merman crossbow's range in feet — which is `COMBAT-*`'s to handle and is recorded in §12.)
+
+**The dissolution also survives the broadest reading of p. 115.** Even if *"all undersea
+ranges in feet at all times"* were read as overriding the p. 87 outdoor convention generally,
+the p. 93 `Undersea` row would still be unaffected: that row **does not use the notation at
+all** — it spells out `1d6 x 10 **yards**`. p. 115 can only change how a `'` glyph is read,
+and p. 93 prints no `'` on any undersea row. The conflict therefore dissolves under both the
+narrow and the broad reading, which is why the conclusion does not rest on the scoping
+argument alone.
 
 > **What this does and does not settle.** For `ENC-001` the apparent conflict **does not
 > arise**, and the accepted packet's own hedge — *possibly distinct concepts* — is confirmed
@@ -1632,9 +1657,11 @@ a function of the Setting `ENC-001` already consumes and validates (`Q-9`).
 ### 6. Repository ownership search
 
 Architecture inspection of `INVENTORY.md`, `ARCHITECTURE.md`, the `SIM-*` specifications and
-the landed modules. **No general owner of distance units, the feet/yards convention or
-measurement representation exists** — and that is not an oversight. **The established
-repository pattern is that each card states the unit of its own output:**
+the landed modules in `src/`.
+
+**No artifact owns *distance* units, the feet/yards convention or measurement
+representation.** The three landed cards that express distances each state the unit of their
+own output:
 
 | Artifact | How it handles the convention | Scope |
 |---|---|---|
@@ -1642,17 +1669,47 @@ repository pattern is that each card states the unit of its own output:**
 | `CHAR-005` Encumbrance & Movement | a landed `Setting` enum, `INDOORS = "feet"` / `OUTDOORS = "yards"`, with a `.unit` property, documented as *"only the unit they are read in does"* change | **card-local**, its own movement rates |
 | `CHAR-004` equipment | carries the unit in the name — `dimension_feet`, `side_feet` | card-local |
 
-There is **no units library, no measurement module and no dimensional-analysis layer**, and
-nothing in the repository asks for one. The accepted packet's *"no Rule ID claims it"* is
-accurate about a *general* owner, and the repository has nonetheless handled the convention
-consistently without one, three times.
+**That is not, however, the only pattern this repository has, and it must not be presented as
+one.** The repository **does** support small **shared primitives owned by no single Rule
+Card**, and has landed three of them:
+
+| Shared primitive | What it owns | Stated basis |
+|---|---|---|
+| `src/rules/currency.py` | exact monetary values in RC coin — *"owned by no single Rule Card… carrying representation and nothing else"*; includes RC's conversion ratios `1 pp = 5 gp = 10 ep = 50 sp = 500 cp` | *"Each owns **different data expressed in** money, so **none may own the representation itself**"* |
+| `src/rules/character_creation/character_class.py` | the nine character-class identities | same pattern, cited by `currency.py` as its precedent |
+| `src/rules/exploration/turn_credit.py` | the `EXP-002` → `EXP-001` turn-credit value types | same pattern, cited by `currency.py` as its precedent |
+
+**This pattern is a small shared primitive, not a "units framework"**, and it must not be
+dismissed as one. `currency.py` is precisely a *measurement* representation with conversion
+ratios, so the existence of a measurement domain is not by itself a reason to avoid it.
+
+**The repository's own documented decision test** (`docs/technical/CLUSTER-003_IMPLEMENTATION_PLAN.md`
+§10, the `currency.Coin` row) is:
+
+```text
+Could CHAR-004 own it?  No. TREAS-*/ADV-003 will need the same type.
+                        character_class.py precedent.
+```
+
+That test — *could one card own it, or will other named cards need the same type?* — is
+applied honestly to this case in §7, Model B.
 
 > **A collision worth flagging before an implementer meets it.** `CHAR-005` already has a type
-> named `Setting` with **two** members (`INDOORS`/`OUTDOORS`). `ENC-001`'s `Setting` axis has
-> **four** (`Dungeon*`/`Wilderness`/`Ocean/sea`/`Undersea`). **Same word, different concepts.**
-> `CHAR-005`'s is a reading-mode for movement rates; `ENC-001`'s is a table axis. They must not
-> be conflated or reused for one another. Recorded as an implementation hazard, not resolved
-> here — no type is designed.
+> named `Setting` with **two** members, `INDOORS = "feet"` / `OUTDOORS = "yards"`, and a
+> `.unit` property. `ENC-001`'s `Setting` axis has **four**
+> (`Dungeon*`/`Wilderness`/`Ocean/sea`/`Undersea`). **Same word, different concepts.**
+>
+> **Why the reuse is tempting, stated so the trap is visible:** `ENC-001`'s four Settings
+> collapse 4 → 2 onto `INDOORS`/`OUTDOORS` **for unit purposes exactly** — `Dungeon*` is
+> indoor, the other three outdoor — which makes `CHAR-005.Setting` look like a ready-made unit
+> selector for `ENC-001`. It is not. `CHAR-005`'s is a **reading-mode for movement rates**,
+> whose own docstring says *"a rate of 90 is a rate of 90 either way"* and which is why
+> `movement_rate` takes no setting; `ENC-001`'s is a **table-lookup axis that selects a row**,
+> where `Wilderness` and `Ocean/sea` are different rows with different values. The 4 → 2
+> collapse is true of the *unit* and false of the *lookup*, so reusing the type would silently
+> lose the distinction `ENC-001` depends on. They must not be conflated or reused for one
+> another. Recorded as an implementation hazard, not resolved here — no type is designed and
+> nothing is renamed.
 
 ### 7. Competing ownership models
 
@@ -1662,15 +1719,55 @@ RC has already stated — the table row (§5) or p. 92's inline *"(or yards if o
 `ENC-001` does is **carry** that unit out with the magnitude. That is not scope inflation; a
 distance returned without its unit is an **incomplete result**, not a leaner one.
 
-**Model B — a shared measurement convention owns it.** *Rejected.* No existing artifact owns
-general measurement units (§6), and creating one would be a units framework — which the
-efficiency guard forbids and which three landed cards demonstrate is unnecessary. `CHAR-005`'s
-enum is **card-local and must not be promoted** into a shared owner by this task.
+**Model B — a small shared primitive owns the representation.** *Not required here — but it is
+a legitimate architectural option, not an absurd one, and it is rejected on responsibility
+rather than on principle.*
+
+The choice is between two patterns the repository actually has:
+
+| | Card-local typed output (Model A) | Small shared primitive (Model B) |
+|---|---|---|
+| Shape | `ENC-001` carries the unit its governing table/prose already specifies | a module owned by no single card, carrying representation and nothing else |
+| Precedent | `EXP-003`, `CHAR-005`, `CHAR-004` | `currency.py`, `character_class.py`, `turn_credit.py` |
+| Trigger | one card's own result | *"Could one card own it? No — other named cards will need the same type"* |
+
+**Applying the documented trigger honestly.** `currency.py` exists because `CHAR-004` *could
+not* own `Coin`: `TREAS-*` and `ADV-003` were **named** as needing the same type, and the
+cards each own *different data expressed in* money while needing the representation to behave
+— exact arithmetic and scaling, with a real defect (the Druid surcharge) if precision were
+lost. Neither limb of that is met for encounter distance:
+
+1. **No other card needs the same type.** `ENC-001` is the only consumer. The three landed
+   distance-bearing cards are already implemented and need no change: `EXP-003` is indoors-only
+   feet, `CHAR-004`'s are named ints, and `CHAR-005` pairs a *movement rate* with a label —
+   not an encounter distance. None is positioned as a second consumer the way `TREAS-*` was.
+2. **There is no shared *behaviour* to own.** This is the substantive reason, and it is about
+   responsibility, not convenience. `ENC-001` **does not convert** feet to yards or yards to
+   feet, **does not normalize** measurements, **does not perform dimensional arithmetic**, and
+   **needs no reusable unit-operation API**. Its governing table and prose already determine
+   the unit of its own result (§5), and the result merely preserves the magnitude/unit pair RC
+   supplied. A primitive carrying an inert label with no operations is not the `currency.py`
+   case; `Coin` exists for arithmetic that had to be exact.
+
+**A source-grounded reason to be positively cautious about a shared *unit-selection*
+primitive.** This very adjudication establishes (§4) that **different distance-bearing
+mechanics in RC follow different unit rules**: undersea *missile ranges* are read in feet at
+all times (p. 115) while the undersea *encounter distance* is in yards (p. 93). A shared type
+that assumed one unit rule across distance-bearing mechanics would therefore be **wrong on
+current evidence**, not merely premature.
+
+**Not foreclosed.** If a later card — `ENC-005`'s pursuit distances or `COMBAT-*`'s missile
+ranges are the plausible candidates — genuinely needs the same `(magnitude, unit)`
+representation, then `currency.py` is **the precedent to follow**, and this adjudication does
+not stand in the way. What it declines to do is create that primitive speculatively for a
+single consumer.
+
+`CHAR-005`'s enum stays **card-local** and is not promoted into a shared owner by this task.
 
 **Model C — caller/context owns units.** *Rejected.* It separates a printed RC rule from the
-mechanic that uses it, and it hands the caller a number that p. 87 makes genuinely ambiguous:
-`30` would be indistinguishable between 30 feet and 30 yards, with a factor-of-three error as
-the failure mode.
+mechanic that uses it, and it discards a unit RC had already supplied: `30` handed to the
+caller is indistinguishable between 30 feet and 30 yards, with a factor-of-three error as the
+failure mode.
 
 **Model D — the table output owns the unit intrinsically.** *Correct, and merged into A — but
 incomplete on its own.* The table does define magnitude **and** unit per row. It does not
@@ -1711,25 +1808,42 @@ Adjudicated at steps 1–3 of the order; step 4 is **not reached**:
 ```text
 NO NEW SIMULATOR RULING
 
-There is no RC contradiction to resolve: p. 87 and p. 93 agree, and the
-p. 115 appearance of conflict dissolves on inspection into a different
-procedural domain. An SR must not be created to choose a software
-representation. SR-13 remains the next free identifier and is not used here.
+No contradiction affecting ENC-001 is present in the inspected governing
+material -- pp. 87, 92, 93 and 115. p. 87 and p. 93 agree, and p. 115's
+appearance of conflict dissolves into a different procedural domain.
+
+SCOPE: no whole-book units search was performed, so this is NOT an RC-wide
+claim that no contradiction exists anywhere in RC. It is a claim about the
+material actually inspected, which is the material that governs ENC-001.
+
+An SR must not be created to choose a software representation, and nothing
+in the inspected material requires an RC-unsupported choice. SR-13 remains
+the next free identifier and is not used here.
 ```
 
 ### 9. Future `ENC-001` output-representation consequence
 
 Narrow, consequence only — **nothing designed, no units library, no implementation**:
 
-- `ENC-001`'s result should carry **magnitude *and* unit** together. A bare integer is
-  rejected, and the reason is RC's own notation, not tidiness: p. 87 prints the *same numeral*
-  for feet indoors and yards outdoors, so `30` alone is ambiguous and the failure mode is a
-  silent factor-of-three error.
+- `ENC-001`'s result should carry **magnitude *and* unit** together.
+
+  **The reason, stated with the right provenance.** The *source facts* are RC's: RC supplies a
+  unit (p. 93 prints it on every row; p. 92 states it inline for the surprise path), and p. 87
+  explains the contextual notation behind it. The *consequence* is the simulator's, not RC's:
+  because RC supplies the unit, and because that unit differs between `Dungeon*` (feet) and
+  the other three Settings (yards), **discarding it and returning only the magnitude would
+  make the simulator's own representation incomplete** — a bare `30` would lose information RC
+  had already supplied, with a factor-of-three error as the failure mode.
+
+  This is a **Necessary Consequence / Repository Architecture** decision. It is **not** an
+  RC-prescribed data structure, and RC is not claimed to dictate it — consistent with §10.
 - The unit is `feet` for `Dungeon*` and `yards` for `Wilderness`, `Ocean/sea` and `Undersea`,
   on both the table path and the surprise path.
-- This matches the established repository pattern (`CHAR-005`'s `.unit`, `EXP-003`'s stated
-  unit, `CHAR-004`'s unit-bearing names). **No general units library is proposed**, no
-  conversion is proposed, and `feet ↔ yards` arithmetic is not part of this.
+- This follows the same shape the three landed distance-bearing cards use for their own
+  outputs (`CHAR-005`'s `.unit`, `EXP-003`'s stated unit, `CHAR-004`'s unit-bearing names) —
+  **one option among the repository's patterns, not the only one it has** (§6, §7 Model B).
+  **No units library is proposed**, no conversion is proposed, and `feet ↔ yards` arithmetic
+  is not part of this.
 - `ENC-001` must not reuse `CHAR-005`'s two-valued `Setting` for its four-valued axis (§6).
 
 ### 10. Provenance classification
@@ -1741,12 +1855,28 @@ Narrow, consequence only — **nothing designed, no units library, no implementa
 | p. 92 states the unit inline for the surprise path | **Rules Cyclopedia Explicit** |
 | p. 115 governs undersea **missile ranges** in combat, not encounter distance | **Rules Cyclopedia Explicit** — different procedural domain, established by heading and subject |
 | `ENC-001` never derives a unit; it carries the RC-stated one | **Necessary Consequence** |
-| `ENC-001`'s result carries magnitude and unit; no separate owner is required | **Repository Boundary / Architecture** |
+| `ENC-001`'s result carries magnitude **and** unit, because discarding a unit RC supplied would leave the simulator's representation incomplete | **Necessary Consequence / Repository Architecture** — **not** an RC-prescribed data structure |
+| No separate software owner is required for this mechanic, and the shared-primitive trigger is not met today | **Repository Boundary / Architecture** |
 | Whether `COMBAT-*` has a residual undersea missile-range question | **Unresolved Source Tension** — `COMBAT-*`'s, not `ENC-001`'s |
 | Any unit conversion, units framework or representation rule | **none issued** — no Simulator Ruling |
 
-**No representation choice above is labelled an RC rule.** The decision that the result
-carries its unit is an **architecture** conclusion; what the unit *is* in each case is RC's.
+**Three things kept distinct, and they must not be conflated:**
+
+```text
+RC RULE PROVENANCE        RC owns the feet/yards convention as a rule, and
+                          supplies the unit for each ENC-001 output path.
+
+REPOSITORY OWNERSHIP      No separate software owner is necessary for THIS
+                          mechanic. That is a statement about ENC-001, not a
+                          repository-wide policy that measurement units are
+                          always card-local.
+
+SOFTWARE REPRESENTATION   ENC-001 owns the complete representation of its own
+                          result. This is an architecture decision; RC does
+                          not prescribe a data structure.
+```
+
+**No representation choice above is labelled an RC rule.**
 
 ### 11. `Q-9` and `SIM-003` — both untouched
 
@@ -1759,11 +1889,22 @@ carries its unit is an **architecture** conclusion; what the unit *is* in each c
 
 ### 12. Residue
 
-- **Undersea missile ranges** (p. 115) may still pose a question for `COMBAT-*`. Recorded,
-  routed, **not** adjudicated — and it does not touch `ENC-001`.
+- **Undersea missile ranges** (p. 115) may still pose a question for `COMBAT-*`, including the
+  cross-domain comparison noted in §4. Recorded, routed, **not** adjudicated — and it is not
+  an input to `ENC-001`.
 - **The `Setting` name collision** between `CHAR-005` (two-valued) and `ENC-001` (four-valued)
-  is an implementation hazard, recorded for whoever implements `ENC-001`.
-- **No general units owner exists**, and this adjudication deliberately does not create one.
+  is an implementation hazard, recorded for whoever implements `ENC-001` (§6).
+- **No owner of *distance* units exists**, and this adjudication deliberately does not create
+  one. **This does not establish a repository-wide policy that measurement units are always
+  card-local** — the shared-primitive pattern (`currency.py` and its precedents) remains
+  available, and §7 Model B states the conditions under which a later card should use it.
+
+> **Reading this alongside `SIM-003`.** `SIM-003`'s specification lists *"feet/yards
+> conversion or convention — still unowned"* among its non-responsibilities, and that remains
+> accurate: **unit conversion genuinely has no owner**, because nothing in the project converts
+> between feet and yards. That is **not** in tension with the closure here. This adjudication
+> settles only that `ENC-001`'s *own result* carries the unit RC supplies for it; it does not
+> claim an owner for conversion, and it does not give one to `SIM-003`. `SIM-003` is unchanged.
 
 ---
 
@@ -1774,7 +1915,8 @@ this table.
 
 ```text
 BLOCKING FOR AN ENC-001 RULE CARD:    none for the contract itself
-                                      one gap for END-TO-END determinism
+ON ENC-001's DISTANCE PATH:           one unowned item (Q-4)
+EXTERNAL, ALSO UNOWNED:               SIM-003's daylight and weather inputs
 ```
 
 | Item | Status | Blocking? |
@@ -1785,11 +1927,11 @@ BLOCKING FOR AN ENC-001 RULE CARD:    none for the contract itself
 | `Q-9` `aerial` and the Setting axis | **SETTLED** | no |
 | **feet/yards** | **SETTLED** — part of `ENC-001`'s typed output | no |
 | `Q-6` undersea feet/yards | **Resolved as it bears on `ENC-001`** — different procedural domain | no |
-| `Q-2` mutual vs asymmetric notice | residue recorded under `Q-1` §7 | **no** — it concerns *awareness description*, not the distance produced; the number is unaffected |
-| `Q-5` infravision `60'` vs a `20'–120'` roll | retained | **no** for the distance; it bears on whether awareness occurred, which is not this card's output |
-| `Q-8` p. 98 word order | retained | **no** — p. 98 states no procedure of its own and defers to pp. 91–93 |
-| **`Q-4` whose infravision satisfies footnote `**`** | retained; carried as `SIM-003` open dependency 1 | **the one real gap** — see below |
-| `SIM-003` unowned daylight/weather inputs | external | **no** for the contract; they are inputs to `SIM-003`, not to `ENC-001` |
+| `Q-2` (two parts: table-instance *and* mutual vs asymmetric notice) | first part **settled by `SR-12`** — distance is determined once by pp. 92–93; only the notice half survives, as residue under `Q-1` §7 | **no** — the surviving half concerns *awareness description*, not the distance produced |
+| `Q-5` infravision `60'` vs a `20'–120'` roll | retained — **not assessed on fresh source this pass**; p. 24 was not re-inspected | **not blocking on the evidence in hand:** the accepted packet records no RC capping or re-roll rule, so producing the rolled value is the only option that invents nothing. **Whether awareness obtains at that distance is left open** and is not this card's output. Not adjudicated |
+| `Q-8` p. 98 word order | retained | **no** — on the accepted packet's own §9 cross-reference ledger: *"p. 98 states **no procedure of its own**; it defers to pp. 91–93"* (`ENC-001-evidence.md` §9). p. 98 was **not** re-inspected this pass |
+| **`Q-4` whose infravision satisfies footnote `**`** | retained; carried as `SIM-003` open dependency 1 | **the one unowned item on `ENC-001`'s distance path** — see below |
+| `SIM-003` unowned daylight/weather inputs | external, **also unowned** | **no** for the `ENC-001` contract — they are inputs to `SIM-003`, not to `ENC-001` — but they are **not closed**, and are scenario-supplied today |
 
 **The distinction that matters, stated plainly.** `ENC-001`'s **contract** is complete: a
 Setting and a visibility label in, a distance with its unit out, refusal when a required input
