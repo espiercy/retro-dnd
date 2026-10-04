@@ -13,12 +13,21 @@
 ```text
 ADJUDICATION-STATUS
 RULE-ID:   ENC-001
-Q-1:       ADJUDICATED 2026-10-04
-Q-3:       OPEN -- not adjudicated here
+Q-1:       ADJUDICATED 2026-10-04; SR-12 APPROVED 2026-10-04
+Q-3:       OPEN -- not adjudicated (see the scope note below)
 Q-7:       OPEN -- not adjudicated here
 Q-9:       OPEN -- not adjudicated here
 STAGE B:   adjudication only; no Rule Card, no implementation
 ```
+
+> **Scope note, 2026-10-04 — why `Q-3` is still open.** A task authorized adjudicating
+> `Q-3` and described it as the *"normal dungeon conditions" vs `Dim light`* question,
+> whose resolution would turn on caller-supplied world-visibility state. The accepted
+> Stage-A packet's `Q-3` is a **different question** — whether the Dungeon row's
+> `Very good light` is the same condition as the Wilderness/Ocean rows' `Clear daylight`.
+> The question described is split across `Q-1` (already adjudicated, `SR-12`) and `Q-7`
+> (not authorized). Adjudicating under the mismatched label would have decided `Q-7` while
+> calling it `Q-3`, so the discrepancy was reported instead. `Q-3` is untouched.
 
 ---
 
@@ -119,7 +128,7 @@ both presentations are in view. Under `SOURCE_HIERARCHY.md` §7 and the adjudica
 in this task, that residue is closed by the smallest sufficient ruling:
 
 ```text
-SIMULATOR RULING SR-12
+SIMULATOR RULING SR-12                                      APPROVED
 Encounter distance is determined ONCE per encounter, by the pp. 92-93
 procedure. Where RC's p. 91 wandering-monster statement and the pp. 92-93
 procedure would both apply, the pp. 92-93 procedure GOVERNS and the p. 91
@@ -128,12 +137,23 @@ procedure would both apply, the pp. 92-93 procedure GOVERNS and the p. 91
 A wandering-monster encounter is a SORT of encounter (RC p. 92), not a
 separate distance track.
 
-Authority: human project owner required. Proposed 2026-10-04.
+APPROVED BY:  human project owner
+DATE:         2026-10-04
+PROPOSED:     2026-10-04
 ```
 
 > **This is a Simulator Ruling, not a Rules Cyclopedia reading**, and it is labelled as
-> one. `SR-12` is the next free identifier (`SR-1`…`SR-11` are in use). It is **proposed**:
-> an agent may not approve a Simulator Ruling (`SOURCE_HIERARCHY.md` §9, `AGENTS.md` §12).
+> one. `SR-12` is the next free identifier (`SR-1`…`SR-11` are in use). It was proposed by
+> an agent and **approved by the human project owner on 2026-10-04**; an agent may not
+> approve a Simulator Ruling (`SOURCE_HIERARCHY.md` §9, `AGENTS.md` §12).
+>
+> **What `SR-12` does NOT decide**, stated so its scope cannot drift:
+>
+> - that "normal dungeon conditions" means `Dim light`, or any other visibility row;
+> - which visibility category obtains at a given moment, or who owns that world state;
+> - anything about surprise ownership, which remains `ENC-002`'s;
+> - the p. 91 / p. 92 awareness-language tension (mutual notice vs asymmetric notice),
+>   which §7 below records as residue.
 
 **The smallest ruling that closes the gap.** It decides only *how many times distance is
 determined and which presentation governs*. It does **not** decide which visibility row a
@@ -168,7 +188,7 @@ row-selection question openly unresolved rather than silently answering it.
 
 | Boundary | Effect |
 |---|---|
-| `ENC-001` | Unchanged. Still owns encounter-distance determination; the governing-object set is unchanged at 13 rows |
+| `ENC-001` | Unchanged. Still owns encounter-distance determination, and the governing-object set is unchanged — the accepted packet's §5 table is byte-identical to the accepted blob, so no count is restated here (`DEC-0013`: counts are derived, not hand-maintained) |
 | `ENC-002` | Unchanged. **Surprise remains `ENC-002`-owned.** `SR-12` makes `ENC-001` *consume* surprise state earlier in the sequence; it never derives it |
 | `ENC-005` | Unchanged. `Contact` (p. 98) and `Evasion at Sea` (p. 100) stay `ENC-005`'s, and the initial-encounter-distance vs pursuit-starting-distance distinction is untouched |
 | `EXP-006` | Unchanged. Still owns mundane light contribution and **not** world visibility |
