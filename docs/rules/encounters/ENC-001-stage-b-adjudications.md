@@ -5,10 +5,12 @@
 > (`docs/rules/evidence/ENC-001-evidence.md`, Stage A `ACCEPTED` 2026-10-04 under
 > `DEC-0013`). It is **not** the Rule Card, and it does not authorize implementation.
 >
-> **`Q-1`, `Q-3`, `Q-7` and `Q-9` are adjudicated here.** `Q-7` is fully settled: its contract
-> by human architecture decision, and its world/environment visibility owner **assigned to
-> `SIM-003`**. The **feet/yards** convention remains unassigned, and nothing below assigns it.
-> **`Q-4` remains open**, preserved rather than closed by `SIM-003`.
+> **`Q-1`, `Q-3`, `Q-7`, `Q-9` and the feet/yards convention are adjudicated here.** `Q-7` is
+> fully settled: its contract by human architecture decision, and its world/environment
+> visibility owner **assigned to `SIM-003`**. Feet/yards is settled by finding that **no
+> separate owner is required** — it is part of `ENC-001`'s typed output. **`Q-4` remains
+> open**, preserved rather than closed by `SIM-003`, and it is the one gap left in end-to-end
+> determinism; see the completion assessment at the end.
 >
 > **The accepted Stage-A packet is never modified by this document.** It records each question
 > at its Stage-A disposition; Stage B adjudicates what `ENC-001` does about them without
@@ -23,6 +25,10 @@ Q-7:       SETTLED 2026-10-04 by human architecture decision
            world/environment visibility OWNER ASSIGNED: SIM-003
 Q-9:       ADJUDICATED 2026-10-04; NO NEW SIMULATOR RULING
            aerial is a Type of Terrain, not a Setting -- no row is missing
+FEET/YARDS ADJUDICATED 2026-10-04; NO NEW SIMULATOR RULING, NO NEW OWNER
+           part of ENC-001's typed output, not an ownership problem
+Q-6:       resolved AS IT BEARS ON ENC-001 -- p. 115 is a different
+           procedural domain (undersea missile ranges, not encounter distance)
 STAGE B:   adjudication only; no Rule Card, no implementation
 ```
 
@@ -1499,3 +1505,301 @@ AERIAL IS NOT A MEMBER of this domain and must not be added to it.
   the same rows, every aerial case above lands on a **yards** row, which changes nothing about
   who owns the convention.
 - **No Setting-selection owner is created**, per §11.
+
+---
+
+## Feet/yards — the unit convention and who owns it
+
+### 1. The gap as the accepted record states it
+
+Two separate records, quoted as written:
+
+> **Ownership gap** (accepted Stage-A packet §10): `Feet/yards unit convention` —
+> *"RC Ch. 6 p. 87 — **no Rule ID claims it**"* — *"consumed here; recorded as a potential
+> completion question, not assigned."*
+
+> **Source tension** (accepted Stage-A packet `Q-6`): *"Undersea distance is in yards (p. 93)
+> while p. 115 reads undersea ranges 'in feet at all times' — **possibly distinct concepts**"*
+> — pp. 93, 115 — `RETAINED AS GENUINE SOURCE AMBIGUITY`.
+
+Both match the expected subject. Note the packet's own hedge — *possibly distinct concepts* —
+which §4 below tests rather than assumes.
+
+### 2. Source basis — re-inspected this pass
+
+| Page | Re-inspected | Supplies |
+|---|---|---|
+| p. 87 | **yes, page image this pass** | `Feet vs. Yards`; the `Movement, Missile, and Spell Ranges` sidebar |
+| p. 93 | yes (`Q-3` pass, magnified crop) | the Encounter Distances Table's printed units |
+| p. 115 | **yes, page image this pass** | `Underwater Combat` — the sentence `E-25` paraphrases |
+
+No whole-book units search. `E-25` was a paraphrase, so it was verified on the image rather
+than relied on — which turned out to matter (§4).
+
+### 3. p. 87 — the rules fact, and a feature the packet's transcription did not carry
+
+```text
+p. 87  "Feet vs. Yards"
+"In dungeons and other indoor settings, the basic unit of distance measurement
+is the foot. ... In wildernesses, open fields, open city streets, and other
+outdoor settings, the basic unit of distance measurement is the yard. (One yard
+equals three feet.)"
+
+"Missiles and spell ranges are also read as feet in dungeons and as yards in
+the wilderness. However, the area affected by a spell ... is not read as yards;
+it is always read as feet."
+
+p. 87  sidebar "Movement, Missile, and Spell Ranges"
+"Indoors: ... measured in feet (90' means ninety feet indoors)."
+"Outdoors: ... measured in yards (120' actually means 120 yards outdoors)."
+"Everywhere: Spell effects are always measured in feet."
+```
+
+**The feature that decides the representation question (§8).** RC's convention is a
+**notation** convention, not only a unit-selection rule: *"120' actually means 120 yards
+outdoors."* The glyph `'` is **scale-relative**, and the *same printed numeral* denotes feet
+indoors and yards outdoors. A bare number in RC is therefore genuinely ambiguous without its
+setting — this is RC's own design, not a modelling artefact.
+
+### 4. p. 115 — the tension dissolves, and `E-25`'s paraphrase understated why
+
+The sentence, read on the page image, with its headings:
+
+```text
+p. 115   Chapter 8: Combat  ->  Underwater Combat  ->  Missile Weapons
+
+"Missile Weapons: Most missile weapons do not work underwater. Only crossbows
+made by undersea dwellers (such as mermen) will function. Even with those
+crossbows, read all undersea ranges in feet at all times."
+```
+
+**Classification: different procedural domain.** Not a contradiction, not an exception, not an
+unresolved tension — and this is established by position and subject, not by preference:
+
+- it sits under **`Missile Weapons`**, inside **`Underwater Combat`**, inside **Chapter 8:
+  Combat**;
+- its subject is the **range of a crossbow** — *"Even with those crossbows"* — i.e. a missile
+  range;
+- it is the undersea counterpart of p. 87's general rule that *"Missiles and spell **ranges**
+  are also read as feet in dungeons and as yards in the wilderness."* p. 115 says: undersea,
+  do not apply the outdoor/yards reading to missile ranges; read them in feet always.
+
+**Encounter distance is not a missile range.** The Encounter Distances Table's `Undersea` row
+(`1d6 x 10 yards`) is Chapter 7 material governing how far apart two groups are at contact.
+p. 115 governs how far a crossbow bolt carries underwater. The two never meet.
+
+> **What this does and does not settle.** For `ENC-001` the apparent conflict **does not
+> arise**, and the accepted packet's own hedge — *possibly distinct concepts* — is confirmed
+> as correct by inspection rather than assumed. Whether `COMBAT-*` has any residual question
+> about undersea missile ranges is **`COMBAT-*`'s, not `ENC-001`'s**, and is not decided here.
+> The accepted packet is not modified; `Q-6`'s Stage-A disposition stands as the Stage-A
+> record.
+
+### 5. p. 93 — the table has already applied the convention
+
+The decisive observation about table application:
+
+| Setting | How the table prints the unit |
+|---|---|
+| `Dungeon*` | `4d6x 10'` / `2d6x 10'` / `1d4x 10'` — the foot mark |
+| `Wilderness` | `4d6 x 10 yards` / `2d6 x 10 yards` / `1d4 x 10 yards` — **the word spelled out** |
+| `Ocean/sea` | `300 yards`, `4d6 x 10 yards`, `120 yards`, … — **spelled out** |
+| `Undersea` | `1d6 x 10 yards` — **spelled out** |
+
+**The Encounter Distances Table does not rely on the p. 87 notation convention.** It never
+prints a bare `'` outdoors and expects the reader to convert; it spells `yards` out on every
+outdoor row. p. 87 supplies the general convention, and **p. 93 has already applied it and
+printed the result**. No row departs from it.
+
+So for the table path there is no conversion left to perform, and no unit left to select —
+only a unit to **carry**.
+
+**The one place `ENC-001` meets the raw notation convention is the surprise short-circuit**,
+and RC disambiguates it inline there too:
+
+```text
+p. 92  "the encounter distance is 1d4 x 10' (or yards if outdoors)"
+p. 92  "the unsurprised party notices the surprised party at the 1d4 X 10'
+        (or yards) distance rolled"
+```
+
+The indoor/outdoor split that governs it is already available to `ENC-001`: the table's
+footnote `*` reads *"Or other indoor setting"* on `Dungeon`, and p. 87 names *"wildernesses,
+open fields, open city streets, and other outdoor settings"* as the outdoor case. So
+`Dungeon*` is the indoor Setting and `Wilderness`, `Ocean/sea` and `Undersea` are outdoor —
+a function of the Setting `ENC-001` already consumes and validates (`Q-9`).
+
+### 6. Repository ownership search
+
+Architecture inspection of `INVENTORY.md`, `ARCHITECTURE.md`, the `SIM-*` specifications and
+the landed modules. **No general owner of distance units, the feet/yards convention or
+measurement representation exists** — and that is not an oversight. **The established
+repository pattern is that each card states the unit of its own output:**
+
+| Artifact | How it handles the convention | Scope |
+|---|---|---|
+| `EXP-003` Dungeon Movement | cites p. 87 `Feet vs. Yards` and states *"The distance unit. Indoors, **feet**"*; rates are feet per turn | **card-local**, indoor half only |
+| `CHAR-005` Encumbrance & Movement | a landed `Setting` enum, `INDOORS = "feet"` / `OUTDOORS = "yards"`, with a `.unit` property, documented as *"only the unit they are read in does"* change | **card-local**, its own movement rates |
+| `CHAR-004` equipment | carries the unit in the name — `dimension_feet`, `side_feet` | card-local |
+
+There is **no units library, no measurement module and no dimensional-analysis layer**, and
+nothing in the repository asks for one. The accepted packet's *"no Rule ID claims it"* is
+accurate about a *general* owner, and the repository has nonetheless handled the convention
+consistently without one, three times.
+
+> **A collision worth flagging before an implementer meets it.** `CHAR-005` already has a type
+> named `Setting` with **two** members (`INDOORS`/`OUTDOORS`). `ENC-001`'s `Setting` axis has
+> **four** (`Dungeon*`/`Wilderness`/`Ocean/sea`/`Undersea`). **Same word, different concepts.**
+> `CHAR-005`'s is a reading-mode for movement rates; `ENC-001`'s is a table axis. They must not
+> be conflated or reused for one another. Recorded as an implementation hazard, not resolved
+> here — no type is designed.
+
+### 7. Competing ownership models
+
+**Model A — `ENC-001` owns unit *selection*.** *Adopted in corrected form.* The label is
+slightly wrong: there is nothing to **select**. Both of `ENC-001`'s output paths carry a unit
+RC has already stated — the table row (§5) or p. 92's inline *"(or yards if outdoors)"*. What
+`ENC-001` does is **carry** that unit out with the magnitude. That is not scope inflation; a
+distance returned without its unit is an **incomplete result**, not a leaner one.
+
+**Model B — a shared measurement convention owns it.** *Rejected.* No existing artifact owns
+general measurement units (§6), and creating one would be a units framework — which the
+efficiency guard forbids and which three landed cards demonstrate is unnecessary. `CHAR-005`'s
+enum is **card-local and must not be promoted** into a shared owner by this task.
+
+**Model C — caller/context owns units.** *Rejected.* It separates a printed RC rule from the
+mechanic that uses it, and it hands the caller a number that p. 87 makes genuinely ambiguous:
+`30` would be indistinguishable between 30 feet and 30 yards, with a factor-of-three error as
+the failure mode.
+
+**Model D — the table output owns the unit intrinsically.** *Correct, and merged into A — but
+incomplete on its own.* The table does define magnitude **and** unit per row. It does not
+cover the **surprise short-circuit**, which is p. 92 prose rather than a table row, so "the
+table owns it" leaves part of `ENC-001`'s output unaccounted for. A together with D covers
+both paths.
+
+### 8. Adjudication — not an ownership problem
+
+**Feet/yards is not a rule-ownership problem. It is part of `ENC-001`'s typed output.**
+
+The ownership gap recorded in the accepted packet is **closed by finding that no separate
+owner is required**, not by assigning one:
+
+```text
+NO NEW OWNER REQUIRED, AND NONE CREATED
+
+ENC-001 returns a distance together with its RC-prescribed unit. The unit is
+not independently derived world state -- it is a property of the result,
+stated by RC at the point the result is produced.
+```
+
+Adjudicated at steps 1–3 of the order; step 4 is **not reached**:
+
+```text
+1. RC Explicit ............... p. 87 states the convention; p. 93 has already
+                               applied it and prints the unit on every row;
+                               p. 92 states it inline for the surprise path
+2. Necessary Consequence ..... ENC-001 never derives a unit. It carries the
+                               one RC states, keyed to a Setting it already
+                               consumes and validates
+3. Architecture / output
+   contract ................. ENC-001's result carries magnitude AND unit,
+                               matching the established card-local pattern
+4. Narrow Simulator Ruling ... NOT REACHED
+```
+
+```text
+NO NEW SIMULATOR RULING
+
+There is no RC contradiction to resolve: p. 87 and p. 93 agree, and the
+p. 115 appearance of conflict dissolves on inspection into a different
+procedural domain. An SR must not be created to choose a software
+representation. SR-13 remains the next free identifier and is not used here.
+```
+
+### 9. Future `ENC-001` output-representation consequence
+
+Narrow, consequence only — **nothing designed, no units library, no implementation**:
+
+- `ENC-001`'s result should carry **magnitude *and* unit** together. A bare integer is
+  rejected, and the reason is RC's own notation, not tidiness: p. 87 prints the *same numeral*
+  for feet indoors and yards outdoors, so `30` alone is ambiguous and the failure mode is a
+  silent factor-of-three error.
+- The unit is `feet` for `Dungeon*` and `yards` for `Wilderness`, `Ocean/sea` and `Undersea`,
+  on both the table path and the surprise path.
+- This matches the established repository pattern (`CHAR-005`'s `.unit`, `EXP-003`'s stated
+  unit, `CHAR-004`'s unit-bearing names). **No general units library is proposed**, no
+  conversion is proposed, and `feet ↔ yards` arithmetic is not part of this.
+- `ENC-001` must not reuse `CHAR-005`'s two-valued `Setting` for its four-valued axis (§6).
+
+### 10. Provenance classification
+
+| Conclusion | Classification |
+|---|---|
+| p. 87's `Feet vs. Yards` convention, including `"120' actually means 120 yards outdoors"` | **Rules Cyclopedia Explicit** — page image |
+| p. 93 prints `'` on `Dungeon` rows and spells `yards` on every outdoor row; no row departs | **Rules Cyclopedia Explicit** — page image |
+| p. 92 states the unit inline for the surprise path | **Rules Cyclopedia Explicit** |
+| p. 115 governs undersea **missile ranges** in combat, not encounter distance | **Rules Cyclopedia Explicit** — different procedural domain, established by heading and subject |
+| `ENC-001` never derives a unit; it carries the RC-stated one | **Necessary Consequence** |
+| `ENC-001`'s result carries magnitude and unit; no separate owner is required | **Repository Boundary / Architecture** |
+| Whether `COMBAT-*` has a residual undersea missile-range question | **Unresolved Source Tension** — `COMBAT-*`'s, not `ENC-001`'s |
+| Any unit conversion, units framework or representation rule | **none issued** — no Simulator Ruling |
+
+**No representation choice above is labelled an RC rule.** The decision that the result
+carries its unit is an **architecture** conclusion; what the unit *is* in each case is RC's.
+
+### 11. `Q-9` and `SIM-003` — both untouched
+
+- **`Q-9` is not reopened.** `Aerial` remains not a Setting. That aerial cases land on
+  yards-based Settings is a **consequence** of the Setting mapping, and it played no part in
+  deciding ownership here.
+- **`SIM-003` is unchanged.** It owns visibility classification only; its specification
+  already lists `feet/yards conversion` and measurement representation among its explicit
+  non-responsibilities, and that boundary is preserved. Nothing here gives it distance units.
+
+### 12. Residue
+
+- **Undersea missile ranges** (p. 115) may still pose a question for `COMBAT-*`. Recorded,
+  routed, **not** adjudicated — and it does not touch `ENC-001`.
+- **The `Setting` name collision** between `CHAR-005` (two-valued) and `ENC-001` (four-valued)
+  is an implementation hazard, recorded for whoever implements `ENC-001`.
+- **No general units owner exists**, and this adjudication deliberately does not create one.
+
+---
+
+## `ENC-001` Stage-B completion assessment
+
+**Assessment only — nothing below is adjudicated**, and no question is settled by appearing in
+this table.
+
+```text
+BLOCKING FOR AN ENC-001 RULE CARD:    none for the contract itself
+                                      one gap for END-TO-END determinism
+```
+
+| Item | Status | Blocking? |
+|---|---|---|
+| `Q-1` two `2d6 × 10'` procedures | **SETTLED** — `SR-12` approved | no |
+| `Q-3` `Very good light` vs `Clear daylight` | **SETTLED** | no |
+| `Q-7` who determines visibility | **SETTLED** — `SIM-003` owns classification | no |
+| `Q-9` `aerial` and the Setting axis | **SETTLED** | no |
+| **feet/yards** | **SETTLED** — part of `ENC-001`'s typed output | no |
+| `Q-6` undersea feet/yards | **Resolved as it bears on `ENC-001`** — different procedural domain | no |
+| `Q-2` mutual vs asymmetric notice | residue recorded under `Q-1` §7 | **no** — it concerns *awareness description*, not the distance produced; the number is unaffected |
+| `Q-5` infravision `60'` vs a `20'–120'` roll | retained | **no** for the distance; it bears on whether awareness occurred, which is not this card's output |
+| `Q-8` p. 98 word order | retained | **no** — p. 98 states no procedure of its own and defers to pp. 91–93 |
+| **`Q-4` whose infravision satisfies footnote `**`** | retained; carried as `SIM-003` open dependency 1 | **the one real gap** — see below |
+| `SIM-003` unowned daylight/weather inputs | external | **no** for the contract; they are inputs to `SIM-003`, not to `ENC-001` |
+
+**The distinction that matters, stated plainly.** `ENC-001`'s **contract** is complete: a
+Setting and a visibility label in, a distance with its unit out, refusal when a required input
+is absent. Nothing above blocks writing that.
+
+**End-to-end determinism is not complete**, for one case: full darkness **with infravision
+used**, where the p. 93 footnote `**` promotes `No light` to `Dim light`. `SIM-003` explicitly
+excludes infravision, and `ENC-001` consumes a supplied label — so **no component currently
+owns applying that footnote**. That is `Q-4`, it is a classification-side question rather than
+`ENC-001`'s to resolve, and it is **not adjudicated here**.
+
+A Rule Card could be written for `ENC-001` today with that case routed out explicitly rather
+than silently defaulted. Whether to do so is a human decision and is not taken here.
