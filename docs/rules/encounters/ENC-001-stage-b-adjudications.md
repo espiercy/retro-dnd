@@ -1684,7 +1684,7 @@ dismissed as one. `currency.py` is precisely a *measurement* representation with
 ratios, so the existence of a measurement domain is not by itself a reason to avoid it.
 
 **The repository's own documented decision test** (`docs/technical/CLUSTER-003_IMPLEMENTATION_PLAN.md`
-§10, the `currency.Coin` row) is:
+§7 *"Ownership Audit (§14)"*, the `currency.Coin` row) is:
 
 ```text
 Could CHAR-004 own it?  No. TREAS-*/ADV-003 will need the same type.
