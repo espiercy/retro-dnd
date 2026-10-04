@@ -14,8 +14,8 @@
 > prose coherence". Single ownership replaces synchronization.*
 
 ```text
-STATUS:  HUMAN ACCEPTED; MERGED TO MAIN
-EXP-006-PHASE: ACCEPTED-AND-MERGED
+STATUS:  HUMAN ACCEPTED; MERGED TO MAIN; PUSHED TO ORIGIN/MAIN
+EXP-006-PHASE: ACCEPTED-MERGED-AND-PUSHED
 
          HUMAN ACCEPTANCE GIVEN 2026-10-03 by the project owner, on the
          independent final acceptance review's PASS with 0 BLOCKING
@@ -25,7 +25,8 @@ EXP-006-PHASE: ACCEPTED-AND-MERGED
          has been run and passes, no required gate is failing, the
          implementation matches the approved Rule Card, no rules ambiguity
          was silently resolved, and known limitations are documented in
-         §11.  Merge remains a separate act and has NOT occurred.
+         §11.  Merge and push were separately authorized acts and have
+         both since occurred; see the lines below for their current state.
 
          REVIEW STAGE REACHED
              Rule Card EXP-006                     APPROVED  2026-10-01
@@ -49,15 +50,22 @@ EXP-006-PHASE: ACCEPTED-AND-MERGED
                                                    no squash, no merge
                                                    commit; all 29 EXP-006
                                                    commits preserved
-         PUSHED                                    NO -- remote mutation
-                                                   separately authorized
+         PUSHED TO ORIGIN/MAIN                     YES 2026-10-03
+                                                   normal push, no force,
+                                                   no tags, feature branch
+                                                   not pushed
+         PUBLISHED COMMIT                          ee86add2e4b6c79443a1bdb0a1a4e96293357808
+                                                   (local main == origin/main
+                                                   == remote main; 0 / 0)
 
          LOW-3 and LOW-8                           RESOLVED (at a150837)
          INFO-1                                    NO CHANGE (adjudicated;
                                                    see §12.2)
 
-BRANCH:  cluster-004-exp-006-stage-b   (accepted, merged to main, unpushed)
+BRANCH:  cluster-004-exp-006-stage-b   (accepted, merged to main; the branch
+                                       itself is NOT on the remote)
 MERGE:   main fast-forwarded c1bdd5c -> 4c35cbd
+PUSH:    origin/main advanced c3a3e2d -> ee86add
 ```
 
 ### Human acceptance
@@ -445,9 +453,10 @@ without one.
    was "open and requires human adjudication" until 2026-10-03; closure review #6 `NB-5` found that
    the adjudication had been made but not propagated here. It also cited the review-#4 ledger's
    `INFO-1` section as "§INFO-1"; that ledger numbers it **§4**.)*
-9. **Accepted and merged to `main`; not pushed.** Push to `origin` is separately authorized
-   and has not occurred. `CLUSTER-004` implementation, `ENC-005` Stage B and any new Stage-A
-   card all remain unauthorized — acceptance of this card does not extend to them.
+9. **Accepted, merged to `main`, and pushed to `origin/main`.** Published at
+   `ee86add2e4b6c79443a1bdb0a1a4e96293357808` on 2026-10-03. `CLUSTER-004` implementation,
+   `ENC-005` Stage B and any new Stage-A card all remain unauthorized — acceptance of this card
+   does not extend to them.
    *(Renumbered 2026-10-03 — this item and the one above were both numbered `8.`, final-acceptance
    `NB-E`.)*
 
@@ -572,7 +581,8 @@ wording changed.**
 | 2026-10-03 | **HUMAN ACCEPTANCE given**; independent-review loop **CLOSED** | accepted |
 | 2026-10-03 | Non-blocking cleanup (`NB-A`–`NB-E`) and the project-wide process rule — this pass | `DEVELOPMENT_WORKFLOW.md` §4.1 |
 | 2026-10-03 | **Merged to `main`** — fast-forward only, `c1bdd5c` → `4c35cbd`, no squash, no merge commit | integrated |
-| — | Push to `origin` | **pending — separately authorized** |
+| 2026-10-03 | **Pushed to `origin/main`** — normal push, `c3a3e2d` → `ee86add`, no force, no tags, feature branch not pushed | published |
+| 2026-10-03 | Push-state correction in this record — the single-owner status model's first live transition | this pass |
 
 **No past `FAIL` or `PASS` is relabelled.** Every final-review artifact is preserved unaltered, as
 are the four Stage-A `FAIL` reviews and the two superseded first-pass evidence packets.
