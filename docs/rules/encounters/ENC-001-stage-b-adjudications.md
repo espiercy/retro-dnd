@@ -5,20 +5,19 @@
 > (`docs/rules/evidence/ENC-001-evidence.md`, Stage A `ACCEPTED` 2026-10-04 under
 > `DEC-0013`). It is **not** the Rule Card, and it does not authorize implementation.
 >
-> **`Q-1`, `Q-3` and `Q-7` are adjudicated here** — `Q-7` only in its rules/contract portion,
-> by human architecture decision. **The world/environment visibility *owner* is still not
-> assigned**, and saying so is not a formality: the gap is real and a separate architecture
-> decision closes it. `Q-9` remains `RETAINED AS GENUINE SOURCE AMBIGUITY` exactly as the
-> accepted packet records it, and the **feet/yards** convention remains unassigned. Nothing
-> below assigns either.
+> **`Q-1`, `Q-3` and `Q-7` are adjudicated here.** `Q-7` is now fully settled: its contract by
+> human architecture decision, and its world/environment visibility owner **assigned to
+> `SIM-003`**. `Q-9` remains `RETAINED AS GENUINE SOURCE AMBIGUITY` exactly as the accepted
+> packet records it, and the **feet/yards** convention remains unassigned — nothing below
+> assigns either. `Q-4` also remains open, and `SIM-003` preserves rather than closes it.
 
 ```text
 ADJUDICATION-STATUS
 RULE-ID:   ENC-001
 Q-1:       ADJUDICATED 2026-10-04; SR-12 APPROVED 2026-10-04
 Q-3:       ADJUDICATED 2026-10-04; NO NEW SIMULATOR RULING
-Q-7:       rules/contract portion SETTLED 2026-10-04 by human architecture decision
-           world/environment visibility OWNER: NOT YET ASSIGNED
+Q-7:       SETTLED 2026-10-04 by human architecture decision
+           world/environment visibility OWNER ASSIGNED: SIM-003
 Q-9:       OPEN -- not adjudicated here
 STAGE B:   adjudication only; no Rule Card, no implementation
 ```
@@ -725,22 +724,34 @@ authorized reconciliation of that protected wording is recorded.
 | | Status |
 |---|---|
 | The **rules/contract** question — *what does `ENC-001` do about the dependency?* | **SETTLED.** It consumes a supplied, setting-valid RC-native label, validates it, and refuses when a required one is absent |
-| The **world/environment visibility owner** — *what component produces that label?* | **NOT YET ASSIGNED** |
+| The **world/environment visibility owner** — *what component produces that label?* | **ASSIGNED** — see immediately below |
 
 ```text
-WORLD/ENVIRONMENT VISIBILITY OWNER:
-NEW OWNERSHIP DECISION REQUIRED
+WORLD/ENVIRONMENT VISIBILITY OWNER ASSIGNED        2026-10-04
+SIM-003 -- World/Environment Visibility Classification
+docs/technical/SIM-003_WORLD_VISIBILITY_CLASSIFICATION.md
+
+Authority:  human architecture decision, 2026-10-04, approving the
+            ownership analysis at the end of this document.
+Scope:      CLASSIFICATION ONLY -- derives exactly one RC-native
+            visibility label valid for the supplied setting.
+Form:       a Simulator Specification (Non-Historical Design
+            Requirement), NOT a Rule Card. RC supplies no mechanic
+            here, so there is nothing for a Rule Card to specify.
 ```
 
-**The ownership gap itself is not closed, and this document does not claim it is.** No Rule
-ID is created, no `SIM-*` specification is created, `INVENTORY.md` is not edited to invent an
-owner, and ownership is assigned to no existing card — not `SIM-001`, not `EXP-006`, not
-`ENC-001`. Whether the owner should be a small `SIM-*` specification or another architecture
-form is a separate decision, deliberately left to a later task.
+**`Q-7` is now fully settled as an `ENC-001` Stage-B dependency:**
 
-What the decision *does* achieve is that `ENC-001`'s own contract no longer waits on it:
-`ENC-001` can be specified against a supplied input, and the unassigned producer is a
-dependency rather than a blocker.
+```text
+ENC-001 consumes SIM-003-supplied RC-native visibility and validates
+that it is legal for the supplied setting.
+```
+
+**What remains open, and is not hidden by this closure.** The *ownership* question is closed;
+three dependencies `SIM-003` records are not, and none of them is `ENC-001`'s to resolve:
+`Q-4` (whose infravision satisfies the p. 93 `**` footnote), and the fact that **daylight /
+time-of-day and weather determination still have no owner** — they are scenario-supplied
+inputs today. `SIM-003` is **defined, not designed and not implemented**.
 
 ### 11. Simulator Ruling — **not required**
 
@@ -909,15 +920,15 @@ nothing here pretends it does.
 
 ### 18. Residue
 
-- **The world/environment visibility owner is still unassigned.** This is the live residue.
-  `ENC-001`'s contract no longer waits on it, but nothing produces the label yet, so a
-  deterministic end-to-end encounter still cannot be run. `NEW OWNERSHIP DECISION REQUIRED`.
-- **Daylight/time-of-day and weather have no owner either** — a gap wider than `Q-7`, surfaced
-  by section 5 and not resolved here. Whoever takes world visibility will meet these.
-- **The form of the eventual owner has since been analysed** — see the ownership-analysis
-  section at the end of this document, which recommends a new, narrowly scoped `SIM-*`
-  specification and returns it for human approval. **The gap is still open**; the analysis
-  creates nothing.
+- **The world/environment visibility owner is now assigned** — `SIM-003`, by human
+  architecture decision 2026-10-04. `SIM-003` is **defined, not designed and not
+  implemented**, so a deterministic end-to-end encounter still cannot be *run*; what has
+  changed is that the responsibility is named and bounded rather than missing.
+- **Daylight/time-of-day and weather still have no owner.** `SIM-003` *consumes* them as
+  scenario-supplied facts and explicitly does not own their determination. This is a gap
+  wider than `Q-7`, carried forward as `SIM-003` open dependencies 2 and 3.
+- **`Q-4` remains unresolved** — whose infravision satisfies the p. 93 `**` footnote, and
+  which rule applies it. `SIM-003` preserves it rather than closing it.
 - **`EXP-006` §7 vs §B is resolved** — the human chose §B and §7 was corrected to match. No
   residue remains on that point.
 - **A minor provenance inaccuracy in the accepted packet, reported not fixed.** Its §10 basis
@@ -932,11 +943,12 @@ nothing here pretends it does.
 ## World/environment visibility — ownership analysis
 
 ```text
-STATUS:  ANALYSIS ONLY, 2026-10-04
-         NEW OWNERSHIP ARTIFACT RECOMMENDED -- HUMAN APPROVAL REQUIRED
+STATUS:  ANALYSIS, 2026-10-04 -- APPROVED AND ACTED ON
 
-         The ownership gap remains OPEN. Nothing is created, numbered,
-         registered or implemented by this section.
+         Recommendation CREATE NEW SIM-* SPECIFICATION was approved by the
+         human project owner on 2026-10-04. SIM-003 was created and
+         registered; see the Q-7 disposition above. The analysis below is
+         preserved as the reasoning that produced it, unaltered.
 ```
 
 Authorized as a bounded architecture pass after the `Q-7` decision settled `ENC-001`'s
@@ -1191,7 +1203,12 @@ day/night, weather, propagation, terrain, calendar and perception.
 NEW OWNERSHIP ARTIFACT RECOMMENDED -- HUMAN APPROVAL REQUIRED
 ```
 
-Nothing was created. No identifier was assigned, `INVENTORY.md` was not edited, no
-specification document exists, and **the ownership gap is not marked closed** — it still
-reads `NEW OWNERSHIP DECISION REQUIRED` in the `Q-7` disposition above. No existing owner
-fits without scope inflation, so no existing artifact is nominated.
+**That approval was given on 2026-10-04**, and the recommendation was acted on in the same
+form it was recommended: `SIM-003 — World/Environment Visibility Classification`,
+**classification only**, registered under *Simulator Specifications* in `INVENTORY.md` and
+specified at `docs/technical/SIM-003_WORLD_VISIBILITY_CLASSIFICATION.md`. The boundary shipped
+is the boundary analysed — not a broader one — and `SIM-003` is defined, **not** designed and
+**not** implemented.
+
+*Recorded as at the time of the analysis:* no existing owner fitted without scope inflation,
+so no existing artifact was nominated.
