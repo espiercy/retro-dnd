@@ -1,86 +1,64 @@
-"""Structural linter for Stage-A evidence packets (DEC-0012).
+"""Stage-A evidence-packet linter (``DEC-0013``).
 
-This tool verifies that a Stage-A evidence packet **carries the research
-instruments the protocol requires**, and that the packet's own
-machine-readable ledgers are internally consistent. It is deliberately a
-*structural* checker:
+This replaces the ``DEC-0012`` structural linter. The difference is not that
+there are more checks -- there are slightly fewer -- but that the checks now
+compare the packet against things the researcher did **not** write:
 
-    It does NOT decide whether the rules research is factually correct.
-    It does NOT read the Rules Cyclopedia.
-    It does NOT judge interpretation, ownership or mechanical synthesis.
+* **seeds** come from the indexes and from accepted neighbour packets, so the
+  candidate page set is not the researcher's to narrow;
+* **citations** are matched against the packet's own page transcriptions, so a
+  page number cannot drift away from the text it names;
+* **counts** are derived here and printed, so there is no hand-maintained
+  tally that can go stale.
 
-Those remain the job of the adversarial self-review
-(`RULE_CARD_RESEARCH_PROTOCOL.md` §10.1.1), the independent completeness
-review (§10.1.2) and human evidence review (§11). What this linter
-replaces is the part of the five `CLUSTER-004` review cycles that was
-spent finding *bookkeeping* defects a machine can find in milliseconds:
-a page carrying an evidence row that appears on no visual-inspection
-list, an absence claim with no Negative Claim Record behind it, a
-`BLOCKED` closure item sitting in a packet that recommends
-`EVIDENCE READY FOR HUMAN REVIEW`, a §17 hard-stop string used as an
-inline label.
+``DEC-0012``'s pilot failed because its instruments checked each other. A
+Coverage Manifest is the researcher's account of what the researcher looked at;
+if a page was never opened it simply does not appear, and every cross-check
+agrees. **Internal consistency is not external completeness.**
 
-Every check below is traceable to a concrete, recorded `CLUSTER-004`
-review finding (see `docs/decisions/DEC-0012-*.md` §"Check-to-failure
-map"). Checks were not added speculatively.
-
-Scope: `docs/rules/evidence/<RULE-ID>-evidence*.md` — Stage-A packets, as
-named by §12. Reviewer artifacts (completeness reviews, audits,
-gap-research records) are not packets and are not linted. Packets that
-predate DEC-0012 are grandfathered by explicit name (§"Grandfathering").
+What this tool still cannot do is judge whether the research is right. A green
+run is a floor, never a certification, and the original researcher may never
+certify its own packet (``RULE_CARD_RESEARCH_PROTOCOL.md`` §10.1.2).
 
 Usage:
 
     uv run python scripts/lint_evidence.py [<evidence-directory>]
 
-With no argument it lints the repository's own `docs/rules/evidence/`. A
+With no argument it lints the repository's own ``docs/rules/evidence/``. A
 directory argument is used by the tests to exercise this gate end to end.
 
-Exits 0 if every linted packet passes, 1 otherwise, printing the exact
-packet, check ID and reason for each failure.
+Exits 0 if every linted packet passes, 1 otherwise, printing the exact packet,
+check ID and reason for each failure.
 """
 
 from __future__ import annotations
 
 import re
 import sys
+import unicodedata
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 EVIDENCE_DIR = REPO_ROOT / "docs" / "rules" / "evidence"
-
-# A Stage-A packet, per RULE_CARD_RESEARCH_PROTOCOL.md §12's naming
-# convention. Reviewer artifacts do not match this shape by design.
 PACKET_GLOB = "*-evidence*.md"
 
-# The canonical Stage-A packet template (§11.2) is linted as a **reference
-# packet** on every run. Two reasons, both load-bearing:
-#
-#   1. It keeps this gate LIVE. Every real packet in the repository today is
-#      grandfathered, so without the reference packet the gate would lint
-#      zero files and pass vacuously -- a green check proving nothing. A
-#      structurally inert gate is worse than no gate, because it is
-#      mistaken for enforcement.
-#   2. The template is the artifact every future packet is copied from. If
-#      an edit makes it non-conformant, every packet started from it
-#      inherits that defect, so the template is exactly what a continuous
-#      check should protect.
-#
-# Its absence is itself a failure: §11.2 requires it to exist.
+# The template is linted as a reference packet for the same reason DEC-0012
+# gave: every pre-existing packet is grandfathered, so without it the gate
+# would lint zero files and pass vacuously. A structurally inert gate is worse
+# than no gate, because it is mistaken for enforcement.
 REFERENCE_PACKET = "_TEMPLATE.md"
 
-# Grandfathering (DEC-0012 consequence 7). Every Stage-A packet that
-# existed when DEC-0012 was adopted is exempt: those packets were
-# researched, reviewed and (for CLUSTER-004) independently certified
-# under the protocol as it then stood, and retro-fitting the new ledgers
-# to them would rewrite accepted evidence rather than improve it.
+# Grandfathering (DEC-0012 consequence 7, carried forward unchanged by
+# DEC-0013). Every Stage-A packet that existed when DEC-0012 was adopted is
+# exempt. DEC-0013 does not retrofit history: these packets were researched and
+# reviewed under the protocol as it then stood, and converting them would
+# rewrite accepted evidence rather than improve it.
 #
-# This list is CLOSED. A packet written after DEC-0012 is never added to
-# it -- tests/tooling/test_lint_evidence.py pins the exact membership, so
-# extending it requires changing a test and is therefore visible in
-# review rather than silent.
+# This list is CLOSED. A packet written after DEC-0012 is never added to it --
+# tests/tooling/test_lint_evidence.py pins the exact membership, so extending
+# it requires changing a test and is therefore visible in review.
 GRANDFATHERED: frozenset[str] = frozenset(
     {
         "CHAR-001-evidence.md",
@@ -98,34 +76,30 @@ GRANDFATHERED: frozenset[str] = frozenset(
     }
 )
 
-# --- The required packet sections (DEC-0012 item 3; protocol §11.2) -------
+# --- Required sections (DEC-0013; the template's own shape) ---------------
 #
-# Matched as a case-insensitive substring of a Markdown heading line, so
-# section numbering and trailing qualifiers stay free-form.
+# Fourteen, against DEC-0012's sixteen -- and four of those that remain are
+# materially smaller (see the template). Matched as a case-insensitive
+# substring of a heading line, so numbering stays free-form.
 REQUIRED_SECTIONS: tuple[str, ...] = (
-    "Research-Start Gate",
-    "Primary Source Accessed",
-    "Source Structure",
-    "Coverage Manifest",
-    "Index Enumeration",
+    "Scope and Seams",
+    "Primary Source",
+    "Seeds",
+    "Page Dispositions",
     "Governing Objects",
-    "Visual Inspection Record",
-    "Cross-Reference Ledger",
-    "Repository-Fact Verification",
+    "Index Enumeration",
+    "Transcriptions",
     "Evidence Map",
-    "Negative Claim Ledger",
+    "Cross-References",
     "Ownership and Dependency Routing",
-    "Falsification Pass",
-    "Open-Question Closure",
-    "Primary-Source Coverage Checklist",
-    "Independent Review Status",
+    "Consequential Negative Claims",
+    "Targeted Falsification",
+    "Open Questions",
+    "Independent Review",
 )
 
 # --- Controlled vocabularies ---------------------------------------------
 
-# §6 confidence vocabulary, plus the repository-fact label DEC-0012 adds
-# (review 5 Finding 8: a project fact is not a source claim, and none of
-# §6's five labels fits one).
 CONFIDENCE_LABELS: frozenset[str] = frozenset(
     {
         "DIRECT PRIMARY TEXT",
@@ -133,17 +107,11 @@ CONFIDENCE_LABELS: frozenset[str] = frozenset(
         "NECESSARY CONSEQUENCE",
         "SECONDARY SOURCE LOCATOR ONLY",
         "NOT YET VERIFIED",
-        # Added by DEC-0012. A negative claim whose enumeration is not yet
-        # complete is classified NOT YET ESTABLISHED rather than reported
-        # as source silence (§10.4); a project fact is not a source claim
-        # at all, and none of §6's five labels fits one (review 5
-        # Finding 8).
         "NOT YET ESTABLISHED",
         "REPOSITORY FACT — NOT A SOURCE CLAIM",
     }
 )
 
-# §10.2 open-question closure dispositions.
 CLOSURE_DISPOSITIONS: frozenset[str] = frozenset(
     {
         "RESOLVED BY SOURCE INSPECTION",
@@ -152,19 +120,33 @@ CLOSURE_DISPOSITIONS: frozenset[str] = frozenset(
         "BLOCKED — MORE PRIMARY-SOURCE RESEARCH REQUIRED",
     }
 )
-
 BLOCKED_DISPOSITION = "BLOCKED — MORE PRIMARY-SOURCE RESEARCH REQUIRED"
+
+# Page-disposition vocabulary (DEC-0013). Deliberately five values. Two of
+# them carry an obligation: a routed or out-of-scope page must say where it
+# went, because "not mine" without an owner is how a mechanic becomes unowned.
+PAGE_DISPOSITIONS: frozenset[str] = frozenset(
+    {
+        "INSPECTED",
+        "ROUTED_EXTERNAL",
+        "IRRELEVANT_AFTER_INSPECTION",
+        "OUTSIDE_CARD_SCOPE",
+        "ACCESS_BLOCKED",
+    }
+)
+DISPOSITIONS_NEEDING_REASON: frozenset[str] = frozenset(
+    {"ROUTED_EXTERNAL", "OUTSIDE_CARD_SCOPE"}
+)
 
 EVIDENCE_READY = "EVIDENCE READY FOR HUMAN REVIEW"
 MORE_RESEARCH_REQUIRED = "MORE PRIMARY RESEARCH REQUIRED"
 RECOMMENDATIONS: frozenset[str] = frozenset({EVIDENCE_READY, MORE_RESEARCH_REQUIRED})
 
-# §10.1.2: what an original researcher may and may not write as its own
-# packet's review status.
 PREPARED = "PREPARED FOR INDEPENDENT COMPLETENESS REVIEW"
 INDEPENDENT_REVIEW_STATES: frozenset[str] = frozenset(
     {
         PREPARED,
+        "NOT YET PERFORMED",
         "INDEPENDENT COMPLETENESS REVIEW PASSED",
         "INDEPENDENT COMPLETENESS REVIEW FAILED",
     }
@@ -174,24 +156,16 @@ PROHIBITED_SELF_CERTIFICATIONS: tuple[str, ...] = (
     "SOURCE COMPLETENESS CERTIFIED",
     "HUMAN EVIDENCE GATE CLEARED",
 )
-
-# The keys whose *value* carries a review verdict. A prohibited string is a
-# self-certification when assigned to one of these, and ordinary prose when
-# it appears anywhere else -- a packet may name these strings to warn
-# against them.
 REVIEW_STATUS_KEYS: frozenset[str] = frozenset(
     {
         "INDEPENDENT-REVIEW",
         "INDEPENDENT REVIEW",
-        "ORIGINAL RESEARCHER OUTPUT",
         "HUMAN EVIDENCE REVIEW",
         "SOURCE COMPLETENESS",
         "STATUS",
     }
 )
 
-# §17 hard-stop bodies. Each must always carry its "STOP — " prefix; used
-# bare, the string reads as a live hard stop (review 4 Finding 6).
 HARD_STOP_BODIES: tuple[str, ...] = (
     "PRIMARY SOURCE ACCESS REQUIRED",
     "PRIMARY-SOURCE VISUAL ACCESS REQUIRED",
@@ -201,90 +175,48 @@ HARD_STOP_BODIES: tuple[str, ...] = (
     "COMPLETION COMPATIBILITY NOT ESTABLISHED",
     "HUMAN RULING REQUIRED",
 )
-
-# E015 checks that a stop body never appears as a bare inline label.
-# "MORE PRIMARY RESEARCH REQUIRED" is deliberately excluded: §11 uses that
-# exact string as a legitimate *recommendation* value, so its bare
-# appearance cannot be diagnosed structurally. The defect this check exists
-# for -- review 4 Finding 6, a bare "INTERNAL SOURCE CONFLICT REQUIRES
-# REVIEW" sitting beside an EVIDENCE READY recommendation -- is unaffected.
+# "MORE PRIMARY RESEARCH REQUIRED" is excluded: it is a legitimate
+# RECOMMENDATION value, so its bare appearance cannot be diagnosed structurally.
 E015_BODIES: tuple[str, ...] = tuple(
-    body for body in HARD_STOP_BODIES if body != "MORE PRIMARY RESEARCH REQUIRED"
+    body for body in HARD_STOP_BODIES if body != MORE_RESEARCH_REQUIRED
 )
-
 VISUAL_ACCESS_STOP = "STOP — PRIMARY-SOURCE VISUAL ACCESS REQUIRED"
-UNVERIFIED_PROJECT_FACT = "UNVERIFIED PROJECT FACT"
 
-# --- Absence / completeness wording (DEC-0012 items 4 and 8) -------------
+# --- Hand-maintained counts are now a defect ------------------------------
 #
-# Deliberately narrow and literal. The linter does not attempt to
-# understand prose; it asks only whether a packet that *states* absence
-# carries the Negative Claim Records that state requires, and whether a
-# packet that *claims* completeness carries the enumeration instruments
-# that claim requires.
-ABSENCE_PATTERNS: tuple[str, ...] = (
-    r"\bRC (?:has|contains|states|prints|supplies|provides) no\b",
-    r"\bthe Rules Cyclopedia (?:has|contains|states|prints|supplies|provides) no\b",
-    r"\bno (?:such )?(?:table|procedure|mechanic|rule|entry|dependency|owner) exists\b",
-    r"\bthe source is silent\b",
-    r"\bRC is silent\b",
-)
-COMPLETENESS_PATTERNS: tuple[str, ...] = (
-    r"\bread in full\b",
-    r"\bfully inspected\b",
-    r"\bexhaustive(?:ly)?\b",
-    r"\ball relevant entries\b",
+# The pilot's BLOCKING-3 was three stale tallies inside a gate that said "each
+# line confirmed, not assumed" -- committed, in one case, inside the
+# remediation of that very finding. The fix is not to check the counts. It is
+# to make the fields not exist, and to fail a packet that reintroduces one.
+MANUAL_COUNT_PATTERNS: tuple[str, ...] = (
+    r"\b\d+\s+(?:rows?|entries|records?|blocks?)\s+dispositioned\b",
+    r"\b(?:Coverage Manifest|manifest)\s+rows?\s*[:=]\s*\d+",
+    r"\b(?:entries|records?|rows?|questions?|pages?)\s+dispositioned\s*[:=]\s*\d+",
+    r"\bCross-references followed\s*[:=]?\s*\d+",
+    r"\b\d+\s+(?:negative[- ]claim|falsification)\s+records?\b",
+    r"\bTotal\s+(?:rows?|pages?|entries)\s*[:=]\s*\d+",
 )
 
-# --- Required ledger blocks ----------------------------------------------
-
-PACKET_STATUS_KEYS: tuple[str, ...] = (
-    "RULE-ID",
-    "PASS",
-    "SELF-FALSIFICATION",
-    "REPOSITORY-FACT-PASS",
-    "INDEPENDENT-REVIEW",
-    "RECOMMENDATION",
-)
-COVERAGE_LEDGER_KEYS: tuple[str, ...] = (
-    "EVIDENCE-PAGES",
-    "IMAGE-VERIFIED",
-    "LOCATOR-ONLY",
-    "ACCESS-BLOCKED",
-)
-
-# Negative Claim Record fields (DEC-0012 item 4).
-NCR_FIELDS: tuple[str, ...] = (
+PACKET_STATUS_KEYS: tuple[str, ...] = ("RULE-ID", "INDEPENDENT-REVIEW", "RECOMMENDATION")
+SEED_KEYS: tuple[str, ...] = ("TABLES-INDEX", "GENERAL-INDEX", "NEIGHBOUR", "LEADS")
+NEGATIVE_CLAIM_FIELDS: tuple[str, ...] = (
     "CLAIM",
     "SCOPE SEARCHED",
-    "STRUCTURAL INSTRUMENTS CHECKED",
-    "INDEXES CHECKED",
-    "SEARCH TERMS USED",
-    "CROSS-REFERENCES FOLLOWED",
-    "VISUAL PAGES INSPECTED",
+    "INSTRUMENTS CHECKED",
     "FALSIFICATION ATTEMPT",
-    "CONFIDENCE",
 )
+FALSIFICATION_FIELDS: tuple[str, ...] = ("CONCLUSION", "SOUGHT", "RESULT", "DISPOSITION")
 NO_NEGATIVE_CLAIMS = "NEGATIVE CLAIMS: NONE"
-NO_REPOSITORY_FACTS = "REPOSITORY FACTS: NONE"
-
-# Falsification record fields (§10, restated as a required shape).
-FALSIFICATION_FIELDS: tuple[str, ...] = (
-    "CONCLUSION",
-    "WOULD FALSIFY",
-    "SOUGHT",
-    "RESULT",
-    "DISPOSITION",
-)
 
 _HEADING = re.compile(r"^#{1,6}\s+(?P<title>.+?)\s*$", re.MULTILINE)
 _FENCE = re.compile(r"^```[^\n]*\n(?P<body>.*?)^```", re.MULTILINE | re.DOTALL)
 _TABLE_SEPARATOR = re.compile(r"^\s*\|?[\s:|-]+\|[\s:|-]*$")
+_PAGE_RANGE = re.compile(r"^\s*(\d+)\s*-\s*(\d+)\s*$")
 
 
 @dataclass(frozen=True)
 class Finding:
-    """One structural defect in one packet."""
+    """One defect in one packet."""
 
     packet: str
     check: str
@@ -292,6 +224,21 @@ class Finding:
 
     def __str__(self) -> str:
         return f"{self.packet}: [{self.check}] {self.detail}"
+
+
+@dataclass(frozen=True)
+class Derived:
+    """Counts the packet no longer states and the linter computes instead."""
+
+    seeded_pages: int
+    dispositioned_pages: int
+    inspected_pages: int
+    evidence_rows: int
+    quoted_rows: int
+    transcriptions: int
+    governing_objects: int
+    open_questions: int
+    negative_claims: int
 
 
 def _headings(text: str) -> list[str]:
@@ -305,10 +252,26 @@ def _fenced_blocks(text: str) -> list[str]:
 def _prose_outside_fences(text: str) -> str:
     """The packet with fenced blocks removed.
 
-    Verbatim source transcriptions live in fenced blocks, and RC's own
-    wording must never be linted as though the researcher had written it.
+    Verbatim source transcriptions live in fenced blocks, and RC's own wording
+    must never be linted as though the researcher had written it.
     """
     return _FENCE.sub("\n", text)
+
+
+def _strip_markup(cell: str) -> str:
+    return cell.replace("**", "").replace("`", "").replace("*", "").strip()
+
+
+def _is_placeholder(value: str) -> bool:
+    """Is this an unfilled ``<...>`` slot rather than a real value?
+
+    The template is linted as a reference packet, so its own slots must not be
+    read as vocabulary violations. This is the only accommodation the linter
+    makes, it applies to every vocabulary check uniformly, and a real packet
+    that leaves a slot unfilled still fails the section and field checks.
+    """
+    stripped = value.strip()
+    return stripped.startswith("<") and stripped.endswith(">")
 
 
 def _keyed_block(text: str, header: str) -> dict[str, str] | None:
@@ -326,28 +289,77 @@ def _keyed_block(text: str, header: str) -> dict[str, str] | None:
     return None
 
 
-def _page_list(raw: str) -> tuple[frozenset[int], str | None]:
-    """Parse ``68, 69, 70`` or ``none`` into a page set."""
-    if raw.strip().lower() in {"none", "-", "n/a"}:
-        return frozenset(), None
+def _blocks_headed(text: str, header: str) -> list[str]:
+    """Every fenced block whose first line is ``header``."""
+    found: list[str] = []
+    for body in _fenced_blocks(text):
+        lines = body.splitlines()
+        if lines and lines[0].strip() == header:
+            found.append(body)
+    return found
+
+
+def _pages_in(raw: str) -> set[int]:
+    """Parse ``91, 93, 96-98`` into a page set. Ignores non-numeric tokens."""
     pages: set[int] = set()
-    for token in raw.replace(";", ",").split(","):
+    for token in re.split(r"[,;]", raw):
         candidate = token.strip()
         if not candidate:
             continue
-        if not candidate.isdigit():
-            return frozenset(), f"{candidate!r} is not a page number"
-        pages.add(int(candidate))
-    return frozenset(pages), None
+        span = _PAGE_RANGE.match(candidate)
+        if span:
+            first, last = int(span.group(1)), int(span.group(2))
+            if first <= last and last - first < 500:
+                pages.update(range(first, last + 1))
+            continue
+        bare = re.match(r"^p?p?\.?\s*(\d+)$", candidate)
+        if bare:
+            pages.add(int(bare.group(1)))
+    return pages
+
+
+def _seed_pages(text: str) -> tuple[set[int], dict[str, str] | None]:
+    """Every page the external instruments put on the researcher's desk."""
+    block = _keyed_block(text, "SEEDS")
+    if block is None:
+        return set(), None
+    pages: set[int] = set()
+    for key in ("TABLES-INDEX", "GENERAL-INDEX"):
+        pages |= _pages_in(block.get(key, ""))
+    # NEIGHBOUR is "RULE-ID: pages; RULE-ID: pages" -- the Rule ID is origin
+    # metadata, deliberately recorded so a seed can be traced to the accepted
+    # packet it came from without importing that packet's conclusions.
+    for clause in block.get("NEIGHBOUR", "").split(";"):
+        _, _, tail = clause.partition(":")
+        pages |= _pages_in(tail if tail else clause)
+    # LEADS is "term -> pages; term -> pages".
+    for clause in block.get("LEADS", "").split(";"):
+        _, arrow, tail = clause.partition("->")
+        if arrow:
+            pages |= _pages_in(tail)
+    return pages, block
+
+
+def _page_dispositions(text: str) -> dict[int, tuple[str, str]]:
+    """``{page: (disposition, remainder)}`` from the PAGE-DISPOSITIONS block."""
+    parsed: dict[int, tuple[str, str]] = {}
+    for body in _blocks_headed(text, "PAGE-DISPOSITIONS"):
+        for line in body.splitlines()[1:]:
+            stripped = line.split("#", 1)[0].strip()
+            if not stripped:
+                continue
+            key, separator, value = stripped.partition(":")
+            if not separator or not key.strip().isdigit():
+                continue
+            words = value.split()
+            if not words:
+                continue
+            parsed[int(key.strip())] = (words[0], " ".join(words[1:]).strip())
+    return parsed
 
 
 def _table_rows(text: str, column: str) -> list[list[str]]:
-    """Data rows of every Markdown table carrying ``column`` in its header.
-
-    Returns each row as its list of stripped cells, restricted to tables
-    whose header row names the column. Tables inside fenced blocks are
-    excluded by the caller passing de-fenced text.
-    """
+    """Data rows of every Markdown table whose header names ``column``."""
     rows: list[list[str]] = []
     lines = text.splitlines()
     index = 0
@@ -357,28 +369,67 @@ def _table_rows(text: str, column: str) -> list[list[str]]:
             index += 1
             continue
         header_cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
-        if (
-            index + 1 >= len(lines)
-            or not _TABLE_SEPARATOR.match(lines[index + 1])
-            or not any(column.lower() in cell.lower() for cell in header_cells)
-        ):
+        if index + 1 >= len(lines) or not _TABLE_SEPARATOR.match(lines[index + 1]):
             index += 1
             continue
-        position = next(
-            i for i, cell in enumerate(header_cells) if column.lower() in cell.lower()
-        )
+        if not any(column.lower() == _strip_markup(cell).lower() for cell in header_cells):
+            index += 1
+            continue
         index += 2
         while index < len(lines) and "|" in lines[index]:
             cells = [cell.strip() for cell in lines[index].strip().strip("|").split("|")]
-            if position < len(cells):
-                rows.append([cells[position], lines[index]])
+            if len(cells) == len(header_cells):
+                rows.append(cells)
             index += 1
     return rows
 
 
-def _strip_markup(cell: str) -> str:
-    """Reduce a table cell to its bare label text."""
-    return cell.replace("**", "").replace("`", "").replace("*", "").strip()
+def _header_of(text: str, column: str) -> list[str]:
+    lines = text.splitlines()
+    for index, line in enumerate(lines):
+        if "|" not in line or index + 1 >= len(lines):
+            continue
+        if not _TABLE_SEPARATOR.match(lines[index + 1]):
+            continue
+        cells = [_strip_markup(cell) for cell in line.strip().strip("|").split("|")]
+        if any(column.lower() == cell.lower() for cell in cells):
+            return cells
+    return []
+
+
+def normalize(text: str) -> str:
+    """Fold a quotation to its comparable form.
+
+    Whitespace, quotation glyphs and soft hyphenation differ between a page
+    image, a transcription and an evidence row without any of them being wrong.
+    Case is preserved: RC distinguishes "Dim light" from "dim light" in table
+    cells, and flattening case would hide a real transcription error.
+    """
+    folded = unicodedata.normalize("NFKC", text)
+    for dash in ("‐", "‑", "‒", "–", "—"):
+        folded = folded.replace(dash, "-")
+    for quote in ("‘", "’", "‛"):
+        folded = folded.replace(quote, "'")
+    for quote in ("“", "”", "‟"):
+        folded = folded.replace(quote, '"')
+    folded = folded.replace("­", "").replace("-\n", "")
+    folded = _strip_markup(folded)
+    return re.sub(r"\s+", " ", folded).strip()
+
+
+def _transcriptions(text: str) -> dict[int, str]:
+    """``{page: normalized transcription}`` from TRANSCRIPTION blocks."""
+    found: dict[int, str] = {}
+    for body in _fenced_blocks(text):
+        lines = body.splitlines()
+        if not lines:
+            continue
+        head = re.match(r"^TRANSCRIPTION\s+p\.?\s*(\d+)\s*$", lines[0].strip())
+        if not head:
+            continue
+        page = int(head.group(1))
+        found[page] = normalize("\n".join(lines[1:]))
+    return found
 
 
 def _find_patterns(text: str, patterns: Iterable[str]) -> list[str]:
@@ -391,7 +442,6 @@ def _find_patterns(text: str, patterns: Iterable[str]) -> list[str]:
 
 
 def _status_assignments(text: str) -> list[tuple[str, str]]:
-    """Every ``KEY: value`` line in the packet, as (upper-cased key, value)."""
     assignments: list[tuple[str, str]] = []
     for line in text.splitlines():
         key, separator, value = line.partition(":")
@@ -402,7 +452,6 @@ def _status_assignments(text: str) -> list[tuple[str, str]]:
 
 
 def _section_body(text: str, section: str) -> str:
-    """The text of the first heading containing ``section``, to the next heading."""
     for match in _HEADING.finditer(text):
         if section.lower() not in match.group("title").lower():
             continue
@@ -412,8 +461,31 @@ def _section_body(text: str, section: str) -> str:
     return ""
 
 
+def derive(text: str) -> Derived:
+    """Compute every count the packet is forbidden to state."""
+    seeds, _ = _seed_pages(text)
+    pages = _page_dispositions(text)
+    evidence = _table_rows(_prose_outside_fences(text), "Quote")
+    header = _header_of(_prose_outside_fences(text), "Quote")
+    quoted = 0
+    if header:
+        quote_at = next(i for i, c in enumerate(header) if c.lower() == "quote")
+        quoted = sum(1 for row in evidence if row[quote_at].strip(" `*"))
+    return Derived(
+        seeded_pages=len(seeds),
+        dispositioned_pages=len(pages),
+        inspected_pages=sum(1 for value in pages.values() if value[0] == "INSPECTED"),
+        evidence_rows=len(evidence),
+        quoted_rows=quoted,
+        transcriptions=len(_transcriptions(text)),
+        governing_objects=len(_table_rows(_prose_outside_fences(text), "Kind")),
+        open_questions=len(_table_rows(_prose_outside_fences(text), "Question")),
+        negative_claims=len(_blocks_headed(text, "NEGATIVE-CLAIM")),
+    )
+
+
 def lint_packet(text: str, name: str) -> list[Finding]:
-    """Run every structural check against one packet's Markdown source."""
+    """Run every DEC-0013 check against one packet's Markdown source."""
     findings: list[Finding] = []
 
     def fail(check: str, detail: str) -> None:
@@ -422,270 +494,215 @@ def lint_packet(text: str, name: str) -> list[Finding]:
     prose = _prose_outside_fences(text)
     headings = " || ".join(_headings(text))
 
-    # E001 -- required instrument sections (DEC-0012 item 3 / item 13).
+    # S001 -- required sections.
     missing_sections = [
         section for section in REQUIRED_SECTIONS if section.lower() not in headings.lower()
     ]
     for section in missing_sections:
-        fail("E001", f"required section missing: {section!r}")
+        fail("S001", f"required section missing: {section!r}")
 
-    # E002 -- the PACKET-STATUS block and its keys.
+    # S002 -- PACKET-STATUS and its three keys.
     status = _keyed_block(text, "PACKET-STATUS")
     if status is None:
-        fail("E002", "no PACKET-STATUS ledger block found")
+        fail("S002", "no PACKET-STATUS ledger block found")
         status = {}
     for key in PACKET_STATUS_KEYS:
         if key not in status:
-            fail("E002", f"PACKET-STATUS is missing the {key} field")
-
+            fail("S002", f"PACKET-STATUS is missing the {key} field")
     recommendation = status.get("RECOMMENDATION", "")
     review_state = status.get("INDEPENDENT-REVIEW", "")
 
-    # E003 -- recommendation must be exactly one of §11's two strings.
+    # S003 / S004 -- recommendation and review vocabulary; no self-certification.
     if recommendation and recommendation not in RECOMMENDATIONS:
-        fail("E003", f"RECOMMENDATION {recommendation!r} is not one of §11's two values")
-
-    # E004 -- independent-review status vocabulary (§10.1.2).
+        fail("S003", f"RECOMMENDATION {recommendation!r} is not one of the two values")
     if review_state and review_state not in INDEPENDENT_REVIEW_STATES:
-        fail("E004", f"INDEPENDENT-REVIEW {review_state!r} is not a recognised state")
-    # Scoped to where such a string would actually *function* as a
-    # certification: the value side of a review-status assignment. A packet
-    # (or the template) may name these strings in prose in order to warn
-    # against them, which is not a certification.
+        fail("S004", f"INDEPENDENT-REVIEW {review_state!r} is not a recognised state")
     for key, value in _status_assignments(text):
         if key not in REVIEW_STATUS_KEYS:
             continue
         for prohibited in PROHIBITED_SELF_CERTIFICATIONS:
             if prohibited in value:
-                fail(
-                    "E004",
-                    f"prohibited self-certification {prohibited!r} assigned to {key!r} — "
-                    "an original researcher may not certify its own packet (§10.1.2)",
-                )
+                fail("S004", f"{key} asserts {prohibited!r}; a researcher may not self-certify")
 
-    # E005 -- the coverage ledger and its page lists.
-    ledger = _keyed_block(text, "COVERAGE-LEDGER")
-    pages: dict[str, frozenset[int]] = {}
-    if ledger is None:
-        fail("E005", "no COVERAGE-LEDGER ledger block found")
+    # S005 -- the SEEDS block exists, and every seeded page is dispositioned.
+    # This is the check DEC-0012 had no equivalent of: the candidate set comes
+    # from the indexes and from accepted neighbour packets, so a page the
+    # researcher never opened still has to be accounted for.
+    seeds, seed_block = _seed_pages(text)
+    pages = _page_dispositions(text)
+    if seed_block is None:
+        fail("S005", "no SEEDS ledger block found")
     else:
-        for key in COVERAGE_LEDGER_KEYS:
-            if key not in ledger:
-                fail("E005", f"COVERAGE-LEDGER is missing the {key} field")
-                continue
-            parsed, error = _page_list(ledger[key])
-            if error:
-                fail("E005", f"COVERAGE-LEDGER {key}: {error}")
-            pages[key] = parsed
-
-    evidence_pages = pages.get("EVIDENCE-PAGES", frozenset())
-    image_verified = pages.get("IMAGE-VERIFIED", frozenset())
-    locator_only = pages.get("LOCATOR-ONLY", frozenset())
-    access_blocked = pages.get("ACCESS-BLOCKED", frozenset())
-
-    # E006 -- a page carrying an evidence row must be visually inspected,
-    # or declared access-blocked. (Review 4 Findings 1 and 7; review 5
-    # Finding 1: pp. 84-86 carried evidence rows and appeared on no
-    # visual-inspection list.)
-    unaccounted = sorted(evidence_pages - image_verified - access_blocked)
-    if unaccounted:
+        for key in SEED_KEYS:
+            if key not in seed_block:
+                fail("S005", f"SEEDS is missing the {key} field")
+    undispositioned = sorted(seeds - set(pages))
+    if undispositioned:
         fail(
-            "E006",
-            "pages carry evidence rows but are neither IMAGE-VERIFIED nor "
-            f"ACCESS-BLOCKED: {unaccounted}",
+            "S005",
+            f"seeded pages carry no disposition: {undispositioned} "
+            "(a seed is an obligation to inspect or route, not inherited truth)",
         )
 
-    # E007 -- a page cannot be both visually inspected and locator-only.
-    both = sorted(image_verified & locator_only)
-    if both:
-        fail("E007", f"pages listed as both IMAGE-VERIFIED and LOCATOR-ONLY: {both}")
+    # S006 -- page-disposition vocabulary, and the two values owing a reason.
+    if not pages:
+        fail("S006", "no PAGE-DISPOSITIONS ledger block found")
+    for page, (disposition, remainder) in sorted(pages.items()):
+        if disposition not in PAGE_DISPOSITIONS:
+            fail("S006", f"p. {page}: {disposition!r} is not a page-disposition value")
+            continue
+        if disposition in DISPOSITIONS_NEEDING_REASON and not remainder:
+            fail("S006", f"p. {page}: {disposition} requires a Rule ID or bounded reason")
 
-    # E008 -- an unresolved visual-access blocker is a hard stop (§9.2).
-    if access_blocked:
+    # S007 -- ACCESS_BLOCKED is a hard stop.
+    blocked = sorted(page for page, value in pages.items() if value[0] == "ACCESS_BLOCKED")
+    if blocked:
         if recommendation == EVIDENCE_READY:
             fail(
-                "E008",
-                f"ACCESS-BLOCKED pages {sorted(access_blocked)} remain, so the packet "
-                f"may not recommend {EVIDENCE_READY!r} (§9.2)",
+                "S007",
+                f"pages {blocked} are ACCESS_BLOCKED; may not recommend {EVIDENCE_READY!r}",
             )
         if VISUAL_ACCESS_STOP not in text:
-            fail(
-                "E008",
-                f"ACCESS-BLOCKED pages {sorted(access_blocked)} are recorded but "
-                f"{VISUAL_ACCESS_STOP!r} is never issued (§9.2, §17)",
-            )
+            fail("S007", f"pages {blocked} are ACCESS_BLOCKED but {VISUAL_ACCESS_STOP!r} is absent")
 
-    # E009 -- a BLOCKED closure item forbids an EVIDENCE READY
-    # recommendation. (Review 2 Finding 12, HIGH: ENC-005 pass 2 did
-    # exactly this.)
+    # S008 -- an open question BLOCKED forbids an EVIDENCE READY recommendation.
     if BLOCKED_DISPOSITION in text and recommendation == EVIDENCE_READY:
-        fail(
-            "E009",
-            f"a {BLOCKED_DISPOSITION!r} closure item is present, so the packet may not "
-            f"recommend {EVIDENCE_READY!r} (§10.2, §17)",
-        )
+        fail("S008", f"a BLOCKED open question forbids {EVIDENCE_READY!r}")
 
-    # E010 -- Negative Claim Ledger: records, or an explicit NONE.
-    ncr_blocks = [
-        body
-        for body in _fenced_blocks(text)
-        if body.splitlines() and body.splitlines()[0].strip() == "NEGATIVE-CLAIM-RECORD"
-    ]
-    declares_no_negatives = NO_NEGATIVE_CLAIMS in text
-    if not ncr_blocks and not declares_no_negatives:
-        fail(
-            "E010",
-            "Negative Claim Ledger carries no NEGATIVE-CLAIM-RECORD block and does not "
-            f"state {NO_NEGATIVE_CLAIMS!r}",
-        )
-    for position, body in enumerate(ncr_blocks, start=1):
+    # S009 -- every page an evidence row cites must be dispositioned INSPECTED.
+    header = _header_of(prose, "Quote")
+    evidence_rows = _table_rows(prose, "Quote")
+    if header and evidence_rows:
+        at = {name.lower(): i for i, name in enumerate(header)}
+        page_at = at.get("page")
+        quote_at = at.get("quote")
+        para_at = at.get("paraphrase")
+        confidence_at = at.get("confidence")
+        transcriptions = _transcriptions(text)
+        for row in evidence_rows:
+            label = _strip_markup(row[0]) or "?"
+            if page_at is None:
+                break
+            cited = _pages_in(_strip_markup(row[page_at]))
+            for page in sorted(cited):
+                if page not in pages:
+                    fail("S009", f"{label}: cites p. {page}, which has no disposition")
+                elif pages[page][0] != "INSPECTED":
+                    fail(
+                        "S009",
+                        f"{label}: cites p. {page}, dispositioned {pages[page][0]} "
+                        "-- only an INSPECTED page may support an evidence row",
+                    )
+            # S010 -- citation verification. A quote must occur in the
+            # transcription recorded for the page it is attributed to. This is
+            # the check that makes a page number mechanically falsifiable.
+            quote = _strip_markup(row[quote_at]) if quote_at is not None else ""
+            para = _strip_markup(row[para_at]) if para_at is not None else ""
+            if quote and para and not (_is_placeholder(quote) or _is_placeholder(para)):
+                fail("S010", f"{label}: carries both a quote and a paraphrase; use one")
+            if quote:
+                needle = normalize(quote)
+                for page in sorted(cited):
+                    haystack = transcriptions.get(page)
+                    if haystack is None:
+                        fail("S010", f"{label}: p. {page} has no TRANSCRIPTION block to match")
+                    elif needle not in haystack:
+                        fail(
+                            "S010",
+                            f"{label}: quoted text does not occur in p. {page}'s "
+                            "transcription (wrong page, or the transcription is incomplete)",
+                        )
+            # S011 -- confidence vocabulary.
+            if confidence_at is not None:
+                label_text = _strip_markup(row[confidence_at])
+                known = label_text in CONFIDENCE_LABELS or _is_placeholder(label_text)
+                if label_text and not known:
+                    fail("S011", f"{label}: confidence {label_text!r} is not the vocabulary")
+
+    # S012 -- every printed cross-reference target must be dispositioned. A
+    # followed reference that leads somewhere unaccounted for is exactly how
+    # p. 98 went missing in the pilot.
+    for row in _table_rows(prose, "To"):
+        target = _pages_in(_strip_markup(row[2]) if len(row) > 2 else "")
+        for page in sorted(target - set(pages)):
+            fail("S012", f"cross-reference target p. {page} carries no disposition")
+
+    # S013 -- every LEAD resolves to at least one page.
+    if seed_block is not None:
+        raw_leads = seed_block.get("LEADS", "")
+        if raw_leads.strip().lower() not in {"none", "", "-"}:
+            for clause in raw_leads.split(";"):
+                if not clause.strip():
+                    continue
+                term, arrow, tail = clause.partition("->")
+                if _is_placeholder(clause.strip()):
+                    continue
+                if not arrow or not _pages_in(tail):
+                    fail("S013", f"LEAD {term.strip()!r} never resolves to a page")
+
+    # S014 -- consequential negative claims carry their three evidence fields.
+    claim_blocks = _blocks_headed(text, "NEGATIVE-CLAIM")
+    if not claim_blocks and NO_NEGATIVE_CLAIMS not in text:
+        fail("S014", f"no NEGATIVE-CLAIM block and no explicit {NO_NEGATIVE_CLAIMS!r}")
+    for position, body in enumerate(claim_blocks, start=1):
         upper = body.upper()
-        for field in NCR_FIELDS:
+        for field in NEGATIVE_CLAIM_FIELDS:
             if field not in upper:
-                fail("E010", f"NEGATIVE-CLAIM-RECORD {position} is missing the {field!r} field")
+                fail("S014", f"NEGATIVE-CLAIM {position} is missing the {field!r} field")
 
-    # E011 -- absence stated in prose requires a Negative Claim Record.
-    # (The pass-1 failure: "RC states no consequence for having no light"
-    # and "RC has no light-conditioned table", both false, both asserted
-    # with nothing behind them.)
-    absence_hits = _find_patterns(prose, ABSENCE_PATTERNS)
-    if absence_hits and not ncr_blocks:
-        fail(
-            "E011",
-            "absence is stated in prose with no NEGATIVE-CLAIM-RECORD behind it "
-            f"(first: {absence_hits[0]!r}) — use NOT YET ESTABLISHED instead (§10.4)",
-        )
+    # S015 -- targeted falsification records keep their shape where present.
+    for position, body in enumerate(_blocks_headed(text, "FALSIFICATION"), start=1):
+        upper = body.upper()
+        for field in FALSIFICATION_FIELDS:
+            if field not in upper:
+                fail("S015", f"FALSIFICATION {position} is missing the {field!r} field")
 
-    # E012 -- completeness wording requires the enumeration instruments
-    # that make it auditable (DEC-0012 item 8).
-    completeness_hits = _find_patterns(prose, COMPLETENESS_PATTERNS)
-    if completeness_hits:
-        for required in ("Coverage Manifest", "Index Enumeration"):
-            if required in missing_sections:
-                fail(
-                    "E012",
-                    f"completeness wording {completeness_hits[0]!r} is used while the "
-                    f"{required!r} section is absent (§9.10)",
-                )
-
-    # E013 -- §6 confidence vocabulary in every evidence-map row.
-    for cell, line in _table_rows(prose, "Confidence"):
-        label = _strip_markup(cell)
-        if not label or label.lower() in {"confidence", "---"}:
+    # S016 -- open-question closure vocabulary.
+    for row in _table_rows(prose, "Disposition"):
+        label_text = _strip_markup(row[-1])
+        if not label_text or label_text.lower() in {"disposition", "---"}:
             continue
-        if label not in CONFIDENCE_LABELS:
-            fail("E013", f"confidence cell {label!r} is not §6 vocabulary — row: {line.strip()!r}")
-
-    # E014 -- §10.2 disposition vocabulary in the closure section.
-    closure = _prose_outside_fences(_section_body(text, "Open-Question Closure"))
-    for cell, line in _table_rows(closure, "Disposition"):
-        label = _strip_markup(cell)
-        if not label or label.lower() in {"disposition", "---"}:
+        if _is_placeholder(label_text):
             continue
-        if label not in CLOSURE_DISPOSITIONS:
-            fail(
-                "E014",
-                f"closure disposition {label!r} is not §10.2 vocabulary — row: {line.strip()!r}",
-            )
+        if label_text in PAGE_DISPOSITIONS or label_text in {"GOVERNING", "ROUTED"}:
+            continue
+        if label_text not in CLOSURE_DISPOSITIONS:
+            fail("S016", f"disposition {label_text!r} is not a recognised vocabulary value")
 
-    # E015 -- a §17 hard-stop body must always carry its STOP prefix.
-    # (Review 4 Finding 6: the bare string asserts a live hard stop.)
+    # S017 -- hard-stop bodies must carry their STOP prefix.
     for body_text in E015_BODIES:
         for match in re.finditer(re.escape(body_text), text):
             preceding = text[max(0, match.start() - 8) : match.start()]
             if "STOP — " not in preceding and "STOP - " not in preceding:
-                fail(
-                    "E015",
-                    f"hard-stop string {body_text!r} used without its 'STOP — ' prefix "
-                    "(§17 vocabulary is not an inline label)",
-                )
-                break
+                fail("S017", f"{body_text!r} appears without its 'STOP — ' prefix")
 
-    # E016 -- Repository-Fact Verification: rows, or an explicit NONE;
-    # and an unverified project fact blocks the gate (DEC-0012 item 5).
-    # (Review 4 Finding 5: CHAR-011 named as the owner of p. 150's
-    # conditions without opening INVENTORY.md, which says Weapon Mastery.)
-    repo_section = _section_body(text, "Repository-Fact Verification")
-    repo_rows = _table_rows(_prose_outside_fences(repo_section), "Artifact inspected")
-    if not repo_rows and NO_REPOSITORY_FACTS not in text:
+    # S018 -- hand-maintained counts are forbidden outright. DEC-0012 checked
+    # that tallies agreed; DEC-0013 removes the field so there is nothing to
+    # drift. The linter derives and prints them instead.
+    for hit in _find_patterns(prose, MANUAL_COUNT_PATTERNS):
         fail(
-            "E016",
-            "Repository-Fact Verification carries no verified-fact row and does not state "
-            f"{NO_REPOSITORY_FACTS!r}",
+            "S018",
+            f"hand-maintained count {hit.strip()!r}: counts are derived by this "
+            "linter and must not be written into the packet",
         )
-    if UNVERIFIED_PROJECT_FACT in text and recommendation == EVIDENCE_READY:
-        fail(
-            "E016",
-            f"an {UNVERIFIED_PROJECT_FACT!r} marker remains, so the packet may not "
-            f"recommend {EVIDENCE_READY!r} (§10.5)",
-        )
-
-    # E017 -- the pre-review self-falsification pass is mandatory and has
-    # a required shape (§10.6). There is no "none" option.
-    falsification_blocks = [
-        body
-        for body in _fenced_blocks(text)
-        if body.splitlines() and body.splitlines()[0].strip() == "FALSIFICATION-RECORD"
-    ]
-    if not falsification_blocks:
-        fail("E017", "no FALSIFICATION-RECORD block found (§10, §10.6)")
-    for position, body in enumerate(falsification_blocks, start=1):
-        upper = body.upper()
-        for field in FALSIFICATION_FIELDS:
-            if field not in upper:
-                fail("E017", f"FALSIFICATION-RECORD {position} is missing the {field!r} field")
-
-    # E018 -- the research-completion gate's own declarations (§11.1).
-    for key, expected in (
-        ("SELF-FALSIFICATION", "COMPLETE"),
-        ("REPOSITORY-FACT-PASS", "COMPLETE"),
-    ):
-        value = status.get(key, "")
-        if value and value != expected and recommendation == EVIDENCE_READY:
-            fail(
-                "E018",
-                f"PACKET-STATUS {key} is {value!r}, not {expected!r}, so the packet may "
-                f"not recommend {EVIDENCE_READY!r} (§11.1)",
-            )
 
     return findings
 
 
-def packet_paths(directory: Path) -> list[Path]:
-    """Every Stage-A packet in ``directory`` that this linter governs."""
-    return sorted(
-        path
-        for path in directory.glob(PACKET_GLOB)
-        if not path.name.startswith("_") and path.name not in GRANDFATHERED
-    )
-
-
 def lint_directory(directory: Path) -> tuple[list[Finding], list[Path]]:
-    """Lint the reference packet and every governed Stage-A packet.
-
-    The reference packet comes first so that a template defect is reported
-    before any packet derived from it.
-    """
     findings: list[Finding] = []
     linted: list[Path] = []
-
     reference = directory / REFERENCE_PACKET
     if reference.is_file():
         linted.append(reference)
         findings.extend(lint_packet(reference.read_text(encoding="utf-8"), reference.name))
     else:
         findings.append(
-            Finding(
-                packet=REFERENCE_PACKET,
-                check="E000",
-                detail=(
-                    f"the canonical Stage-A packet template is missing from {directory} — "
-                    "§11.2 requires it, and without it this gate has nothing to verify"
-                ),
-            )
+            Finding(packet=REFERENCE_PACKET, check="S000", detail="reference packet is missing")
         )
-
-    for path in packet_paths(directory):
+    for path in sorted(directory.glob(PACKET_GLOB)):
+        if path.name in GRANDFATHERED or path.name == REFERENCE_PACKET:
+            continue
         linted.append(path)
         findings.extend(lint_packet(path.read_text(encoding="utf-8"), path.name))
     return findings, linted
@@ -693,39 +710,44 @@ def lint_directory(directory: Path) -> tuple[list[Finding], list[Path]]:
 
 def _report(findings: Sequence[Finding], linted: Sequence[Path], skipped: int) -> None:
     reference_count = sum(1 for path in linted if path.name == REFERENCE_PACKET)
-    print("Stage-A evidence-packet structural linter (DEC-0012)")
+    print("Stage-A evidence-packet linter (DEC-0013)")
     print("-" * 60)
     print(f"reference packet linted:  {reference_count}  ({REFERENCE_PACKET})")
     print(f"Stage-A packets linted:   {len(linted) - reference_count}")
-    print(f"Stage-A grandfathered:    {skipped}")
+    print(f"Stage-A grandfathered:    {skipped}  (closed set; not migrated)")
     for path in linted:
         packet_findings = [finding for finding in findings if finding.packet == path.name]
         verdict = "PASS" if not packet_findings else f"FAIL ({len(packet_findings)})"
         label = " (reference)" if path.name == REFERENCE_PACKET else ""
         print(f"  {path.name + label:<44} {verdict}")
+        if path.name == REFERENCE_PACKET:
+            continue
+        counts = derive(path.read_text(encoding="utf-8"))
+        print(
+            f"      derived: seeded {counts.seeded_pages}, dispositioned "
+            f"{counts.dispositioned_pages} ({counts.inspected_pages} inspected), "
+            f"objects {counts.governing_objects}, evidence {counts.evidence_rows} "
+            f"({counts.quoted_rows} quoted / {counts.transcriptions} transcriptions), "
+            f"questions {counts.open_questions}, negative claims {counts.negative_claims}"
+        )
     if findings:
         print("\nFAILED:")
         for finding in findings:
             print(f"  - {finding}")
     else:
-        print("\nEvery linted Stage-A packet carries its required instruments.")
+        print("\nEvery linted Stage-A packet carries its required instruments,")
+        print("every seeded page is dispositioned, and every quotation matches")
+        print("the transcription of the page it cites.")
         if len(linted) == reference_count:
             print(
-                "No post-DEC-0012 Stage-A packet exists yet, so only the reference\n"
+                "\nNo post-DEC-0013 Stage-A packet exists yet, so only the reference\n"
                 "packet was checked. This gate is live but has not yet governed a\n"
-                "real packet -- see DEC-0012 consequence 7 on grandfathering."
+                "real packet."
             )
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    """Lint an evidence directory. Defaults to the repository's own.
-
-    The optional directory argument exists so the enforcement path itself can
-    be exercised end to end -- running this script as a subprocess against a
-    prepared directory and asserting the exit code, rather than only calling
-    lint_packet() in-process. A gate is only proven by the exit code it
-    actually returns.
-    """
+    """Lint an evidence directory. Defaults to the repository's own."""
     arguments = list(sys.argv[1:] if argv is None else argv)
     directory = Path(arguments[0]).resolve() if arguments else EVIDENCE_DIR
     if not directory.is_dir():

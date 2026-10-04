@@ -1,21 +1,12 @@
-"""Tests for the Stage-A evidence-packet structural linter (DEC-0012).
+"""Tests for the DEC-0013 Stage-A evidence linter.
 
-These tests protect the linter's *decisions*, not its formatting: for each
-check, one packet that must pass and one that must fail, with the failing
-case built from the corresponding recorded `CLUSTER-004` defect wherever
-that defect can be reproduced in miniature. If a check stops firing on the
-defect it was created for, one of these tests fails.
+Cases A-G replay the defects actually observed in the ENC-001 DEC-0012 pilot
+and the EXP-006 review series. Each one is a defect that reached, or would have
+reached, a human reviewer under DEC-0012; each must now be caught mechanically
+or cost nothing to dismiss.
 
-Two tests deliberately pin project state rather than behaviour:
-
-    test_template_is_a_conforming_packet   -- the canonical template must
-        itself satisfy every structural check, so a researcher who fills it
-        in honestly starts from a green baseline.
-
-    test_grandfather_list_is_exactly_the_pre_dec_0012_packets -- the
-        grandfather list is CLOSED (DEC-0012 consequence 7). Adding a packet
-        to it requires changing this test, which makes the exemption visible
-        in review instead of silent.
+The suite also pins the grandfathered set, which is closed: extending it has to
+change a test, and is therefore visible in review.
 """
 
 from __future__ import annotations
@@ -24,483 +15,376 @@ import subprocess
 import sys
 from pathlib import Path
 
-import lint_evidence as linter
 import pytest
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-EVIDENCE_DIR = REPO_ROOT / "docs" / "rules" / "evidence"
-TEMPLATE = EVIDENCE_DIR / "_TEMPLATE.md"
-FIXTURES = Path(__file__).resolve().parent / "fixtures"
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+
+import lint_evidence  # noqa: E402
+from lint_evidence import (  # noqa: E402
+    GRANDFATHERED,
+    REFERENCE_PACKET,
+    derive,
+    lint_packet,
+    main,
+    normalize,
+)
+
+SCRIPT = Path(__file__).resolve().parents[2] / "scripts" / "lint_evidence.py"
 
 
-# --- A minimal conforming packet, used as the baseline for every mutation -
+# --- A minimal packet that passes, which every case below perturbs ---------
 
-def _conforming_packet(
-    *,
-    recommendation: str = linter.EVIDENCE_READY,
-    evidence_pages: str = "69, 70",
-    image_verified: str = "69, 70",
-    locator_only: str = "72",
-    access_blocked: str = "none",
-    extra: str = "",
-    confidence: str = "DIRECT PRIMARY TEXT",
-    closure_disposition: str = "RESOLVED BY SOURCE INSPECTION",
-    include_negative_record: bool = True,
-    self_falsification: str = "COMPLETE",
-) -> str:
-    """Build a packet that passes every check, then let callers break one.
-
-    Every required section, ledger and vocabulary item is present, so a
-    finding in a mutated copy is attributable to the mutation alone.
-    """
-    negative_record = (
-        """```text
-NEGATIVE-CLAIM-RECORD
-CLAIM:                           no second illumination table governs this card
-SCOPE SEARCHED:                  Ch. 4, Ch. 7, Ch. 13
-STRUCTURAL INSTRUMENTS CHECKED:  TOC, Tables Index
-INDEXES CHECKED:                 General Index, Index to Spells
-SEARCH TERMS USED:               torch, lantern, light, illumination
-CROSS-REFERENCES FOLLOWED:       p. 93, p. 150
-VISUAL PAGES INSPECTED:          69, 70
-FALSIFICATION ATTEMPT:           re-swept the Tables Index for every table naming light
-CONFIDENCE:                      DIRECT PRIMARY TEXT
-```"""
-        if include_negative_record
-        else linter.NO_NEGATIVE_CLAIMS
-    )
-
-    return f"""# `TEST-001` — Test Card — Stage-A Evidence
+VALID = """# `TEST-900` — Example — Stage-A Evidence
 
 ```text
 PACKET-STATUS
-RULE-ID:              TEST-001
-PASS:                 1
-SELF-FALSIFICATION:   {self_falsification}
-REPOSITORY-FACT-PASS: COMPLETE
-INDEPENDENT-REVIEW:   {linter.PREPARED}
-RECOMMENDATION:       {recommendation}
+RULE-ID:              TEST-900
+INDEPENDENT-REVIEW:   PREPARED FOR INDEPENDENT COMPLETENESS REVIEW
+RECOMMENDATION:       EVIDENCE READY FOR HUMAN REVIEW
 ```
 
-## 1. Research-Start Gate
-Scope established from the inventory this pass.
+## 1. Scope and Seams
+Owns the example mechanic. Routes surprise to `ENC-002`.
 
-## 2. Primary Source Accessed
-Page images; OCR as locator only. No access limitation encountered.
+## 2. Primary Source
 
-## 3. Source Structure
-Ch. 4 Equipment, pp. 62-74.
+| Source | Access method | Role |
+|---|---|---|
+| Example edition | page images | authoritative |
 
-## 4. Coverage Manifest
-| # | Object | Class | Page | Disposition |
+## 3. Seeds
+
+```text
+SEEDS
+TABLES-INDEX:   93
+GENERAL-INDEX:  91-93
+NEIGHBOUR:      ENC-005: 98, 104
+LEADS:          infravision -> 24
+```
+
+## 4. Page Dispositions
+
+```text
+PAGE-DISPOSITIONS
+91: INSPECTED
+92: INSPECTED
+93: INSPECTED
+98: INSPECTED
+104: OUTSIDE_CARD_SCOPE COMBAT-*
+24: INSPECTED
+```
+
+## 5. Governing Objects
+
+| Object | Page | Kind | Disposition | Owner |
 |---|---|---|---|---|
-| 1 | Adventuring Gear Table | B | 69 | VISUALLY INSPECTED |
+| Example Table | 93 | table | GOVERNING | |
 
-## 5. Index Enumeration
-| Entry | Pages | Followed? | Disposition |
+## 6. Index Enumeration
+
+| Instrument | Entry | Pages | Disposition |
 |---|---|---|---|
-| Torch | 69 | yes | DISPOSITIONED |
+| Tables | Example Table | 93 | GOVERNING |
 
-## 6. Governing Objects
-The p. 69 item descriptions are the principal governing object.
+**Enumerated absences:** None recorded.
 
-## 7. Visual Inspection Record
+## 7. Transcriptions
+
 ```text
-COVERAGE-LEDGER
-EVIDENCE-PAGES:  {evidence_pages}
-IMAGE-VERIFIED:  {image_verified}
-LOCATOR-ONLY:    {locator_only}
-ACCESS-BLOCKED:  {access_blocked}
+TRANSCRIPTION p. 93
+The encounter distance is determined by setting and visibility.
 ```
 
-## 8. Cross-Reference Ledger
-| From | Explicit reference | Followed to | Result |
-|---|---|---|---|
-| 69 | see p. 93 | 93 | encounter-distance table located |
-
-## 9. Repository-Fact Verification
-| Project claim | Artifact inspected | Identifier / section | Verdict |
-|---|---|---|---|
-| CHAR-004 owns item cost | docs/rules/INVENTORY.md | row CHAR-004 | VERIFIED |
-
-## 10. Evidence Map
-| # | Fact | Object | Provenance | Confidence |
-|---|---|---|---|---|
-| E-1 | A torch burns for six turns | p. 69 | Rules Cyclopedia Explicit | {confidence} |
-
-## 11. Negative Claim Ledger
-{negative_record}
-
-## 12. Ownership and Dependency Routing
-| Mechanic | Owner | Status | Evidence for the routing |
-|---|---|---|---|
-| encounter distance | ENC-001 | UNRESEARCHED | §9 row 1 |
-
-## 13. Falsification Pass
 ```text
-FALSIFICATION-RECORD
-CONCLUSION:     a torch burns for six turns
-WOULD FALSIFY:  a second duration printed elsewhere in the source
-SOUGHT:         Tables Index, General Index Torch entry, Ch. 13
-RESULT:         none located; no competing duration printed
-DISPOSITION:    CONFIRMED
+TRANSCRIPTION p. 98
+Contact occurs when the two parties encounter one another.
 ```
 
-## 14. Open-Question Closure
-| # | Open question | Object implicated | Disposition |
+## 8. Evidence Map
+
+| # | Page | Quote | Paraphrase | Object | Provenance | Confidence |
+|---|---|---|---|---|---|---|
+| E-1 | 93 | distance is determined by setting | | table | RC Explicit | DIRECT PRIMARY TEXT |
+| E-2 | 98 | | Contact is defined here | prose | RC Explicit | DIRECT PRIMARY TEXT |
+
+## 9. Cross-References
+
+| From | Printed reference | To | Result |
 |---|---|---|---|
-| 1 | does light gate surprise? | p. 92 | {closure_disposition} |
+| 93 | see page 98 | 98 | Contact definition |
 
-## 15. Primary-Source Coverage Checklist
-- Relevant structural units inspected: Ch. 4
-- Visual verification completed for: pp. 69, 70
+## 10. Ownership and Dependency Routing
 
-## 16. Independent Review Status
+| Mechanic | Owner | Status | Basis |
+|---|---|---|---|
+| Surprise | `ENC-002` | UNRESEARCHED | routed, not absorbed |
+
+## 11. Consequential Negative Claims
+
 ```text
-ORIGINAL RESEARCHER OUTPUT:  {linter.PREPARED}
-INDEPENDENT REVIEW:          NOT YET PERFORMED
-HUMAN EVIDENCE REVIEW:       NOT GIVEN
+NEGATIVE-CLAIM
+CLAIM:                  No other rule modifies the example distance.
+SCOPE SEARCHED:         pp. 91-104
+INSTRUMENTS CHECKED:    Tables Index, General Index
+FALSIFICATION ATTEMPT:  Sought a second distance statement; none found.
 ```
-{extra}
+
+## 12. Targeted Falsification
+
+```text
+FALSIFICATION
+CONCLUSION:   The table governs.
+SOUGHT:       pp. 91-104
+RESULT:       No competing procedure.
+DISPOSITION:  CONFIRMED
+```
+
+## 13. Open Questions
+
+| # | Question | Object | Disposition |
+|---|---|---|---|
+| 1 | Does visibility bind? | p. 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
+
+## 14. Independent Review
+
+```text
+INDEPENDENT REVIEW:    NOT YET PERFORMED
+HUMAN EVIDENCE REVIEW: NOT GIVEN
+```
 """
 
 
-def _checks(text: str, name: str = "TEST-001-evidence.md") -> set[str]:
-    return {finding.check for finding in linter.lint_packet(text, name)}
+def checks(text: str) -> set[str]:
+    return {finding.check for finding in lint_packet(text, "TEST-900-evidence.md")}
 
 
-# --- The baseline itself --------------------------------------------------
+def test_the_baseline_packet_passes() -> None:
+    assert lint_packet(VALID, "TEST-900-evidence.md") == []
 
 
-def test_conforming_packet_has_no_findings() -> None:
-    findings = linter.lint_packet(_conforming_packet(), "TEST-001-evidence.md")
-    assert findings == [], f"baseline packet should be clean, got: {findings}"
+def test_the_shipped_template_passes() -> None:
+    template = Path(lint_evidence.EVIDENCE_DIR) / REFERENCE_PACKET
+    assert lint_packet(template.read_text(encoding="utf-8"), REFERENCE_PACKET) == []
 
 
-def test_template_is_a_conforming_packet() -> None:
-    # The canonical template must pass its own linter, or a researcher who
-    # follows it starts from a red baseline and learns to ignore the gate.
-    findings = linter.lint_packet(TEMPLATE.read_text(encoding="utf-8"), TEMPLATE.name)
-    assert findings == [], f"the Stage-A template must lint clean, got: {findings}"
+# --- A: the p. 98 class ----------------------------------------------------
 
 
-# --- E001 required sections ---------------------------------------------
+def test_a_seeded_neighbour_page_without_a_disposition_fails() -> None:
+    """ENC-001 B-1 replay.
+
+    ENC-005's accepted packet cites p. 98. Under DEC-0012 nothing obliged the
+    researcher to account for it, and the omission survived to independent
+    review. Here the seed carries the obligation.
+    """
+    broken = VALID.replace("98: INSPECTED\n", "")
+    assert "S005" in checks(broken)
 
 
-@pytest.mark.parametrize(
-    "section",
-    [
-        "Coverage Manifest",
-        "Negative Claim Ledger",
-        "Repository-Fact Verification",
-        "Falsification Pass",
-        "Index Enumeration",
-        "Primary-Source Coverage Checklist",
-    ],
-)
-def test_missing_required_section_is_reported(section: str) -> None:
-    text = _conforming_packet().replace(f"## 4. {section}", "## 4. Something Else")
-    text = text.replace(f"## 11. {section}", "## 11. Something Else")
-    text = text.replace(f"## 9. {section}", "## 9. Something Else")
-    text = text.replace(f"## 13. {section}", "## 13. Something Else")
-    text = text.replace(f"## 5. {section}", "## 5. Something Else")
-    text = text.replace(f"## 15. {section}", "## 15. Something Else")
-    assert "E001" in _checks(text)
+def test_the_seed_names_its_origin_packet_without_importing_its_conclusions() -> None:
+    """F: a seed is an obligation, never inherited truth.
+
+    ENC-005's own note calling the table "light-keyed" was wrong, and ENC-001
+    correctly refuted it. The seed must therefore carry a page and a source
+    name, and nothing else -- there is no field in which a conclusion could
+    travel.
+    """
+    seeds, block = lint_evidence._seed_pages(VALID)
+    assert block is not None
+    assert "ENC-005" in block["NEIGHBOUR"]
+    assert 98 in seeds and 104 in seeds
+    assert lint_packet(VALID, "p.md") == []
 
 
-def test_all_required_sections_are_named_by_the_protocol_template() -> None:
-    # The linter matches on section names; the template must supply each one,
-    # so the two cannot drift apart silently.
-    template = TEMPLATE.read_text(encoding="utf-8").lower()
-    for section in linter.REQUIRED_SECTIONS:
-        assert section.lower() in template, f"template lacks the {section!r} section"
+# --- B: citation drift -----------------------------------------------------
 
 
-# --- E002 / E003 / E004 status block ------------------------------------
-
-
-def test_missing_packet_status_block_is_reported() -> None:
-    text = _conforming_packet().replace("PACKET-STATUS", "PACKET-NOTES")
-    assert "E002" in _checks(text)
-
-
-def test_recommendation_outside_the_two_permitted_values_is_reported() -> None:
-    text = _conforming_packet(recommendation="LOOKS GOOD TO ME")
-    assert "E003" in _checks(text)
-
-
-def test_original_researcher_self_certification_is_reported() -> None:
-    # §10.1.2: the researcher may prepare a packet for review; it may not
-    # certify its own completeness.
-    text = _conforming_packet().replace(
-        "INDEPENDENT REVIEW:          NOT YET PERFORMED",
-        "INDEPENDENT REVIEW:          SOURCE COMPLETENESS PASSED",
+def test_a_quote_attributed_to_the_wrong_page_fails() -> None:
+    """ENC-001 B-2 replay: text cited to p. 91 that is printed on p. 93."""
+    broken = VALID.replace(
+        "| E-1 | 93 | distance is determined by setting",
+        "| E-1 | 91 | distance is determined by setting",
     )
-    assert "E004" in _checks(text)
+    assert "S010" in checks(broken)
 
 
-def test_naming_a_prohibited_certification_to_warn_against_it_is_allowed() -> None:
-    # The template and real packets quote these strings in order to forbid
-    # them. Only their use AS this packet's own status is a defect.
-    text = _conforming_packet(
-        extra="\n> Never write `SOURCE COMPLETENESS PASSED` in your own packet.\n"
+def test_a_quote_matching_its_cited_page_passes_through_normalization() -> None:
+    quoted = VALID.replace(
+        "distance is determined by setting |",
+        "distance  is   determined  by setting |",
     )
-    assert "E004" not in _checks(text)
-
-
-# --- E005 / E006 / E007 the coverage ledger -----------------------------
-
-
-def test_missing_coverage_ledger_is_reported() -> None:
-    text = _conforming_packet().replace("COVERAGE-LEDGER", "COVERAGE-NOTES")
-    assert "E005" in _checks(text)
-
-
-def test_unparseable_page_list_is_reported() -> None:
-    text = _conforming_packet(image_verified="sixty-nine")
-    assert "E005" in _checks(text)
-
-
-def test_evidence_page_missing_from_every_inspection_list_is_reported() -> None:
-    # The CLUSTER-004 defect: RC p. 84 carried evidence row E-43 and
-    # appeared on neither coverage list. It survived three research passes
-    # and two independent reviews (review 4 F1/F7, review 5 F1).
-    text = _conforming_packet(evidence_pages="69, 70, 84", image_verified="69, 70")
-    findings = linter.lint_packet(text, "TEST-001-evidence.md")
-    assert "E006" in {finding.check for finding in findings}
-    assert "84" in " ".join(finding.detail for finding in findings)
-
-
-def test_page_recorded_as_both_image_verified_and_locator_only_is_reported() -> None:
-    text = _conforming_packet(image_verified="69, 70", locator_only="70")
-    assert "E007" in _checks(text)
-
-
-# --- E008 the visual-access gate ----------------------------------------
-
-
-def test_access_blocked_page_with_a_ready_recommendation_is_reported() -> None:
-    # Review 4 Finding 1 (HIGH): an unrenderable page presented as
-    # inspected, in a packet recommending EVIDENCE READY.
-    text = _conforming_packet(
-        evidence_pages="69, 70, 84",
-        access_blocked="84",
-        recommendation=linter.EVIDENCE_READY,
+    assert "S010" not in checks(quoted)
+    # A dash the transcription does not contain is a real mismatch, not a
+    # normalization case: folding en-dash to hyphen must not invent one.
+    invented = VALID.replace(
+        "distance is determined by setting |",
+        "distance – is determined by setting |",
     )
-    assert "E008" in _checks(text)
+    assert "S010" in checks(invented)
 
 
-def test_access_blocked_page_without_the_hard_stop_is_reported() -> None:
-    text = _conforming_packet(
-        evidence_pages="69, 70, 84",
-        access_blocked="84",
-        recommendation=linter.MORE_RESEARCH_REQUIRED,
+def test_an_evidence_row_citing_an_undispositioned_page_fails() -> None:
+    broken = VALID.replace("| E-1 | 93 |", "| E-1 | 77 |")
+    assert "S009" in checks(broken)
+
+
+def test_an_evidence_row_may_not_cite_a_routed_page() -> None:
+    broken = VALID.replace("| E-2 | 98 | |", "| E-2 | 104 | |")
+    assert "S009" in checks(broken)
+
+
+# --- C: the stale-count class ---------------------------------------------
+
+
+def test_no_count_field_exists_to_drift_and_counts_are_derived() -> None:
+    """ENC-001 BLOCKING-3 replay.
+
+    Three tallies went stale inside a gate asserting "each line confirmed, not
+    assumed". The fix is not to check them: it is that the packet has no count
+    field at all, and the linter derives them.
+    """
+    counts = derive(VALID)
+    assert counts.seeded_pages == 6
+    assert counts.dispositioned_pages == 6
+    assert counts.inspected_pages == 5
+    assert counts.evidence_rows == 2
+    assert counts.quoted_rows == 1
+    assert counts.transcriptions == 2
+    assert counts.negative_claims == 1
+
+
+def test_a_hand_maintained_count_is_rejected() -> None:
+    broken = VALID.replace(
+        "**Enumerated absences:** None recorded.",
+        "**Enumerated absences:** None recorded. 38 rows dispositioned.",
     )
-    assert "E008" in _checks(text)
+    assert "S018" in checks(broken)
 
 
-def test_access_blocked_page_declared_correctly_is_accepted() -> None:
-    text = _conforming_packet(
-        evidence_pages="69, 70, 84",
-        access_blocked="84",
-        recommendation=linter.MORE_RESEARCH_REQUIRED,
-        extra=f"\n{linter.VISUAL_ACCESS_STOP} for p. 84, columns 2-3.\n",
+# --- D: the false categorical-coverage class -------------------------------
+
+
+def test_a_missing_seed_disposition_fails_rather_than_a_prose_claim() -> None:
+    """ENC-001 BLOCKING-1 replay.
+
+    Pass 2 asserted "every row is now visually inspected" while six cited pages
+    were uninspected. There is no such claim to make here: coverage is the
+    disposition ledger, and a gap is a machine failure.
+    """
+    broken = VALID.replace("104: OUTSIDE_CARD_SCOPE COMBAT-*\n", "")
+    found = checks(broken)
+    assert "S005" in found
+
+
+def test_a_routed_page_must_name_where_it_went() -> None:
+    broken = VALID.replace("104: OUTSIDE_CARD_SCOPE COMBAT-*", "104: OUTSIDE_CARD_SCOPE")
+    assert "S006" in checks(broken)
+
+
+def test_access_blocked_is_a_hard_stop() -> None:
+    broken = VALID.replace("92: INSPECTED", "92: ACCESS_BLOCKED")
+    assert "S007" in checks(broken)
+
+
+# --- E: the cheap false-positive dismissal --------------------------------
+
+
+def test_an_unrelated_neighbour_seed_is_dismissed_in_one_line() -> None:
+    """ENC-005 cites p. 104 (Retreat/Fighting Withdrawal), which is COMBAT-*'s.
+
+    The whole cost of disposing of it is the single line already in VALID. If
+    this test ever needs more ceremony than that line, the design has drifted.
+    """
+    assert lint_packet(VALID, "TEST-900-evidence.md") == []
+    pages = lint_evidence._page_dispositions(VALID)
+    assert pages[104] == ("OUTSIDE_CARD_SCOPE", "COMBAT-*")
+
+
+# --- G: mechanical defects do not demand semantic re-review ----------------
+
+
+def test_a_mechanical_defect_is_expressed_as_a_check_not_a_review_state() -> None:
+    """The escalation rule is only honest if a mechanical defect is visible as
+    a linter finding and leaves the review state untouched, so correcting it
+    needs machine verification rather than a new semantic review.
+    """
+    broken = VALID.replace("| E-1 | 93 |", "| E-1 | 91 |")
+    findings = lint_packet(broken, "TEST-900-evidence.md")
+    assert findings and all(f.check.startswith("S") for f in findings)
+    status = lint_evidence._keyed_block(broken, "PACKET-STATUS")
+    assert status is not None
+    assert status["INDEPENDENT-REVIEW"] == "PREPARED FOR INDEPENDENT COMPLETENESS REVIEW"
+
+
+# --- Remaining structure --------------------------------------------------
+
+
+def test_a_cross_reference_target_must_be_dispositioned() -> None:
+    broken = VALID.replace("| 93 | see page 98 | 98 |", "| 93 | see page 77 | 77 |")
+    assert "S012" in checks(broken)
+
+
+def test_an_unresolved_lead_fails() -> None:
+    broken = VALID.replace("LEADS:          infravision -> 24", "LEADS:          infravision")
+    assert "S013" in checks(broken)
+
+
+def test_a_missing_section_fails() -> None:
+    broken = VALID.replace("## 3. Seeds", "## 3. Something Else")
+    assert "S001" in checks(broken)
+
+
+def test_self_certification_is_rejected() -> None:
+    broken = VALID.replace(
+        "INDEPENDENT REVIEW:    NOT YET PERFORMED",
+        "INDEPENDENT REVIEW:    SOURCE COMPLETENESS CERTIFIED",
     )
-    assert "E008" not in _checks(text)
+    assert "S004" in checks(broken)
 
 
-# --- E009 a BLOCKED closure item ----------------------------------------
-
-
-def test_blocked_closure_item_with_a_ready_recommendation_is_reported() -> None:
-    # Review 2 Finding 12 (HIGH): §17 forbids exactly this combination.
-    text = _conforming_packet(
-        closure_disposition=linter.BLOCKED_DISPOSITION,
-        recommendation=linter.EVIDENCE_READY,
+def test_a_blocked_open_question_forbids_evidence_ready() -> None:
+    broken = VALID.replace(
+        "RETAINED AS GENUINE SOURCE AMBIGUITY",
+        "BLOCKED — MORE PRIMARY-SOURCE RESEARCH REQUIRED",
     )
-    assert "E009" in _checks(text)
+    assert "S008" in checks(broken)
 
 
-def test_blocked_closure_item_with_more_research_required_is_accepted() -> None:
-    text = _conforming_packet(
-        closure_disposition=linter.BLOCKED_DISPOSITION,
-        recommendation=linter.MORE_RESEARCH_REQUIRED,
+def test_a_negative_claim_missing_its_evidence_fields_fails() -> None:
+    broken = VALID.replace("INSTRUMENTS CHECKED:    Tables Index, General Index\n", "")
+    assert "S014" in checks(broken)
+
+
+def test_a_packet_with_no_consequential_negative_claim_must_say_so() -> None:
+    without = VALID.replace(
+        """```text
+NEGATIVE-CLAIM
+CLAIM:                  No other rule modifies the example distance.
+SCOPE SEARCHED:         pp. 91-104
+INSTRUMENTS CHECKED:    Tables Index, General Index
+FALSIFICATION ATTEMPT:  Sought a second distance statement; none found.
+```""",
+        "NEGATIVE CLAIMS: NONE",
     )
-    assert "E009" not in _checks(text)
+    assert "S014" not in checks(without)
 
 
-# --- E010 / E011 the Negative Claim Gate --------------------------------
+def test_an_unrecognised_confidence_label_fails() -> None:
+    broken = VALID.replace("| DIRECT PRIMARY TEXT |", "| PRETTY SURE |", 1)
+    assert "S011" in checks(broken)
 
 
-def test_negative_claim_record_missing_a_required_field_is_reported() -> None:
-    text = _conforming_packet().replace("INDEXES CHECKED:                 ", "SKIPPED: ")
-    assert "E010" in _checks(text)
+def test_normalize_folds_whitespace_dashes_and_quotes_but_not_case() -> None:
+    assert normalize("a — b") == normalize("a - b")
+    assert normalize("“x”") == normalize('"x"')
+    assert normalize("Dim light") != normalize("dim light")
 
 
-def test_explicit_none_satisfies_the_negative_claim_ledger() -> None:
-    text = _conforming_packet(include_negative_record=False)
-    assert "E010" not in _checks(text)
+# --- The gate itself -------------------------------------------------------
 
 
-def test_absence_claim_without_a_negative_claim_record_is_reported() -> None:
-    # The pass-1 failure in miniature: an absence asserted as a finding
-    # with nothing behind it. Both of pass 1's headline claims of this
-    # shape turned out to be false.
-    text = _conforming_packet(
-        include_negative_record=False,
-        extra="\nRC has no light-conditioned table anywhere in the source.\n",
-    )
-    assert "E011" in _checks(text)
-
-
-def test_absence_claim_backed_by_a_record_is_accepted() -> None:
-    text = _conforming_packet(
-        include_negative_record=True,
-        extra="\nRC has no light-conditioned table; see the record above.\n",
-    )
-    assert "E011" not in _checks(text)
-
-
-def test_absence_wording_inside_a_verbatim_quotation_is_not_a_finding() -> None:
-    # Fenced blocks carry verbatim source text. RC's own wording must never
-    # be linted as though the researcher had written it.
-    text = _conforming_packet(
-        include_negative_record=False,
-        extra='\n```text\nRC has no such rule, the designers wrote.\n```\n',
-    )
-    assert "E011" not in _checks(text)
-
-
-# --- E012 unsupported completeness language ------------------------------
-
-
-def test_completeness_wording_without_the_enumeration_sections_is_reported() -> None:
-    text = _conforming_packet(extra="\nThe General Index was read in full.\n")
-    text = text.replace("## 5. Index Enumeration", "## 5. Some Notes")
-    assert "E012" in _checks(text)
-
-
-# --- E013 / E014 controlled vocabulary ----------------------------------
-
-
-def test_confidence_cell_outside_the_protocol_vocabulary_is_reported() -> None:
-    # Review 5 Finding 8: four cells carried prose instead of a §6 label.
-    text = _conforming_packet(confidence="pretty sure")
-    assert "E013" in _checks(text)
-
-
-@pytest.mark.parametrize("label", sorted(linter.CONFIDENCE_LABELS))
-def test_every_permitted_confidence_label_is_accepted(label: str) -> None:
-    assert "E013" not in _checks(_conforming_packet(confidence=label))
-
-
-def test_closure_disposition_outside_the_protocol_vocabulary_is_reported() -> None:
-    text = _conforming_packet(closure_disposition="handled elsewhere")
-    assert "E014" in _checks(text)
-
-
-@pytest.mark.parametrize("label", sorted(linter.CLOSURE_DISPOSITIONS))
-def test_every_permitted_closure_disposition_is_accepted(label: str) -> None:
-    text = _conforming_packet(
-        closure_disposition=label,
-        recommendation=(
-            linter.MORE_RESEARCH_REQUIRED
-            if label == linter.BLOCKED_DISPOSITION
-            else linter.EVIDENCE_READY
-        ),
-    )
-    assert "E014" not in _checks(text)
-
-
-# --- E015 hard-stop strings as inline labels ----------------------------
-
-
-def test_hard_stop_string_used_as_a_bare_label_is_reported() -> None:
-    # Review 4 Finding 6: review 3 raised this, one packet fixed it, the
-    # sibling packet did not -- the signature of patching a handed list
-    # rather than re-running the check.
-    text = _conforming_packet(extra="\nN-14 remains unadjudicated. "
-                              "`INTERNAL SOURCE CONFLICT REQUIRES REVIEW`.\n")
-    assert "E015" in _checks(text)
-
-
-def test_hard_stop_string_with_its_stop_prefix_is_accepted() -> None:
-    text = _conforming_packet(
-        extra="\nA packet choosing a number here would trip "
-        "`STOP — INTERNAL SOURCE CONFLICT REQUIRES REVIEW`. This one does not choose.\n"
-    )
-    assert "E015" not in _checks(text)
-
-
-def test_more_primary_research_required_is_not_treated_as_a_bare_label() -> None:
-    # That exact string is also §11's legitimate recommendation value, so
-    # E015 excludes it by design (DEC-0012 check-to-failure map).
-    text = _conforming_packet(recommendation=linter.MORE_RESEARCH_REQUIRED)
-    assert "E015" not in _checks(text)
-
-
-# --- E016 the Repository Fact Gate --------------------------------------
-
-
-def test_repository_fact_section_with_no_rows_and_no_none_is_reported() -> None:
-    text = _conforming_packet().replace(
-        "| CHAR-004 owns item cost | docs/rules/INVENTORY.md | row CHAR-004 | VERIFIED |",
-        "",
-    )
-    assert "E016" in _checks(text)
-
-
-def test_explicit_none_satisfies_the_repository_fact_section() -> None:
-    text = _conforming_packet().replace(
-        "| Project claim | Artifact inspected | Identifier / section | Verdict |\n"
-        "|---|---|---|---|\n"
-        "| CHAR-004 owns item cost | docs/rules/INVENTORY.md | row CHAR-004 | VERIFIED |",
-        linter.NO_REPOSITORY_FACTS,
-    )
-    assert "E016" not in _checks(text)
-
-
-def test_unverified_project_fact_with_a_ready_recommendation_is_reported() -> None:
-    # Review 4 Finding 5: CHAR-011 named as the owner of p. 150's
-    # conditions without opening INVENTORY.md, which says Weapon Mastery.
-    text = _conforming_packet(
-        extra=f"\nOwnership of the p. 150 conditions: {linter.UNVERIFIED_PROJECT_FACT}.\n"
-    )
-    assert "E016" in _checks(text)
-
-
-# --- E017 / E018 the falsification and completion gates -----------------
-
-
-def test_missing_falsification_record_is_reported() -> None:
-    text = _conforming_packet().replace("FALSIFICATION-RECORD", "SOME-NOTES")
-    assert "E017" in _checks(text)
-
-
-def test_falsification_record_missing_a_required_field_is_reported() -> None:
-    text = _conforming_packet().replace("WOULD FALSIFY:", "NOTES:")
-    assert "E017" in _checks(text)
-
-
-def test_incomplete_self_falsification_with_a_ready_recommendation_is_reported() -> None:
-    text = _conforming_packet(self_falsification="NOT STARTED")
-    assert "E018" in _checks(text)
-
-
-def test_incomplete_self_falsification_without_a_ready_recommendation_is_accepted() -> None:
-    text = _conforming_packet(
-        self_falsification="NOT STARTED", recommendation=linter.MORE_RESEARCH_REQUIRED
-    )
-    assert "E018" not in _checks(text)
-
-
-# --- Scope, grandfathering and the directory walk ------------------------
-
-
-def test_grandfather_list_is_exactly_the_pre_dec_0012_packets() -> None:
-    # DEC-0012 consequence 7: the list is CLOSED. A packet written after
-    # DEC-0012 is never added, so changing this set must change this test.
-    expected = frozenset(
+def test_the_grandfathered_set_is_closed_and_exact() -> None:
+    assert set(GRANDFATHERED) == (
         {
             "CHAR-001-evidence.md",
             "CHAR-002-evidence.md",
@@ -516,188 +400,38 @@ def test_grandfather_list_is_exactly_the_pre_dec_0012_packets() -> None:
             "EXP-006-evidence-remediated.md",
         }
     )
-    assert expected == linter.GRANDFATHERED
 
 
-def test_every_grandfathered_packet_still_exists() -> None:
-    # If an exempt packet is renamed or removed, the exemption is stale and
-    # should be corrected rather than left to mask a new file.
-    for name in linter.GRANDFATHERED:
-        assert (EVIDENCE_DIR / name).is_file(), f"grandfathered packet {name} not found"
+def test_grandfathered_packets_are_not_linted(tmp_path: Path) -> None:
+    (tmp_path / REFERENCE_PACKET).write_text(VALID, encoding="utf-8")
+    (tmp_path / "EXP-006-evidence.md").write_text("not a packet at all", encoding="utf-8")
+    findings, linted = lint_evidence.lint_directory(tmp_path)
+    assert findings == []
+    assert [path.name for path in linted] == [REFERENCE_PACKET]
 
 
-def test_grandfathered_and_template_files_are_not_linted() -> None:
-    linted = {path.name for path in linter.packet_paths(EVIDENCE_DIR)}
-    assert not (linted & linter.GRANDFATHERED)
-    assert TEMPLATE.name not in linted
+def test_a_missing_reference_packet_is_itself_a_failure(tmp_path: Path) -> None:
+    findings, _ = lint_evidence.lint_directory(tmp_path)
+    assert any(finding.check == "S000" for finding in findings)
 
 
-def test_reviewer_artifacts_are_not_treated_as_packets() -> None:
-    # Completeness reviews, audits and gap-research records are reviewer
-    # artifacts, not Stage-A packets (§12's naming convention).
-    linted = {path.name for path in linter.packet_paths(EVIDENCE_DIR)}
-    for name in linted:
-        assert "review" not in name and "audit" not in name
+@pytest.mark.parametrize("broken,expected", [(False, 0), (True, 1)])
+def test_the_gate_returns_the_exit_code_it_promises(
+    tmp_path: Path, broken: bool, expected: int
+) -> None:
+    packet = VALID.replace("| E-1 | 93 |", "| E-1 | 91 |") if broken else VALID
+    (tmp_path / REFERENCE_PACKET).write_text(VALID, encoding="utf-8")
+    (tmp_path / "TEST-900-evidence.md").write_text(packet, encoding="utf-8")
+    assert main([str(tmp_path)]) == expected
 
 
-def test_repository_evidence_directory_currently_passes() -> None:
-    # The gate that runs in canonical verification. It must be green on a
-    # clean tree, or the gate is noise.
-    findings, _ = linter.lint_directory(EVIDENCE_DIR)
-    assert findings == [], f"repository evidence packets have findings: {findings}"
-
-
-# --- The gate must not be structurally inert -----------------------------
-
-
-def test_repository_run_actually_lints_the_reference_packet() -> None:
-    # Every real packet is grandfathered, so without the reference packet
-    # this gate would lint zero files and pass vacuously. A green check that
-    # inspected nothing is worse than no check, because it is mistaken for
-    # enforcement.
-    _, linted = linter.lint_directory(EVIDENCE_DIR)
-    assert linter.REFERENCE_PACKET in {path.name for path in linted}
-    assert linted, "the gate must lint at least one artifact"
-
-
-def test_missing_reference_packet_fails_the_gate(tmp_path: Path) -> None:
-    # §11.2 requires the template to exist. Its absence is a finding, not a
-    # silent zero-packet pass.
-    findings, linted = linter.lint_directory(tmp_path)
-    assert linted == []
-    assert "E000" in {finding.check for finding in findings}
-
-
-# --- Fixtures: a NEW packet passes, malformed NEW packets fail -----------
-
-
-def test_compliant_new_packet_fixture_passes() -> None:
-    # The claim the repository cannot make on its own: a conforming
-    # post-DEC-0012 packet lints clean.
-    path = FIXTURES / "TEST-900-evidence-compliant.md"
-    findings = linter.lint_packet(path.read_text(encoding="utf-8"), path.name)
-    assert findings == [], f"the compliant fixture must lint clean, got: {findings}"
-
-
-@pytest.mark.parametrize(
-    ("fixture", "expected_checks"),
-    [
-        ("TEST-900-evidence-malformed-absence.md", {"E010", "E011"}),
-        ("TEST-900-evidence-malformed-coverage.md", {"E006", "E009"}),
-        ("TEST-900-evidence-malformed-skeletal.md", {"E001", "E002", "E005", "E017"}),
-    ],
-)
-def test_malformed_new_packet_fixtures_fail(fixture: str, expected_checks: set[str]) -> None:
-    path = FIXTURES / fixture
-    findings = linter.lint_packet(path.read_text(encoding="utf-8"), path.name)
-    checks = {finding.check for finding in findings}
-    assert expected_checks <= checks, f"{fixture}: expected {expected_checks}, got {checks}"
-
-
-def test_fixtures_are_not_in_the_evidence_directory() -> None:
-    # A fabricated packet must never be reachable as real research, and must
-    # never be picked up by the gate's own directory scan.
-    assert FIXTURES.resolve() != EVIDENCE_DIR.resolve()
-    assert not list(EVIDENCE_DIR.glob("TEST-900*"))
-
-
-# --- Grandfathering cannot silently expand ------------------------------
-
-
-def test_a_new_packet_is_linted_even_beside_grandfathered_ones(tmp_path: Path) -> None:
-    # The exemption is by exact name. A new packet dropped into a directory
-    # full of exempt ones is still governed.
-    (tmp_path / linter.REFERENCE_PACKET).write_text(
-        TEMPLATE.read_text(encoding="utf-8"), encoding="utf-8"
-    )
-    for exempt in sorted(linter.GRANDFATHERED)[:3]:
-        (tmp_path / exempt).write_text("# not conformant at all", encoding="utf-8")
-    (tmp_path / "NEW-001-evidence.md").write_text("# not conformant either", encoding="utf-8")
-
-    findings, linted = linter.lint_directory(tmp_path)
-    linted_names = {path.name for path in linted}
-    assert "NEW-001-evidence.md" in linted_names
-    assert not (linted_names & linter.GRANDFATHERED)
-    assert any(finding.packet == "NEW-001-evidence.md" for finding in findings)
-
-
-def test_a_name_resembling_a_grandfathered_packet_is_still_linted(tmp_path: Path) -> None:
-    # "EXP-006-evidence-remediated.md" is exempt; a new pass of the same card
-    # is not, and must not inherit the exemption by resemblance.
-    (tmp_path / linter.REFERENCE_PACKET).write_text(
-        TEMPLATE.read_text(encoding="utf-8"), encoding="utf-8"
-    )
-    lookalike = "EXP-006-evidence-remediated-pass-6.md"
-    (tmp_path / lookalike).write_text("# not conformant", encoding="utf-8")
-
-    findings, linted = linter.lint_directory(tmp_path)
-    assert lookalike in {path.name for path in linted}
-    assert any(finding.packet == lookalike for finding in findings)
-
-
-# --- End-to-end: the gate's exit code, not just its function ------------
-
-
-def _run_linter(directory: Path) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        [sys.executable, str(REPO_ROOT / "scripts" / "lint_evidence.py"), str(directory)],
+def test_the_gate_runs_as_a_subprocess(tmp_path: Path) -> None:
+    (tmp_path / REFERENCE_PACKET).write_text(VALID, encoding="utf-8")
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT), str(tmp_path)],
         capture_output=True,
         text=True,
         check=False,
     )
-
-
-def test_gate_exits_zero_for_a_conforming_directory(tmp_path: Path) -> None:
-    (tmp_path / linter.REFERENCE_PACKET).write_text(
-        TEMPLATE.read_text(encoding="utf-8"), encoding="utf-8"
-    )
-    (tmp_path / "TEST-900-evidence.md").write_text(
-        (FIXTURES / "TEST-900-evidence-compliant.md").read_text(encoding="utf-8"),
-        encoding="utf-8",
-    )
-    result = _run_linter(tmp_path)
-    assert result.returncode == 0, result.stdout + result.stderr
-    assert "Stage-A packets linted:   1" in result.stdout
-
-
-def test_gate_exits_nonzero_for_a_malformed_new_packet(tmp_path: Path) -> None:
-    # This is what actually fails the build. Without it, the checks are
-    # proven only in-process and the integration is untested.
-    (tmp_path / linter.REFERENCE_PACKET).write_text(
-        TEMPLATE.read_text(encoding="utf-8"), encoding="utf-8"
-    )
-    (tmp_path / "TEST-900-evidence.md").write_text(
-        (FIXTURES / "TEST-900-evidence-malformed-coverage.md").read_text(encoding="utf-8"),
-        encoding="utf-8",
-    )
-    result = _run_linter(tmp_path)
-    assert result.returncode == 1, result.stdout + result.stderr
-    assert "E006" in result.stdout
-
-
-def test_gate_exits_zero_on_the_repository_itself() -> None:
-    result = _run_linter(EVIDENCE_DIR)
-    assert result.returncode == 0, result.stdout + result.stderr
-    assert f"reference packet linted:  1  ({linter.REFERENCE_PACKET})" in result.stdout
-
-
-def test_canonical_verification_invokes_the_evidence_gate() -> None:
-    # The integration point itself: verify.py must run this script and
-    # report it as a named gate.
-    verify_source = (REPO_ROOT / "scripts" / "verify.py").read_text(encoding="utf-8")
-    assert "lint_evidence.py" in verify_source
-    assert '"Evidence"' in verify_source
-
-
-def test_directory_walk_reports_findings_for_a_non_conforming_packet(
-    tmp_path: Path,
-) -> None:
-    (tmp_path / "TEST-002-evidence.md").write_text("# nothing here", encoding="utf-8")
-    findings, linted = linter.lint_directory(tmp_path)
-    assert [path.name for path in linted] == ["TEST-002-evidence.md"]
-    assert "E001" in {finding.check for finding in findings}
-
-
-def test_finding_renders_packet_check_and_detail() -> None:
-    rendered = str(linter.Finding(packet="p.md", check="E006", detail="pages [84]"))
-    assert rendered == "p.md: [E006] pages [84]"
+    assert result.returncode == 0
+    assert "DEC-0013" in result.stdout
