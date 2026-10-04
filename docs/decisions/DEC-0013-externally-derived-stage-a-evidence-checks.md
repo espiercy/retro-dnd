@@ -7,15 +7,37 @@ DEC-0013
 Externally-Derived Stage-A Evidence Checks (supersedes `DEC-0012`)
 
 ## Status
-Proposed — awaiting human approval
-
-> An agent has no authority to approve a project-wide process decision
-> (`DEVELOPMENT_WORKFLOW.md` §9, `AGENTS.md` §12). This record was drafted under a
-> human-assigned implementation task that approved the design in principle; the record
-> itself still requires explicit human approval before it governs.
+Approved
 
 ## Date
-2026-10-04 (drafted)
+2026-10-04
+
+> **Lifecycle history.** Drafted 2026-10-04 under a human-assigned process-redesign task;
+> **approved by the human project owner 2026-10-04.** The `Date` field carries the approval
+> date, per this repository's convention (`DEC-0010`, `DEC-0011`, `DEC-0012`). How this
+> record reached approval is preserved rather than erased:
+>
+> - It was drafted `Proposed — awaiting human approval`, because an agent has no authority
+>   to approve a project-wide process decision (`DEVELOPMENT_WORKFLOW.md` §9,
+>   `AGENTS.md` §12) — the same correction `DEC-0010` and `DEC-0012` each record having
+>   had to make about themselves.
+> - While proposed, an independent implementation review found that the first
+>   implementation **did not deliver what this record's title claims**: the packet's
+>   `SEEDS` block was researcher-written and the linter read nothing outside the packet,
+>   so deleting p. 98 let the pilot's original `B-1` defect lint clean again. Corrected at
+>   `916d77f` — seeds are now derived from `INVENTORY.md` and accepted neighbour packets.
+> - A narrow closure review then found one further blocking defect: `RULE-ID` was itself a
+>   packet-authored, unverified selector, so a one-character typo derived zero pages and
+>   linted clean. Corrected at `1a340b5` with filename corroboration, `INVENTORY.md`
+>   resolution, loud failure and targeted regressions.
+> - Human approval is the closure step. **No further process review was performed**, by
+>   deliberate application of this record's own anti-spiral principle: a bounded mechanical
+>   defect is corrected, machine-verified and dispositioned by a human, not escalated into
+>   another review cycle.
+>
+> **`DEC-0012` is superseded for future Stage-A work. `DEC-0012` remains historical and
+> unchanged** — its text is byte-identical to the version approved 2026-10-01, and this
+> record does not rewrite it.
 
 ## Supersedes
 
@@ -210,13 +232,57 @@ remain a closed set and are **not migrated**. Historical packets stay historical
   citation-verification and derived-count reporting take their place.
 - The researcher-maintained surface is measurably smaller; the implementation report
   accompanying this record carries the before/after comparison against the pilot packet.
-- `RULE_CARD_RESEARCH_PROTOCOL.md` and `AGENTS.md` §10 still describe the `DEC-0012`
-  instruments. **They are not edited by this record** — both are protected or
-  protocol-authoritative and require explicit human direction. Aligning them is a
-  required follow-up before this record governs day-to-day research.
+- `RULE_CARD_RESEARCH_PROTOCOL.md` and `AGENTS.md` §10 were aligned at `916d77f` under
+  explicit human direction, both being protected or protocol-authoritative. The protocol
+  carries a supersession notice at §1 naming exactly which instruments this record
+  replaced and which still bind; its `DEC-0012` references below that notice are
+  deliberately preserved as history. `DEVELOPMENT_WORKFLOW.md` §10.1 was added at
+  `07eec15` and corrected at `1a340b5`.
 - `ENC-001` resumes under this record, not as a third review under `DEC-0012`. Its
   remaining work is mechanical except for RC p. 100 `Evasion at Sea` and the scope
   residue in its open-question `Q-7`.
+
+## Accepted limitations
+
+These are known and accepted at approval. They are recorded here so that no later reader
+has to rediscover them, and so that no artifact claims more than the mechanism delivers.
+
+### A. Index seeding is not mechanically external
+
+Candidate enumeration from the Rules Cyclopedia's **Tables/Checklists Index** and
+**General Index** is **not** machine-derived, because the repository holds no structured
+index dataset outside Stage-A packets themselves. Deriving index candidates from a ledger
+written inside the packet under review would be circular, and that is the precise defect
+this record exists to remove.
+
+**Index enumeration therefore remains a manual, semantic research responsibility, reviewed
+by the independent semantic reviewer.** It must not be described as machine-checked
+anywhere — not in a packet, not in the template, not in the tooling's own output. The
+linter prints this caveat on every real packet it reports on.
+
+The gap is closable, but not by this record: it needs a repository-level index
+transcription authored outside any Stage-A packet, under its own review. That is a separate
+decision and is not created here.
+
+What this costs in practice is bounded. The pilot's principal omission, RC p. 98 `Contact`,
+is reachable **without** any index seeding: `ENC-005`'s accepted packet cites it, and
+`INVENTORY.md`'s reverse edge reaches `ENC-005` with no researcher declaration at all.
+
+### B. External-seed breadth is wide, deliberately
+
+`ENC-001` currently derives **approximately 43** external page obligations, including
+plainly external pages — pp. 3 and 300–304 among them, which are not encounter-distance
+material by any reading.
+
+This is the intended direction of error. A seed is an obligation to look, and the two
+failure costs are asymmetric: an unnecessary seed costs one line to disposition
+(`OUTSIDE_CARD_SCOPE`, `IRRELEVANT_AFTER_INSPECTION`), while a missing one costs an
+independent review — which is exactly what the pilot spent.
+
+**No threshold and no gate are added.** The linter prints seed provenance by origin packet
+as a diagnostic only. **Actual seeding cost will be measured during controlled `ENC-001`
+re-entry**, before any decision about whether breadth needs refinement. Refining it now
+would be tuning against a single simulated card.
 
 ## Falsification condition
 
