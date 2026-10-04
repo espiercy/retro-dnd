@@ -14,8 +14,8 @@
 > prose coherence". Single ownership replaces synchronization.*
 
 ```text
-STATUS:  ACCEPTED BY THE HUMAN PROJECT OWNER -- NOT YET MERGED
-EXP-006-PHASE: ACCEPTED-PENDING-MERGE
+STATUS:  HUMAN ACCEPTED; MERGED TO MAIN
+EXP-006-PHASE: ACCEPTED-AND-MERGED
 
          HUMAN ACCEPTANCE GIVEN 2026-10-03 by the project owner, on the
          independent final acceptance review's PASS with 0 BLOCKING
@@ -44,14 +44,20 @@ EXP-006-PHASE: ACCEPTED-PENDING-MERGE
                                                    is closed unless a later
                                                    concrete regression
                                                    justifies reopening
-         MERGED                                    NO
-         PUSHED                                    NO
+         MERGED TO MAIN                             YES 2026-10-03
+                                                   fast-forward only,
+                                                   no squash, no merge
+                                                   commit; all 29 EXP-006
+                                                   commits preserved
+         PUSHED                                    NO -- remote mutation
+                                                   separately authorized
 
          LOW-3 and LOW-8                           RESOLVED (at a150837)
          INFO-1                                    NO CHANGE (adjudicated;
                                                    see §12.2)
 
-BRANCH:  cluster-004-exp-006-stage-b   (accepted, unmerged, unpushed)
+BRANCH:  cluster-004-exp-006-stage-b   (accepted, merged to main, unpushed)
+MERGE:   main fast-forwarded c1bdd5c -> 4c35cbd
 ```
 
 ### Human acceptance
@@ -439,8 +445,9 @@ without one.
    was "open and requires human adjudication" until 2026-10-03; closure review #6 `NB-5` found that
    the adjudication had been made but not propagated here. It also cited the review-#4 ledger's
    `INFO-1` section as "§INFO-1"; that ledger numbers it **§4**.)*
-9. **Accepted but not merged and not pushed.** Merge is a separate human act. `CLUSTER-004`
-   implementation, `ENC-005` Stage B and any new Stage-A card all remain unauthorized.
+9. **Accepted and merged to `main`; not pushed.** Push to `origin` is separately authorized
+   and has not occurred. `CLUSTER-004` implementation, `ENC-005` Stage B and any new Stage-A
+   card all remain unauthorized — acceptance of this card does not extend to them.
    *(Renumbered 2026-10-03 — this item and the one above were both numbered `8.`, final-acceptance
    `NB-E`.)*
 
@@ -564,7 +571,8 @@ wording changed.**
 | 2026-10-03 | **Independent final acceptance review** | **`PASS`** — 0 blocking, 5 non-blocking, 1 process recommendation |
 | 2026-10-03 | **HUMAN ACCEPTANCE given**; independent-review loop **CLOSED** | accepted |
 | 2026-10-03 | Non-blocking cleanup (`NB-A`–`NB-E`) and the project-wide process rule — this pass | `DEVELOPMENT_WORKFLOW.md` §4.1 |
-| — | Merge | **pending — a separate human act** |
+| 2026-10-03 | **Merged to `main`** — fast-forward only, `c1bdd5c` → `4c35cbd`, no squash, no merge commit | integrated |
+| — | Push to `origin` | **pending — separately authorized** |
 
 **No past `FAIL` or `PASS` is relabelled.** Every final-review artifact is preserved unaltered, as
 are the four Stage-A `FAIL` reviews and the two superseded first-pass evidence packets.
