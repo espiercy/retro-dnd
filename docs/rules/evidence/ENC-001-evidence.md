@@ -92,6 +92,7 @@ PAGE-DISPOSITIONS
 98: INSPECTED
 99: ROUTED_EXTERNAL ENC-005                 # Evasion Checklist, Evasion Table
 100: INSPECTED
+101: IRRELEVANT_AFTER_INSPECTION            # Balancing Encounters (Optional) -> ENC-007
 103: ROUTED_EXTERNAL ENC-004                # Morale Scores Table
 104: ROUTED_EXTERNAL COMBAT-*               # Retreat / Fighting Withdrawal
 108: INSPECTED
@@ -227,6 +228,10 @@ the "Encounter Distance" section, below, for more information).
 When a DM's roll indicates that wandering monsters will appear, they appear
 the following turn. The DM rolls 2d6 and multiplies this number by 10; the
 result is the distance, in feet, at which the monsters are detected.
+    This is the distance at which the DM first begins keeping track of them
+and the distance at which both sides first have a chance to notice one
+another. Once the monsters appear, the DM should switch to the Encounter
+Checklist (on page 93) to determine what happens next.
 
 An "encounter" occurs when two or more groups come within visual range of one
 another and at least one group becomes aware of the other.
@@ -247,6 +252,10 @@ TRANSCRIPTION p. 24
 Infravision is the ability to see heat (and the lack of heat). Dwarves have
 infravision in addition to normal sight and can see 60' in the dark.
 Infravision does not work in the presence of normal and magical light.
+    Infravision isn't good enough to read by. A character can use his
+infravision to recognize an individual only if they are within 10' distance
+. . . unless the individual is very, very distinctive (for example, 8' tall or
+walking with a crutch).
 ```
 
 ```text
@@ -297,6 +306,8 @@ vision, the pursuer may start closer.) The pursuing ship closes in.
 | E-27 | 92 | | The Chance of Encounter Table lists aerial as a wilderness terrain, but the Encounter Distances Table has no Aerial Setting row | table | Unresolved by RC | DIRECT PRIMARY TEXT |
 | E-28 | 3 | | The Contents confirms App. 4 Indices at 300–304: Index to Spells 300, Tables and Checklists 301, General Index 302 | front matter | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
 | E-29 | 93 | | RC states no procedure for selecting which visibility category obtains | table | Unresolved by RC | NOT YET ESTABLISHED |
+| E-30 | 91 | the distance at which both sides first have a chance to notice one | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
+| E-31 | 24 | recognize an individual only if they are within 10' distance | | prose | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |
 
 ## 9. Cross-References
 
@@ -358,7 +369,16 @@ CLAIM:                  Within the chapters carrying the encounter, movement and
                         dungeon-procedure rules, RC states no procedure for
                         determining WHICH visibility category (Very good light /
                         Dim light / No light) obtains at a given moment.
-SCOPE SEARCHED:         Ch. 7 pp. 91-100 complete; the three table footnotes;
+SCOPE SEARCHED:         Ch. 7 pp. 91-101 -- the chapter's full span, which runs
+                        to p. 101 (p. 102 begins Ch. 8, per p. 93's own "see
+                        Chapter 8, page 102"). p. 101 was inspected as a page
+                        image this pass: it carries Balancing Encounters
+                        (Optional) only -- TPL, Individual Adjusted Hit Dice,
+                        the Challenge Percentage and Encounter Challenge Tables
+                        and Reversing the Process. No visibility, setting or
+                        distance content; ENC-007's material, and NOT a
+                        governing object for this card.
+                        Also the three table footnotes;
                         Ch. 6 p. 87; Ch. 13 p. 150; Ch. 14 pp. 153, 215.
                         NOT searched: Ch. 3 (Spells) or Ch. 4 (Equipment) -- the
                         claim is scoped to what was searched and does not extend
@@ -431,10 +451,10 @@ DISPOSITION:  CONFIRMED
 | # | Question | Object | Disposition |
 |---|---|---|---|
 | 1 | Does "normal dungeon conditions" (p. 91) denote the table's Dim-light row? Both produce `2d6 × 10'`, and RC never equates them | pp. 91, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
-| 2 | Is the p. 91 wandering-monster distance an instance of the p. 93 table, or an independent default bypassing the surprise branches? | pp. 91, 92, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
+| 2 | Is the p. 91 wandering-monster distance an instance of the p. 93 table, or an independent default bypassing the surprise branches? RC calls it "the distance at which **both sides** first have a chance to notice one another" (E-30) — **mutual** notice — while p. 92's one-surprised branch has the surprised party not noticing "until they reach half that distance". RC does not reconcile the two | pp. 91, 92, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
 | 3 | Is the Dungeon row's "Very good light" the same condition as "Clear daylight"? RC prints two labels and never equates them | p. 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
-| 4 | Whose infravision satisfies footnote `**` — any one member's, all, or the noticing side's? | p. 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
-| 5 | Infravision reaches 60′, but the Dim-light dungeon row rolls 20′–120′. RC does not say what happens when the roll exceeds the range | pp. 24, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
+| 4 | Whose infravision satisfies footnote `**` — any one member's, all, or the noticing side's? RC adds that infravision recognises an individual only within 10′ (E-31), so "seeing by infravision" and "identifying who is there" are different ranges; RC does not say which the footnote means | pp. 24, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
+| 5 | Infravision reaches 60′, but the Dim-light dungeon row rolls 20′–120′. RC does not say what happens when the roll exceeds the range — and p. 91 defines an encounter by groups becoming *aware* of one another, which the 10′ recognition limit (E-31) distinguishes from mere heat-shape detection | pp. 24, 91, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
 | 6 | Undersea distance is in yards (p. 93) while p. 115 reads undersea ranges "in feet at all times" — possibly distinct concepts | pp. 93, 115 | RETAINED AS GENUINE SOURCE AMBIGUITY |
 | 7 | Which visibility category obtains at a given moment — no selector in the chapters searched, and no Rule ID owns the world state | pp. 92, 93 | RETAINED AS GENUINE SOURCE AMBIGUITY |
 | 8 | p. 98 names distance **and** surprise in one sentence with no sequencing word, while p. 92 sequences them. Does its word order carry procedural force? | pp. 92, 98 | RETAINED AS GENUINE SOURCE AMBIGUITY |
