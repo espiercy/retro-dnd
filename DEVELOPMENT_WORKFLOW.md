@@ -40,6 +40,28 @@ When it is unclear whether a change is significant enough to warrant a completio
 
 A completion record documents the **final state** of completed work and the **evidence** that it is correct. It is not a chronological log of every action taken, dead end explored, or intermediate attempt. Keep it concise — a reader should be able to determine everything required by §5 in a few minutes.
 
+### 4.1 Volatile Status Ownership
+
+**A volatile/current project fact MUST have one authoritative owner.** Examples:
+
+- current implementation/review phase;
+- latest review;
+- pending review;
+- current blocker state;
+- current acceptance/merge state.
+
+**Other documents reference that authoritative owner rather than independently restating the volatile fact.**
+
+**Historical artifacts remain immutable historical evidence.** They are never rewritten to tidy current documentation, and they may contain statements that were true or believed when written.
+
+**Durable facts may be repeated where useful** — an approval date, a source attribution, a provenance classification, an ownership boundary.
+
+**Consistency checks should verify authority/reference relationships and narrow machine-checkable claims.** They must **not** attempt to synchronize duplicated volatile prose, and must not attempt to interpret arbitrary natural language.
+
+> **Do not solve current-status drift by copying the same changing fact into multiple documents and attempting to keep those copies synchronized.**
+
+*Rationale: established by the `EXP-006` incident (2026-10-03). Six consecutive independent reviews failed on the same defect class — a volatile fact duplicated across records and stale in one of them. Three successive remediations tried to synchronize the duplicates; each corrected the instances a review named and left another stale, including one record that simultaneously carried a correct status token and prose contradicting it. The issue passed only after volatile status was given a single owner and the other records were reduced to references. This rule applies to all future work, including `ENC-005` and subsequent clusters.*
+
 ## 5. Completion Record Contents
 
 Every completion record must contain the following, in order. Where a category legitimately has no entries, state that explicitly (e.g., "Deviations: None.") rather than omitting it — an omitted category is ambiguous; an explicit "none" is not.

@@ -54,7 +54,7 @@ IMPLEMENTATION  Slices A-D accepted.
                 ISSUE-022.  This plan does not own that fact
                 (normalized 2026-10-03, closure review #6).
 
-                Every independent final review returned FAIL and is
+                Every independent review to date returned FAIL and is
                 preserved unaltered.  NONE found a rules-conformance
                 defect.  The review history is the persisted artifact set
                 itself -- docs/technical/EXP-006_FINAL_IMPLEMENTATION_

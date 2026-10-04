@@ -14,28 +14,36 @@
 > prose coherence". Single ownership replaces synchronization.*
 
 ```text
-STATUS:  NOT COMPLETE
-EXP-006-PHASE: CLOSURE-REVIEW-6-REMEDIATED
+STATUS:  ACCEPTED BY THE HUMAN PROJECT OWNER -- NOT YET MERGED
+EXP-006-PHASE: ACCEPTED-PENDING-MERGE
 
-         Implementation is code complete and all canonical gates pass, but
-         DEVELOPMENT_WORKFLOW.md §5.1 forbids representing an issue as
-         complete while required verification is outstanding, and human
-         acceptance is a separate act that has not occurred.
+         HUMAN ACCEPTANCE GIVEN 2026-10-03 by the project owner, on the
+         independent final acceptance review's PASS with 0 BLOCKING
+         findings.  The independent-review loop is CLOSED.
 
-         EVERY independent review performed to date returned FAIL, and NONE
-         found a rules-conformance defect.  The review history is the
-         persisted artifact set in §3, not a count stated here.
+         DEVELOPMENT_WORKFLOW.md §5.1's bar is met: required verification
+         has been run and passes, no required gate is failing, the
+         implementation matches the approved Rule Card, no rules ambiguity
+         was silently resolved, and known limitations are documented in
+         §11.  Merge remains a separate act and has NOT occurred.
 
          REVIEW STAGE REACHED
              Rule Card EXP-006                     APPROVED  2026-10-01
              Implementation slices A-D             ACCEPTED
-             Independent final reviews #1-#5       all FAIL, each remediated
-             Closure review #6                    FAIL
-             Review #5 remediation                COMPLETE
-             Closure review #6 remediation        COMPLETE (this pass)
+             Independent reviews (see §3)          every one FAIL, each
+                                                  remediated; NONE found a
+                                                  rules-conformance defect
+             Final acceptance review               PASS, 0 blocking
+             Non-blocking cleanup (NB-A..NB-E)     COMPLETE
+             Project-wide process rule             RECORDED in
+                                                  DEVELOPMENT_WORKFLOW §4.1
 
-         OPEN BLOCKERS                             NONE known
-         FINAL HUMAN ACCEPTANCE                    NOT GIVEN
+         OPEN BLOCKERS                             NONE
+         FINAL HUMAN ACCEPTANCE                    GIVEN 2026-10-03
+         FURTHER INDEPENDENT REVIEW                NOT AUTHORIZED; the loop
+                                                   is closed unless a later
+                                                   concrete regression
+                                                   justifies reopening
          MERGED                                    NO
          PUSHED                                    NO
 
@@ -43,11 +51,34 @@ EXP-006-PHASE: CLOSURE-REVIEW-6-REMEDIATED
          INFO-1                                    NO CHANGE (adjudicated;
                                                    see §12.2)
 
-         Whether a further independent review is authorized is recorded
-         here when it is decided; no other record states it.
-
-BRANCH:  cluster-004-exp-006-stage-b   (unmerged, unpushed)
+BRANCH:  cluster-004-exp-006-stage-b   (accepted, unmerged, unpushed)
 ```
+
+### Human acceptance
+
+```text
+ACCEPTED BY        human project owner
+DATE               2026-10-03
+BASIS              EXP-006 FINAL ACCEPTANCE REVIEW: PASS -- 0 BLOCKING,
+                   5 non-blocking, 1 process recommendation
+                   docs/technical/EXP-006_FINAL_ACCEPTANCE_REVIEW.md
+AT                 c001c20c3dc3f8a8506ba6e862b578af16d612d4
+                   (the commit persisting that PASS artifact)
+REVIEW LOOP        CLOSED.  No further independent EXP-006 review is
+                   authorized unless a later concrete regression
+                   independently justifies reopening the issue.
+STILL REQUIRED     merge, which is a separate human act
+```
+
+**What acceptance rests on.** Seven independent reviews, of which six returned `FAIL`; **not one
+found a rules-conformance defect** in any pass. The production tree is provably unchanged across
+every reviewed `HEAD` (`src` tree `d6aaf58…`), as is the approved Rule Card (blob `92fd605…`). The
+53-case identity set, the derived `22/5/11/14/1` split, `SR-11`'s single matrix row, the three RC
+silences, the refuel fuel/ignition separation and the error taxonomy were each independently
+re-derived and confirmed. Every blocking finding across all six `FAIL` reviews concerned the
+**self-description layer** — docstrings, audit ledgers, case tables, status records and the breadth
+of guard claims — and the last of those defect classes was closed by giving volatile status a single
+owner rather than synchronizing copies of it.
 
 > **Why this record no longer states a review count.** Corrected 2026-10-03 under review-#4 finding
 > `B-4`. Every prose count of the review history written into this record has gone stale within a
@@ -172,6 +203,9 @@ is paired, and a test checks the pairing (`B-4`):
 - `docs/technical/EXP-006_REVIEW_5_REMEDIATION_LEDGER.md` — remediation of review #5
 - `docs/technical/EXP-006_CLOSURE_REVIEW_6.md` — closure review #6, `FAIL`
 - `docs/technical/EXP-006_CLOSURE_REVIEW_6_REMEDIATION_LEDGER.md` — remediation of closure review #6
+- `docs/technical/EXP-006_FINAL_ACCEPTANCE_REVIEW.md` — final acceptance review, **`PASS`** (0
+  blocking). A `PASS` review has nothing to remediate and therefore takes **no** paired ledger;
+  `test_the_review_artifact_set_is_internally_consistent` encodes that exception explicitly.
 - `docs/completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md` — this record
 
 *Reviews #3 and #4 and their ledgers were missing from this list until 2026-10-03 (`B-4`), which is
@@ -405,8 +439,10 @@ without one.
    was "open and requires human adjudication" until 2026-10-03; closure review #6 `NB-5` found that
    the adjudication had been made but not propagated here. It also cited the review-#4 ledger's
    `INFO-1` section as "§INFO-1"; that ledger numbers it **§4**.)*
-8. **Not merged and not pushed.** `CLUSTER-004` implementation, `ENC-005` Stage B and any new
-   Stage-A card all remain unauthorized.
+9. **Accepted but not merged and not pushed.** Merge is a separate human act. `CLUSTER-004`
+   implementation, `ENC-005` Stage B and any new Stage-A card all remain unauthorized.
+   *(Renumbered 2026-10-03 — this item and the one above were both numbered `8.`, final-acceptance
+   `NB-E`.)*
 
 **`LOW-9` is no longer open.** Review #2's ledger recorded it as *"recorded, not actioned"*, which
 was accurate when written and is preserved there as the historical statement. It was **adjudicated
@@ -524,8 +560,11 @@ wording changed.**
 | 2026-10-03 | **Closure review #6** | **`FAIL`** — 2 blocking, 5 non-blocking, 3 informational |
 | 2026-10-03 | Human architecture decision: `ISSUE-022` becomes the sole owner of volatile `EXP-006` status | applied |
 | 2026-10-03 | Human adjudication of `INFO-1` | **`NO CHANGE`** (§12.2) |
-| 2026-10-03 | Bounded remediation of closure review #6 — this pass | ledger #6 |
-| — | Human acceptance and merge | **pending** |
+| 2026-10-03 | Bounded remediation of closure review #6 | ledger #6 |
+| 2026-10-03 | **Independent final acceptance review** | **`PASS`** — 0 blocking, 5 non-blocking, 1 process recommendation |
+| 2026-10-03 | **HUMAN ACCEPTANCE given**; independent-review loop **CLOSED** | accepted |
+| 2026-10-03 | Non-blocking cleanup (`NB-A`–`NB-E`) and the project-wide process rule — this pass | `DEVELOPMENT_WORKFLOW.md` §4.1 |
+| — | Merge | **pending — a separate human act** |
 
 **No past `FAIL` or `PASS` is relabelled.** Every final-review artifact is preserved unaltered, as
 are the four Stage-A `FAIL` reviews and the two superseded first-pass evidence packets.

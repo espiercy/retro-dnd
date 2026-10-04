@@ -1,8 +1,27 @@
 """`EXP-006` live-record consistency — a deliberately narrow mechanical check.
 
-WHY THIS EXISTS. Four independent final implementation reviews have now run,
-and not one found a rules defect. Every blocking finding in all four was the
-same class: a fact duplicated into a second place and not updated there.
+WHAT THIS ENFORCES, stated first because an inaccurate self-description is
+the defect this file has twice been faulted for:
+
+    ISSUE-022 owns volatile EXP-006 current status.
+
+    Enrolled non-authoritative records reference that authority and are
+    prevented from independently asserting selected volatile current-state
+    forms.
+
+    Historical chronology remains permitted.
+
+It does **not** understand arbitrary English. `VOLATILE_STATUS_FORMS` is a
+closed, narrow list of current-state predicates; a phrasing outside that
+list is outside the claim, and the module says so rather than implying
+general coverage.
+
+WHY THIS EXISTS. Every independent review of EXP-006 to date found no rules
+defect, and every blocking finding across them was the same class: a fact
+duplicated into a second place and not updated there. The review history is
+the persisted artifact set (see `_historical_artifacts`), not a count stated
+here -- an earlier version of this docstring said "four reviews" and went
+stale, which the final acceptance review recorded as `NB-B`.
 
     review #1  MED-3   five artifacts of record said "NOT AUTHORIZED" after
                        implementation was authorized and complete
@@ -36,8 +55,22 @@ A SECOND LESSON FROM B-1..B-5: prefer DERIVING a fact over transcribing it.
 The case total is enumerated from the approved Rule Card. The category split
 is derived from `CASE_DISCHARGE` and is no longer duplicated in the plan or
 the gate at all. The review history is derived from the artifact files that
-exist on disk rather than from a prose count. What cannot be derived -- the
-review phase -- is carried as one token that every named record must match.
+exist on disk rather than from a prose count.
+
+THE PHASE TOKEN DESIGN IS WITHDRAWN, and this paragraph used to say the
+opposite. It read: "What cannot be derived -- the review phase -- is carried
+as one token that every named record must match." Closure review #6 showed
+why that could not work: a record carried the correct token AND, twelve
+lines below it, prose naming an earlier review as the newest work --
+simultaneously, with this suite green. **Token presence is not prose
+coherence.**
+
+So the phase is no longer synchronized across records; it is OWNED by one.
+`EXP-006-PHASE` is now a FORBIDDEN form in every enrolled non-authoritative
+record, which is the exact inverse of what this docstring previously
+instructed -- a record following the old text would fail the suite. The
+stale instruction survived the normalization commit and was reported as
+`NB-B` by the final acceptance review; it is corrected here.
 
 WHAT THIS DELIBERATELY DOES NOT DO: it does not scan arbitrary prose, it is
 not a generic documentation linter, it does not validate historical prose,
@@ -649,19 +682,66 @@ def test_the_review_artifact_set_is_internally_consistent() -> None:
     Every persisted review artifact must have a paired remediation ledger, so
     the history can be read off the filesystem instead of transcribed into
     records that then go stale.
+
+    **Discovery covers every persisted naming family, and hard-codes no
+    review number.** Corrected 2026-10-03 under final-acceptance findings
+    `NB-C`/`NB-D`: the globs matched only
+    ``EXP-006_FINAL_IMPLEMENTATION_REVIEW*`` and
+    ``EXP-006_REVIEW*_REMEDIATION_LEDGER``, so **both closure-review
+    artifacts were invisible** to the pairing count and to the `ISSUE-022`
+    §3 listing check — the test claimed to cover "every persisted review
+    artifact" while seeing neither. No defect had surfaced only because
+    `ISSUE-022` §3 happened to list them.
     """
     technical = REPO_ROOT / "docs/technical"
-    reviews = sorted(technical.glob("EXP-006_FINAL_IMPLEMENTATION_REVIEW*.md"))
-    ledgers = sorted(technical.glob("EXP-006_REVIEW*_REMEDIATION_LEDGER.md"))
 
-    assert reviews, "no review artifacts found"
-    assert len(reviews) == len(ledgers), (
-        f"{len(reviews)} review artifact(s) but {len(ledgers)} ledger(s): "
-        f"reviews={[p.name for p in reviews]} ledgers={[p.name for p in ledgers]}"
+    # Each family is (review-artifact glob, its paired-ledger glob). A new
+    # family is added here; review numbers are never hard-coded.
+    review_families = (
+        ("EXP-006_FINAL_IMPLEMENTATION_REVIEW*.md", "EXP-006_REVIEW*_REMEDIATION_LEDGER.md"),
+        ("EXP-006_CLOSURE_REVIEW_[0-9]*.md", "EXP-006_CLOSURE_REVIEW_*_REMEDIATION_LEDGER.md"),
+        ("EXP-006_FINAL_ACCEPTANCE_REVIEW.md", None),
     )
 
-    # Every review artifact is listed in ISSUE-022's §3 artifact inventory,
-    # which DEVELOPMENT_WORKFLOW.md §5 item 3 requires to be complete.
+    def _reviews(pattern: str) -> list[pathlib.Path]:
+        """Review artifacts matching `pattern`, never their own ledgers.
+
+        A review glob can match its own ledger — `CLOSURE_REVIEW_[0-9]*`
+        matches `CLOSURE_REVIEW_6_REMEDIATION_LEDGER` too — so the ledger
+        suffix is excluded on the review side rather than per-family.
+        """
+        return sorted(
+            p for p in technical.glob(pattern) if "REMEDIATION_LEDGER" not in p.name
+        )
+
+    all_reviews: list[pathlib.Path] = []
+    all_ledgers: list[pathlib.Path] = []
+    for review_glob, ledger_glob in review_families:
+        found = _reviews(review_glob)
+        if ledger_glob is None:
+            # A PASS review has nothing to remediate, so it takes no ledger.
+            all_reviews += found
+            continue
+        paired = sorted(technical.glob(ledger_glob))
+        # Keep the families disjoint: the closure ledger also matches the
+        # first family's broader ledger glob.
+        if review_glob.startswith("EXP-006_FINAL_IMPLEMENTATION"):
+            paired = [p for p in paired if "CLOSURE" not in p.name]
+        assert len(found) == len(paired), (
+            f"{review_glob}: {len(found)} review(s) but {len(paired)} ledger(s): "
+            f"reviews={[p.name for p in found]} ledgers={[p.name for p in paired]}"
+        )
+        all_reviews += found
+        all_ledgers += paired
+
+    assert all_reviews, "no review artifacts found"
+    assert len(all_reviews) >= 7, (
+        f"discovery found only {len(all_reviews)} review artifacts; the "
+        "persisted set is larger, so a naming family is unmatched"
+    )
+
+    # Every artifact is listed in ISSUE-022's §3 inventory, which
+    # DEVELOPMENT_WORKFLOW.md §5 item 3 requires to be complete.
     issue = _read("docs/completion-records/ISSUE-022-exp-006-light-and-exploration-resources.md")
-    unlisted = [p.name for p in reviews + ledgers if p.name not in issue]
+    unlisted = [p.name for p in all_reviews + all_ledgers if p.name not in issue]
     assert unlisted == [], f"artifacts missing from ISSUE-022 §3: {unlisted}"

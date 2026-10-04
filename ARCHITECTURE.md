@@ -573,7 +573,9 @@ unaltered, paired with its own remediation ledger:
 ```text
 docs/technical/EXP-006_FINAL_IMPLEMENTATION_REVIEW*.md    the reviews
 docs/technical/EXP-006_CLOSURE_REVIEW_*.md                the closure review(s)
+docs/technical/EXP-006_FINAL_ACCEPTANCE_REVIEW.md         the acceptance review
 docs/technical/EXP-006_REVIEW*_REMEDIATION_LEDGER.md      their remediations
+docs/technical/EXP-006_CLOSURE_REVIEW_*_REMEDIATION_LEDGER.md
 ```
 
 That artifact set **is** the review history; it is deliberately not restated here as a count, because
@@ -585,6 +587,10 @@ the approved card and ran its own behavioural and state-space mutations; **every
 review has concerned the self-description layer** — docstrings, audit ledgers, case tables, status
 records, and the breadth of guard claims. The production tree has not moved across the reviewed
 HEADs.
+
+**`EXP-006` IMPLEMENTATION: ACCEPTED by the human project owner, 2026-10-03**, on an independent final acceptance review returning `PASS` with **0 blocking findings** (`docs/technical/EXP-006_FINAL_ACCEPTANCE_REVIEW.md`). **The independent-review loop is CLOSED** — no further `EXP-006` review is authorized unless a later concrete regression independently justifies reopening the issue. **Merge is a separate human act and has not occurred.** Current status remains owned by `ISSUE-022`, which records the acceptance; this entry states the durable architectural fact of acceptance only.
+
+**The process lesson is now project-wide.** `DEVELOPMENT_WORKFLOW.md` §4.1 records the volatile-status-ownership rule this incident established, binding on all future work including `ENC-005` and subsequent clusters. §15.2's `EXP-006` ownership table above remains the worked example.
 
 **Review-#3's two protected-card findings are `RESOLVED`.** `LOW-3` (`CHAR-005`'s two "there is no `SR-11`" denials) and `LOW-8` (the `EXP-006` card's retained pre-approval sentence) were adjudicated by the human project owner and applied at `a150837` as documentation-only historical clarifications — each denial now carries a note that it describes only the 2026-09-25 amendment state and that `SR-11` was subsequently allocated, and the pre-approval sentence is quoted under an explicit historical heading. No mechanic, provenance classification, case ID or approval status changed. Independently confirmed by review #4. *(This paragraph said both findings "remain open" until corrected 2026-10-03 under review-#4 finding `B-3`; it was written before the adjudication and not updated by it.)*
 
