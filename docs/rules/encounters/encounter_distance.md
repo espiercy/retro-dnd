@@ -10,16 +10,27 @@ Encounter Distance
 
 ## Status
 
-`DRAFT`
+`APPROVED`
 
-> **Not approved. Not implemented.** Only a human project owner may set a Rule Card to
-> `APPROVED` (`SOURCE_HIERARCHY.md` §9, `AGENTS.md` §2), and no agent may do so.
+> **Approved by the human project owner, 2026-10-04**, as drafted at `9c9027b`. Only a human
+> project owner may set this status (`SOURCE_HIERARCHY.md` §9, `AGENTS.md` §2); no agent may,
+> and none did — this records the owner's decision.
 >
-> **Why `DRAFT` rather than `RESEARCHED`.** The *research basis* is complete — Stage A is
-> `ACCEPTED` (2026-10-04, under `DEC-0013`) and Stage B is recorded `COMPLETE — RULE CARD DRAFT
-> AUTHORIZED`. But **this card has not yet had an independent review**, and its author may not
-> certify its own work (`AGENTS.md` §10 item 15). `DRAFT` is therefore the honest status until
-> an independent reviewer and the human project owner have seen it.
+> **Approval basis, as given:**
+>
+> - Stage A `ACCEPTED` under `DEC-0013`;
+> - Stage B `COMPLETE`;
+> - `SR-12` approved;
+> - independent Rule Card semantic review **`PASS`**;
+> - the post-review provenance correction mechanically verified;
+> - **no blocking findings remain.**
+>
+> This card carries **one Simulator Ruling — `SR-12`** — and **no** `Alternate-Source
+> Compatible Completion` and **no** `Human-Approved Variant`.
+>
+> **Approval authorizes implementation of this card's specification; it does not by itself
+> clear the project-level Pre-Code Development Gate** (`ARCHITECTURE.md` §16), and no
+> implementation, test or implementation plan exists for `ENC-001` yet.
 
 ## Rules Domain
 
@@ -417,7 +428,10 @@ owner. This card states durable rules and boundaries, not changing project state
 
 ## Approval
 
-- Approved by: `<not approved>`
-- Date: `<not approved>`
-- Notes: Awaiting independent review, then human project-owner approval. **No agent may set
-  this card to `APPROVED`**, and no independent review has been performed on it yet.
+- Approved by: `human project owner`
+- Date: `2026-10-04`
+- Notes: Approved on the basis recorded in §Status — Stage A `ACCEPTED` under `DEC-0013`,
+  Stage B `COMPLETE`, `SR-12` approved, independent Rule Card semantic review `PASS`, the
+  post-review provenance correction mechanically verified, and no blocking findings remaining.
+  The card was drafted at `d57246b` and corrected at `9c9027b`; it was **not** reviewed or
+  certified by its author.
