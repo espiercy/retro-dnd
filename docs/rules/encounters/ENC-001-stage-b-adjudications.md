@@ -914,9 +914,10 @@ nothing here pretends it does.
   deterministic end-to-end encounter still cannot be run. `NEW OWNERSHIP DECISION REQUIRED`.
 - **Daylight/time-of-day and weather have no owner either** — a gap wider than `Q-7`, surfaced
   by section 5 and not resolved here. Whoever takes world visibility will meet these.
-- **The form of the eventual owner is undecided** — a small `SIM-*` specification or another
-  architecture form. Deliberately left to the next task; nothing here prejudges it beyond the
-  observation in section 9 that `SIM-001` is precedent and not a fit.
+- **The form of the eventual owner has since been analysed** — see the ownership-analysis
+  section at the end of this document, which recommends a new, narrowly scoped `SIM-*`
+  specification and returns it for human approval. **The gap is still open**; the analysis
+  creates nothing.
 - **`EXP-006` §7 vs §B is resolved** — the human chose §B and §7 was corrected to match. No
   residue remains on that point.
 - **A minor provenance inaccuracy in the accepted packet, reported not fixed.** Its §10 basis
@@ -925,3 +926,272 @@ nothing here pretends it does.
   substance is identical and the routing conclusion is unaffected; the quotation marks are
   inexact. The accepted packet is **not** modified — it is accepted evidence.
 - **`Q-9` and the feet/yards gap are untouched.**
+
+---
+
+## World/environment visibility — ownership analysis
+
+```text
+STATUS:  ANALYSIS ONLY, 2026-10-04
+         NEW OWNERSHIP ARTIFACT RECOMMENDED -- HUMAN APPROVAL REQUIRED
+
+         The ownership gap remains OPEN. Nothing is created, numbered,
+         registered or implemented by this section.
+```
+
+Authorized as a bounded architecture pass after the `Q-7` decision settled `ENC-001`'s
+contract and left the producer unassigned. It defines **responsibility, not mechanics**.
+
+### 1. The ownership problem, stated precisely
+
+The unresolved responsibility is **not "visibility"**. It is:
+
+```text
+the AGGREGATION of world/environment facts into the single RC-native
+visibility category that ENC-001 consumes for the Encounter Distances
+Table lookup.
+```
+
+Current evidence has exposed these candidate inputs. **They are not assumed to share one
+owner** — several already have owners, and determining the *smallest coherent* boundary is
+the whole task:
+
+| Input | Owner today |
+|---|---|
+| daylight / time-of-day | **none** |
+| weather impairing vision | **none** |
+| environmental / global darkness | **none** (`EXP-006` §8, `OWNER NOT SETTLED`) |
+| mundane light-source contribution | `EXP-006` **[LANDED]** |
+| magical-light contribution | `MAGIC-*` |
+| setting | supplied with the encounter |
+| infravision (character capability) | `CHAR-009` |
+
+### 2. Layer decomposition — and what the owner should *not* take
+
+| Layer | Contents | Should the proposed owner own it? |
+|---|---|---|
+| **World / environment facts** | daylight, weather, darkness, ambient illumination of an area, setting | **No — they already have a home.** See the finding below |
+| **Contributions** | mundane light sources (`EXP-006`), magical light (`MAGIC-*`) | **No** — owned, and consumed as inputs |
+| **Character-specific capabilities** | infravision, blindness, other perception effects | **No** — see §9 below; collapsing these into shared world state would make a *world* fact depend on who is standing in the room |
+| **Derived encounter input** | the RC-native visibility category `ENC-001` consumes | **Yes — this, and only this** |
+
+**The reframing finding.** `ARCHITECTURE.md` §6 already defines a **Dungeon State** domain
+containing *"rooms/areas"* and *"persistent environmental changes"*, and a **Campaign State**
+domain containing *"calendar/time"*. The raw world facts therefore **already have an
+architectural home**: they are authored or generated per-area/per-campaign **data**, not
+something a rule derives. RC supplies no determination procedure for them precisely because
+there is nothing to derive — the DM simply knows the room is dark, exactly as the DM *"first
+needs to know where the characters are"* (p. 93).
+
+What has **no** home is the step that turns those facts into one RC-native label. That, and
+not "the world", is the gap.
+
+### 3. Existing-owner search
+
+Re-confirmed against `INVENTORY.md` and the accepted/approved card boundaries; no RC research
+reopened.
+
+| Candidate | Responsibility | Fit |
+|---|---|---|
+| `EXP-003` Dungeon Movement | movement rates, mapping | no — unrelated axis |
+| `EXP-005` Searching, Listening, Doors | search/listen procedures | no — a *consumer* of darkness |
+| `EXP-006` Light & Exploration Resources | mundane light-source contribution | **no — forbidden**, Finding B, guards `L29`–`L33` |
+| `EXP-008` Dungeon Stocking | what occupies an already-laid-out room | no — content, not ambient conditions |
+| `ENC-001` Encounter Distance | distance at contact | **no — excluded by the `Q-7` decision** |
+| `ENC-002` Surprise | surprise determination | no |
+| `CHAR-005` | blindness/darkness **movement** consequence | no — consumer |
+| `CHAR-009` | infravision **possession** | no — a capability |
+| `MAGIC-*` | magical light and darkness | no — one contributor |
+| `SIM-001` Procedural Dungeon **Layout** Generation | layout/map generation only | no — see Option B |
+
+**No existing Rule ID fits**, consistent with the two independent records already on file
+(`ENC-001` packet §10 `NO RULE ID EXISTS`; `EXP-006` §B `OWNER NOT SETTLED`).
+
+### 4. Option A — extend an existing Rule ID
+
+**Rejected, and on a structural ground stronger than "no card fits".** A **Rule Card
+specifies an RC mechanic**. The accepted packet's consequential negative claim establishes
+that RC supplies **no** procedure for determining which visibility category obtains. There is
+therefore no RC mechanic for *any* Rule Card to specify. Option A is the wrong **artifact
+class**, independently of which ID is chosen — and every candidate above would additionally
+require substantial scope inflation.
+
+### 5. Option B — extend `SIM-001`
+
+**Rejected.** `SIM-001` owns *"layout/map generation only"*, and its scope was **deliberately
+narrowed** in the current `INVENTORY.md` revision, which warns in terms that stocking,
+monster and treasure determination *"must not be silently absorbed into `SIM-001`"*.
+Absorbing world visibility would repeat precisely the boundary-blurring that narrowing
+corrected. **`SIM-*` prefix similarity is not evidence of fit** and is not treated as any.
+
+### 6. Option C — a new, narrowly scoped `SIM-*` specification
+
+**Fits the existing taxonomy exactly.** `INVENTORY.md`'s `SIM-*` table is titled **"Simulator
+Specifications (Non-Historical Design Requirements)"** and carries a **"Constraint Source"**
+column — the family exists for responsibilities the simulator must specify *because RC does
+not supply them*. The constraint source here is already on file and accepted: the `ENC-001`
+negative claim.
+
+**The scope-creep risk is real and is the thing to control.** A responsibility shaped as
+*"owns shared world/environment predicates that RC assumes the DM knows"* is **too broad** —
+it would grow into daylight, weather, time and propagation, and §11's reject condition would
+fire. The boundary below is therefore narrowed to the **derivation only** (see §7), which is
+what makes this option viable rather than what makes it dangerous.
+
+### 7. Option D — unnumbered orchestration responsibility
+
+**Rejected as the whole answer, but it is half right.** Its insight is correct: the *raw
+facts* genuinely do belong to scenario/world data, and §2's finding is that they already have
+a home in `ARCHITECTURE.md` §6 — **no new artifact is needed for them**.
+
+It fails for the *derivation*, on two grounds:
+
+1. **Governance.** An unnumbered responsibility has no approved boundary, no
+   non-responsibility list and no guard tests. The `EXP-006` §7 contradiction this project
+   just repaired was created exactly that way — by informal prose routing a responsibility
+   nobody owned.
+2. **Reuse.** Several consumers need the same derivation (§9). With no artifact, each would
+   re-derive it, which is the duplicated-classification outcome the design standard forbids.
+
+### 8. Aggregation boundary — **B: own the final classification, not the raw facts**
+
+| Option | Verdict |
+|---|---|
+| A. raw world facts only | **No** — the gap would persist; someone must still aggregate, and `ENC-001` and `EXP-006` are both excluded |
+| **B. the final RC-native visibility classification** | **Yes** — one cohesive derivation, with inputs it reads but does not own |
+| C. both | **No** — this is the *"everything about the world"* subsystem the reject condition names |
+
+Coupling check against the four things the design must avoid:
+
+| Must avoid | Under B |
+|---|---|
+| `ENC-001` understanding light-source internals | avoided — it receives a label |
+| `EXP-006` understanding encounter tables | avoided — unchanged; it keeps contributing |
+| character cards owning global world state | avoided — see §9 |
+| duplicated visibility classification | avoided — derived once, consumed by many |
+
+### 9. Infravision boundary — **excluded from world visibility**
+
+The p. 93 footnote `**` (*"Or full darkness with infravision used"*) folds a **character
+capability** into a **table-row selection**. It must **not** be folded into world state:
+
+- infravision is character-specific (`CHAR-009` owns possession); a party is typically mixed,
+  so a *world* category that depended on it would vary by who is present — incoherent;
+- RC gives it its own constraints, which the accepted packet preserves: `60'` in the dark,
+  **suppressed by normal and magical light** (`E-18`), and recognition only within `10'`
+  (`E-31`). These are perception limits, not ambient-illumination facts;
+- **`Q-4` is unresolved** — *"Whose infravision satisfies footnote `**` — any one member's,
+  all, or the noticing side's? RC does not say."* Folding infravision into the world category
+  would silently adjudicate `Q-4`, which is out of scope.
+
+**Therefore:** the proposed owner exposes the **world** visibility state, and the footnote
+`**` adjustment is applied by the consuming rule, with the character capability supplied
+separately. **No universal perception engine is proposed.**
+
+> **Known unresolved dependency, recorded not closed.** *Which* rule applies footnote `**`,
+> and on *whose* infravision, cannot be settled without `Q-4`. `ENC-001` is the likeliest
+> applier since the footnote is printed on its own table, but that is an observation, not a
+> decision, and it is **not** adjudicated here.
+
+### 10. Known consumers — the reuse justification
+
+| Consumer | Needs ambient visibility for | Evidence |
+|---|---|---|
+| `ENC-001` | the Encounter Distances Table lookup | **evidenced** — accepted Stage-A packet |
+| `CHAR-005` | blindness/darkness **movement** (⅓ unguided, ⅔ guided) | **evidenced** — `EXP-006` §B routing, RC p. 150 |
+| `COMBAT-*` | blindness attack/save/AC consequences (`−4`/`−6`/`+4`) | **evidenced** — `EXP-006` §B routing, RC p. 150, corroborated p. 154 |
+| `EXP-005` searching/listening | plausible | **not evidenced here** — not asserted |
+| `EXP-003` movement/navigation | plausible | **not evidenced here** — not asserted |
+| `ENC-002` surprise | plausible | **not evidenced here** — not asserted |
+
+**Three evidenced consumers besides `ENC-001`** is the reuse case, and it is drawn from
+approved artifacts rather than speculation. The speculative rows are labelled as such and
+none of these consumers is designed here.
+
+### 11. Proposed artifact form — **not created**
+
+```text
+IDENTIFIER CLASS:  SIM-*  (Simulator Specification -- Non-Historical
+                   Design Requirement). The next free number is SIM-003,
+                   verified by enumerating SIM-N across the repository
+                   (SIM-001, SIM-002 in use). NOT ASSIGNED, NOT REGISTERED.
+
+TITLE (proposed):  World/Environment Visibility Classification
+
+CONSTRAINT SOURCE: ENC-001 accepted Stage-A evidence -- RC states no
+                   procedure for determining which visibility category
+                   obtains (scope: the chapters searched).
+
+RESPONSIBILITY:    Derive, once, the RC-native visibility category for a
+                   given setting and location, from supplied world facts
+                   and owned contributions. Nothing else.
+
+INPUTS:            setting; ambient/environment state of the area
+                   (scenario- or state-supplied); EXP-006's mundane light
+                   contribution; MAGIC-* magical light contribution;
+                   outdoor daylight and weather state (scenario-supplied).
+
+OUTPUT:            exactly one RC-native visibility label, valid for the
+                   supplied setting, per Q-3's setting-indexed vocabulary.
+
+NON-RESPONSIBILITIES (explicit):
+                   day/night cycle mechanics
+                   weather generation rules
+                   light propagation / illumination engine
+                   terrain or weather simulation
+                   calendar or time system          (EXP-002 owns turns)
+                   character perception, infravision, blindness
+                   the footnote ** adjustment        (depends on Q-4)
+                   encounter distance                (ENC-001)
+                   light-source resource behaviour   (EXP-006)
+                   feet/yards unit convention        (still unowned)
+
+CONSUMERS:         ENC-001, CHAR-005, COMBAT-*  (evidenced)
+
+UNRESOLVED DEPENDENCIES:
+                   Q-4   -- whose infravision satisfies footnote **
+                   daylight/time-of-day has no owner
+                   weather visibility has no owner
+                   feet/yards has no owner
+```
+
+**Where RC supplies no procedure, the fact is recorded as caller/scenario-supplied or as a
+future ownership gap — never invented here.** Daylight and weather are both: they are inputs
+this responsibility would *read*, and their own determination remains unowned.
+
+### 12. Comparison
+
+| | Scope cohesion | Reuse | Coupling | Taxonomy fit | Creep risk | New machinery |
+|---|---|---|---|---|---|---|
+| **A** extend a Rule ID | poor | — | high | **wrong artifact class** — no RC mechanic to specify | high | moderate |
+| **B** extend `SIM-001` | poor — two unrelated jobs | low | moderate | superficial only | **high** — repeats a corrected error | low |
+| **C** new `SIM-*`, classification only | **strong** | **high** | **low** | **exact** | **low**, if §8-B scoped | **one small artifact** |
+| **D** unnumbered orchestration | n/a | **low** — duplication | moderate | none — no governance | moderate | none |
+
+### 13. Recommendation
+
+```text
+CREATE NEW SIM-* SPECIFICATION
+```
+
+It is the only option that satisfies every success criterion at once: `EXP-006` can remain
+unchanged, `ENC-001` can remain narrow, the category is derived **once**, other evidenced
+systems consume the same state, and character-specific perception stays separate. Options A
+and B fail on artifact class and on a scope narrowing that must not be undone; D is right
+about the raw facts — which is why §8-B leaves them where `ARCHITECTURE.md` §6 already puts
+them — but gives the derivation no boundary and invites duplication.
+
+The reject condition was tested and does **not** fire: the proposal is not a generic
+"everything about the world" subsystem. It owns one derivation and explicitly disclaims
+day/night, weather, propagation, terrain, calendar and perception.
+
+### 14. Approval boundary
+
+```text
+NEW OWNERSHIP ARTIFACT RECOMMENDED -- HUMAN APPROVAL REQUIRED
+```
+
+Nothing was created. No identifier was assigned, `INVENTORY.md` was not edited, no
+specification document exists, and **the ownership gap is not marked closed** — it still
+reads `NEW OWNERSHIP DECISION REQUIRED` in the `Q-7` disposition above. No existing owner
+fits without scope inflation, so no existing artifact is nominated.
