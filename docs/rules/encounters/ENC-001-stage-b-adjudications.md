@@ -5,11 +5,14 @@
 > (`docs/rules/evidence/ENC-001-evidence.md`, Stage A `ACCEPTED` 2026-10-04 under
 > `DEC-0013`). It is **not** the Rule Card, and it does not authorize implementation.
 >
-> **`Q-1`, `Q-3` and `Q-7` are adjudicated here.** `Q-7` is now fully settled: its contract by
-> human architecture decision, and its world/environment visibility owner **assigned to
-> `SIM-003`**. `Q-9` remains `RETAINED AS GENUINE SOURCE AMBIGUITY` exactly as the accepted
-> packet records it, and the **feet/yards** convention remains unassigned — nothing below
-> assigns either. `Q-4` also remains open, and `SIM-003` preserves rather than closes it.
+> **`Q-1`, `Q-3`, `Q-7` and `Q-9` are adjudicated here.** `Q-7` is fully settled: its contract
+> by human architecture decision, and its world/environment visibility owner **assigned to
+> `SIM-003`**. The **feet/yards** convention remains unassigned, and nothing below assigns it.
+> **`Q-4` remains open**, preserved rather than closed by `SIM-003`.
+>
+> **The accepted Stage-A packet is never modified by this document.** It records each question
+> at its Stage-A disposition; Stage B adjudicates what `ENC-001` does about them without
+> rewriting the evidence record.
 
 ```text
 ADJUDICATION-STATUS
@@ -18,7 +21,8 @@ Q-1:       ADJUDICATED 2026-10-04; SR-12 APPROVED 2026-10-04
 Q-3:       ADJUDICATED 2026-10-04; NO NEW SIMULATOR RULING
 Q-7:       SETTLED 2026-10-04 by human architecture decision
            world/environment visibility OWNER ASSIGNED: SIM-003
-Q-9:       OPEN -- not adjudicated here
+Q-9:       ADJUDICATED 2026-10-04; NO NEW SIMULATOR RULING
+           aerial is a Type of Terrain, not a Setting -- no row is missing
 STAGE B:   adjudication only; no Rule Card, no implementation
 ```
 
@@ -479,11 +483,12 @@ Q-7 STATUS:  rules/contract question   SETTLED 2026-10-04
                                        by human architecture decision
 
              world/environment
-             visibility OWNER          NOT YET ASSIGNED
-                                       separate architecture decision required
+             visibility OWNER          ASSIGNED 2026-10-04 -- SIM-003
 
-The ownership gap is NOT closed. What is settled is what ENC-001 does about
-it: it consumes a supplied label and refuses when a required one is absent.
+ENC-001 consumes SIM-003-supplied RC-native visibility and validates that it
+is legal for the supplied setting. SIM-003 is DEFINED, not designed and not
+implemented, and the dependencies it records (Q-4; unowned daylight and
+weather determination) remain open.
 ```
 
 ### 1. Question as the accepted packet states it
@@ -936,7 +941,8 @@ nothing here pretends it does.
   words are *"It owns nothing about the world"* and *"never a fact about the world"*. The
   substance is identical and the routing conclusion is unaffected; the quotation marks are
   inexact. The accepted packet is **not** modified — it is accepted evidence.
-- **`Q-9` and the feet/yards gap are untouched.**
+- **`Q-9` and the feet/yards gap were untouched by this `Q-7` pass.** `Q-9` has since been
+  adjudicated separately — see the `Q-9` section below. Feet/yards remains unowned.
 
 ---
 
@@ -1212,3 +1218,284 @@ is the boundary analysed — not a broader one — and `SIM-003` is defined, **n
 
 *Recorded as at the time of the analysis:* no existing owner fitted without scope inflation,
 so no existing artifact was nominated.
+
+---
+
+## Q-9 — `aerial` and the table's Setting axis
+
+### 1. Question as the accepted packet states it
+
+> The Chance of Encounter Table lists **aerial** terrain, but the table has no Aerial Setting
+> row and RC gives no City-style bridge.
+
+Accepted Stage-A disposition: `RETAINED AS GENUINE SOURCE AMBIGUITY`, object `pp. 92, 93`.
+The supporting evidence row is `E-27` (p. 92, *Unresolved by RC*): *"The Chance of Encounter
+Table lists aerial as a wilderness terrain, but the Encounter Distances Table has no Aerial
+Setting row."*
+
+### 2. Source basis — re-inspected this pass
+
+| Page | Re-inspected | Supplies |
+|---|---|---|
+| p. 92 | **yes, page image this pass** | the Chance of Encounter Table, its terrain list and **both footnotes** — the material `E-27` rests on |
+| p. 93 | yes (`Q-3` pass, incl. a magnified crop) | the Encounter Distances Table and its Setting axis |
+| p. 95 | yes (`Q-7` pass) | the Wilderness Encounters Table, which carries a `Flyer` entry in every terrain column |
+
+No whole-book aerial search was performed and no new source area was opened. `E-27`'s
+paraphrase was verified against the page image rather than relied on.
+
+### 3. The exact printed facts
+
+```text
+p. 92   Chance of Encounter Table
+
+Type of Encounter    Roll Method
+Dungeon and city     Roll 1d6 every two turns when traveling and roll 1d12 once
+                     during the night; on a 1, an encounter occurs
+Wilderness           Determine the type of terrain the party is in and roll 1d6 once
+                     during the day and roll 1d12 once when camped at night;
+                     consult the following for encounter occurrences
+
+Type of Terrain                                                   Chance
+Clear, grasslands, inhabited, or settled                            1
+Forest, river, hills, barren lands, desert, ocean*, or aerial**    1-2
+Swamp, jungle, or mountains                                        1-3
+
+ *  Ocean: A roll of 1 indicates a normal ocean encounter. A roll of 2 indicates
+    no encounter unless the ship lands at the end of the day; if so, a land
+    encounter is used.
+ ** Aerial encounters always use the Flyers subtable in the Wilderness Encounter
+    Table, regardless of terrain.
+```
+
+Two further printed facts already in the accepted packet, both load-bearing here:
+
+```text
+p. 92  "When neither party is surprised, take a look at the Encounter Distances
+        Table. When the type of terrain (dungeon, wilderness, ocean/sea, or
+        underwater) is known, the DM can find out how far apart the groups are
+        when the encounter takes place."
+
+p. 93  "When a random encounter is to occur, the DM first needs to know where the
+        characters are--dungeon or wilderness."
+```
+
+### 4. The four questions, answered separately
+
+```text
+A. Does RC recognize aerial encounters elsewhere?        YES -- explicitly
+B. Does the Encounter Distances Table have an Aerial
+   Setting row?                                          NO  -- absence recorded
+                                                              as absence
+C. Does RC explicitly route aerial encounters to one of
+   the printed rows?                                     NOT for DISTANCE.
+                                                         It routes them to the
+                                                         Wilderness table for
+                                                         MONSTER SELECTION.
+D. Can ENC-001 stay deterministic without inventing a
+   mapping?                                              YES -- see section 7
+```
+
+**C is where the care is needed.** Footnote `**` routes aerial encounters to the *Flyers
+subtable in the Wilderness Encounter**s** Table* — the **monster-selection** table on p. 95,
+**not** the Encounter **Distances** Table on p. 93. Those are different tables, and the
+existence of aerial movement, aerial monsters or an aerial encounter-frequency band is **not**
+evidence that a distance row exists. The two are not conflated below.
+
+### 5. The structural finding — `aerial` is not a Setting peer
+
+The Chance of Encounter Table has **two levels**, and `aerial` sits at the lower one:
+
+```text
+LEVEL 1   Type of Encounter     Dungeon and city  |  Wilderness
+LEVEL 2   Type of Terrain       clear / grasslands / inhabited / settled
+          (applies ONLY to      forest / river / hills / barren lands / desert /
+          the Wilderness          ocean / AERIAL
+          roll method)          swamp / jungle / mountains
+```
+
+`aerial` is a **Type of Terrain inside the Wilderness branch** — it is listed in the terrain
+band the *Wilderness* roll method says to consult ("Determine the type of terrain the party is
+in… consult the following"). It is never presented as a peer of `Dungeon`/`Wilderness`.
+
+The Encounter Distances Table's `Setting` axis is the **upper** level. p. 92 names that axis
+*"the type of terrain (dungeon, wilderness, ocean/sea, or underwater)"*, and p. 93 reduces the
+basic question to *"where the characters are — dungeon or wilderness"*.
+
+**So the two taxonomies are at different granularities, and `Q-9` compares across them.** The
+Encounter Distances Table is not missing an `Aerial` row for the same reason it is not missing
+a `Swamp` row, a `Desert` row or a `Jungle` row — **none of those is a Setting either**. Every
+one of them is a Level-2 wilderness terrain.
+
+That is the finding. `Q-9` reads as a gap only while `aerial` is taken for a Setting; once the
+table's own two-level structure is read off the page, there is nothing missing.
+
+### 6. Movement mode vs Setting
+
+Tested on RC structure, not intuition:
+
+| Question | RC's answer |
+|---|---|
+| Is `Setting` about where the **characters** are? | **Yes** — p. 93, *"where the characters are"*; p. 92, *"the type of terrain the party is in"* |
+| Can a flying creature be encountered in a dungeon? | Nothing prevents it; the encounter is still a *dungeon* encounter, because that is where the party is |
+| Does a creature's movement mode change the Setting? | **No** — Setting is a property of the location, not of a participant's locomotion |
+| Does RC ever make `aerial` exclude a terrain? | **The opposite.** Footnote `**` says aerial encounters use the Flyers subtable *"regardless of terrain"* — terrain still exists and still applies; `aerial` overlays it |
+
+**`aerial` therefore behaves as a movement-mode-derived encounter descriptor layered over
+terrain, not as a mutually exclusive world Setting.** Footnote `**`'s own *"regardless of
+terrain"* is the strongest printed evidence for this: a category that coexists with every
+terrain is not a member of a mutually exclusive terrain partition.
+
+### 7. Competing interpretations
+
+**Interpretation A — aerial encounters use the `Wilderness` Setting.** *Adopted, for the
+wilderness-branch case, on structure rather than on the intuition that "flying is outdoors".*
+RC itself files `aerial` under the Wilderness roll method (p. 92, Level 2) and sends aerial
+encounters to the Wilderness Encounters Table *always, regardless of terrain* (footnote `**`,
+corroborated by the `Flyer` entries visible on p. 95). The intuitive version of A — *"flying
+is outdoors, Wilderness is the outdoor row"* — is **not** what carries it; RC's own placement
+of `aerial` inside the Wilderness branch is.
+
+**Interpretation B — use the underlying surface Setting.** *Not adopted.* It is actively
+disfavoured by printed text: footnote `**` says aerial encounters use the Flyers subtable
+**"regardless of terrain"**, which is RC declining to let the surface govern the aerial case.
+RC nowhere defines Setting by what lies beneath the participants.
+
+**Interpretation C — aerial is outside the table's domain.** *Not adopted.* It presumes
+`aerial` is a Setting whose row is missing. §5 shows it is a Level-2 terrain, so there is no
+domain hole: an aerial encounter happens where the characters are, and that location has a
+Setting. Adopting C would manufacture an unsupported-case branch for a case RC already covers.
+
+**Interpretation D — none.** No further reading is supported by the primary text inspected,
+and none is invented to pad the list.
+
+### 8. The four required cases
+
+| | Case | Setting | Basis |
+|---|---|---|---|
+| **A** | Flying creatures inside a large cavern/dungeon | **`Dungeon*`** | The party is in a dungeon; `Type of Encounter` is *Dungeon and city*, a different roll method whose terrain list does not apply. Movement mode does not relocate the party |
+| **B** | Flying encounter over open wilderness | **`Wilderness`** | `aerial` is a Level-2 terrain in the Wilderness branch; Setting is the Level-1 value |
+| **C** | Flying encounter over ocean | **`Wilderness`** on Interpretation A; `Ocean/sea` on B. **RC does not explicitly resolve this for *distance*** — see the residue note below |
+| **D** | High-altitude encounter, no meaningful surface environment | **`Wilderness`** | Still a Wilderness-branch encounter; no row is missing, so no refusal arises |
+
+> **Case C, stated honestly.** RC's footnote `**` settles the *monster* question for aerial
+> over water (Flyers subtable, regardless of terrain) but says nothing explicit about which
+> **Setting row** supplies the distance. The accepted packet's own `Q-6`-adjacent care applies:
+> absence is recorded as absence.
+>
+> **It has no mechanical consequence, and that is an observation, not the argument.** The
+> `Wilderness` rows and the `Ocean/sea` **`Monster`** rows carry identical distance
+> expressions at every visibility tier — `4d6 x 10 yards`, `2d6 x 10 yards`, `1d4 x 10 yards`
+> — and aerial encounters produce *Flyers*, i.e. monsters, not Ships, so the `Ocean/sea`
+> `Ship` rows (the only ones that differ) are not reachable by an aerial encounter. Both
+> admissible readings therefore coincide. **Identical numbers are not identical mechanics** —
+> this project has twice declined to reason from a shared dice expression — so this is
+> recorded as corroboration that the open point is harmless, **not** as proof that the two
+> Settings are the same.
+
+### 9. Adjudication
+
+**`Q-9` does not describe a defect in the Encounter Distances Table.** The table has no
+`Aerial` Setting row because **`aerial` is not a Setting** — it is a Type of Terrain inside
+the Chance of Encounter Table's *Wilderness* branch, at a different level of RC's taxonomy
+from the Setting axis. The absence is correct, not missing.
+
+An aerial encounter takes its Setting from **where the characters are**, exactly as every
+other encounter does. No mapping is invented, no printed Setting vocabulary is broadened, and
+`Aerial` is **not** added to the Setting domain.
+
+Adjudicated at steps 1–3 of the order; steps 4 and 5 are **not reached**:
+
+```text
+1. RC Explicit ............... aerial is a Type of Terrain under the Wilderness
+                               roll method; footnote ** routes aerial encounters
+                               to the Wilderness Encounters Table
+2. Necessary Consequence ..... the Setting axis is the upper taxonomic level, so
+                               a Level-2 terrain cannot be a missing Setting row
+3. Caller-supplied Setting ... fully resolves it; ENC-001 validates
+4. Narrow Simulator Ruling ... NOT REACHED
+5. Unsupported / refusal ..... NOT REACHED
+```
+
+```text
+NO NEW SIMULATOR RULING
+
+The table was never missing a row, so no RC-unsupported choice has to be
+made. Issuing an SR merely because a label does not appear in a column
+would invent a category RC does not have. SR-13 remains the next free
+identifier and is not used here.
+```
+
+### 10. Provenance classification
+
+| Conclusion | Classification |
+|---|---|
+| `aerial` is a Type of Terrain listed under the `Wilderness` roll method | **Rules Cyclopedia Explicit** — p. 92 page image |
+| Aerial encounters always use the Flyers subtable in the Wilderness Encounters Table, regardless of terrain | **Rules Cyclopedia Explicit** — p. 92 footnote `**`, corroborated by p. 95's `Flyer` entries |
+| The Setting axis is the upper taxonomic level (*dungeon, wilderness, ocean/sea, underwater*) | **Rules Cyclopedia Explicit** — p. 92 prose, p. 93 prose |
+| `aerial` is therefore not a missing Setting row | **Necessary Consequence** of the two levels above |
+| Setting is a property of where the characters are, not of a participant's movement mode | **Necessary Consequence** |
+| `ENC-001` consumes and validates a caller-supplied Setting | **Repository Boundary / Architecture** |
+| Which Setting an over-ocean aerial encounter uses for *distance* | **Unresolved Dependency** — not explicitly stated by RC; shown non-consequential, not resolved |
+| Any Setting mapping for `aerial` | **none issued** — no Simulator Ruling |
+
+**No intuitive mapping is described as RC Explicit.** In particular the reading *"flying is
+outdoors, so use Wilderness"* is **not** the basis of §9; RC's own placement of `aerial` inside
+the Wilderness branch is.
+
+### 11. `SIM-003` impact — **none**
+
+`SIM-003` owns **visibility classification for a supplied Setting**. It does **not** choose the
+Setting, and `Q-9` does not extend it: nothing here makes `SIM-003` a spatial or terrain
+classifier, and its `INVENTORY.md` row and specification are unchanged.
+
+**Is there a separate Setting-owner gap?** Examined, and the answer is **no** — stated with
+the reason, so this is not merely an assertion:
+
+- World **visibility** needed an owner because it is an **aggregation**: several contributing
+  facts (light, daylight, weather, darkness) have to be combined into one category, and no
+  component owned that combination. That is why `SIM-003` exists.
+- **Setting has no aggregation step.** *Where the characters are* is a primitive world fact
+  with an existing architectural home — `ARCHITECTURE.md` §6 **Dungeon State** (*rooms/areas*)
+  and **Campaign State**. Nothing derives it; it is simply supplied, exactly as RC assumes
+  (*"the DM first needs to know where the characters are"*).
+- Per the `SIM-003` precedent, **a fact having no Rule Card is not a defect**, and no
+  artificial ownership gap is recorded for one.
+
+> **Recorded, not assigned.** If a later task wants a rule that disambiguates the over-ocean
+> aerial case (§8 case C) rather than leaving it caller-supplied, that is a **Setting-selection**
+> question. It would **not** belong to `SIM-003`, and it is not assigned to anything here.
+
+### 12. Future `ENC-001` contract consequence
+
+Narrow, consequence only — nothing designed, nothing implemented:
+
+- `ENC-001` takes `setting` as a **caller-supplied RC-native Setting** and validates it,
+  exactly as it does `visibility` (`Q-3`, `Q-7`). It does **not** derive Setting, and it does
+  **not** become a spatial or environment classifier.
+- The Setting domain is exactly the four printed values:
+
+```text
+Dungeon*  |  Wilderness  |  Ocean/sea  |  Undersea
+
+"City" is treated just like any other wilderness terrain (RC p. 93).
+AERIAL IS NOT A MEMBER of this domain and must not be added to it.
+```
+
+- If no supported Setting can be established, `ENC-001` **refuses** — the same shape as the
+  missing-visibility case, and for the same reason: RC supplies no default, so a simulator that
+  must not guess can only refuse. Note that `Q-9` itself produces **no** new refusal case;
+  aerial encounters resolve to a printed Setting.
+
+### 13. Residue
+
+- **The over-ocean aerial Setting is not explicitly stated by RC for distance purposes**
+  (§8 case C). Recorded as an unresolved dependency, shown to have no mechanical consequence,
+  and deliberately **not** closed by a ruling.
+- **`Q-4` remains open** (whose infravision satisfies the p. 93 `**` footnote), carried by
+  `SIM-003`.
+- **Daylight/time-of-day and weather determination remain unowned**, as `SIM-003` records.
+- **The feet/yards convention remains unowned and is untouched here** — though `Q-9` touches
+  the same rows, every aerial case above lands on a **yards** row, which changes nothing about
+  who owns the convention.
+- **No Setting-selection owner is created**, per §11.
