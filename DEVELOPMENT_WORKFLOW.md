@@ -276,10 +276,17 @@ The rule that record exists to enforce, stated once here:
 A researcher's own instruments agreeing with one another proves nothing about the source.
 `DEC-0012`'s pilot failed on exactly that: a packet whose ledgers agreed perfectly, and
 which passed its linter, had never opened a page that an already-accepted neighbouring
-packet cited by name. Facts a machine can establish — which pages the indexes and accepted
-neighbour packets put in scope, whether a quotation occurs on the page it cites, how many
-rows a table has — are therefore checked mechanically and **must not be restated as
+packet cited by name. Facts a machine can establish — which pages the **accepted neighbour
+packets** put in scope, whether a quotation occurs on the page it cites, how many rows a
+table has — are therefore checked mechanically and **must not be restated as
 researcher-maintained prose or counts**.
+
+**Index-based candidate enumeration is not among them.** The repository holds no reusable
+structured transcription of the Rules Cyclopedia's Tables/Checklists or General Index
+outside Stage-A packets, and deriving index candidates from a ledger written inside the
+packet under review would be circular. Index enumeration therefore remains a semantic and
+manual research instrument, judged by the independent reviewer, until such an external
+dataset exists. Do not describe it as machine-checked.
 
 Two consequences bind every Stage-A task:
 

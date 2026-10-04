@@ -339,6 +339,20 @@ def _pages_in(raw: str) -> set[int]:
     return pages
 
 
+class RuleIdError(ValueError):
+    """The packet's ``RULE-ID`` cannot be trusted to select its own seeds.
+
+    External derivation keys entirely off this one value, so an unvalidated
+    ``RULE-ID`` is an authority the packet holds over its own obligations --
+    the exact defect shape DEC-0013 exists to remove. A nonexistent or
+    mistyped ID previously derived zero pages and linted clean, which is worse
+    than a wrong answer because it looks like a right one.
+
+    Like a malformed seam, this fails loudly. Nothing is inferred or repaired:
+    a typo is reported, never guessed at.
+    """
+
+
 class SeedInputError(ValueError):
     """A seed or seam declaration that cannot be parsed.
 
@@ -366,6 +380,59 @@ class RepoContext:
 
     def inventory_text(self) -> str:
         return self.inventory.read_text(encoding="utf-8") if self.inventory.is_file() else ""
+
+
+def rule_id_from_filename(name: str) -> str | None:
+    """The Rule ID a packet filename encodes, e.g. ``ENC-001-evidence.md``."""
+    match = re.match(r"^([A-Z]{3,6}-\d{3})-evidence", name)
+    return match.group(1) if match else None
+
+
+def inventory_rule_ids(inventory_text: str) -> set[str]:
+    """Every Rule ID that INVENTORY.md gives a row of its own.
+
+    A row's Rule ID is the first one in the row, which is how the inventory's
+    tables are written. IDs merely *mentioned* in another row's notes are not
+    entries, so a plausible-looking but unregistered ID cannot resolve.
+    """
+    ids: set[str] = set()
+    for line in inventory_text.splitlines():
+        if not line.lstrip().startswith("|"):
+            continue
+        match = _RULE_ID.search(line)
+        if match:
+            ids.add(match.group(1))
+    return ids
+
+
+def validate_rule_id(declared: str, packet_name: str, inventory_text: str) -> str:
+    """Return ``declared`` only if it may be trusted to select external seeds.
+
+    Two independent confirmations, neither of which the packet controls:
+    the filename it was saved under, and ``INVENTORY.md``.
+    """
+    if not declared:
+        raise RuleIdError("PACKET-STATUS declares no RULE-ID")
+    from_name = rule_id_from_filename(packet_name)
+    if from_name is None:
+        raise RuleIdError(
+            f"packet filename {packet_name!r} encodes no Rule ID; "
+            "expected <RULE-ID>-evidence*.md"
+        )
+    if declared != from_name:
+        raise RuleIdError(
+            f"RULE-ID {declared!r} does not match the Rule ID {from_name!r} in the "
+            "filename -- one packet-authored field may not redirect its own obligations"
+        )
+    registered = inventory_rule_ids(inventory_text)
+    if not registered:
+        raise RuleIdError("INVENTORY.md yielded no Rule IDs; cannot resolve RULE-ID")
+    if declared not in registered:
+        raise RuleIdError(
+            f"RULE-ID {declared!r} resolves to no INVENTORY.md entry "
+            "(not inferred or corrected -- report it)"
+        )
+    return declared
 
 
 def inventory_neighbours(rule_id: str, inventory_text: str) -> set[str]:
@@ -690,14 +757,25 @@ def lint_packet(text: str, name: str, context: RepoContext | None = None) -> lis
     # S019 -- the externally-derived obligation set. Generated from
     # INVENTORY.md and from accepted neighbour packets, never from this
     # packet, so removing a page here cannot remove the obligation.
-    rule_id = status.get("RULE-ID", "")
+    declared_id = status.get("RULE-ID", "")
     try:
         seams = _declared(seed_block, "SEAMS")
         _declared(seed_block, "SUBJECT-TERMS")
     except SeedInputError as error:
         fail("S019", str(error))
         seams = []
-    if rule_id and not _is_placeholder(rule_id):
+
+    # S020 -- RULE-ID must be corroborated before it is allowed to select the
+    # obligation set. The reference template is exempt: it is linted as a
+    # shape, carries a placeholder ID and is not a real card.
+    rule_id = ""
+    if not _is_placeholder(declared_id) and name != REFERENCE_PACKET:
+        try:
+            rule_id = validate_rule_id(declared_id, name, context.inventory_text())
+        except RuleIdError as error:
+            fail("S020", str(error))
+
+    if rule_id:
         external = derive_external_seeds(rule_id, seams, context)
         missing = sorted(set(external) - set(pages))
         if missing:
@@ -928,8 +1006,14 @@ def _report(
             continue
         packet_text = path.read_text(encoding="utf-8")
         status = _keyed_block(packet_text, "PACKET-STATUS") or {}
-        rule_id = status.get("RULE-ID", "")
-        if rule_id and not _is_placeholder(rule_id):
+        declared_id = status.get("RULE-ID", "")
+        rule_id = ""
+        if not _is_placeholder(declared_id):
+            try:
+                rule_id = validate_rule_id(declared_id, path.name, context.inventory_text())
+            except RuleIdError as error:
+                print(f"      RULE-ID NOT CORROBORATED: {error}")
+        if rule_id:
             seed_block = _keyed_block(packet_text, "SEEDS")
             try:
                 seams = _declared(seed_block, "SEAMS")
@@ -941,6 +1025,17 @@ def _report(
                 for page in sorted(external):
                     origins = ", ".join(sorted(set(external[page])))
                     print(f"        p. {page} <- {origins}")
+                # Diagnostic only (DEC-0013 remediation item 6): how the
+                # obligation set breaks down by origin. There is deliberately
+                # no threshold and no gate -- seeding cost is a human
+                # judgement to make when a real card next runs.
+                by_origin: dict[str, int] = {}
+                for origins_list in external.values():
+                    for origin in set(origins_list):
+                        by_origin[origin] = by_origin.get(origin, 0) + 1
+                print(f"      seed provenance (diagnostic, not a gate): {len(external)} pages")
+                for origin, count in sorted(by_origin.items(), key=lambda item: -item[1]):
+                    print(f"        {count:>3} <- {origin}")
             else:
                 print("      REQUIRED EXTERNAL PAGE SEEDS: none derived")
             print(

@@ -31,14 +31,20 @@ from lint_evidence import (  # noqa: E402
 
 SCRIPT = Path(__file__).resolve().parents[2] / "scripts" / "lint_evidence.py"
 
+# These fixtures use ENC-006, a real INVENTORY-registered card that is
+# Unresearched and whose only neighbour (ENC-003) has no landed packet. So
+# RULE-ID corroborates against the real repository, and external derivation
+# correctly yields nothing -- letting these tests exercise the packet-local
+# checks without inventing a Rule ID the inventory does not register.
+
 
 # --- A minimal packet that passes, which every case below perturbs ---------
 
-VALID = """# `TEST-900` — Example — Stage-A Evidence
+VALID = """# `ENC-006` — Example — Stage-A Evidence
 
 ```text
 PACKET-STATUS
-RULE-ID:              TEST-900
+RULE-ID:              ENC-006
 INDEPENDENT-REVIEW:   PREPARED FOR INDEPENDENT COMPLETENESS REVIEW
 RECOMMENDATION:       EVIDENCE READY FOR HUMAN REVIEW
 ```
@@ -153,12 +159,15 @@ HUMAN EVIDENCE REVIEW: NOT GIVEN
 """
 
 
-def checks(text: str) -> set[str]:
-    return {finding.check for finding in lint_packet(text, "TEST-900-evidence.md")}
+def checks(text: str, context: lint_evidence.RepoContext | None = None) -> set[str]:
+    return {
+        finding.check
+        for finding in lint_packet(text, "ENC-006-evidence.md", context)
+    }
 
 
 def test_the_baseline_packet_passes() -> None:
-    assert lint_packet(VALID, "TEST-900-evidence.md") == []
+    assert lint_packet(VALID, "ENC-006-evidence.md") == []
 
 
 def test_the_shipped_template_passes() -> None:
@@ -263,7 +272,7 @@ def test_an_unrelated_neighbour_seed_is_dismissed_in_one_line() -> None:
     The whole cost of disposing of it is the single line already in VALID. If
     this test ever needs more ceremony than that line, the design has drifted.
     """
-    assert lint_packet(VALID, "TEST-900-evidence.md") == []
+    assert lint_packet(VALID, "ENC-006-evidence.md") == []
     pages = lint_evidence._page_dispositions(VALID)
     assert pages[104] == ("OUTSIDE_CARD_SCOPE", "COMBAT-*")
 
@@ -277,7 +286,7 @@ def test_a_mechanical_defect_is_expressed_as_a_check_not_a_review_state() -> Non
     needs machine verification rather than a new semantic review.
     """
     broken = VALID.replace("| E-1 | 93 |", "| E-1 | 91 |")
-    findings = lint_packet(broken, "TEST-900-evidence.md")
+    findings = lint_packet(broken, "ENC-006-evidence.md")
     assert findings and all(f.check.startswith("S") for f in findings)
     status = lint_evidence._keyed_block(broken, "PACKET-STATUS")
     assert status is not None
@@ -389,7 +398,7 @@ def test_the_gate_returns_the_exit_code_it_promises(
 ) -> None:
     packet = VALID.replace("| E-1 | 93 |", "| E-1 | 91 |") if broken else VALID
     (tmp_path / REFERENCE_PACKET).write_text(VALID, encoding="utf-8")
-    (tmp_path / "TEST-900-evidence.md").write_text(packet, encoding="utf-8")
+    (tmp_path / "ENC-006-evidence.md").write_text(packet, encoding="utf-8")
     assert main([str(tmp_path)]) == expected
 
 

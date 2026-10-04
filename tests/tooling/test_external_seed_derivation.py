@@ -22,12 +22,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 import lint_evidence  # noqa: E402
 from lint_evidence import (  # noqa: E402
     RepoContext,
+    RuleIdError,
     SeedInputError,
     accepted_packets,
     cited_pages,
     derive_external_seeds,
     inventory_neighbours,
+    inventory_rule_ids,
     lint_packet,
+    rule_id_from_filename,
+    validate_rule_id,
 )
 
 # An accepted neighbour packet, in the shape the real ones take: prose with
@@ -307,19 +311,107 @@ def test_a_governing_object_may_not_borrow_the_closure_vocabulary(
 def test_exactly_one_of_quote_or_paraphrase(context: RepoContext) -> None:
     row = "| E-1 | 93 | visibility selects the distance | | table | RC Explicit | DIRECT PRIMARY TEXT |"  # noqa: E501
     quote_only = _packet(ALL_PAGES)
-    assert lint_packet(quote_only, "p.md", context) == []
+    assert lint_packet(quote_only, "ENC-001-evidence.md", context) == []
 
     para_only = quote_only.replace(
         row, row.replace("| visibility selects the distance | |", "| | paraphrased |")
     )
-    assert not [f for f in lint_packet(para_only, "p.md", context) if f.check == "S010"]
+    para_findings = lint_packet(para_only, "ENC-001-evidence.md", context)
+    assert not [f for f in para_findings if f.check == "S010"]
 
     both = quote_only.replace(
         row, row.replace("selects the distance | |", "selects the distance | also summarised |")
     )
-    assert any(f.check == "S010" for f in lint_packet(both, "p.md", context))
+    assert any(f.check == "S010" for f in lint_packet(both, "ENC-001-evidence.md", context))
 
     neither = quote_only.replace(
         row, row.replace("| visibility selects the distance | |", "| | |")
     )
-    assert any(f.check == "S010" for f in lint_packet(neither, "p.md", context))
+    assert any(f.check == "S010" for f in lint_packet(neither, "ENC-001-evidence.md", context))
+
+
+# --- RULE-ID may not be the packet's own authority over its obligations -----
+#
+# The closure review's blocking finding: RULE-ID came from PACKET-STATUS, was
+# never corroborated, and a one-character typo derived zero pages and linted
+# clean. Validation now takes two confirmations the packet does not control --
+# the filename it was saved under, and INVENTORY.md.
+
+
+def test_a_matching_registered_rule_id_is_valid() -> None:
+    assert validate_rule_id("ENC-001", "ENC-001-evidence.md", INVENTORY) == "ENC-001"
+
+
+def test_a_rule_id_absent_from_inventory_fails() -> None:
+    with pytest.raises(RuleIdError, match="no INVENTORY"):
+        validate_rule_id("ENC-999", "ENC-999-evidence.md", INVENTORY)
+
+
+def test_a_rule_id_disagreeing_with_the_filename_fails() -> None:
+    with pytest.raises(RuleIdError, match="does not match"):
+        validate_rule_id("ENC-999", "ENC-001-evidence.md", INVENTORY)
+
+
+def test_a_one_character_typo_fails_and_is_not_repaired() -> None:
+    """ENC-00I is not ENC-001. Nothing is inferred or corrected."""
+    with pytest.raises(RuleIdError):
+        validate_rule_id("ENC-00I", "ENC-001-evidence.md", INVENTORY)
+
+
+def test_a_valid_looking_but_unregistered_rule_id_fails() -> None:
+    with pytest.raises(RuleIdError, match="no INVENTORY"):
+        validate_rule_id("ENC-007", "ENC-007-evidence.md", INVENTORY)
+
+
+def test_rule_id_is_read_from_the_filename_not_the_packet() -> None:
+    assert rule_id_from_filename("ENC-001-evidence.md") == "ENC-001"
+    assert rule_id_from_filename("ENC-001-evidence-remediated.md") == "ENC-001"
+    assert rule_id_from_filename("notes.md") is None
+
+
+def test_inventory_rows_define_registered_ids_but_mentions_do_not() -> None:
+    """ENC-005's row mentions ENC-001; that makes ENC-001 a neighbour, not an
+    entry. Only a row's own first ID registers it.
+    """
+    assert inventory_rule_ids(INVENTORY) == {"ENC-001", "ENC-005"}
+
+
+@pytest.mark.parametrize("bad", ["ENC-999", "ENC-00I", "EXP-404"])
+def test_changing_only_rule_id_cannot_empty_the_obligation_set(
+    context: RepoContext, bad: str
+) -> None:
+    """THE invariant. A packet-authored edit must not silently buy an empty
+    obligation set. Before this fix each of these linted clean with zero
+    external seeds; now each fails loudly and derivation never runs.
+    """
+    good = lint_packet(_packet(ALL_PAGES), "ENC-001-evidence.md", context)
+    assert good == [], "the honest packet should pass"
+
+    tampered = _packet(ALL_PAGES).replace(
+        "RULE-ID:              ENC-001", f"RULE-ID:              {bad}"
+    )
+    findings = lint_packet(tampered, "ENC-001-evidence.md", context)
+    assert any(f.check == "S020" for f in findings), f"{bad} must not pass unchallenged"
+
+
+def test_a_tampered_rule_id_fails_even_with_every_page_removed(
+    context: RepoContext,
+) -> None:
+    """The two failure modes cannot be combined into a clean run: deleting the
+    dispositions AND redirecting the Rule ID still fails.
+    """
+    tampered = _packet("91: INSPECTED").replace(
+        "RULE-ID:              ENC-001", "RULE-ID:              ENC-999"
+    )
+    findings = lint_packet(tampered, "ENC-001-evidence.md", context)
+    assert any(f.check == "S020" for f in findings)
+
+
+def test_a_valid_packet_still_derives_the_real_pilot_pages() -> None:
+    """Validation gates derivation; it must not weaken it. Against the real
+    repository, the honest ENC-001 packet still derives pp. 93, 98 and 100.
+    """
+    repo = RepoContext.default()
+    assert validate_rule_id("ENC-001", "ENC-001-evidence.md", repo.inventory_text())
+    seeds = derive_external_seeds("ENC-001", [], repo)
+    assert {93, 98, 100} <= set(seeds)
