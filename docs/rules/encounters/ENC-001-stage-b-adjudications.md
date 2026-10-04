@@ -5,7 +5,7 @@
 > (`docs/rules/evidence/ENC-001-evidence.md`, Stage A `ACCEPTED` 2026-10-04 under
 > `DEC-0013`). It is **not** the Rule Card, and it does not authorize implementation.
 >
-> **Only `Q-1` is adjudicated here.** `Q-3`, `Q-7` and `Q-9` remain `RETAINED AS GENUINE
+> **`Q-1` and `Q-3` are adjudicated here.** `Q-7` and `Q-9` remain `RETAINED AS GENUINE
 > SOURCE AMBIGUITY` exactly as the accepted packet records them, and the two ownership
 > gaps — the world **visibility category** (`NO RULE ID EXISTS`) and the **feet/yards**
 > convention — remain open and unassigned. Nothing below decides any of them.
@@ -14,20 +14,27 @@
 ADJUDICATION-STATUS
 RULE-ID:   ENC-001
 Q-1:       ADJUDICATED 2026-10-04; SR-12 APPROVED 2026-10-04
-Q-3:       OPEN -- not adjudicated (see the scope note below)
+Q-3:       ADJUDICATED 2026-10-04; NO NEW SIMULATOR RULING
 Q-7:       OPEN -- not adjudicated here
 Q-9:       OPEN -- not adjudicated here
 STAGE B:   adjudication only; no Rule Card, no implementation
 ```
 
-> **Scope note, 2026-10-04 — why `Q-3` is still open.** A task authorized adjudicating
-> `Q-3` and described it as the *"normal dungeon conditions" vs `Dim light`* question,
-> whose resolution would turn on caller-supplied world-visibility state. The accepted
-> Stage-A packet's `Q-3` is a **different question** — whether the Dungeon row's
-> `Very good light` is the same condition as the Wilderness/Ocean rows' `Clear daylight`.
-> The question described is split across `Q-1` (already adjudicated, `SR-12`) and `Q-7`
-> (not authorized). Adjudicating under the mismatched label would have decided `Q-7` while
-> calling it `Q-3`, so the discrepancy was reported instead. `Q-3` is untouched.
+> **Historical note, 2026-10-04 — a label discrepancy that was stopped on.** An earlier
+> task authorized adjudicating `Q-3` but described it as the *"normal dungeon conditions"
+> vs `Dim light`* question, whose resolution would turn on caller-supplied world-visibility
+> state. The accepted Stage-A packet's `Q-3` is a **different question** — the one
+> adjudicated below. The question that task described is split across `Q-1` (already
+> adjudicated, `SR-12`) and `Q-7` (not authorized). Adjudicating under the mismatched label
+> would have decided `Q-7` while calling it `Q-3`, so the discrepancy was reported instead
+> and nothing was decided. A subsequent task authorized `Q-3` **as the accepted packet
+> actually words it**; that adjudication is below. `Q-7` was not adjudicated then and is
+> not adjudicated now.
+>
+> **The Stage-A disposition is not rewritten.** The accepted packet still records `Q-3` as
+> `RETAINED AS GENUINE SOURCE AMBIGUITY`, which is the correct *Stage-A* finding: Stage A
+> established that RC does not equate the labels. Stage B adjudicates what `ENC-001` does
+> about that; it does not revise the evidence record, and the accepted packet is unmodified.
 
 ---
 
@@ -207,3 +214,256 @@ specification:
   (`EXP-001`) decides *that* an encounter occurs, not *how far away*.
 - The procedure cannot be made total until a visibility category is available, which is
   an **unowned** input today.
+
+---
+
+## Q-3 — `Very good light` vs `Clear daylight`
+
+### 1. Question as the accepted packet states it
+
+> Is the Dungeon row's "Very good light" the same condition as "Clear daylight"? RC prints
+> two labels and never equates them.
+
+Accepted Stage-A disposition: `RETAINED AS GENUINE SOURCE AMBIGUITY`, object `p. 93`.
+
+This is a question about **two printed table labels**. It is *not* the question of which
+visibility condition obtains in the world — that is `Q-7`, and it is out of scope here.
+
+### 2. Source basis — re-inspected this pass
+
+| Page | Re-inspected | Why |
+|---|---|---|
+| p. 93 | yes, authoritative page image, including a magnified crop of the table | carries both labels and the whole Encounter Distances Table |
+
+**No other page was opened.** p. 93 points to p. 95, p. 102 and Chapter 14, but each is a
+monster/combat reference rather than a definition of either visibility label, and pp. 94–97
+are `ROUTED` to `EXP-008` in the accepted packet. The accepted Stage-A evidence identifies
+no page defining either term. Stage-A research was not reopened.
+
+### 3. Exact occurrences, labels preserved as printed
+
+Transcribed from the page image, RC's capitalization and spacing kept:
+
+```text
+Setting        Visibility          Encounter      Distance
+Dungeon*       Very good light     DM's choice    4d6x 10'
+Dungeon*       Dim light**         DM's choice    2d6x 10'
+Dungeon*       No lightt           DM's choice    1d4x 10'
+Wilderness     Clear daylight      DM's choice    4d6 x 10 yards
+Wilderness     Dim light**         DM's choice    2d6 x 10 yards
+Wilderness     No lightt           DM's choice    1d4 x 10 yards
+Ocean/sea      Clear daylight      Ship           300 yards
+Ocean/sea      Clear daylight      Monster        4d6 x 10 yards
+Ocean/sea      Dim light**         Ship           120 yards
+Ocean/sea      Dim light**         Monster        2d6 X 10 yards
+Ocean/sea      No lightt           Ship           40 yards
+Ocean/sea      No lightt           Monster        1d4 x 10 yards
+Undersea       Any light           DM's choice    1d6 x 10 yards
+  *  Or other indoor setting.
+ **  Or full darkness with infravision used.
+  t  Or very poor visibility (heavy snow or fog, sandstorm, etc.).
+```
+
+Every occurrence of the two labels:
+
+| Label | Setting | Visibility label as printed | Encounter | Distance |
+|---|---|---|---|---|
+| `Very good light` | `Dungeon*` | `Very good light` | `DM's choice` | `4d6x 10'` |
+| `Clear daylight` | `Wilderness` | `Clear daylight` | `DM's choice` | `4d6 x 10 yards` |
+| `Clear daylight` | `Ocean/sea` | `Clear daylight` | `Ship` | `300 yards` |
+| `Clear daylight` | `Ocean/sea` | `Clear daylight` | `Monster` | `4d6 x 10 yards` |
+
+`Very good light` occurs **once**, on the only indoor setting. `Clear daylight` occurs
+**three times**, all on outdoor settings. Neither label carries a footnote marker.
+
+### 4. Structural comparison
+
+| Property | `Very good light` | `Clear daylight` |
+|---|---|---|
+| Settings that use it | `Dungeon*` only | `Wilderness`, `Ocean/sea` |
+| Do they ever co-occur in one setting? | **no — complementary distribution** | **no** |
+| Row it selects | the setting's brightest tier | the setting's brightest tier |
+| Distance expression | `4d6x 10'` | `4d6 x 10 yards`, **and** a flat `300 yards` on `Ocean/sea`/`Ship` |
+| Footnote attached | none | none |
+| Footnote mapping one to the other | **none exists** | **none exists** |
+| Defined elsewhere in RC | not in the chapters the accepted packet searched | not in the chapters the accepted packet searched |
+
+Four structural facts carry the weight, and all four are visible on the page image:
+
+1. **Complementary distribution.** No setting offers both labels. They never compete for
+   the same lookup, so the table never asks the reader to tell them apart.
+2. **RC reuses labels verbatim when it means the same tier.** `Dim light**` and `No lightt`
+   are printed *identically* across `Dungeon*`, `Wilderness` and `Ocean/sea`. RC was
+   plainly willing to repeat a visibility label across settings — so the divergence at the
+   top tier is a deliberate wording choice, not typographic drift. It is also adequately
+   explained by the fact that *daylight is not available indoors*, which is a constraint on
+   wording, not a claim about a different brightness.
+3. **The Visibility column is not a uniform cross-setting enum.** `Undersea` collapses the
+   entire axis to `Any light`. RC therefore does not maintain one global visibility
+   vocabulary that the settings each draw from; the column is **setting-local**.
+4. **The label does not carry the formula.** `Clear daylight` yields `4d6 x 10 yards` on
+   `Wilderness` and `Ocean/sea`/`Monster`, but a flat `300 yards` on `Ocean/sea`/`Ship`.
+   Distance is a function of `(Setting, Visibility, Encounter)`, never of the visibility
+   label alone — so "same label, same distance" is not even true *within* `Clear daylight`,
+   and identical dice across two labels proves correspondingly less.
+
+### 5. The three questions, answered separately
+
+```text
+1. Are the WORDS identical?              NO -- they share no word at all
+2. Does RC explicitly EQUATE the labels?  NO -- see the scope limit below
+3. Must the simulator treat them as the
+   same INPUT STATE for ENC-001?          NO -- and it must not, see section 7
+```
+
+**Scope limit on question 2, stated narrowly.** No equating passage appears on p. 93, and
+none was found in the chapters the accepted Stage-A packet searched. That is the claim the
+inspected material supports. It is **not** a claim that no such passage exists anywhere in
+RC; the accepted packet's `Q-7` was already narrowed to the chapters searched for exactly
+this reason, and the same limit is kept here rather than quietly widened.
+
+### 6. Competing interpretations
+
+**Interpretation A — equivalent visibility conditions.** The two labels name one effective
+visibility state, worded per setting, and a simulator may normalize both to one internal
+category. *Support:* identical structural position, identical `4d6 × 10` dice in the
+`Dungeon`/`Wilderness` pair, no distinguishing footnote. *Against:* RC never says it, and
+fact 3 above shows RC does not operate a single cross-setting visibility vocabulary at all
+— so a shared underlying category cannot be inferred from parallel position. **Not adopted:
+it asserts more than the source establishes.**
+
+**Interpretation B — distinct RC conditions.** The differing labels are semantically
+non-equivalent, and the simulator must keep separate categories unless some rule maps them.
+*Support:* RC prints different words, reuses labels verbatim elsewhere, and never equates
+these two. *Against:* that is evidence the wording choice was deliberate, not evidence the
+*conditions* differ — the choice is fully explained by daylight's unavailability indoors.
+**Not adopted as stated:** it reads "never equated" as "proven different", which the source
+does not support either.
+
+**Interpretation C — operationally equivalent in the table, textually and semantically
+unequated by RC.** Each label occupies the brightest tier of its own setting; because of
+complementary distribution they never compete, so the table is fully determinate without
+RC ever having to equate them. RC leaves the semantic relationship **unmapped**, and the
+table does not need it mapped. *Support:* all four structural facts in section 4, each read
+off the page image. **Adopted.** It is the reading the table itself establishes, and it
+claims nothing beyond it — it asserts neither identity (A) nor difference (B).
+
+Interpretation C is retained because the source supports it, not to avoid choosing: it
+makes a positive, checkable claim (the lookup is total per setting without an equivalence)
+and it is falsifiable — a single setting offering both labels would refute it.
+
+### 7. Adjudication
+
+**RC does not equate `Very good light` and `Clear daylight`, and `ENC-001` does not equate
+them either.** They are preserved as distinct RC-native visibility labels, each belonging
+to its own setting.
+
+This is adjudicated under step 4 of the adjudication order — *preserve separate states if
+determinism does not require equivalence* — and step 3 is **not** reached:
+
+```text
+1. RC Explicit .................. the table's structure, read off the page image
+2. Necessary Consequence ........ lookup is total per setting without an equivalence
+3. Narrow Simulator Ruling ...... NOT REACHED
+4. Preserve separate states ..... ADOPTED
+```
+
+**Why determinism does not require an answer.** The lookup key is
+`(Setting, Visibility, Encounter)`. Once a setting is fixed, the visibility labels available
+in that setting are fixed, and the brightest tier is named by exactly one label. At no point
+does the procedure have to ask whether `Very good light` and `Clear daylight` denote the
+same world condition — the question cannot arise inside a lookup, because no setting offers
+both. Row selection is total and unambiguous without the equivalence.
+
+```text
+NO NEW SIMULATOR RULING
+
+Q-3 is resolved by preserving what RC prints. Creating an equivalence (or a
+non-equivalence) would decide something the table never asks and the source
+never states. The next free identifier remains SR-13; it is not used here.
+```
+
+### 8. Behaviour in the four required cases
+
+| | Case | Result |
+|---|---|---|
+| **A** | Dungeon with very strong illumination | Requires `Very good light` **specifically**. There is no `Dungeon*`/`Clear daylight` row, so `Clear daylight` is not a usable input in a dungeon |
+| **B** | Wilderness in clear daytime | Requires `Clear daylight` **specifically**. There is no `Wilderness`/`Very good light` row |
+| **C** | Caller supplies one generic "excellent visibility" state | **`ENC-001` cannot accept it.** Mapping one generic state onto both labels would assert that a single world condition satisfies the brightest tier in every setting — which is the equivalence `Q-3` asks about. Doing it inside `ENC-001` would **silently adjudicate** `Q-3` in the affirmative, so `ENC-001` requires the RC-native label instead |
+| **D** | Future world-state provider preserves RC-native labels | **Negligible added complexity.** `Setting` is already a required input to the lookup, so a provider that must emit a visibility label already knows the setting; emitting that setting's own label adds no new dimension. Preservation is close to free, which is why it is preferred over an invented equivalence |
+
+Case C is the load-bearing one. It is also the reason the adjudication has a contract
+consequence at all: the cheapest-looking implementation choice — one tidy brightness enum —
+is precisely the one that would decide `Q-3` without saying so.
+
+### 9. Provenance classification
+
+| Conclusion | Classification |
+|---|---|
+| The table's structure: complementary distribution, shared lower-tier labels, `Undersea`/`Any light`, footnote attachment, `Ocean/sea`/`Ship` flat `300 yards` | **Rules Cyclopedia Explicit** — read directly off the authoritative p. 93 image |
+| Row selection is total per setting without equating the two labels | **Necessary Consequence** of that structure |
+| No equating passage on p. 93 or in the chapters the accepted packet searched | **Rules Cyclopedia Explicit**, scope-limited — a narrowed negative finding, not an RC-wide claim |
+| `ENC-001` consumes RC-native labels and does not normalize them | **Repository Boundary / Architecture** — a contract decision about where the ambiguity is owned, not a rules claim |
+| Any equivalence or non-equivalence of the two labels | **none issued** — no Simulator Ruling |
+
+**"Not equated" is not "proven distinct."** RC leaves the relationship between the two
+labels **unmapped**, and this adjudication preserves that unmapped state. It does **not**
+assert that a brightly lit dungeon and a clear day are different conditions in the fiction.
+Whether one world condition satisfies both labels is left undecided, and is left decidable
+later by whoever owns world visibility.
+
+### 10. `Q-7` impact — **unchanged**
+
+| | Question | Status |
+|---|---|---|
+| `Q-3` | Are two printed visibility labels equivalent? | **adjudicated here** — RC does not equate them; `ENC-001` preserves them |
+| `Q-7` | Who determines which visibility condition obtains in the world? | **unchanged** — not adjudicated, not narrowed |
+
+`Q-3` is answered entirely inside the table. `Q-7` asks who supplies the input *to* the
+table. Neither the *who* nor the *which* is touched: no owner is assigned, no selector is
+identified, and the accepted packet's `Q-7` row is not modified.
+
+One honest qualification, recorded so it is not mistaken for progress on `Q-7`: this
+adjudication fixes the **type** of the input that `Q-7`'s eventual answer must produce — an
+RC-native label for the setting in play, not a normalized enum. That constrains the shape of
+a future answer. It does not narrow the question, which remains open in full.
+
+### 11. `EXP-006` boundary impact — **none**
+
+`EXP-006` owns **mundane light contribution** — what a torch, lantern or similar light
+source provides. `Q-3` is about the vocabulary of a table's Visibility column. Nothing in it
+requires moving that boundary, and the boundary is unchanged.
+
+**The tempting error, explicitly rejected:** *"`Very good light` is a dungeon condition,
+dungeon light comes from torches, torches are `EXP-006`'s, therefore `EXP-006` owns
+`Very good light`."* That does not follow. `EXP-006` owns what a light source contributes;
+it does not own the aggregation of contributions into a visibility category, and it has
+never owned world visibility. The word "light" appearing in a table label is not an
+ownership argument.
+
+### 12. Future `ENC-001` contract consequence
+
+Stated narrowly, as consequence only — this is not a specification and authorizes nothing:
+
+- `ENC-001` should accept the **RC-native visibility label as printed for the setting in
+  play**, not a normalized cross-setting visibility enum.
+- Valid labels are setting-indexed: `Dungeon*` admits `Very good light`, `Dim light**`,
+  `No lightt`; `Wilderness` and `Ocean/sea` admit `Clear daylight`, `Dim light**`,
+  `No lightt`; `Undersea` admits `Any light` only.
+- A visibility label that does not belong to the supplied setting is a caller error, not
+  something `ENC-001` resolves by mapping.
+
+Who produces that label, and from what world state, is **not decided here** and is not
+designed here.
+
+### 13. Residue, recorded not resolved
+
+- **The semantic relationship stays unmapped.** Whether one world condition can satisfy both
+  `Very good light` and `Clear daylight` is undecided. This adjudication deliberately keeps
+  it visible at the `ENC-001` boundary instead of burying it in a normalization step.
+- **`Q-7` remains open**, and `ENC-001` still cannot be made total without it.
+- **The feet/yards convention remains unowned.** It is visible again here — the same
+  brightest tier reads `4d6x 10'` indoors and `4d6 x 10 yards` outdoors — but it is not
+  resolved, and `Q-6` in the accepted packet still records the undersea feet/yards tension.
+- **`Ocean/sea`/`Ship` flat distances** (`300`, `120`, `40` yards) are not dice expressions.
+  Noted because it bears on the eventual contract's return type; not adjudicated.
