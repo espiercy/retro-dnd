@@ -5,19 +5,20 @@
 > (`docs/rules/evidence/ENC-001-evidence.md`, Stage A `ACCEPTED` 2026-10-04 under
 > `DEC-0013`). It is **not** the Rule Card, and it does not authorize implementation.
 >
-> **`Q-1` and `Q-3` are adjudicated here. `Q-7` is analysed but NOT settled** — it is
-> returned as a `PENDING HUMAN OWNERSHIP DECISION`, and the accepted packet's
-> `RETAINED AS GENUINE SOURCE AMBIGUITY` stands for it. `Q-9` remains
-> `RETAINED AS GENUINE SOURCE AMBIGUITY` exactly as the accepted packet records it, and the
-> two ownership gaps — the world **visibility category** (`NO RULE ID EXISTS`) and the
-> **feet/yards** convention — remain open and unassigned. Nothing below assigns either.
+> **`Q-1`, `Q-3` and `Q-7` are adjudicated here** — `Q-7` only in its rules/contract portion,
+> by human architecture decision. **The world/environment visibility *owner* is still not
+> assigned**, and saying so is not a formality: the gap is real and a separate architecture
+> decision closes it. `Q-9` remains `RETAINED AS GENUINE SOURCE AMBIGUITY` exactly as the
+> accepted packet records it, and the **feet/yards** convention remains unassigned. Nothing
+> below assigns either.
 
 ```text
 ADJUDICATION-STATUS
 RULE-ID:   ENC-001
 Q-1:       ADJUDICATED 2026-10-04; SR-12 APPROVED 2026-10-04
 Q-3:       ADJUDICATED 2026-10-04; NO NEW SIMULATOR RULING
-Q-7:       ANALYSED 2026-10-04; PENDING HUMAN OWNERSHIP DECISION -- NOT SETTLED
+Q-7:       rules/contract portion SETTLED 2026-10-04 by human architecture decision
+           world/environment visibility OWNER: NOT YET ASSIGNED
 Q-9:       OPEN -- not adjudicated here
 STAGE B:   adjudication only; no Rule Card, no implementation
 ```
@@ -475,9 +476,15 @@ designed here.
 ## Q-7 — who determines which visibility category obtains
 
 ```text
-Q-7 STATUS:  ANALYSED 2026-10-04
-             PENDING HUMAN OWNERSHIP DECISION
-             NOT SETTLED -- see section 10 for exactly what is unresolved
+Q-7 STATUS:  rules/contract question   SETTLED 2026-10-04
+                                       by human architecture decision
+
+             world/environment
+             visibility OWNER          NOT YET ASSIGNED
+                                       separate architecture decision required
+
+The ownership gap is NOT closed. What is settled is what ENC-001 does about
+it: it consumes a supplied label and refuses when a required one is absent.
 ```
 
 ### 1. Question as the accepted packet states it
@@ -689,38 +696,51 @@ the accepted negative claim establishes RC supplies no rule, so there is nothing
 Card* to specify. But `SIM-001`'s scope was deliberately narrowed to layout, and stretching
 it would repeat the boundary-blurring that narrowing corrected. **No fit is invented.**
 
-### 10. Ownership disposition — **PENDING HUMAN OWNERSHIP DECISION**
+### 10. Ownership disposition — **human architecture decision, 2026-10-04**
 
-**Recommendation (not a decision): option E, implemented as Model C** — the world-visibility
-predicate is owned at a world/environment specification layer in the `SIM-*` family, **not**
-by a Rule Card, and `ENC-001` consumes it as a caller-supplied RC-native label. The reasoning
-is sections 4, 7, 8 and 9: RC supplies no rule, so there is no RC mechanic for a Rule Card to
-specify; several subsystems besides `ENC-001` need the fact; and every existing card that
-could take it would be broadened past its accepted boundary.
+The analysis above was returned to the human project owner with a recommendation and two
+blockers. **The human project owner decided**, and the decision is recorded here verbatim as
+a **human architecture decision — not an RC rule, and not an agent conclusion**:
 
-**Why this is recorded as pending rather than settled — two blockers, both requiring a human:**
+```text
+HUMAN ARCHITECTURE DECISION                    Q-7         2026-10-04
+DECIDED BY:  human project owner
 
-1. **It would create a new responsibility.** Option E assigns the predicate to a `SIM-*`
-   specification that does not exist. Under this task's own guard, a new Rule ID or
-   responsibility is **not** added to `INVENTORY.md` here:
+EXP-006 does NOT own aggregate/world visibility.
 
-   ```text
-   NEW OWNERSHIP DECISION REQUIRED
-   ```
+ENC-001 does NOT derive aggregate/world visibility.
 
-2. **An approved Rule Card must be reconciled, and an agent may not do it.** `EXP-006` §7
-   prose routes *"whatever aggregation it needs"* to `ENC-001` (Model A), while `EXP-006` §B
-   splits the same subject into **`Visibility classification → ENC-001`** and
-   **`environmental illumination world state → OWNER NOT SETTLED`**. The two readings differ,
-   and §7's was written when `ENC-001` was `[UNRESEARCHED]` — the card says so. Choosing
-   between them decides whether `ENC-001` aggregates world facts (Model A) or consumes a
-   label (Model C), which is exactly `Q-7`. `EXP-006` is an **approved Rule Card and a
-   protected document** (`AGENTS.md` §12); an agent may not narrow its stated routing.
+ENC-001 consumes a caller-supplied RC-native visibility label
+appropriate to the supplied setting and validates that input.
 
-**`Q-7` is therefore not marked settled, and the accepted packet's
-`RETAINED AS GENUINE SOURCE AMBIGUITY` stands.** Recording a recommendation as a resolution
-would be the same defect this project has been removing: an artifact claiming more than its
-authority establishes.
+World/environment visibility is a separate ownership responsibility.
+```
+
+This selects **Model C** and rejects **Models A and B**. It also resolves blocker 2 by
+choosing the `EXP-006` **§B** boundary over §7's broader prose — see section 14, where the
+authorized reconciliation of that protected wording is recorded.
+
+**What is settled, and what is not.** The distinction is load-bearing and is not a formality:
+
+| | Status |
+|---|---|
+| The **rules/contract** question — *what does `ENC-001` do about the dependency?* | **SETTLED.** It consumes a supplied, setting-valid RC-native label, validates it, and refuses when a required one is absent |
+| The **world/environment visibility owner** — *what component produces that label?* | **NOT YET ASSIGNED** |
+
+```text
+WORLD/ENVIRONMENT VISIBILITY OWNER:
+NEW OWNERSHIP DECISION REQUIRED
+```
+
+**The ownership gap itself is not closed, and this document does not claim it is.** No Rule
+ID is created, no `SIM-*` specification is created, `INVENTORY.md` is not edited to invent an
+owner, and ownership is assigned to no existing card — not `SIM-001`, not `EXP-006`, not
+`ENC-001`. Whether the owner should be a small `SIM-*` specification or another architecture
+form is a separate decision, deliberately left to a later task.
+
+What the decision *does* achieve is that `ENC-001`'s own contract no longer waits on it:
+`ENC-001` can be specified against a supplied input, and the unassigned producer is a
+dependency rather than a blocker.
 
 ### 11. Simulator Ruling — **not required**
 
@@ -733,18 +753,31 @@ assign software ownership, and it must not paper over an architecture
 ownership gap. SR-13 remains the next free identifier and is not used here.
 ```
 
-A ruling would also be premature: it is not yet established that *any* game-rule question
-remains once ownership is assigned. If the human decision produces a residual rules
-ambiguity, that is the point at which a narrow `SR` could be proposed — `PROPOSED — human
-approval required`, never self-approved.
+**Confirmed after the decision.** The human decision of §10 is an architecture decision, and
+it produced no residual game-rule ambiguity requiring a ruling: `ENC-001` consumes a label RC
+already names and refuses when it is absent, neither of which extends an RC mechanic. `SR-13`
+remains free. Should the later ownership decision surface a residual rules ambiguity, a
+narrow `SR` could be proposed then — `PROPOSED — human approval required`, never
+self-approved.
 
 ### 12. Relationship to `Q-3` — consistent, and `Q-3` is preserved
 
 `Q-3` settled that `ENC-001` preserves RC-native labels, setting-indexed, and does not
-normalize them. Model C is the ownership model that **makes `Q-3` implementable**: someone
-must emit the label `Q-3` says `ENC-001` consumes. Model A is the model that would strain
-`Q-3`, which is one reason it is not recommended. No label is normalized here, and the
-`Q-3` vocabulary is unchanged.
+normalize them. The decision selects Model C, which is the ownership model that **makes `Q-3`
+implementable**: someone must emit the label `Q-3` says `ENC-001` consumes. Model A would
+have strained `Q-3`, and it was rejected.
+
+**`Q-3` is unchanged by the `Q-7` decision, and specifically is not collapsed:**
+
+```text
+Dungeon*                 Very good light   Dim light**   No lightt
+Wilderness / Ocean-sea   Clear daylight    Dim light**   No lightt
+Undersea                 Any light
+
+Very good light and Clear daylight remain DISTINCT RC-native labels.
+The caller supplies the one valid for the setting in play.
+ENC-001 validates; it does not normalize them into one category.
+```
 
 ### 13. Relationship to `SR-12` and "normal dungeon conditions"
 
@@ -758,19 +791,57 @@ accepted evidence, **withdrawn entirely by human adjudication 2026-10-01 (Findin
 guarded against in landed code by `EXP-006` test `L30`. `ENC-001` must not now perform the
 derivation `EXP-006` was forbidden to perform.
 
-### 14. `EXP-006` boundary impact — **none**
+### 14. `EXP-006` boundary impact — **none; its §7 wording reconciled to its §B boundary**
 
 `EXP-006` keeps exactly its accepted boundary: mundane light-source contribution, and nothing
-about the world. It is not expanded, and the §6 test was applied explicitly in section 7 with
-result **(B)** — expanding it would turn a resource card into world-state ownership.
+about the world. It is **not expanded and not shrunk**, and the §6 test was applied in
+section 7 with result **(B)** — expanding it would turn a resource card into world-state
+ownership.
 
-The one `EXP-006`-facing item here is **not** a boundary change but a **reconciliation
-request**: §7 prose versus §B table, section 10 blocker 2. That is returned for human
-decision, not acted on.
+**The reconciliation was authorized by the human and performed.** The approved card contained
+an internal contradiction, found by the analysis above:
+
+| | Before |
+|---|---|
+| `EXP-006` **§7** | *"`ENC-001` is `[UNRESEARCHED]`; whatever aggregation it needs — mundane light, environmental illumination, magical light, infravision, encounter circumstances — is **its** rule to write"* — routing world/environment aggregation to `ENC-001` |
+| `EXP-006` **§B** | `Visibility classification → ENC-001`; `Complete-darkness / environmental illumination world state → OWNER NOT SETTLED` |
+
+**The human chose §B.** `EXP-006` §7 was therefore minimally corrected so that it no longer
+assigns world/environment aggregation to `ENC-001`. Its corrected meaning:
+
+```text
+EXP-006 supplies only its owned light-source contribution and state.
+
+ENC-001 CONSUMES a Visibility category for the encounter-distance lookup,
+and owns the classification SCHEME -- which categories exist, which are
+legal for which Setting, how the table is keyed.
+
+Aggregating world/environment facts -- daylight and time of day, weather,
+magical light, environmental darkness -- into a Visibility category is
+owned by NEITHER card.
+
+That responsibility is UNASSIGNED pending a separate architecture decision.
+```
+
+**What the correction did not touch**, because §7 of this task requires all of it to remain
+true: `EXP-006` still owns mundane light-source contribution and resource behaviour, and
+still owns **none** of daylight/time-of-day, weather visibility, magical-light aggregation,
+environmental/global darkness, or the final encounter visibility category. `SR-11` is
+unaltered, as is every other `EXP-006` adjudication, every guard test, the §B boundary table
+itself, and the implementation. `EXP-006` research was not reopened. This is a
+protected-document **consistency** correction under `AGENTS.md` §12, performed on explicit
+human direction.
+
+One incidental improvement in the same sentence: the corrected text no longer restates
+`ENC-001`'s status as `[UNRESEARCHED]`. That was both stale (Stage A is `ACCEPTED`) and a
+secondary restatement of a volatile fact `EXP-006` does not own
+(`DEVELOPMENT_WORKFLOW.md` §4.1). It is dropped rather than updated, which is what the
+single-owner status model requires.
 
 ### 15. Future `ENC-001` contract consequence
 
-Narrow, conditional on the human decision, and not a specification:
+Narrow, now carried by the human decision, and still **not a specification** — no API, no
+error type and no parameter beyond `visibility` is settled here, and no code is written:
 
 ```text
 determine_encounter_distance(
@@ -786,21 +857,36 @@ determine_encounter_distance(
 validates; it does not derive, aggregate or normalize. No other parameter is settled here,
 and no code is written.
 
-### 16. Missing-visibility behaviour — **explicit refusal**
+### 16. Missing-visibility behaviour — **explicit refusal, human-approved**
 
-If `visibility` is absent where the procedure requires it:
+```text
+HUMAN DECISION                                 Q-7         2026-10-04
+
+If visibility is required by ENC-001 and is not supplied:
+    explicit refusal / error
+
+ENC-001 must NOT:
+    silently default to Dim light
+    infer aggregate visibility from EXP-006 alone
+```
+
+The three options, and why the approved one is the only tenable one:
 
 | Option | Verdict |
 |---|---|
-| Derive internally | **No** — that is Model A, and it is unowned and unapproved |
-| Default silently | **No** — RC supplies no default. Defaulting to `Dim light` re-commits Finding A; defaulting to `No light` or any other row invents a rule |
+| Derive internally | **No** — that is Model A, rejected by the decision in §10 |
+| Default silently | **No** — RC supplies no default. Defaulting to `Dim light` re-commits Finding A, which a human withdrew and `EXP-006` guard `L30` forbids; defaulting to any other row invents a rule |
+| Infer from `EXP-006` alone | **No** — explicitly excluded. `EXP-006` asserts nothing about the world from the absence of its own sources (§6 `DOES NOT MEAN`), so inferring from it would read an absence of knowledge as a fact |
 | **Refuse / error** | **Yes** — the only option that neither invents a rule nor guesses |
 
-This is a **Necessary Consequence** of the determinism requirement plus the absence of any
-RC default: a simulator that must not guess, given a required input it does not have, can
-only refuse. Note the shape — surprise short-circuits the table (p. 92: both or one party
-surprised ⇒ flat `1d4 × 10'`), so visibility is required **only** on the neither-surprised
-path, and refusal is scoped to that path. No behaviour is implemented.
+**The accepted surprise short-circuit is preserved.** p. 92 sends both-surprised and
+one-surprised encounters to a flat `1d4 × 10'` without consulting the table, so visibility is
+required **only** on the neither-surprised path. Refusal is scoped to that path, and
+`ENC-001` must **not** demand visibility merely for formality where surprise has already made
+it unnecessary.
+
+**Not designed here:** no API shape, no error type, no exception hierarchy. Nothing is
+implemented.
 
 ### 17. Provenance classification
 
@@ -808,22 +894,31 @@ path, and refusal is scoped to that path. No behaviour is implemented.
 |---|---|
 | RC defines no visibility selector (scope: the chapters the accepted packet searched) | **Rules Cyclopedia Explicit**, scope-limited negative finding — **not** RC-wide |
 | p. 93 "the DM first needs to know where the characters are"; p. 95 "using the visibility, distance, and surprise factors"; p. 150's presupposed "area of complete darkness" | **Rules Cyclopedia Explicit** — page images re-inspected |
-| Visibility is an adjudicator-supplied input, on the same footing as `Setting` | **Necessary Consequence** |
-| Missing required visibility ⇒ refusal | **Necessary Consequence** |
+| Visibility is **supplied rather than derived** by `ENC-001` | **Necessary Consequence** (RC's own structure, §4) **+ human architecture decision** (§10) — both, and neither alone |
+| `ENC-001` **validates** setting-compatible RC-native labels | **Repository Boundary / Architecture** |
+| Missing required visibility ⇒ refusal | **Necessary Consequence**, **approved by the human** (§16) |
 | `EXP-006` cannot own it (Finding B, §6 `DOES NOT MEAN`, guards `L29`–`L33`) | **Repository Boundary / Architecture** — verified against the approved card and landed module |
 | No existing Rule ID fits; `SIM-001` is precedent, not a fit | **Repository Boundary / Architecture** |
-| Recommended owner: a `SIM-*` world/environment specification | **Unresolved Ownership Decision** — a recommendation, not a decision |
-| `EXP-006` §7 prose vs §B table | **Unresolved Ownership Decision** — returned for human reconciliation |
+| `EXP-006` §7 reconciled to its §B boundary | **Repository Boundary / Architecture** — human-directed protected-document consistency correction |
+| **World/environment visibility owner** | **UNRESOLVED OWNERSHIP DECISION** — still unassigned |
 | Any equivalence, default or derived category | **none issued** — no Simulator Ruling |
 
-No architecture choice above is labelled as an RC rule.
+**No architecture choice above is labelled as an RC rule.** In particular the §10 decision is
+a *human architecture decision*, not `Rules Cyclopedia Explicit`: RC supplies no selector, and
+nothing here pretends it does.
 
 ### 18. Residue
 
-- **`Q-7` is not closed.** It awaits the human ownership decision in section 10.
+- **The world/environment visibility owner is still unassigned.** This is the live residue.
+  `ENC-001`'s contract no longer waits on it, but nothing produces the label yet, so a
+  deterministic end-to-end encounter still cannot be run. `NEW OWNERSHIP DECISION REQUIRED`.
 - **Daylight/time-of-day and weather have no owner either** — a gap wider than `Q-7`, surfaced
-  by section 5 and not resolved here.
-- **`EXP-006` §7 vs §B** needs human reconciliation; neither reading is adopted.
+  by section 5 and not resolved here. Whoever takes world visibility will meet these.
+- **The form of the eventual owner is undecided** — a small `SIM-*` specification or another
+  architecture form. Deliberately left to the next task; nothing here prejudges it beyond the
+  observation in section 9 that `SIM-001` is precedent and not a fit.
+- **`EXP-006` §7 vs §B is resolved** — the human chose §B and §7 was corrected to match. No
+  residue remains on that point.
 - **A minor provenance inaccuracy in the accepted packet, reported not fixed.** Its §10 basis
   row quotes `EXP-006`'s module as *"Not a statement about the world"*. The module's actual
   words are *"It owns nothing about the world"* and *"never a fact about the world"*. The
