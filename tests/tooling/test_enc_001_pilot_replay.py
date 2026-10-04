@@ -1,22 +1,22 @@
-"""Replay of the ENC-001 DEC-0012 pilot against the DEC-0013 mechanism.
+"""Replay of the ENC-001 DEC-0012 pilot against the corrected mechanism.
 
-These are **simulations**. They do not read, import or modify the real ENC-001
-packet, which is frozen on its own branch; they reconstruct the pilot's seed
-inputs from relationships the pilot itself established, and assert that the new
-mechanism surfaces the omissions before independent review.
+**These tests derive from the real repository**, not from hand-built fixtures:
+the actual `docs/rules/evidence/ENC-005-evidence*.md` accepted packets and the
+actual `docs/rules/INVENTORY.md`. That is the point. The first implementation's
+replay inserted p. 98 into a fixture and then asserted it was required, which
+proved nothing -- a page does not count as externally derived because the test
+put it there.
 
-What the pilot actually found, and what each case here replays:
+Nothing here reads or modifies the frozen ENC-001 packet on its own branch.
 
-* Review #1 `B-1`  -- RC p. 98 `Contact` was never enumerated. ENC-005's
-  accepted packet cites p. 98 and bolds "encounter distance"; the researcher
-  read line 147 of that file and not line 146.
-* Review #1 `B-2`  -- the City sentence was cited to p. 91; it is printed on
-  p. 93.
-* Review #2 `BLOCKING-1` -- "every row is now visually inspected" while six
-  cited pages were uninspected.
-* Review #2 `BLOCKING-2` -- RC p. 100 `Evasion at Sea` states a
-  visibility-conditioned distance and was never enumerated.
-* Review #2 `BLOCKING-3` -- three hand-maintained counts had gone stale.
+What the pilot found, and what is replayed:
+
+* Review #1 `B-1`  -- RC p. 98 `Contact` never enumerated. ENC-005's accepted
+  packet cites p. 98; the researcher read line 147 of that file and not 146.
+* Review #2 `BLOCKING-2` -- RC p. 100 `Evasion at Sea`, a visibility-conditioned
+  distance, never enumerated.
+* Review #2 `BLOCKING-1` -- a categorical coverage claim covering six
+  uninspected pages.
 """
 
 from __future__ import annotations
@@ -24,236 +24,103 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 
-import lint_evidence  # noqa: E402
-from lint_evidence import derive, lint_packet  # noqa: E402
+from lint_evidence import (  # noqa: E402
+    RepoContext,
+    cited_pages,
+    derive_external_seeds,
+    inventory_neighbours,
+)
 
-# Seeds as the instruments would have produced them for ENC-001.
-#
-# TABLES-INDEX: "Encounter Distances Table ... 93", "Chance of Encounter Table
-#   ... 92", "Game Turn Checklist ... 91", "Evasion Checklist ... 99",
-#   "Ship Evasion Table ... 100".
-# GENERAL-INDEX: "Encounters ... 91-96", "Distance ... 87",
-#   "Infravision ... 24, 25".
-# NEIGHBOUR: ENC-005's accepted packet cites pp. 88, 92, 93, 98, 99, 100, 102,
-#   103, 104; EXP-006's cites pp. 69, 70, 93.
-SEEDS = """```text
-SEEDS
-TABLES-INDEX:   91, 92, 93, 99, 100
-GENERAL-INDEX:  87, 91-96, 24, 25
-NEIGHBOUR:      ENC-005: 88, 92, 93, 98, 99, 100, 102, 103, 104; EXP-006: 69, 70, 93
-LEADS:          infravision -> 24, 25
-```"""
+# The pages the pilot's pass 1 actually inspected in Ch. 7 and its neighbours.
+PILOT_PASS_1 = {24, 25, 26, 27, 87, 91, 92, 93, 95}
 
-# What the pilot's pass-1 packet actually inspected: 24, 25, 26, 27, 87, 91,
-# 92, 93, 95, 108, 115, 150, 153, 215 and the index pages.
-PILOT_PASS_1_PAGES = [24, 25, 26, 27, 87, 91, 92, 93, 95]
+# The pages the two independent reviews found missing.
+PILOT_MISSED = {88, 94, 96, 97, 98, 99, 100, 102, 103}
 
 
-def _packet(page_lines: str, evidence: str = "", transcriptions: str = "") -> str:
-    return f"""# `ENC-001` — Encounter Distance — Stage-A Evidence
-
-```text
-PACKET-STATUS
-RULE-ID:              ENC-001
-INDEPENDENT-REVIEW:   PREPARED FOR INDEPENDENT COMPLETENESS REVIEW
-RECOMMENDATION:       EVIDENCE READY FOR HUMAN REVIEW
-```
-
-## 1. Scope and Seams
-Owns encounter-distance determination. Routes surprise to `ENC-002`.
-
-## 2. Primary Source
-
-| Source | Access method | Role |
-|---|---|---|
-| Rules Cyclopedia | page images | authoritative |
-
-## 3. Seeds
-
-{SEEDS}
-
-## 4. Page Dispositions
-
-```text
-PAGE-DISPOSITIONS
-{page_lines}
-```
-
-## 5. Governing Objects
-
-| Object | Page | Kind | Disposition | Owner |
-|---|---|---|---|---|
-| Encounter Distances Table | 93 | table | GOVERNING | |
-
-## 6. Index Enumeration
-
-| Instrument | Entry | Pages | Disposition |
-|---|---|---|---|
-| Tables | Encounter Distances Table | 93 | GOVERNING |
-
-**Enumerated absences:** No `Encounter distance` entry in the General Index.
-
-## 7. Transcriptions
-
-{transcriptions}
-
-## 8. Evidence Map
-
-| # | Page | Quote | Paraphrase | Object | Provenance | Confidence |
-|---|---|---|---|---|---|---|
-{evidence}
-
-## 9. Cross-References
-
-| From | Printed reference | To | Result |
-|---|---|---|---|
-| 91 | see the Encounter Distance section | 92 | the three surprise branches |
-
-## 10. Ownership and Dependency Routing
-
-| Mechanic | Owner | Status | Basis |
-|---|---|---|---|
-| Surprise determination | `ENC-002` | UNRESEARCHED | consumed, not absorbed |
-
-## 11. Consequential Negative Claims
-
-NEGATIVE CLAIMS: NONE
-
-## 12. Targeted Falsification
-
-```text
-FALSIFICATION
-CONCLUSION:   The table governs.
-SOUGHT:       Ch. 7
-RESULT:       No competing procedure.
-DISPOSITION:  CONFIRMED
-```
-
-## 13. Open Questions
-
-| # | Question | Object | Disposition |
-|---|---|---|---|
-| 1 | Does "normal dungeon" mean Dim light? | p. 91 | RETAINED AS GENUINE SOURCE AMBIGUITY |
-
-## 14. Independent Review
-
-```text
-INDEPENDENT REVIEW:    NOT YET PERFORMED
-HUMAN EVIDENCE REVIEW: NOT GIVEN
-```
-"""
+@pytest.fixture(scope="module")
+def repo() -> RepoContext:
+    return RepoContext.default()
 
 
-def _checks(text: str) -> set[str]:
-    return {finding.check for finding in lint_packet(text, "ENC-001-evidence.md")}
+def test_the_real_inventory_reaches_enc_005_without_any_declared_seam(
+    repo: RepoContext,
+) -> None:
+    """ENC-001's own INVENTORY row carries an em dash in both dependency
+    columns, so a forward walk finds nothing. The reverse edge saves it:
+    ENC-005's row names ENC-001 as a provider in its notes.
 
-
-def test_the_instruments_seed_the_three_pages_the_pilot_needed() -> None:
-    """p. 93, p. 98 and p. 100 all arrive from external instruments."""
-    seeds, block = lint_evidence._seed_pages(SEEDS)
-    assert block is not None
-    assert 93 in seeds, "Encounter Distances Table -- Tables Index"
-    assert 98 in seeds, "Contact -- ENC-005's accepted packet"
-    assert 100 in seeds, "Evasion at Sea -- ENC-005 and the Tables Index"
-
-
-def test_p98_is_seeded_by_two_mutually_independent_instruments() -> None:
-    """The General Index has no `Encounter distance` entry at all, so index
-    seeding alone could miss this card's own subject. ENC-005's packet does not
-    depend on the index. Redundancy is the point of using both.
+    This is why edges are read in both directions, and it means the pilot's
+    principal omission was reachable with no researcher declaration at all.
     """
-    index_only, _ = lint_evidence._seed_pages(
-        "```text\nSEEDS\nTABLES-INDEX: 91, 92, 93, 99, 100\n"
-        "GENERAL-INDEX: 87, 91-96, 24, 25\nNEIGHBOUR: none\nLEADS: none\n```"
-    )
-    neighbour_only, _ = lint_evidence._seed_pages(
-        "```text\nSEEDS\nTABLES-INDEX: none\nGENERAL-INDEX: none\n"
-        "NEIGHBOUR: ENC-005: 88, 92, 93, 98, 99, 100, 102, 103, 104\nLEADS: none\n```"
-    )
-    assert 98 not in index_only
-    assert 98 in neighbour_only
+    neighbours = inventory_neighbours("ENC-001", repo.inventory_text())
+    assert "ENC-005" in neighbours
 
 
-def test_the_pilots_pass_1_coverage_fails_before_review() -> None:
-    """B-1 and BLOCKING-1/2 replay.
+def test_the_real_enc_005_packet_cites_the_pages_the_pilot_missed(
+    repo: RepoContext,
+) -> None:
+    """Read straight out of the accepted packet on disk."""
+    packet = repo.evidence_dir / "ENC-005-evidence-remediated.md"
+    assert packet.is_file()
+    pages = cited_pages(packet.read_text(encoding="utf-8"))
+    for page in (93, 98, 100):
+        assert page in pages, f"p. {page} should be cited by the accepted ENC-005 packet"
 
-    The pilot's pass-1 page set reached an independent reviewer. Here it does
-    not reach one: the seeded pages it never accounted for are a gate failure.
+
+def test_external_derivation_alone_produces_the_pilots_missed_pages(
+    repo: RepoContext,
+) -> None:
+    """The principal claim: p. 98 and p. 100 arrive from outside the packet.
+
+    No seam is declared here, so every page below comes from the INVENTORY
+    reverse edge plus the accepted packet's own citations.
     """
-    lines = "\n".join(f"{page}: INSPECTED" for page in PILOT_PASS_1_PAGES)
-    findings = lint_packet(_packet(lines), "ENC-001-evidence.md")
-    assert any(f.check == "S005" for f in findings)
-    detail = next(f.detail for f in findings if f.check == "S005")
-    for missed in (88, 94, 96, 98, 99, 100, 102, 103, 104):
-        assert str(missed) in detail, f"p. {missed} should be an unmet obligation"
+    seeds = derive_external_seeds("ENC-001", [], repo)
+    assert 98 in seeds, "B-1: p. 98 Contact"
+    assert 100 in seeds, "BLOCKING-2: p. 100 Evasion at Sea"
+    assert 93 in seeds, "the Encounter Distances Table itself"
+    for page in sorted(seeds):
+        assert all("ENC-005" in origin or "-evidence" in origin for origin in seeds[page])
 
 
-def test_dispositioning_every_seed_passes_including_cheap_dismissals() -> None:
-    """E replay: p. 104 is ENC-005's Retreat/Fighting Withdrawal, genuinely not
-    this card's. It costs one line. So do pp. 102, 103, 69, 70.
+def test_the_pilots_pass_1_page_set_leaves_derived_obligations_unmet(
+    repo: RepoContext,
+) -> None:
+    """The pilot's actual coverage would not have reached a reviewer."""
+    seeds = derive_external_seeds("ENC-001", [], repo)
+    unmet = set(seeds) - PILOT_PASS_1
+    assert unmet, "pass 1 should leave externally-derived obligations unmet"
+    assert {98, 100} <= unmet
+    assert len(PILOT_MISSED & unmet) >= 5
+
+
+def test_p93_is_derived_externally_not_only_from_an_index(repo: RepoContext) -> None:
+    """Index seeding is not external yet (no structured RC index exists outside
+    packets). p. 93 is still covered, because the accepted neighbour packet
+    cites it -- so the one externally-derived instrument reaches all three
+    principal pages on its own.
     """
-    lines = "\n".join(
-        [
-            *(f"{page}: INSPECTED" for page in [24, 25, 87, 91, 92, 93, 94, 95, 96, 98]),
-            "88: IRRELEVANT_AFTER_INSPECTION",
-            "99: ROUTED_EXTERNAL ENC-005",
-            "100: ROUTED_EXTERNAL ENC-005",
-            "102: ROUTED_EXTERNAL COMBAT-006",
-            "103: ROUTED_EXTERNAL ENC-004",
-            "104: OUTSIDE_CARD_SCOPE COMBAT-*",
-            "69: ROUTED_EXTERNAL EXP-006",
-            "70: ROUTED_EXTERNAL EXP-006",
-        ]
-    )
-    assert lint_packet(_packet(lines), "ENC-001-evidence.md") == []
+    seeds = derive_external_seeds("ENC-001", [], repo)
+    assert 93 in seeds
+    assert any("ENC-005" in origin for origin in seeds[93])
 
 
-def test_the_city_sentence_cited_to_p91_fails_mechanically() -> None:
-    """B-2 replay: the sentence is printed on p. 93, not p. 91."""
-    lines = "\n".join(
-        [
-            *(f"{page}: INSPECTED" for page in [24, 25, 87, 91, 92, 93, 94, 95, 96, 98]),
-            "88: IRRELEVANT_AFTER_INSPECTION",
-            "99: ROUTED_EXTERNAL ENC-005",
-            "100: ROUTED_EXTERNAL ENC-005",
-            "102: ROUTED_EXTERNAL COMBAT-006",
-            "103: ROUTED_EXTERNAL ENC-004",
-            "104: OUTSIDE_CARD_SCOPE COMBAT-*",
-            "69: ROUTED_EXTERNAL EXP-006",
-            "70: ROUTED_EXTERNAL EXP-006",
-        ]
-    )
-    transcriptions = (
-        "```text\nTRANSCRIPTION p. 91\n"
-        "An encounter occurs when two or more groups come within visual range.\n```\n\n"
-        "```text\nTRANSCRIPTION p. 93\n"
-        "'City' is treated just like any other wilderness terrain.\n```"
-    )
-    wrong = (
-        "| E-19 | 91 | 'City' is treated just like any other wilderness terrain | "
-        "| p. 91 | Rules Cyclopedia Explicit | DIRECT PRIMARY TEXT |"
-    )
-    right = wrong.replace("| E-19 | 91 |", "| E-19 | 93 |").replace("| p. 91 |", "| p. 93 |")
-    assert "S010" in _checks(_packet(lines, wrong, transcriptions))
-    assert lint_packet(_packet(lines, right, transcriptions), "ENC-001-evidence.md") == []
-
-
-def test_counts_are_derived_so_none_can_go_stale() -> None:
-    """BLOCKING-3 replay: the packet states no count, so none can drift."""
-    lines = "\n".join(f"{page}: INSPECTED" for page in PILOT_PASS_1_PAGES)
-    counts = derive(_packet(lines))
-    assert counts.dispositioned_pages == len(PILOT_PASS_1_PAGES)
-    assert counts.governing_objects == 1
-    assert counts.open_questions == 1
-
-
-def test_a_categorical_coverage_claim_cannot_be_written() -> None:
-    """BLOCKING-1 replay: the claim form itself is rejected."""
-    lines = "\n".join(f"{page}: INSPECTED" for page in PILOT_PASS_1_PAGES)
-    boast = _packet(lines).replace(
-        "**Enumerated absences:**",
-        "Every row is now visually inspected. 38 rows dispositioned.\n\n**Enumerated absences:**",
-    )
-    assert "S018" in _checks(boast)
+def test_derivation_carries_no_conclusion_from_the_neighbour_packet(
+    repo: RepoContext,
+) -> None:
+    """ENC-005's accepted packet calls the table "light-keyed", which ENC-001
+    refuted against primary text. The derived seeds must carry page numbers and
+    a packet name, and nothing that could make that refutation harder.
+    """
+    packet = repo.evidence_dir / "ENC-005-evidence-remediated.md"
+    assert "light-keyed" in packet.read_text(encoding="utf-8")
+    seeds = derive_external_seeds("ENC-001", [], repo)
+    blob = repr(seeds)
+    assert "light-keyed" not in blob
+    assert "Contact" not in blob
+    assert all(isinstance(page, int) for page in seeds)

@@ -1,15 +1,23 @@
 """Stage-A evidence-packet linter (``DEC-0013``).
 
-This replaces the ``DEC-0012`` structural linter. The difference is not that
-there are more checks -- there are slightly fewer -- but that the checks now
-compare the packet against things the researcher did **not** write:
+This replaces the ``DEC-0012`` structural linter. The check *count* is
+comparable -- what changed is what the researcher has to maintain by hand, and
+where the obligations come from:
 
-* **seeds** come from the indexes and from accepted neighbour packets, so the
-  candidate page set is not the researcher's to narrow;
+* **page-seed obligations are derived here**, from ``INVENTORY.md`` and from
+  accepted neighbour packets, so the candidate page set is not the researcher's
+  to narrow. Deleting a page from the packet does not delete its obligation.
 * **citations** are matched against the packet's own page transcriptions, so a
   page number cannot drift away from the text it names;
 * **counts** are derived here and printed, so there is no hand-maintained
   tally that can go stale.
+
+One limit, stated plainly rather than implied away: **index-derived seeds are
+not external yet.** The repository holds no structured transcription of the
+Rules Cyclopedia's Tables/Checklists or General Index outside Stage-A packets,
+and reading the index ledger inside the packet under review would be circular.
+Index enumeration therefore remains research work the semantic reviewer judges,
+not a machine-checked obligation.
 
 ``DEC-0012``'s pilot failed because its instruments checked each other. A
 Coverage Manifest is the researcher's account of what the researcher looked at;
@@ -198,7 +206,20 @@ MANUAL_COUNT_PATTERNS: tuple[str, ...] = (
 )
 
 PACKET_STATUS_KEYS: tuple[str, ...] = ("RULE-ID", "INDEPENDENT-REVIEW", "RECOMMENDATION")
-SEED_KEYS: tuple[str, ...] = ("TABLES-INDEX", "GENERAL-INDEX", "NEIGHBOUR", "LEADS")
+
+# What the researcher declares, and what the tool derives.
+#
+# The researcher declares SUBJECT-TERMS and SEAMS -- judgment the reviewer
+# checks -- and LEADS, which are discovered during inspection. The researcher
+# does **not** declare the resulting page set: that is derived here from
+# INVENTORY.md and from accepted neighbour packets, so deleting a page from
+# this packet cannot delete the obligation. That inversion is the whole point
+# of DEC-0013, and the first implementation got it wrong.
+SEED_KEYS: tuple[str, ...] = ("SUBJECT-TERMS", "SEAMS", "LEADS")
+
+INVENTORY_PATH = REPO_ROOT / "docs" / "rules" / "INVENTORY.md"
+_RULE_ID = re.compile(r"\b([A-Z]{3,6}-\d{3})\b")
+_PAGE_CITATION = re.compile(r"\bpp?\.\s*(\d+)")
 NEGATIVE_CLAIM_FIELDS: tuple[str, ...] = (
     "CLAIM",
     "SCOPE SEARCHED",
@@ -318,21 +339,144 @@ def _pages_in(raw: str) -> set[int]:
     return pages
 
 
+class SeedInputError(ValueError):
+    """A seed or seam declaration that cannot be parsed.
+
+    Malformed input must fail loudly. The first implementation let a dropped
+    colon parse to the empty set, which silently turned an instrument into a
+    no-op -- the same shape of defect as a coverage claim with nothing behind it.
+    """
+
+
+@dataclass(frozen=True)
+class RepoContext:
+    """Where the externally-derived facts live.
+
+    Held as data so the tests can point the derivation at a temporary
+    repository, and so it is obvious that these two paths are the only things
+    outside the packet that the linter trusts.
+    """
+
+    evidence_dir: Path
+    inventory: Path
+
+    @classmethod
+    def default(cls) -> RepoContext:
+        return cls(evidence_dir=EVIDENCE_DIR, inventory=INVENTORY_PATH)
+
+    def inventory_text(self) -> str:
+        return self.inventory.read_text(encoding="utf-8") if self.inventory.is_file() else ""
+
+
+def inventory_neighbours(rule_id: str, inventory_text: str) -> set[str]:
+    """Rule IDs related to ``rule_id`` by an INVENTORY row, in both directions.
+
+    Forward: every Rule ID named in this card's own row. Reverse: every row
+    that names this card. Deliberately over-inclusive -- a seed is an
+    obligation to look, and an unnecessary one costs a single line to
+    disposition, while a missing one costs an independent review.
+
+    INVENTORY is **not** treated as complete. ENC-001's own row carries an em
+    dash in both dependency columns, so this function alone would have returned
+    nothing for the pilot card; declared seams supplement it, and the reviewer
+    judges whether they were adequate.
+    """
+    related: set[str] = set()
+    for line in inventory_text.splitlines():
+        if not line.lstrip().startswith("|"):
+            continue
+        ids = set(_RULE_ID.findall(line))
+        if not ids:
+            continue
+        row_id = _RULE_ID.search(line)
+        own = row_id.group(1) if row_id else ""
+        if own == rule_id:
+            related |= ids
+        elif rule_id in ids and own:
+            related.add(own)
+    related.discard(rule_id)
+    return related
+
+
+def accepted_packets(rule_ids: Iterable[str], evidence_dir: Path) -> dict[str, list[Path]]:
+    """The accepted evidence packets belonging to each Rule ID.
+
+    Accepted means landed in ``docs/rules/evidence/``. A card may have more
+    than one (``-evidence.md`` and ``-evidence-remediated.md``); both are read,
+    because a page cited by either is a page someone thought mattered.
+    """
+    found: dict[str, list[Path]] = {}
+    if not evidence_dir.is_dir():
+        return found
+    for rule_id in sorted(set(rule_ids)):
+        paths = sorted(evidence_dir.glob(f"{rule_id}-evidence*.md"))
+        if paths:
+            found[rule_id] = paths
+    return found
+
+
+def cited_pages(packet_text: str) -> set[int]:
+    """Every page a packet cites, by its printed ``p. N`` / ``pp. N`` form.
+
+    Only the page number travels. No quotation, disposition, confidence or
+    conclusion is read, so a wrong interpretation in an accepted packet cannot
+    become inherited truth -- it can only oblige the new researcher to look at
+    the same page and reach their own finding.
+    """
+    return {int(match) for match in _PAGE_CITATION.findall(packet_text)}
+
+
+def derive_external_seeds(
+    rule_id: str, seams: Iterable[str], context: RepoContext
+) -> dict[int, list[str]]:
+    """``{page: [origins]}`` derived from outside the packet under review.
+
+    Sources are INVENTORY edges (both directions) union the declared seams,
+    resolved to their accepted packets and then to the pages those packets
+    cite. The packet under review is excluded from its own derivation.
+
+    **Index-derived seeds are not produced here.** The repository holds no
+    structured representation of the Rules Cyclopedia's Tables/Checklists or
+    General Index outside Stage-A packets themselves, and deriving them from a
+    ledger written inside the packet under review would be circular. That gap
+    is reported rather than papered over; see ``_report``.
+    """
+    neighbours = inventory_neighbours(rule_id, context.inventory_text()) | set(seams)
+    neighbours.discard(rule_id)
+    seeds: dict[int, list[str]] = {}
+    for neighbour, paths in accepted_packets(neighbours, context.evidence_dir).items():
+        for path in paths:
+            if path.name.startswith(f"{rule_id}-evidence"):
+                continue
+            for page in sorted(cited_pages(path.read_text(encoding="utf-8"))):
+                seeds.setdefault(page, []).append(f"{neighbour} ({path.name})")
+    return seeds
+
+
+def _declared(block: dict[str, str] | None, key: str) -> list[str]:
+    """Parse a declared comma-separated list, failing loudly if malformed."""
+    if block is None:
+        return []
+    raw = block.get(key, "")
+    if raw.strip().lower() in {"none", "", "-"}:
+        return []
+    if not any(character.isalnum() for character in raw):
+        raise SeedInputError(f"{key} is not parseable: {raw!r}")
+    items = [item.strip() for item in raw.split(",") if item.strip()]
+    if not items or any(not any(c.isalnum() for c in item) for item in items):
+        raise SeedInputError(f"{key} is not parseable: {raw!r}")
+    return items
+
+
 def _seed_pages(text: str) -> tuple[set[int], dict[str, str] | None]:
     """Every page the external instruments put on the researcher's desk."""
     block = _keyed_block(text, "SEEDS")
     if block is None:
         return set(), None
+    # Only LEADS contributes pages from inside the packet, and only because a
+    # lead is discovered during inspection and has nowhere else to come from.
+    # Every other page obligation is derived externally.
     pages: set[int] = set()
-    for key in ("TABLES-INDEX", "GENERAL-INDEX"):
-        pages |= _pages_in(block.get(key, ""))
-    # NEIGHBOUR is "RULE-ID: pages; RULE-ID: pages" -- the Rule ID is origin
-    # metadata, deliberately recorded so a seed can be traced to the accepted
-    # packet it came from without importing that packet's conclusions.
-    for clause in block.get("NEIGHBOUR", "").split(";"):
-        _, _, tail = clause.partition(":")
-        pages |= _pages_in(tail if tail else clause)
-    # LEADS is "term -> pages; term -> pages".
     for clause in block.get("LEADS", "").split(";"):
         _, arrow, tail = clause.partition("->")
         if arrow:
@@ -484,8 +628,14 @@ def derive(text: str) -> Derived:
     )
 
 
-def lint_packet(text: str, name: str) -> list[Finding]:
-    """Run every DEC-0013 check against one packet's Markdown source."""
+def lint_packet(text: str, name: str, context: RepoContext | None = None) -> list[Finding]:
+    """Run every DEC-0013 check against one packet's Markdown source.
+
+    ``context`` supplies the two external sources -- the evidence directory and
+    ``INVENTORY.md`` -- that the seed obligations are derived from. It defaults
+    to this repository's own.
+    """
+    context = context or RepoContext.default()
     findings: list[Finding] = []
 
     def fail(check: str, detail: str) -> None:
@@ -536,11 +686,35 @@ def lint_packet(text: str, name: str) -> list[Finding]:
         for key in SEED_KEYS:
             if key not in seed_block:
                 fail("S005", f"SEEDS is missing the {key} field")
+
+    # S019 -- the externally-derived obligation set. Generated from
+    # INVENTORY.md and from accepted neighbour packets, never from this
+    # packet, so removing a page here cannot remove the obligation.
+    rule_id = status.get("RULE-ID", "")
+    try:
+        seams = _declared(seed_block, "SEAMS")
+        _declared(seed_block, "SUBJECT-TERMS")
+    except SeedInputError as error:
+        fail("S019", str(error))
+        seams = []
+    if rule_id and not _is_placeholder(rule_id):
+        external = derive_external_seeds(rule_id, seams, context)
+        missing = sorted(set(external) - set(pages))
+        if missing:
+            origins = "; ".join(
+                f"p. {page} <- {', '.join(sorted(set(external[page])))}" for page in missing[:8]
+            )
+            fail(
+                "S019",
+                f"{len(missing)} externally-derived page seed(s) carry no disposition: "
+                f"{origins}{' ...' if len(missing) > 8 else ''}",
+            )
+
     undispositioned = sorted(seeds - set(pages))
     if undispositioned:
         fail(
             "S005",
-            f"seeded pages carry no disposition: {undispositioned} "
+            f"lead pages carry no disposition: {undispositioned} "
             "(a seed is an obligation to inspect or route, not inherited truth)",
         )
 
@@ -598,8 +772,16 @@ def lint_packet(text: str, name: str) -> list[Finding]:
             # the check that makes a page number mechanically falsifiable.
             quote = _strip_markup(row[quote_at]) if quote_at is not None else ""
             para = _strip_markup(row[para_at]) if para_at is not None else ""
-            if quote and para and not (_is_placeholder(quote) or _is_placeholder(para)):
-                fail("S010", f"{label}: carries both a quote and a paraphrase; use one")
+            # M-5: exactly one. Both was already rejected; neither was not,
+            # though the template required one -- an evidence row supporting
+            # nothing is the emptiest form of the claim-without-mechanism
+            # defect this whole record exists to stop.
+            if quote_at is not None and para_at is not None:
+                filled = [value for value in (quote, para) if value and not _is_placeholder(value)]
+                if len(filled) > 1:
+                    fail("S010", f"{label}: carries both a quote and a paraphrase; use exactly one")
+                elif not filled and not (_is_placeholder(quote) or _is_placeholder(para)):
+                    fail("S010", f"{label}: carries neither a quote nor a paraphrase")
             if quote:
                 needle = normalize(quote)
                 for page in sorted(cited):
@@ -657,17 +839,21 @@ def lint_packet(text: str, name: str) -> list[Finding]:
             if field not in upper:
                 fail("S015", f"FALSIFICATION {position} is missing the {field!r} field")
 
-    # S016 -- open-question closure vocabulary.
-    for row in _table_rows(prose, "Disposition"):
-        label_text = _strip_markup(row[-1])
-        if not label_text or label_text.lower() in {"disposition", "---"}:
-            continue
-        if _is_placeholder(label_text):
-            continue
-        if label_text in PAGE_DISPOSITIONS or label_text in {"GOVERNING", "ROUTED"}:
-            continue
-        if label_text not in CLOSURE_DISPOSITIONS:
-            fail("S016", f"disposition {label_text!r} is not a recognised vocabulary value")
+    # S016 -- each table's Disposition column is validated against its OWN
+    # vocabulary. The first implementation accepted the union of three, so an
+    # Open Question dispositioned INSPECTED passed while the template said the
+    # permitted labels were exactly four, "verbatim". A permissive union is a
+    # check that agrees with everything.
+    for section, allowed, what in (
+        ("Open Questions", CLOSURE_DISPOSITIONS, "open-question"),
+        ("Governing Objects", frozenset({"GOVERNING", "ROUTED"}), "governing-object"),
+    ):
+        for row in _table_rows(_prose_outside_fences(_section_body(text, section)), "Disposition"):
+            label_text = _strip_markup(row[-1] if section == "Open Questions" else row[3])
+            if not label_text or _is_placeholder(label_text):
+                continue
+            if label_text not in allowed:
+                fail("S016", f"{what} disposition {label_text!r} is not that field's vocabulary")
 
     # S017 -- hard-stop bodies must carry their STOP prefix.
     for body_text in E015_BODIES:
@@ -676,9 +862,16 @@ def lint_packet(text: str, name: str) -> list[Finding]:
             if "STOP — " not in preceding and "STOP - " not in preceding:
                 fail("S017", f"{body_text!r} appears without its 'STOP — ' prefix")
 
-    # S018 -- hand-maintained counts are forbidden outright. DEC-0012 checked
-    # that tallies agreed; DEC-0013 removes the field so there is nothing to
-    # drift. The linter derives and prints them instead.
+    # S018 -- a backstop, not a general rule.
+    #
+    # The real protection against stale counts is structural: the template has
+    # no count field, so there is nothing to maintain and nothing to drift.
+    # This check only catches the phrasings actually observed going stale in
+    # the pilot. Establishing "no count anywhere" mechanically would need
+    # general language parsing, which this project does not want and which
+    # would be a worse cure than the disease -- so the claim is narrowed to
+    # what the patterns below genuinely prove, rather than the patterns being
+    # described as something they are not.
     for hit in _find_patterns(prose, MANUAL_COUNT_PATTERNS):
         fail(
             "S018",
@@ -689,13 +882,18 @@ def lint_packet(text: str, name: str) -> list[Finding]:
     return findings
 
 
-def lint_directory(directory: Path) -> tuple[list[Finding], list[Path]]:
+def lint_directory(
+    directory: Path, context: RepoContext | None = None
+) -> tuple[list[Finding], list[Path]]:
+    context = context or RepoContext(evidence_dir=directory, inventory=INVENTORY_PATH)
     findings: list[Finding] = []
     linted: list[Path] = []
     reference = directory / REFERENCE_PACKET
     if reference.is_file():
         linted.append(reference)
-        findings.extend(lint_packet(reference.read_text(encoding="utf-8"), reference.name))
+        findings.extend(
+            lint_packet(reference.read_text(encoding="utf-8"), reference.name, context)
+        )
     else:
         findings.append(
             Finding(packet=REFERENCE_PACKET, check="S000", detail="reference packet is missing")
@@ -704,11 +902,17 @@ def lint_directory(directory: Path) -> tuple[list[Finding], list[Path]]:
         if path.name in GRANDFATHERED or path.name == REFERENCE_PACKET:
             continue
         linted.append(path)
-        findings.extend(lint_packet(path.read_text(encoding="utf-8"), path.name))
+        findings.extend(lint_packet(path.read_text(encoding="utf-8"), path.name, context))
     return findings, linted
 
 
-def _report(findings: Sequence[Finding], linted: Sequence[Path], skipped: int) -> None:
+def _report(
+    findings: Sequence[Finding],
+    linted: Sequence[Path],
+    skipped: int,
+    context: RepoContext | None = None,
+) -> None:
+    context = context or RepoContext.default()
     reference_count = sum(1 for path in linted if path.name == REFERENCE_PACKET)
     print("Stage-A evidence-packet linter (DEC-0013)")
     print("-" * 60)
@@ -722,7 +926,28 @@ def _report(findings: Sequence[Finding], linted: Sequence[Path], skipped: int) -
         print(f"  {path.name + label:<44} {verdict}")
         if path.name == REFERENCE_PACKET:
             continue
-        counts = derive(path.read_text(encoding="utf-8"))
+        packet_text = path.read_text(encoding="utf-8")
+        status = _keyed_block(packet_text, "PACKET-STATUS") or {}
+        rule_id = status.get("RULE-ID", "")
+        if rule_id and not _is_placeholder(rule_id):
+            seed_block = _keyed_block(packet_text, "SEEDS")
+            try:
+                seams = _declared(seed_block, "SEAMS")
+            except SeedInputError:
+                seams = []
+            external = derive_external_seeds(rule_id, seams, context)
+            if external:
+                print(f"      REQUIRED EXTERNAL PAGE SEEDS ({len(external)}):")
+                for page in sorted(external):
+                    origins = ", ".join(sorted(set(external[page])))
+                    print(f"        p. {page} <- {origins}")
+            else:
+                print("      REQUIRED EXTERNAL PAGE SEEDS: none derived")
+            print(
+                "      (index-derived seeds are NOT external: no structured RC index\n"
+                "       transcription exists outside Stage-A packets -- see module docstring)"
+            )
+        counts = derive(packet_text)
         print(
             f"      derived: seeded {counts.seeded_pages}, dispositioned "
             f"{counts.dispositioned_pages} ({counts.inspected_pages} inspected), "
@@ -753,11 +978,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     if not directory.is_dir():
         print(f"error: {directory} not found", file=sys.stderr)
         return 1
-    findings, linted = lint_directory(directory)
+    context = RepoContext(evidence_dir=directory, inventory=INVENTORY_PATH)
+    findings, linted = lint_directory(directory, context)
     grandfathered_present = sum(
         1 for path in directory.glob(PACKET_GLOB) if path.name in GRANDFATHERED
     )
-    _report(findings, linted, grandfathered_present)
+    _report(findings, linted, grandfathered_present, context)
     return 1 if findings else 0
 
 

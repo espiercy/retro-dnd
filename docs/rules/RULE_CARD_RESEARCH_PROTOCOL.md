@@ -2,6 +2,35 @@
 
 ## 1. Status and Authority
 
+> **Supersession notice (`DEC-0013`, drafted 2026-10-04).** The Stage-A **evidence-packet
+> mechanism** described in this document — the Coverage Manifest, the general Negative
+> Claim Record requirement, the Repository Fact Gate's prose rows, the blanket
+> self-falsification pass, the hand-maintained coverage counts and the
+> Research-Completion Gate's self-declared checklist — was adopted by `DEC-0012` and is
+> **superseded by** `docs/decisions/DEC-0013-externally-derived-stage-a-evidence-checks.md`.
+>
+> `DEC-0012`'s pilot (`ENC-001`) did not pass its own fixed success criteria. The
+> diagnosis was right and is retained: *evidentiary closure, not rules interpretation*,
+> is what fails. The remedy was not, because those instruments are the researcher's own
+> account of the researcher's own work — **internal consistency is not external
+> completeness**. Page-seed obligations are now derived from `INVENTORY.md` and accepted
+> neighbour packets, citations are matched mechanically against page transcriptions, and
+> counts are derived rather than written.
+>
+> **What still binds, unchanged:** everything in this document about *how to research* —
+> the two-stage Evidence-First structure, the primary-source visual-access hard stop, the
+> confidence vocabulary (§6), the open-question closure vocabulary (§10.2), the
+> hard-stop conditions (§17), the prohibition on self-certification (§10.1.2), and the
+> rule that an original researcher never certifies its own packet.
+>
+> **What no longer binds:** the packet *shape* in §11.2 and the `DEC-0012` instrument list.
+> Use `docs/rules/evidence/_TEMPLATE.md`, which is the canonical packet form, and
+> `scripts/lint_evidence.py`, which is its gate.
+>
+> `DEC-0012` references below are **historical** — they record what was done and why, and
+> are deliberately not rewritten. Where this document's packet-shape instructions conflict
+> with `DEC-0013`, `DEC-0013` governs.
+
 This is the canonical, detailed research protocol for Rules Cyclopedia (and, when gap-directed, alternate-source) rule research, adopted by `docs/decisions/DEC-0009-evidence-first-rule-research-protocol.md`. `AGENTS.md` §10 and `DEVELOPMENT_WORKFLOW.md` §9.7 bind agents to this document rather than duplicating it; where this document and either of those differ, resolve the conflict by asking a human rather than assuming either wins by default.
 
 This document governs *how* rules research is performed. It does not itself grant Rule Card approval authority (`SOURCE_HIERARCHY.md` §9), does not change which source is primary (`DEC-0007`), and does not change which RC-optional systems this project has selected (`DEC-0008`). It operationalizes the source hierarchy; it does not revise it.

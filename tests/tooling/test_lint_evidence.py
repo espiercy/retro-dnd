@@ -56,9 +56,8 @@ Owns the example mechanic. Routes surprise to `ENC-002`.
 
 ```text
 SEEDS
-TABLES-INDEX:   93
-GENERAL-INDEX:  91-93
-NEIGHBOUR:      ENC-005: 98, 104
+SUBJECT-TERMS:  encounter distance
+SEAMS:          none
 LEADS:          infravision -> 24
 ```
 
@@ -167,33 +166,11 @@ def test_the_shipped_template_passes() -> None:
     assert lint_packet(template.read_text(encoding="utf-8"), REFERENCE_PACKET) == []
 
 
-# --- A: the p. 98 class ----------------------------------------------------
-
-
-def test_a_seeded_neighbour_page_without_a_disposition_fails() -> None:
-    """ENC-001 B-1 replay.
-
-    ENC-005's accepted packet cites p. 98. Under DEC-0012 nothing obliged the
-    researcher to account for it, and the omission survived to independent
-    review. Here the seed carries the obligation.
-    """
-    broken = VALID.replace("98: INSPECTED\n", "")
-    assert "S005" in checks(broken)
-
-
-def test_the_seed_names_its_origin_packet_without_importing_its_conclusions() -> None:
-    """F: a seed is an obligation, never inherited truth.
-
-    ENC-005's own note calling the table "light-keyed" was wrong, and ENC-001
-    correctly refuted it. The seed must therefore carry a page and a source
-    name, and nothing else -- there is no field in which a conclusion could
-    travel.
-    """
-    seeds, block = lint_evidence._seed_pages(VALID)
-    assert block is not None
-    assert "ENC-005" in block["NEIGHBOUR"]
-    assert 98 in seeds and 104 in seeds
-    assert lint_packet(VALID, "p.md") == []
+# --- A / E / F: seed obligations -----------------------------------------
+#
+# These cases moved to test_external_seed_derivation.py when seed generation
+# became external. Testing them here would mean asserting against a seed list
+# the packet itself declares, which is the defect the move exists to remove.
 
 
 # --- B: citation drift -----------------------------------------------------
@@ -244,7 +221,7 @@ def test_no_count_field_exists_to_drift_and_counts_are_derived() -> None:
     field at all, and the linter derives them.
     """
     counts = derive(VALID)
-    assert counts.seeded_pages == 6
+    assert counts.seeded_pages == 1  # LEADS only; page obligations are external
     assert counts.dispositioned_pages == 6
     assert counts.inspected_pages == 5
     assert counts.evidence_rows == 2
@@ -262,18 +239,9 @@ def test_a_hand_maintained_count_is_rejected() -> None:
 
 
 # --- D: the false categorical-coverage class -------------------------------
-
-
-def test_a_missing_seed_disposition_fails_rather_than_a_prose_claim() -> None:
-    """ENC-001 BLOCKING-1 replay.
-
-    Pass 2 asserted "every row is now visually inspected" while six cited pages
-    were uninspected. There is no such claim to make here: coverage is the
-    disposition ledger, and a gap is a machine failure.
-    """
-    broken = VALID.replace("104: OUTSIDE_CARD_SCOPE COMBAT-*\n", "")
-    found = checks(broken)
-    assert "S005" in found
+#
+# The missing-seed half of D is in test_external_seed_derivation.py. What
+# remains here is the half that is purely local to the packet.
 
 
 def test_a_routed_page_must_name_where_it_went() -> None:

@@ -52,19 +52,33 @@ you declare here): `<IDs>`
 
 ## 3. Seeds
 
-> **Machine-generated obligations, not inherited truth.** A seed means *someone cited this
-> page in a related context, so you must look and disposition it*. It does **not** mean the
-> prior packet was right — an accepted packet may contain a wrong interpretation.
+> **You declare judgment; the tool derives the page obligations.** Subject terms and seams
+> are yours and the reviewer checks whether they were adequate. The resulting page set is
+> **not yours to write**: `scripts/lint_evidence.py` derives it from `INVENTORY.md` and
+> from accepted neighbour packets, prints it as `REQUIRED EXTERNAL PAGE SEEDS`, and fails
+> the packet if any of those pages lacks a disposition. **Deleting a page from this packet
+> does not delete its obligation.**
+>
+> A seed means *someone cited this page in a related context, so look and disposition it*.
+> It does **not** mean the prior packet was right — only the page number and the source
+> packet's name travel, never a conclusion.
 
 ```text
 SEEDS
-TABLES-INDEX:   93
-GENERAL-INDEX:  87, 91-96
-NEIGHBOUR:      ENC-005: 98, 99, 100, 104
+SUBJECT-TERMS:  encounter distance, visibility, surprise
+SEAMS:          ENC-002, ENC-005, EXP-006
 LEADS:          infravision -> 24, 25
 ```
 
-> *The values above are an illustration, not this card's. Replace them.*
+> *Illustrative. `LEADS` is the one page list you write, because a lead is discovered
+> during inspection and has nowhere else to come from; it must resolve before Stage A
+> completes. Malformed values here fail loudly rather than parsing to nothing.*
+>
+> **Known limit:** index-derived seeds are **not** externally derived. The repository holds
+> no structured transcription of the Rules Cyclopedia's Tables/Checklists or General Index
+> outside Stage-A packets, so deriving them from this packet's own §6 would be circular.
+> Index enumeration is therefore research work the semantic reviewer judges — it is not a
+> machine-checked obligation, and this template does not pretend otherwise.
 
 > You do **not** declare a page range. Candidate pages come from the instruments above
 > plus anything you cite. A `LEAD` is a named term or printed reference not yet tied to a
