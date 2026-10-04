@@ -5,17 +5,19 @@
 > (`docs/rules/evidence/ENC-001-evidence.md`, Stage A `ACCEPTED` 2026-10-04 under
 > `DEC-0013`). It is **not** the Rule Card, and it does not authorize implementation.
 >
-> **`Q-1` and `Q-3` are adjudicated here.** `Q-7` and `Q-9` remain `RETAINED AS GENUINE
-> SOURCE AMBIGUITY` exactly as the accepted packet records them, and the two ownership
-> gaps — the world **visibility category** (`NO RULE ID EXISTS`) and the **feet/yards**
-> convention — remain open and unassigned. Nothing below decides any of them.
+> **`Q-1` and `Q-3` are adjudicated here. `Q-7` is analysed but NOT settled** — it is
+> returned as a `PENDING HUMAN OWNERSHIP DECISION`, and the accepted packet's
+> `RETAINED AS GENUINE SOURCE AMBIGUITY` stands for it. `Q-9` remains
+> `RETAINED AS GENUINE SOURCE AMBIGUITY` exactly as the accepted packet records it, and the
+> two ownership gaps — the world **visibility category** (`NO RULE ID EXISTS`) and the
+> **feet/yards** convention — remain open and unassigned. Nothing below assigns either.
 
 ```text
 ADJUDICATION-STATUS
 RULE-ID:   ENC-001
 Q-1:       ADJUDICATED 2026-10-04; SR-12 APPROVED 2026-10-04
 Q-3:       ADJUDICATED 2026-10-04; NO NEW SIMULATOR RULING
-Q-7:       OPEN -- not adjudicated here
+Q-7:       ANALYSED 2026-10-04; PENDING HUMAN OWNERSHIP DECISION -- NOT SETTLED
 Q-9:       OPEN -- not adjudicated here
 STAGE B:   adjudication only; no Rule Card, no implementation
 ```
@@ -467,3 +469,364 @@ designed here.
   resolved, and `Q-6` in the accepted packet still records the undersea feet/yards tension.
 - **`Ocean/sea`/`Ship` flat distances** (`300`, `120`, `40` yards) are not dice expressions.
   Noted because it bears on the eventual contract's return type; not adjudicated.
+
+---
+
+## Q-7 — who determines which visibility category obtains
+
+```text
+Q-7 STATUS:  ANALYSED 2026-10-04
+             PENDING HUMAN OWNERSHIP DECISION
+             NOT SETTLED -- see section 10 for exactly what is unresolved
+```
+
+### 1. Question as the accepted packet states it
+
+> Which visibility category obtains at a given moment — no selector in the chapters
+> searched, and no Rule ID owns the world state.
+
+Accepted Stage-A disposition: `RETAINED AS GENUINE SOURCE AMBIGUITY`, object `pp. 92, 93`.
+The accepted packet also records the scope discipline applied to it:
+
+> `Q-7` is scoped to match the negative claim it rests on. The pilot's wording asserted
+> "no RC selector exists" at RC-wide scope while its own claim had been narrowed to the
+> chapters searched. The narrower scope is kept and the broader wording deleted.
+
+### 2. The two questions inside `Q-7`, kept apart
+
+```text
+A. RULES QUESTION
+   Does RC define how to determine the current visibility category?
+
+B. ARCHITECTURE QUESTION
+   If RC does not, which simulator component owns the state ENC-001 consumes?
+```
+
+These are answered separately below. **A Simulator Ruling may close an RC ambiguity; it may
+not be used to assign software ownership**, and none is proposed here.
+
+### 3. Source basis — re-inspected this pass
+
+| Page | Re-inspected | Bearing |
+|---|---|---|
+| p. 93 | yes (previous pass, this document's `Q-3`) | the table, its Visibility column and all three footnotes |
+| p. 95 | **yes, page image this pass** | `Wilderness Encounters` — the sentence naming visibility a *factor* |
+| p. 150 | **yes, page image this pass** | Ch. 13 `Blindness`, the darkness ↔ infravision link |
+
+No other page was opened; broad completeness research was not reopened. pp. 24, 91, 92, 100
+and 153 are taken from the accepted packet's transcriptions and evidence map rather than
+re-inspected, because the accepted record already disposes of them for this question and
+nothing here contradicts it.
+
+**p. 95, confirmed verbatim on the page image:**
+
+```text
+p. 95  (Wilderness Encounters)
+"Play out the encounter as described under "Encounters" on page 91, using the
+visibility, distance, and surprise factors."
+```
+
+**p. 150, confirmed verbatim on the page image:**
+
+```text
+p. 150  (Special Character Conditions -> Blindness)
+"Characters can be blinded by a variety of effects. For example, a light or
+continual light spell may be cast directly on a character's eyes, or a
+character without infravision may find himself in an area of complete
+darkness."
+```
+
+### 4. Rules finding — what RC does and does not define
+
+**RC defines no selector.** This is the accepted packet's single consequential negative
+claim, and it is kept at exactly its established scope — Ch. 7 pp. 91–101, the three table
+footnotes, Ch. 6 p. 87, Ch. 13 p. 150, Ch. 14 pp. 153 and 215; **not** Ch. 3 (Spells) or
+Ch. 4 (Equipment). It is **not** an RC-wide claim and is not widened here. Nothing inspected
+this pass disturbed it: p. 95 supplies no selector and p. 150 supplies no selector.
+
+**But RC is not silent about the *shape* of the dependency, and that is the new finding.**
+Three printed facts, read together, show RC treating visibility as a world fact the
+adjudicator brings *to* the procedure rather than one the procedure derives:
+
+| Fact | Page | What it shows |
+|---|---|---|
+| "the DM first needs to know where the characters are--dungeon or wilderness" | 93 | `Setting` is a fact the DM **already holds**. The table does not derive it |
+| "using the visibility, distance, and surprise factors" | 95 | Visibility is listed as a **factor**, beside surprise (`ENC-002`-owned input) and distance (`ENC-001`'s output). RC groups it with the inputs |
+| "a character without infravision may find himself in an area of complete darkness" | 150 | An *"area of complete darkness"* is presupposed as an existing world condition. RC states the **per-character consequence** of that condition and supplies no procedure for establishing it |
+
+**Necessary Consequence:** in RC's own structure, the visibility category is an **input the
+adjudicator supplies**, on exactly the same footing as `Setting`. RC's "selector" is the DM's
+knowledge of the fiction. That is a real finding about the dependency's direction, and it is
+*not* the same as RC defining a procedure — RC defines none, and none is invented here.
+
+### 5. Inputs that may contribute to world visibility
+
+Identified as categories only; **no aggregation is designed**. The distinction that matters
+is the one the approved `EXP-006` card already enforces:
+
+| Contributing world fact | Already owned by | Is it the aggregate category? |
+|---|---|---|
+| Mundane light sources (lit state, `30'` radius, duration) | `EXP-006` **[LANDED]** | **no** — a radius, not a category |
+| Absence of a lit mundane source | `EXP-006`, which asserts **nothing further** from it | **no** — explicitly an absence of *that card's* knowledge |
+| Magical light / darkness | `MAGIC-*` | no |
+| Infravision possession | `CHAR-009` | no — and `60'` sight in the dark is a range, not a category |
+| Daylight / time of day | **nothing** | — |
+| Weather impairing vision | **nothing** — RC mentions it twice (footnote `t`; p. 100's DM discretion) but defines no category | — |
+| Setting (`Dungeon*` / `Wilderness` / `Ocean/sea` / `Undersea`) | supplied with the encounter | no — the *other* axis |
+
+**The owner of a contribution does not own the aggregate.** Every row above is either a
+contribution or an unowned world fact; not one of them is the RC-native category the table
+consumes. Two of the categories — daylight/time-of-day and weather — have **no owner at
+all**, which is a wider gap than `Q-7` alone.
+
+### 6. Model A — `ENC-001` owns visibility selection
+
+`ENC-001` receives underlying world facts and derives its own RC-native label.
+
+**This is not a hypothetical: it is close to the position the approved `EXP-006` Rule Card
+already records.** `EXP-006` §7 states the RC facts are recorded *"for `ENC-001`, which owns
+the classification and the resolution"*, and adds that *"whatever aggregation it needs —
+mundane light, environmental illumination, magical light, infravision, encounter
+circumstances — is **its** rule to write"*. Landed guard tests `L31`–`L33` and `L36` enforce
+the `EXP-006` side of that boundary.
+
+**Against it, three things:**
+
+1. **It conflicts with `Q-3`, settled above.** `Q-3` concluded `ENC-001` accepts the RC-native
+   label as printed for the setting and must *not* normalize. A card that aggregates light,
+   daylight, weather and infravision into a category is deriving the label, not consuming it.
+2. **It bloats the card.** `ENC-001`'s accepted scope is encounter-distance determination at
+   contact. Aggregating environmental illumination is a different responsibility with
+   different inputs, and `ENC-001` owns none of those inputs.
+3. **Other subsystems need the same fact.** p. 150's blindness consequence (`CHAR-005` owns
+   the movement effect per `EXP-006` §B), `COMBAT-*` attack/save/AC consequences, and
+   `EXP-005` searching all turn on whether an area is dark. Per the decision standard, that
+   a second subsystem needs the fact is **evidence against** making `ENC-001` the owner — a
+   consumer of a fact should not be its producer.
+
+**`EXP-006`'s own structured boundary table draws the line more narrowly than its §7 prose**,
+and this is the tension that blocks closure — see section 10.
+
+### 7. Model B — `EXP-006` owns visibility selection
+
+**Excluded by approved governance, not merely disfavoured.** This is a repository fact,
+verified in the active pass against the artifacts named:
+
+- The **approved** `EXP-006` Rule Card, under **human adjudication 2026-10-01, Finding B**,
+  withdrew exactly this: the card *"produced a `Visibility` category"* — **withdrawn**. The
+  ratification line records `EXP-006` owns *"mundane-light contribution, not global/world
+  illumination"* and *"does not produce encounter `Visibility`"*.
+- Its §6 states what `any_mundane_source_lit == false` means, and lists under **DOES NOT
+  MEAN**: `complete darkness`, `NO_LIGHT`, `any Visibility category`, `blindness`.
+- The **landed implementation** carries the same boundary. `src/rules/exploration/light_and_exploration_resources.py`
+  states it *"owns nothing about the world"* and must not *"state or derive
+  global/environmental darkness, encounter Visibility, or blindness"*, citing Rule Card §6,
+  §8 and Finding B. Guard tests `L29`–`L33`, `L36` enforce it.
+
+Testing the §6 question directly: would expanding `EXP-006` **(A)** follow naturally from its
+accepted responsibility, or **(B)** improperly turn a light-source/resource card into
+world-state ownership? **(B).** `EXP-006` owns what *the party's own carried sources*
+contribute. World visibility also depends on daylight, weather and magical light it does not
+own, and on the absence of its sources — which it is expressly forbidden to read as darkness.
+Expanding it would re-commit the precise error a human already withdrew. **Not adopted.** An
+agent may not overturn a human adjudication recorded in an approved Rule Card.
+
+### 8. Model C — a world/environment layer owns it
+
+A separate world/environment responsibility determines the RC-native label and passes it to
+`ENC-001`, which validates that the label is legal for the supplied setting.
+
+**Strongest on the decision standard**, and it is the model RC's own structure points at
+(section 4): the DM holds the world facts and brings visibility to the encounter as a factor.
+
+| Criterion | Model C |
+|---|---|
+| Single responsibility | **yes** — `ENC-001` stays encounter-distance determination |
+| Minimal cross-card knowledge | **yes** — `ENC-001` need not know about torches, weather, daylight or spells |
+| No duplicated derivation | **yes** — one producer; `COMBAT-*`, `CHAR-005`, `EXP-005` can consume the same fact |
+| Clear caller/callee contract | **yes** — label in, distance out, invalid label refused |
+| Future reuse outside `ENC-001` | **yes** — this is the decisive one; several subsystems need it |
+| Preserves accepted boundaries | **yes** — `EXP-006` untouched, `ENC-002` untouched, `Q-3` preserved |
+
+It also leaves `Q-3`'s result intact: the world layer emits the label *for the setting in
+play*, and `ENC-001` validates rather than normalizes.
+
+### 9. Model D — does an existing Rule ID already own it?
+
+Repository architecture inspection of `docs/rules/INVENTORY.md` and the accepted card
+boundaries. This is not RC research.
+
+| Rule ID | Current responsibility | Fits? | Would it broaden the card? |
+|---|---|---|---|
+| `EXP-006` Light & Exploration Resources | mundane light-source contribution | **no** | **yes** — and forbidden by Finding B |
+| `EXP-003` Dungeon Movement | movement rates, mapping, special terrain | no | yes — unrelated axis |
+| `EXP-005` Searching, Listening, Doors | search/listen procedures | no | yes — a *consumer* of darkness, not a producer |
+| `EXP-008` Dungeon Stocking | what occupies an already-laid-out room | no | yes — content, not ambient conditions |
+| `ENC-002` Surprise | surprise determination | no | yes |
+| `CHAR-005` | blindness/darkness **movement** consequence | no | yes — consumes the condition |
+| `CHAR-009` | infravision **possession** | no | yes — a capability, not a world state |
+| `MAGIC-*` | magical light and darkness | no | partial contributor only |
+| `SIM-001` Procedural Dungeon **Layout** Generation | layout/map generation only; scope deliberately narrowed | **no** | yes — but see below |
+
+**No existing Rule ID fits.** Two independent artifacts already record this, and they agree:
+
+```text
+ENC-001 accepted Stage-A packet, section 10
+  World visibility category        NO RULE ID EXISTS
+
+EXP-006 approved Rule Card, section B ("What this card does not own")
+  Complete-darkness / environmental
+    illumination world state       OWNER NOT SETTLED -- section 8, Open Question 7
+```
+
+`EXP-006`'s own Open Question 7 states it outright: *"The complete-darkness /
+environmental-illumination world-state predicate has no owner."*
+
+**`SIM-001` is the nearest structural precedent, not a fit.** The `SIM-*` family exists for
+responsibilities the simulator must specify *because RC supplies no rule* — `SIM-001` layout
+generation, `SIM-002` survivability policy. Ambient illumination is the same kind of thing:
+the accepted negative claim establishes RC supplies no rule, so there is nothing for a *Rule
+Card* to specify. But `SIM-001`'s scope was deliberately narrowed to layout, and stretching
+it would repeat the boundary-blurring that narrowing corrected. **No fit is invented.**
+
+### 10. Ownership disposition — **PENDING HUMAN OWNERSHIP DECISION**
+
+**Recommendation (not a decision): option E, implemented as Model C** — the world-visibility
+predicate is owned at a world/environment specification layer in the `SIM-*` family, **not**
+by a Rule Card, and `ENC-001` consumes it as a caller-supplied RC-native label. The reasoning
+is sections 4, 7, 8 and 9: RC supplies no rule, so there is no RC mechanic for a Rule Card to
+specify; several subsystems besides `ENC-001` need the fact; and every existing card that
+could take it would be broadened past its accepted boundary.
+
+**Why this is recorded as pending rather than settled — two blockers, both requiring a human:**
+
+1. **It would create a new responsibility.** Option E assigns the predicate to a `SIM-*`
+   specification that does not exist. Under this task's own guard, a new Rule ID or
+   responsibility is **not** added to `INVENTORY.md` here:
+
+   ```text
+   NEW OWNERSHIP DECISION REQUIRED
+   ```
+
+2. **An approved Rule Card must be reconciled, and an agent may not do it.** `EXP-006` §7
+   prose routes *"whatever aggregation it needs"* to `ENC-001` (Model A), while `EXP-006` §B
+   splits the same subject into **`Visibility classification → ENC-001`** and
+   **`environmental illumination world state → OWNER NOT SETTLED`**. The two readings differ,
+   and §7's was written when `ENC-001` was `[UNRESEARCHED]` — the card says so. Choosing
+   between them decides whether `ENC-001` aggregates world facts (Model A) or consumes a
+   label (Model C), which is exactly `Q-7`. `EXP-006` is an **approved Rule Card and a
+   protected document** (`AGENTS.md` §12); an agent may not narrow its stated routing.
+
+**`Q-7` is therefore not marked settled, and the accepted packet's
+`RETAINED AS GENUINE SOURCE AMBIGUITY` stands.** Recording a recommendation as a resolution
+would be the same defect this project has been removing: an artifact claiming more than its
+authority establishes.
+
+### 11. Simulator Ruling — **not required**
+
+```text
+NO NEW SIMULATOR RULING
+
+Q-7's rules half is an RC omission, and its remaining half is an ownership
+question. A Simulator Ruling closes an RC ambiguity; it must not be used to
+assign software ownership, and it must not paper over an architecture
+ownership gap. SR-13 remains the next free identifier and is not used here.
+```
+
+A ruling would also be premature: it is not yet established that *any* game-rule question
+remains once ownership is assigned. If the human decision produces a residual rules
+ambiguity, that is the point at which a narrow `SR` could be proposed — `PROPOSED — human
+approval required`, never self-approved.
+
+### 12. Relationship to `Q-3` — consistent, and `Q-3` is preserved
+
+`Q-3` settled that `ENC-001` preserves RC-native labels, setting-indexed, and does not
+normalize them. Model C is the ownership model that **makes `Q-3` implementable**: someone
+must emit the label `Q-3` says `ENC-001` consumes. Model A is the model that would strain
+`Q-3`, which is one reason it is not recommended. No label is normalized here, and the
+`Q-3` vocabulary is unchanged.
+
+### 13. Relationship to `SR-12` and "normal dungeon conditions"
+
+`SR-12` is **not reopened**. It resolved the duplicate-distance-track question — distance is
+determined once, by the pp. 92–93 procedure — and decided nothing about visibility.
+
+**Stated plainly, because it is the tempting shortcut:** an ordinary dungeon encounter still
+has **no supplied visibility category**. `"normal dungeon conditions"` is **not** concluded to
+mean `Dim light`. That inference was classified `QUALIFIED, not forced` in `EXP-006`'s
+accepted evidence, **withdrawn entirely by human adjudication 2026-10-01 (Finding A)**, and is
+guarded against in landed code by `EXP-006` test `L30`. `ENC-001` must not now perform the
+derivation `EXP-006` was forbidden to perform.
+
+### 14. `EXP-006` boundary impact — **none**
+
+`EXP-006` keeps exactly its accepted boundary: mundane light-source contribution, and nothing
+about the world. It is not expanded, and the §6 test was applied explicitly in section 7 with
+result **(B)** — expanding it would turn a resource card into world-state ownership.
+
+The one `EXP-006`-facing item here is **not** a boundary change but a **reconciliation
+request**: §7 prose versus §B table, section 10 blocker 2. That is returned for human
+decision, not acted on.
+
+### 15. Future `ENC-001` contract consequence
+
+Narrow, conditional on the human decision, and not a specification:
+
+```text
+determine_encounter_distance(
+    setting,            # Dungeon* / Wilderness / Ocean-sea / Undersea
+    visibility,         # CALLER-SUPPLIED RC-native label, valid for the setting
+    surprise_state,     # ENC-002's, consumed (SR-12)
+    encounter_type,     # Ship / Monster / DM's choice, where the setting needs it
+    ...
+)
+```
+
+`visibility` is **caller-supplied** and must be valid for `setting` (`Q-3`). `ENC-001`
+validates; it does not derive, aggregate or normalize. No other parameter is settled here,
+and no code is written.
+
+### 16. Missing-visibility behaviour — **explicit refusal**
+
+If `visibility` is absent where the procedure requires it:
+
+| Option | Verdict |
+|---|---|
+| Derive internally | **No** — that is Model A, and it is unowned and unapproved |
+| Default silently | **No** — RC supplies no default. Defaulting to `Dim light` re-commits Finding A; defaulting to `No light` or any other row invents a rule |
+| **Refuse / error** | **Yes** — the only option that neither invents a rule nor guesses |
+
+This is a **Necessary Consequence** of the determinism requirement plus the absence of any
+RC default: a simulator that must not guess, given a required input it does not have, can
+only refuse. Note the shape — surprise short-circuits the table (p. 92: both or one party
+surprised ⇒ flat `1d4 × 10'`), so visibility is required **only** on the neither-surprised
+path, and refusal is scoped to that path. No behaviour is implemented.
+
+### 17. Provenance classification
+
+| Conclusion | Classification |
+|---|---|
+| RC defines no visibility selector (scope: the chapters the accepted packet searched) | **Rules Cyclopedia Explicit**, scope-limited negative finding — **not** RC-wide |
+| p. 93 "the DM first needs to know where the characters are"; p. 95 "using the visibility, distance, and surprise factors"; p. 150's presupposed "area of complete darkness" | **Rules Cyclopedia Explicit** — page images re-inspected |
+| Visibility is an adjudicator-supplied input, on the same footing as `Setting` | **Necessary Consequence** |
+| Missing required visibility ⇒ refusal | **Necessary Consequence** |
+| `EXP-006` cannot own it (Finding B, §6 `DOES NOT MEAN`, guards `L29`–`L33`) | **Repository Boundary / Architecture** — verified against the approved card and landed module |
+| No existing Rule ID fits; `SIM-001` is precedent, not a fit | **Repository Boundary / Architecture** |
+| Recommended owner: a `SIM-*` world/environment specification | **Unresolved Ownership Decision** — a recommendation, not a decision |
+| `EXP-006` §7 prose vs §B table | **Unresolved Ownership Decision** — returned for human reconciliation |
+| Any equivalence, default or derived category | **none issued** — no Simulator Ruling |
+
+No architecture choice above is labelled as an RC rule.
+
+### 18. Residue
+
+- **`Q-7` is not closed.** It awaits the human ownership decision in section 10.
+- **Daylight/time-of-day and weather have no owner either** — a gap wider than `Q-7`, surfaced
+  by section 5 and not resolved here.
+- **`EXP-006` §7 vs §B** needs human reconciliation; neither reading is adopted.
+- **A minor provenance inaccuracy in the accepted packet, reported not fixed.** Its §10 basis
+  row quotes `EXP-006`'s module as *"Not a statement about the world"*. The module's actual
+  words are *"It owns nothing about the world"* and *"never a fact about the world"*. The
+  substance is identical and the routing conclusion is unaffected; the quotation marks are
+  inexact. The accepted packet is **not** modified — it is accepted evidence.
+- **`Q-9` and the feet/yards gap are untouched.**
